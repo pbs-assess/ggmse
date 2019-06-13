@@ -1,2 +1,3 @@
 # gfdlm
-Tools for creating and modifying DLMtool inputs and outputs from GF data
+
+Tools for creating, modifying, and plotting DLMtool inputs and outputs from PBS groundfish data
