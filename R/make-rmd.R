@@ -85,7 +85,7 @@ change_chunk_suffix <- function(file_name,
     obj_name <- get_obj_name(rmd, x)
     obj_name_regex <- paste0("(?<!desc-)", obj_name)
     val <- grep(obj_name_regex, rmd, perl = TRUE)
-    rmd[val] <<- gsub(obj_name, paste0(x, chunk_suffix), rmd[val])
+    rmd[val] <<- gsub(obj_name, paste0(x, "_", chunk_suffix), rmd[val])
   })
 
   conn <- file(file_name)
