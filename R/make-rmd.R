@@ -43,6 +43,7 @@ change_chunk_suffix <- function(file_name,
   chunk_name_regex <- "(?<=desc-)[\\w-]+(?=\\}| *,)"
   rmd <- readLines(file_name)
   val <- grep(chunk_name_regex, rmd, perl = TRUE)
+
   lapply(val, function(x){
     k <- stringr::str_split(regmatches(rmd[x], regexpr(chunk_name_regex, rmd[x], perl = TRUE)), "-")[[1]]
     if(length(k) >= 3){
@@ -78,9 +79,13 @@ change_chunk_suffix <- function(file_name,
     rmd[x] <<- sub(chunk_name_regex, paste(k, collapse = "-"), rmd[x], perl = TRUE)
   })
 
-  ## Now change all instances of stock, fleet, obs, and impl objects in code chunks to have suffix
+  ## Now change all instances of stock, fleet, obs, and impl objects in code chunks to have suffix.
+  ## Must make sure not to change chunk names, only the actual object names.
   purrr::map(c("stock", "fleet", "obs", "imp"), function(x){
-    rmd <<- gsub(get_obj_name(rmd, x), paste0(x, chunk_suffix), rmd)
+    obj_name <- get_obj_name(rmd, x)
+    obj_name_regex <- paste0("(?<!desc-)", obj_name)
+    val <- grep(obj_name_regex, rmd, perl = TRUE)
+    rmd[val] <<- gsub(obj_name, paste0(x, chunk_suffix), rmd[val])
   })
 
   conn <- file(file_name)
@@ -120,6 +125,7 @@ create_rmd <- function(file_name,
   rmd <- readLines(file_name)
   beg <- grep("<!-- slot-chunk-begin -->", rmd)
   end <- grep("<!-- slot-chunk-end -->", rmd)
+
   if(length(beg) != length(end)){
     stop("Error - mismatch between number of slot begin tags (", length(beg), ") and ",
          "end tags (", length(end), ").\nLine numbers for begin tags are:\n", paste(beg, collapse = " "),
