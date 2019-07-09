@@ -109,8 +109,8 @@ change_chunk_suffix <- function(file_name,
 #' dir.create(testing_path, showWarnings = FALSE)
 #' create_rmd(file.path(testing_path, "test.Rmd"))
 create_rmd <- function(file_name,
-                       cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "pbs2dlm"),
-                       slot_type_order_file_name = system.file("slot-type-order.csv", package = "pbs2dlm"),
+                       cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
+                       slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
                        ...){
 
   if (!file.exists(file_name)){
@@ -287,6 +287,8 @@ create_rmd <- function(file_name,
   ordered_slots <- list()
   for(i in seq(1, nrow(xxx))){
     new_slot <- s_in_list(xxx[i,])
+    ## Add a blank line between slot definitions
+    new_slot[[1]] <- c(new_slot[[1]], "")
     ordered_slots <- c(ordered_slots, new_slot)
   }
 
