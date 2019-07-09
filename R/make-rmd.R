@@ -1,5 +1,5 @@
 #' Get the actual name of the object for the base name object. e.g. stock
-#' object may have a suffix and be stockpc <- new('Stock') or similar
+#' object may have a suffix and be stock_pc <- new('Stock') or similar
 #' Assumes the first instance of stock* <- contains the object name
 get_obj_name <- function(rmd, obj_base_name){
   paste0(obj_base_name,
@@ -236,8 +236,13 @@ create_rmd <- function(file_name,
       if(last_slot_type != nm$slot_type){
         if(nm$slot_type == "stock"){
           stock_obj_name <- get_obj_name(rmd, "stock")
+          if(stock_obj_name == "stock_"){
+            chunk_suffix <- ""
+          }else{
+            chunk_suffix <- paste0("-", gsub("stock_", "", stock_obj_name))
+          }
           slots[whr][[1]] <- c("",
-                               "## STOCK SLOT DESCRIPTIONS {#app:desc-stock}",
+                               paste0("## STOCK SLOT DESCRIPTIONS {#app:desc-stock", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
                                paste0(stock_obj_name, " <- methods::new('Stock')"),
@@ -245,9 +250,14 @@ create_rmd <- function(file_name,
                                "",
                                slots[whr][[1]])
         }else if(nm$slot_type == "fleet"){
-          fleet_obj_name <- get_obj_name(rmd, "Fleet")
+          fleet_obj_name <- get_obj_name(rmd, "fleet")
+          if(fleet_obj_name == "fleet_"){
+            chunk_suffix <- ""
+          }else{
+            chunk_suffix <- paste0("-", gsub("fleet_", "", fleet_obj_name))
+          }
           slots[whr][[1]] <- c("",
-                               "## FLEET SLOT DESCRIPTIONS {#app:desc-fleet}",
+                               paste0("## FLEET SLOT DESCRIPTIONS {#app:desc-fleet", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
                                paste0(fleet_obj_name, " <- DLMtool::Generic_Fleet # TODO: temporary"),
@@ -256,18 +266,28 @@ create_rmd <- function(file_name,
                                slots[whr][[1]])
         }else if(nm$slot_type == "obs"){
           obs_obj_name <- get_obj_name(rmd, "obs")
+          if(obs_obj_name == "obs_"){
+            chunk_suffix <- ""
+          }else{
+            chunk_suffix <- paste0("-", gsub("obs_", "", obs_obj_name))
+          }
           slots[whr][[1]] <- c("",
-                               "## OBS SLOT DESCRIPTIONS {#app:desc-obs}",
+                               paste0("## OBS SLOT DESCRIPTIONS {#app:desc-obs", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
-                               paste0(obs_obj_name, " <- methods::new('Obs')"),
+                               paste0(obs_obj_name, " <- DLMtool::Precise_Unbiased"),
                                "```",
                                "",
                                slots[whr][[1]])
         }else if(nm$slot_type == "imp"){
           imp_obj_name <- get_obj_name(rmd, "imp")
+          if(imp_obj_name == "imp_"){
+            chunk_suffix <- ""
+          }else{
+            chunk_suffix <- paste0("-", gsub("imp_", "", imp_obj_name))
+          }
           slots[whr][[1]] <- c("",
-                               "## IMP SLOT DESCRIPTIONS {#app:desc-imp}",
+                               paste0("## IMP SLOT DESCRIPTIONS {#app:desc-imp", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
                                paste0(imp_obj_name, " <- methods::new('Imp')"),
