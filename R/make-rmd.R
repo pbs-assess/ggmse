@@ -152,29 +152,32 @@ create_rmd <- function(file_name,
   ## be shown in the document. List elements will be slot chunks that are set to be shown,
   ## or NULLs for those which are not
   slots <- lapply(slots, function(x){
-    k <- stringr::str_split(regmatches(x, regexpr("(?<=desc-)[\\w-]+(?=\\})", x, perl = TRUE)), "-")[[1]]
-    kk <- cust_desc %>%
-      dplyr::filter(slot_type == k[1]) %>%
-      dplyr::filter(slot == k[2])
-    if(nrow(kk) != 1){
-      return(NULL)
-    }
-    if(kk$use_custom_description){
-      val <- grep("^\\*.*\\*$", x)
-      if(!length(val)){
-        stop("Error trying to find the description inside autogen chunk. Note it needs to start and end with an asterisk:\n",
-             paste0(j, collapse = "\n"),
-             call. = FALSE)
+    k <- stringr::str_split(regmatches(x, regexpr("(?<=desc-)[\\w-]+(?=\\})", x, perl = TRUE)), "-")
+    if(length(k)){
+      k <- k[[1]]
+      kk <- cust_desc %>%
+        dplyr::filter(slot_type == k[1]) %>%
+        dplyr::filter(slot == k[2])
+      if(nrow(kk) != 1){
+        return(NULL)
       }
-      if(length(val) > 1){
-        stop("Error - more than one line matches as a description inside autogen chunk:\n",
-             paste0(j, collapse = "\n"),
-             call. = FALSE)
+      if(kk$use_custom_description){
+        val <- grep("^\\*.*\\*$", x)
+        if(!length(val)){
+          stop("Error trying to find the description inside autogen chunk. Note it needs to start and end with an asterisk:\n",
+               paste0(j, collapse = "\n"),
+               call. = FALSE)
+        }
+        if(length(val) > 1){
+          stop("Error - more than one line matches as a description inside autogen chunk:\n",
+               paste0(j, collapse = "\n"),
+               call. = FALSE)
+        }
+        x[val] <- paste0("*", kk$custom_description, "*")
       }
-      x[val] <- paste0("*", kk$custom_description, "*")
-    }
-    if(!kk$show_slot){
-      return(NULL)
+      if(!kk$show_slot){
+        return(NULL)
+      }
     }
     x
   })
@@ -214,10 +217,13 @@ create_rmd <- function(file_name,
     # Get logical vector of where the slot name nm is in the slots list
     nm_str <- paste(nm$slot_type, nm$slot, sep = "-")
     whr <- sapply(slots, function(x){
-      k <- stringr::str_split(regmatches(x, regexpr("(?<=desc-)[\\w-]+(?=\\})", x, perl = TRUE)), "-")[[1]]
-      g <- paste(k[1], k[2], sep = "-")
-      if(g == nm_str){
-        return(TRUE)
+      k <- stringr::str_split(regmatches(x, regexpr("(?<=desc-)[\\w-]+(?=\\})", x, perl = TRUE)), "-")
+      if(length(k)){
+        k <- k[[1]]
+        g <- paste(k[1], k[2], sep = "-")
+        if(g == nm_str){
+          return(TRUE)
+        }
       }
       FALSE
     })
