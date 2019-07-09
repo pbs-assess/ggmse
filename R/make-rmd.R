@@ -94,6 +94,40 @@ change_chunk_suffix <- function(file_name,
 
 }
 
+#' Check that begin and end slot-chunk tage match properly
+#'
+#' @param rmd The lines of the Rmd file as read in by readLines()
+#'
+#' @return Nothing
+check_tags <- function(rmd){
+  chomp <- function(){
+    line_num <<- line_num + 1
+    first_line <- rmd[1]
+    rmd <<- rmd[-1]
+    first_line
+  }
+  line_num <- 0
+  paired <- TRUE
+  while(length(rmd)){
+    line <- chomp()
+    if(paired){
+      if(length(grep("<!-- slot-chunk-begin -->", line))){
+        paired <- FALSE
+      }else if(length(grep("<!-- slot-chunk-end -->", line))){
+        stop("Unmatched slot-chunk-end at line ", line_num,
+             call. = FALSE)
+      }
+    }else{
+      if(length(grep("<!-- slot-chunk-end -->", line))){
+        paired <- TRUE
+      }else if(length(grep("<!-- slot-chunk-begin -->", line))){
+        stop("Unmatched slot-chunk-begin at line ", line_num,
+             call. = FALSE)
+      }
+    }
+  }
+}
+
 #' Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it
 #'
 #' @param file_name Filename/path of the .rmd file to create/modify. If it does not exist,
@@ -123,11 +157,12 @@ create_rmd <- function(file_name,
   slot_type_order <- readr::read_csv(slot_type_order_file_name)
 
   rmd <- readLines(file_name)
+  check_tags(rmd)
   beg <- grep("<!-- slot-chunk-begin -->", rmd)
   end <- grep("<!-- slot-chunk-end -->", rmd)
 
   if(length(beg) != length(end)){
-    stop("Error - mismatch between number of slot begin tags (", length(beg), ") and ",
+    stop("Mismatch between number of slot begin tags (", length(beg), ") and ",
          "end tags (", length(end), ").\nLine numbers for begin tags are:\n", paste(beg, collapse = " "),
          "\nLine numbers for end tags are:\n", paste(end, collapse = " "), "\n",
          call. = FALSE)
