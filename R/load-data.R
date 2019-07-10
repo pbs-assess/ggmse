@@ -1,3 +1,16 @@
+#' Factory to create loading functions for various species
+#'
+#' @param species_name The species name as can be used in extraction with [gfdata::get_commercial_samples]
+#'  and similar functions
+#' @param file The filename to load from
+#'
+#' @return A function which can be used to load data automatically
+#' @export
+#'
+#' @examples
+#' load_data_pcod <- load_data_factory("pacific cod",
+#'   file = here::here("generated-data",
+#'                     "pacific-cod.rds"))
 load_data_factory <- function(species_name, file) {
   created_by_load_data_factory <- function(unsorted_only = TRUE, private = FALSE) {
     if (!file.exists(file)) {
@@ -42,6 +55,17 @@ load_data_rex <- load_data_factory("rex sole",
   )
 )
 
+#' Filter Rex sole data
+#'
+#' @param d data as retrieved from [gfdata::get_commercial_samples()] and similar functions
+#' @param minimum_year Minimum year for filtering
+#' @param maximum_year Maximum year for filtering
+#' @param major_stat_area_codes vector of major stat area codes
+#' @param survey_series_descs vector of survey descriptions as they appear in the survey_series_desc
+#'  field of the survey_index item of the call to [gfdata::get_survey_index()]
+#'
+#' @return The filtered data
+#' @export
 filter_data_rex <- function(d,
                             minimum_year = 1996,
                             maximum_year = 2018,

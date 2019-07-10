@@ -96,7 +96,8 @@ plot_probs <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
-                       sort_by = "decreasing"){
+                       sort_by = "decreasing",
+                       use_full_desc = FALSE){
 
   df <- probs_dat[[1]]
   captions <- probs_dat[[2]]
@@ -117,7 +118,7 @@ plot_probs <- function(probs_dat,
 
   ## Set up expressions for tick labels
   j <- as.vector(do.call('rbind', captions))
-  probs <- cap_expr(j)
+  probs <- ifelse(use_full_desc, cap_expr(j), j)
 
   df$txt <- vapply(df$value, function(x){
     gfutilities::f(x, digits)
