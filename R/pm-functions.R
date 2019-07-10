@@ -5,10 +5,14 @@
 #' @param mse_obj MSE object, output of the DLMtool [DLMtool::runMSE()] function
 #' @param pm_list List of performace metric names
 #' @param refs Optional. List containing the reference limits for each metric
-#' @param yrs Numeric vector of length 2 with year indices to summarize performance
+#' @param yrs Optional. Numeric vector of length 2 with year indices to summarize performance
 #'
 #' @returns A data frame containing the Management procedures, Performace metrics,
-#' probability, probability caption, description, and class of the management procedure.
+#'  probability, probability caption, description, and class of the management procedure.
+#' @example
+#' \dontrun{
+#' eval_pm(mse, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
+#' }
 eval_pm <- function(mse_obj,
                     pm_list = NULL,
                     refs = NULL,
