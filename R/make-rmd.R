@@ -183,6 +183,30 @@ create_rmd <- function(file_name,
     rmd[beg[x]:end[x]]
   })
 
+  ## Get optional code chunks after STOCK, FLEET, OBS, and IMP headers
+  ## Returns list in that order with NA for those which didn't exist in the file
+  ## The first code chunk will be thrown away as it is assumed to be the object instantiation chunk
+  ## which is set upu later in this function
+  get_custom_chunks <- function(rmd){
+    get_chunks <- function(rmd, head_ind){
+      if(!length(head_ind)) return(NA)
+      head_ind <- head_ind + 1
+      rmd <- rmd[head_ind:length(rmd)]
+      next_beg <- grep("<!-- slot-chunk-begin -->", rmd)
+      chunks <- rmd[1:(next_beg[1] - 1)]
+      backticks <- grep("```", chunks)
+      ## Throw away instantiation chunk
+      if(length(backticks) <= 2) return(NA)
+      chunks[backticks[3]:length(chunks)]
+    }
+    list(get_chunks(rmd, grep("## STOCK", rmd)),
+         get_chunks(rmd, grep("## FLEET", rmd)),
+         get_chunks(rmd, grep("## OBS", rmd)),
+         get_chunks(rmd, grep("## IMP", rmd)))
+  }
+
+  cust_chunks <- get_custom_chunks(rmd)
+
   ## Add custom definitions to slots which are set to have them, and check if they are to
   ## be shown in the document. List elements will be slot chunks that are set to be shown,
   ## or NULLs for those which are not
@@ -283,6 +307,7 @@ create_rmd <- function(file_name,
                                paste0(stock_obj_name, " <- methods::new('Stock')"),
                                "```",
                                "",
+                               ifelse(!is.na(cust_chunks[[1]]), cust_chunks[[1]], ""),
                                slots[whr][[1]])
         }else if(nm$slot_type == "fleet"){
           fleet_obj_name <- get_obj_name(rmd, "fleet")
@@ -295,9 +320,10 @@ create_rmd <- function(file_name,
                                paste0("## FLEET SLOT DESCRIPTIONS {#app:desc-fleet", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
-                               paste0(fleet_obj_name, " <- DLMtool::Generic_Fleet # TODO: temporary"),
+                               paste0(fleet_obj_name, " <- DLMtool::Generic_Fleet"),
                                "```",
                                "",
+                               ifelse(!is.na(cust_chunks[[2]]), cust_chunks[[2]], ""),
                                slots[whr][[1]])
         }else if(nm$slot_type == "obs"){
           obs_obj_name <- get_obj_name(rmd, "obs")
@@ -310,9 +336,10 @@ create_rmd <- function(file_name,
                                paste0("## OBS SLOT DESCRIPTIONS {#app:desc-obs", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
-                               paste0(obs_obj_name, " <- DLMtool::Precise_Unbiased"),
+                               paste0(obs_obj_name, " <- DLMtool::Generic_Obs"),
                                "```",
                                "",
+                               ifelse(!is.na(cust_chunks[[3]]), cust_chunks[[3]], ""),
                                slots[whr][[1]])
         }else if(nm$slot_type == "imp"){
           imp_obj_name <- get_obj_name(rmd, "imp")
@@ -325,9 +352,10 @@ create_rmd <- function(file_name,
                                paste0("## IMP SLOT DESCRIPTIONS {#app:desc-imp", chunk_suffix, "}"),
                                "",
                                "```{r warnings = FALSE}",
-                               paste0(imp_obj_name, " <- methods::new('Imp')"),
+                               paste0(imp_obj_name, " <- DLMtool::Precise_Unbiased"),
                                "```",
                                "",
+                               ifelse(!is.na(cust_chunks[[4]]), cust_chunks[[4]], ""),
                                slots[whr][[1]])
         }else{
           slots[whr][[1]] <- c("", slots[whr][[1]])
