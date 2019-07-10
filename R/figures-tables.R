@@ -1,0 +1,150 @@
+#'Summary of probabilities of performance metrics from the MSE object
+#'
+#' @param object MSE object, output of the [DLMtool::runMSE()] function
+#' @param ... List of performace metrics
+#' @param refs List containing the reference limits for each metric
+#'
+#' @returns List of length 2, first item is a data frame of the output, second item is a list of
+#'  captions for the metrics
+#'  @example
+#'  \dontrun{
+#'  probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+#'  }
+get_probs <- function(object,
+                      ...,
+                      refs = NULL){
+
+  if (class(object) != "MSE"){
+    stop("object must be class `MSE`",
+         call. = FALSE)
+  }
+
+  pm_list <- unlist(list(...))
+  if(!length(pm_list)){
+    warning("No PM's included. Using defaults")
+    pm_list <- c("PNOF", "P50", "AAVY", "LTY")
+  }
+  if(class(pm_list) != 'character'){
+    stop("Must provide names of PM methods",
+         call. = FALSE)
+  }
+  for(X in seq_along(pm_list)){
+    if (!pm_list[X] %in% avail("PM")){
+      stop(pm_list[X], " is not a valid PM method",
+           call. = FALSE)
+    }
+  }
+
+  means <- names <- captions <- mps <- list()
+  for (X in 1:length(pm_list)) {
+    ref <- refs[[pm_list[X]]]
+    if (is.null(ref)) {
+      run_pm <- eval(call(pm_list[X], object))
+    } else {
+      run_pm <- eval(call(pm_list[X], object, Ref = ref))
+    }
+    means[[X]] <- run_pm@Mean
+    names[[X]] <- run_pm@Name
+    captions[[X]] <- run_pm@Caption
+    mps[[X]] <- run_pm@MPs
+  }
+
+  df <- data.frame('MP' = mps[[1]],
+                   signif(do.call('cbind', means),2), stringsAsFactors = FALSE)
+  colnames(df)[2:(length(pm_list) + 1)] <- pm_list
+
+  list(as_tibble(df), captions)
+}
+
+#' Change a vector of probability captions into expressions for rendering on a ggplot plot
+#'
+#' @param cap_vec A vector of strings containing probabilities and special characters
+#' @param inc_yrs Include the years part of the caption expression
+#' @return a list of expressions
+cap_expr <- function(cap_vec, inc_yrs = FALSE){
+  probs <- regmatches(cap_vec, regexpr("(?<=Prob\\. ).*(?= \\()", cap_vec, perl = TRUE))
+  probs <- paste0("P(", probs, ")")
+  probs <- gsub("MSY", "_{MSY}", probs)
+  probs <- gsub("%", "\\\\%", probs)
+  probs <- paste0("$", probs, "$")
+
+  yrs <- stringr::str_extract(cap_vec, "\\(Year.*\\)$")
+  yrs <- gsub("Years", "Yrs", yrs)
+  yrs <- gsub(" - ", "-", yrs)
+  if(inc_yrs){
+    probs <- paste0(probs, "  ", yrs)
+  }
+
+  unlist(lapply(probs, latex2exp::TeX))
+}
+
+#' Summary of probabilities of things from the MSE object in a colored tile table format
+#'
+#' @param probs_dat A list of length 2 - a data frame and another list of captions describing the
+#'   columns of the data frame as returned from [get_probs()]
+#' @param relative_max Make the plot have each column use a reletive maximum. If
+#'  scale_0_1 is used, this will be ignored
+#' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
+#' @param sort_by show values in decreasing or increasing format
+#' @param digits How many decimal places to show in the tiles for the values
+#' @example
+#' \dontrun{
+#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' plot_probs(probs)
+#' }
+plot_probs <- function(probs_dat,
+                       digits = 2,
+                       relative_max = FALSE,
+                       scale_0_1 = FALSE,
+                       sort_by = "decreasing"){
+
+  df <- probs_dat[[1]]
+  captions <- probs_dat[[2]]
+
+  if(sort_by == "decreasing"){
+    df$MP <- factor(df$MP, levels = df$MP[do.call(order, df[-1])])
+  }else if(sort_by == "increasing"){
+    df$MP <- factor(df$MP, levels = df$MP[rev(do.call(order, df[-1]))])
+  }else{
+    stop("sort_by must be either 'increasing' or 'decreasing'",
+         call. = FALSE)
+  }
+
+  df <- reshape2::melt(df,
+                       id.vars = "MP",
+                       variable.name = "type",
+                       value.name = "value")
+
+  ## Set up expressions for tick labels
+  j <- as.vector(do.call('rbind', captions))
+  probs <- cap_expr(j)
+
+  df$txt <- vapply(df$value, function(x){
+    gfutilities::f(x, digits)
+  }, FUN.VALUE = character(1L))
+  if(relative_max){
+    df <- group_by(df, type) %>%
+      mutate(value = value / max(value)) %>%
+      ungroup()
+  }
+  if(scale_0_1){
+    df <- group_by(df, type) %>%
+      mutate(value = (value - min(value)) / (max(value) - min(value))) %>%
+      ungroup()
+  }
+
+  g <- ggplot(df, aes(x = type, y = MP)) +
+    geom_tile(aes(fill = value), color = "white") +
+    gfplot::theme_pbs() +
+    theme(panel.border=element_blank(),
+          axis.ticks.x = element_blank(),
+          axis.ticks.y = element_blank(),
+          axis.text.x = element_text(size = 7)) +
+    scale_fill_gradient(low = "white", high = "grey50", limits = c(0, 1)) +
+    guides(fill = FALSE) + xlab("") + ylab("") +
+    geom_text(aes(x = type, label = txt)) +
+    scale_x_discrete(labels = parse(text = probs), position = "left")
+
+  g
+}
+
