@@ -1,6 +1,6 @@
 #' Download an operating model from the DLMtool website
 #'
-#' @param file The name of the file (should be .rds)
+#' @param file The name of the file. If there is no .rds extension one will be appended
 #' @param web_file Like this: "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata" See webpage for listing
 #' @param base_url The URL to find the web_file on
 #' @param method Download method. It seems that on "wget" works on MS Windows
