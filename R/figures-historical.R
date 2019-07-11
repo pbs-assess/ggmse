@@ -1,3 +1,20 @@
+#' Plot historical time series
+#'
+#' @param object object
+#' @param type type
+#' @param n_samples number of samples
+#' @param this_year the year
+#' @param observed_ts obeserved ts
+#' @param legend_position legend position
+#' @importFrom reshape2 melt
+#' @importFrom dplyr transmute filter mutate group_by summarize bind_rows
+#' @importFrom ggplot2 ggplot aes aes_string scale_colour_manual geom_ribbon xlab ylab scale_size_manual
+#'  labs theme geom_line guides
+#' @importFrom gfplot theme_pbs
+#' @importFrom stats quantile
+#'
+#' @return ggplot object
+#' @export
 plot_historical_ts <- function(object,
   type = c("Catch", "SSB"),
   n_samples = 50,
@@ -37,7 +54,7 @@ plot_historical_ts <- function(object,
 
   d <- dplyr::filter(x, sample_id %in% sampled_ids)
 
-  if (!is.null(observed_ts)) d <- plyr::bind_rows(d, real_x)
+  if (!is.null(observed_ts)) d <- dplyr::bind_rows(d, real_x)
 
   g <- ggplot2::ggplot(d, ggplot2::aes_string("year", "value",
     colour = "type", group = "sample_id"))

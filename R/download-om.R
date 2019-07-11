@@ -7,6 +7,7 @@
 #' @param overwrite TRUE or FALSE to overwrite file
 #'
 #' @importFrom stringi stri_sub
+#' @importFrom utils download.file
 #' @export
 #'
 #' @examples

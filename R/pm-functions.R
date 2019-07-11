@@ -73,6 +73,7 @@ eval_pm <- function(mse_obj,
 #'
 #' @return A DLMtool PM function
 #' @importFrom DLMtool calcProb calcMean ChkYrs
+#' @importFrom methods new
 #' @export
 #'
 #' @examples
@@ -157,26 +158,164 @@ pm_factory <- function(pm_type,
   created_by_pm_factory
 }
 
+#' The function used for 10\% BMSY Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P10 <- pm_factory("SBMSY", 0.1)
+#' The function used for 10\% BMSY Performance metric for years 6-20
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P10_yrs6_20 <- pm_factory("SBMSY", 0.1, c(6, 20))
+#' The function used for 10\% BMSY Performance metric for years 21-35
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P10_yrs21_35 <- pm_factory("SBMSY", 0.1, c(21, 35))
+#' The function used for 10\% BMSY Performance metric for years 36-50
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P10_yrs36_50 <- pm_factory("SBMSY", 0.1, c(36, 50))
+#' The function used for 40\% BMSY Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P40 <- pm_factory("SBMSY", 0.4)
+#' The function used for 40\% BMSY Performance metric for years 6-20
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P40_yrs6_20 <- pm_factory("SBMSY", 0.4, c(6, 20))
+#' The function used for 40\% BMSY Performance metric for years 21-35
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P40_yrs21_35 <- pm_factory("SBMSY", 0.4, c(21, 35))
+#' The function used for 40\% BMSY Performance metric for years 36-50
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P40_yrs36_50 <- pm_factory("SBMSY", 0.4, c(36, 50))
+#' The function used for 80\% BMSY Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P80 <- pm_factory("SBMSY", 0.8)
+#' The function used for 80\% BMSY Performance metric for years 6-20
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P80_yrs6_20 <- pm_factory("SBMSY", 0.8, c(6, 20))
+#' The function used for 80\% BMSY Performance metric for years 21-35
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P80_yrs21_35 <- pm_factory("SBMSY", 0.8, c(21, 35))
+#' The function used for 80\% BMSY Performance metric for years 36-50
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P80_yrs36_50 <- pm_factory("SBMSY", 0.8, c(36, 50))
+#' The function used for 100\% BMSY Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P100 <- pm_factory("SBMSY", 1)
+#' The function used for 100\% BMSY Performance metric for years 6-20
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P100_yrs6_20 <- pm_factory("SBMSY", 1, c(6, 20))
+#' The function used for 100\% BMSY Performance metric for years 21-35
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P100_yrs21_35 <- pm_factory("SBMSY", 1, c(21, 35))
+#' The function used for 100\% BMSY Performance metric for years 36-50
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 P100_yrs36_50 <- pm_factory("SBMSY", 1, c(36, 50))
+#' The function used for Probaiblity of Not Overfishing Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 PNOF <- pm_factory("PNOF", 1)
+#' The function used for Probaiblity of Not Overfishing Performance metric for years 6-20
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 PNOF_yrs6_20 <- pm_factory("PNOF", 1, c(6, 20))
+#' The function used for Probaiblity of Not Overfishing Performance metric for years 21-35
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 PNOF_yrs21_35 <- pm_factory("PNOF", 1, c(21, 35))
+#' The function used for Probaiblity of Not Overfishing Performance metric for years 36-50
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 PNOF_yrs36_50 <- pm_factory("PNOF", 1, c(36, 50))
+#' The function used for Long Term Yield Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 LTY <- pm_factory("LTY", 0.5)
+#' The function used for Yield Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 Yield <- pm_factory("Yield", 1)
+#' The function used for Average Annual Variability in Yield being less than 20\% Performance metric
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
 AAVY <- pm_factory("AAVY", 0.2)

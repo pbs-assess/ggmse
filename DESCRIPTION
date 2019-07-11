@@ -25,7 +25,11 @@ Imports:
     readr,
     stringi,
     stringr,
-    tibble
+    tibble,
+    MASS,
+    TMB,
+    plyr,
+    here
 Suggests: 
 Encoding: UTF-8
 LazyData: true

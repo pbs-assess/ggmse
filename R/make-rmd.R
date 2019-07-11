@@ -1,6 +1,9 @@
 #' Get the actual name of the object for the base name object. e.g. stock
 #' object may have a suffix and be stock_pc <- new('Stock') or similar
 #' Assumes the first instance of stock* <- contains the object name
+#'
+#' @param rmd Lines of an Rmd file as read in by [readLines()]
+#' @param obj_base_name The base name of an object, i.e. stock, fleet, obs, or imp
 get_obj_name <- function(rmd, obj_base_name){
   paste0(obj_base_name,
          regmatches(rmd,
@@ -24,10 +27,8 @@ get_obj_name <- function(rmd, obj_base_name){
 #' @export
 #'
 #' @examples
-#' testing_path <- tempdir()
-#' dir.create(testing_path, showWarnings = FALSE)
-#' create_default_rmd(file.path(testing_path, "test.Rmd"))
-#' change_chunk_suffix(file.path(testing_path, "test.Rmd"), "test-suffix")
+#' create_default_rmd("test.Rmd")
+#' change_chunk_suffix("test.Rmd", "test-suffix")
 change_chunk_suffix <- function(file_name,
                                 chunk_suffix = ""){
   if (!file.exists(file_name)){
@@ -97,7 +98,7 @@ change_chunk_suffix <- function(file_name,
 
 }
 
-#' Check that begin and end slot-chunk tage match properly
+#' Check that begin and end slot-chunk tags match properly
 #'
 #' @param rmd The lines of the Rmd file as read in by readLines()
 #'
@@ -133,21 +134,21 @@ check_tags <- function(rmd){
 
 #' Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it
 #'
-#' @param file_name Filename/path of the .rmd file to create/modify. If it does not exist,
-#'  it will be created using create_default_rmd()
-#' @param cust_desc_file_name Filename/path of the .csv file containing the custom descriptions.
+#' @param file_name Filename of the .rmd file to create/modify. If it does not exist,
+#'  it will be created using [create_default_rmd()]
+#' @param cust_desc_file_name Filename of the .csv file containing the custom descriptions.
 #'  Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it.
+#' @param slot_type_order_file_name Filename of the .csv file containing the slot orders.
+#' @param ... Arguments to be passed to [gfdlm::create_default_rmd()]
 #'
 #' @return Nothing
 #' @importFrom readr read_csv
 #' @importFrom stringr str_split
-#' @importFrom dplyr filter arrange pull transmute
+#' @importFrom dplyr filter arrange pull transmute %>% row_number
 #' @export
 #'
 #' @examples
-#' testing_path <- tempdir()
-#' dir.create(testing_path, showWarnings = FALSE)
-#' create_rmd(file.path(testing_path, "test.Rmd"))
+#' create_rmd("test.Rmd")
 create_rmd <- function(file_name,
                        cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
                        slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
@@ -229,13 +230,13 @@ create_rmd <- function(file_name,
       if(kk$use_custom_description){
         val <- grep("^\\*.*\\*$", x)
         if(!length(val)){
-          stop("Error trying to find the description inside autogen chunk. Note it needs to start and end with an asterisk:\n",
-               paste0(j, collapse = "\n"),
+          stop("Error trying to find the description inside slot chunk. Note it needs to start and end with an asterisk:\n",
+               paste0(k, collapse = "\n"),
                call. = FALSE)
         }
         if(length(val) > 1){
-          stop("Error - more than one line matches as a description inside autogen chunk:\n",
-               paste0(j, collapse = "\n"),
+          stop("Error - more than one line matches as a description inside slot chunk:\n",
+               paste0(k, collapse = "\n"),
                call. = FALSE)
         }
         x[val] <- paste0("*", kk$custom_description, "*")
@@ -399,9 +400,7 @@ create_rmd <- function(file_name,
 #' @export
 #'
 #' @examples
-#' testing_path <- tempdir()
-#' dir.create(testing_path, showWarnings = FALSE)
-#' create_default_rmd(file.path(testing_path, "test.Rmd"))
+#' create_default_rmd("test.Rmd", overwrite = TRUE)
 create_default_rmd <- function(file_name, overwrite = FALSE,
   knitr_results = TRUE, knitr_echo = TRUE) {
   if (file.exists(file_name) && !overwrite)

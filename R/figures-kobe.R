@@ -1,6 +1,6 @@
 #' Calculate a set of x-y coordinates for a contour line
 #' Density values are sorted and standardized, and the critical value is
-#' calculated from the alpha cutoff value and sent to [calc_countour_lines()]
+#' calculated from the alpha cutoff value and sent to [gfdlm::calc_contour_lines()]
 #' as an argument.
 #'
 #' @param x Output from the function [MASS::kde2d()]
@@ -22,6 +22,9 @@ quantile_contour <- function(x, alpha = 0.8){
 #' @param d A list of management procedure data frames with columns mp, mp_name, x, and y.
 #' @param alpha A vector of levels between 0 and 1 for the contour lines.
 #' @param n As defined in [MASS::kde2d()].
+#' @importFrom MASS bandwidth.nrd kde2d
+#' @importFrom purrr map_dfr map_df
+#' @importFrom stats na.omit
 #'
 #' @return A data frame containing mp, mp_name, alpha, x, and y where x and y are the calculated
 #'  coordinates for the contour lines for each alpha and mp.
@@ -68,7 +71,7 @@ calc_contour_lines <- function(d,
 #' @importFrom dplyr filter select rename inner_join left_join
 #' @importFrom ggsidekick theme_sleek
 #' @importFrom ggplot2 geom_point geom_path scale_color_viridis_c labs facet_wrap guides geom_vline
-#' @importFrom ggplot2 ggplot geom_hline aes
+#' @importFrom ggplot2 ggplot geom_hline aes xlim ylim
 #' @export
 #'
 #' @examples

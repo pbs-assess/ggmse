@@ -6,6 +6,9 @@
 #'
 #' @return List of length 2, first item is a data frame of the output, second item is a list of captions for the metrics
 #' @importFrom tibble as_tibble
+#' @importFrom DLMtool avail
+#' @export
+#'
 #' @examples
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
@@ -54,38 +57,14 @@ get_probs <- function(object,
   list(as_tibble(df), captions)
 }
 
-#' #' Change a vector of probability captions into expressions for rendering on a ggplot plot
-#' #'
-#' #' @param cap_vec A vector of strings containing probabilities and special characters
-#' #' @param inc_yrs Include the years part of the caption expression
-#' #' @return a list of expressions
-#' #' @importFrom stringr str_extract
-#' cap_expr <- function(cap_vec, inc_yrs = FALSE){
-#'   probs <- regmatches(cap_vec, regexpr("(?<=Prob\\. ).*(?= \\()", cap_vec, perl = TRUE))
-#'   probs <- paste0("P(", probs, ")")
-#'   probs <- gsub("MSY", "_{MSY}", probs)
-#'   probs <- gsub("%", "\\\\%", probs)
-#'   probs <- paste0("$", probs, "$")
-#'
-#'   yrs <- stringr::str_extract(cap_vec, "\\(Year.*\\)$")
-#'   yrs <- gsub("Years", "Yrs", yrs)
-#'   yrs <- gsub(" - ", "-", yrs)
-#'   if(inc_yrs){
-#'     probs <- paste0(probs, "  ", yrs)
-#'   }
-#'
-#'   unlist(lapply(probs, latex2exp::TeX))
-#' }
-
 #' Summary of probabilities of things from the MSE object in a colored tile table format
 #'
 #' @param probs_dat A list of length 2 - a data frame and another list of captions describing the
-#'   columns of the data frame as returned from [get_probs()]
+#'   columns of the data frame as returned from [gfdlm::get_probs()]
 #' @param relative_max Make the plot have each column use a reletive maximum. If
 #'  scale_0_1 is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
 #' @param sort_by show values in decreasing or increasing format
-#' @param use_full_desc
 #' @param digits How many decimal places to show in the tiles for the values
 #'
 #' @importFrom reshape2 melt
@@ -95,16 +74,13 @@ get_probs <- function(object,
 #' @importFrom ggplot2 element_blank element_text guides xlab ylab
 #' @importFrom gfplot theme_pbs
 #' @examples
-#' \dontrun{
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' plot_probs(probs)
-#' }
 plot_probs <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
-                       sort_by = "decreasing",
-                       use_full_desc = FALSE){
+                       sort_by = "decreasing"){
 
   df <- probs_dat[[1]]
   captions <- probs_dat[[2]]
@@ -124,8 +100,7 @@ plot_probs <- function(probs_dat,
                        value.name = "value")
 
   ## Set up expressions for tick labels
-  j <- as.vector(do.call('rbind', captions))
-  probs <- ifelse(use_full_desc, cap_expr(j), j)
+  probs <- as.vector(do.call('rbind', captions))
 
   df$txt <- vapply(df$value, function(x){
     gfutilities::f(x, digits)
