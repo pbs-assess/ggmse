@@ -7,6 +7,8 @@
 #'   final plot.
 #' @param n_samples The number of timeseries samples to illustrate.
 #' @param this_year The last year of the historical timeseries.
+#' @param bbmsy_zones A numeric vector of status zone lines to add to
+#'   the B/Bmsy panel if it is present.
 #'
 #' @return ggplot object
 #' @export
@@ -21,15 +23,18 @@ plot_projection_ts <- function(object,
                                type = c("F_FMSY", "B_BMSY"),
                                n_samples = 3,
                                this_year = 2018,
-                               observed_ts = NULL,
-                               legend_position = c(0.9, 0.85)) {
+  bbmsy_zones = c(0.4, 0.8)) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be aa DLMtool object of class `mse`",
       "that was created by running `DLMtool::runMSE()`."
     )
   }
-  proj_years <- seq(this_year, this_year + object@proyears)
+  .proj_years <- seq(this_year + 1, this_year + object@proyears)
+  years_df <- data.frame(
+    year = seq_len(object@proyears), real_year = .proj_years,
+    stringsAsFactors = FALSE
+  )
 
   mps <- data.frame(
     mp = seq_along(object@MPs),
@@ -45,9 +50,10 @@ plot_projection_ts <- function(object,
       dplyr::mutate(Type = type[i])
   }
   ts_data <- dplyr::bind_rows(ts_data)
+  ts_data <- dplyr::left_join(ts_data, years_df, by = "year")
 
   quantiles <- ts_data %>%
-    dplyr::group_by(mp_name, year, Type) %>%
+    dplyr::group_by(mp_name, real_year, Type) %>%
     dplyr::summarize(
       median_value = median(value),
       l = quantile(value, probs = 0.75),
@@ -70,27 +76,27 @@ plot_projection_ts <- function(object,
   d <- dplyr::left_join(d, type_df, by = "Type")
   quantiles <- dplyr::left_join(quantiles, type_df, by = "Type")
 
-  lines <- data.frame(value = 0.4, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
+  lines <- data.frame(value = bbmsy_zones, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
 
-  g <- ggplot2::ggplot(d, ggplot2::aes_string("year", "value", group = "iter"))
+  g <- ggplot2::ggplot(d, ggplot2::aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
-    ggplot2::aes_string(x = "year", ymin = "ll", ymax = "uu"),
+    ggplot2::aes_string(x = "real_year", ymin = "ll", ymax = "uu"),
     colour = NA, fill = "grey90", inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
-    ggplot2::aes_string(x = "year", ymin = "l", ymax = "u"),
+    ggplot2::aes_string(x = "real_year", ymin = "l", ymax = "u"),
     colour = NA, fill = "grey70", inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_line(
     data = quantiles,
-    ggplot2::aes_string(x = "year", y = "m"),
+    ggplot2::aes_string(x = "real_year", y = "m"),
     colour = "grey40", lwd = 1.1, inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30") +
-    ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey30")
-  g <- g + ggplot2::geom_line(alpha = 0.5, lwd = 0.3, lty = 1) +
+    ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey40")
+  g <- g + ggplot2::geom_line(alpha = 0.5, lty = 1) +
     ggplot2::ylab("Projected value") +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +

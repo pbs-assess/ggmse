@@ -5,8 +5,7 @@
 \title{Plot projection time series}
 \usage{
 plot_projection_ts(object, type = c("F_FMSY", "B_BMSY"), n_samples = 3,
-  this_year = 2018, observed_ts = NULL, legend_position = c(0.9,
-  0.85))
+  this_year = 2018, bbmsy_zones = c(0.4, 0.8))
 }
 \arguments{
 \item{object}{A DLMtool object of class \code{mse} that was created by
@@ -19,6 +18,9 @@ final plot.}
 \item{n_samples}{The number of timeseries samples to illustrate.}
 
 \item{this_year}{The last year of the historical timeseries.}
+
+\item{bbmsy_zones}{A numeric vector of status zone lines to add to
+the B/Bmsy panel if it is present.}
 }
 \value{
 ggplot object
