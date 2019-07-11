@@ -35,25 +35,40 @@ load_data_factory <- function(species_name, file) {
   created_by_load_data_factory
 }
 
+#' Loads Pacific Cod data
+#'
+#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+#' @param private If TRUE, do not include commercial samples and catch in the returned data
+#'
+#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+#' @importFrom here here
+#' @export
 load_data_pcod <- load_data_factory("pacific cod",
-  file = here::here(
-    "generated-data",
-    "pacific-cod.rds"
-  )
+  file = here("generated-data", "pacific-cod.rds")
 )
 
+#' Loads Shortraker Rockfish data
+#'
+#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+#' @param private If TRUE, do not include commercial samples and catch in the returned data
+#'
+#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+#' @importFrom here here
+#' @export
 load_data_shortraker <- load_data_factory("shortraker rockfish",
-  file = here::here(
-    "generated-data",
-    "shortraker-rockfish.rds"
-  )
+  file = here("generated-data", "shortraker-rockfish.rds")
 )
 
+#' Loads Rex Sole data
+#'
+#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+#' @param private If TRUE, do not include commercial samples and catch in the returned data
+#'
+#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+#' @importFrom here here
+#' @export
 load_data_rex <- load_data_factory("rex sole",
-  file = here::here(
-    "generated-data",
-    "rex-sole.rds"
-  )
+  file = here("generated-data", "rex-sole.rds")
 )
 
 #' Filter Rex sole data
