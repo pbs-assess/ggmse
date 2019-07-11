@@ -1,6 +1,6 @@
 #' Plot historical time series
 #'
-#' @param object A DLMtool object of class `MSE` that was created by
+#' @param object A DLMtool object of class `Hist` that was created by
 #'  running [DLMtool::runMSE()] with `Hist = TRUE`.
 #' @param type A character object describing the element of `object@TSdata` to
 #'   plot.
@@ -32,6 +32,11 @@ plot_historical_ts <- function(object,
                                observed_ts = NULL,
                                legend_position = c(0.9, 0.85)) {
 
+  if (!.hasSlot(object, "Data" || class(object) != "Hist")) {
+    stop("`object` must be a DLMtool object of class `Hist`",
+      "that was created by running `DLMtool::runMSE()` with",
+      "`Hist = TRUE`.")
+  }
   all_years <- seq(this_year - object@Data@LHYear + 1, this_year)
 
   x <- object@TSdata[[type[[1]]]] %>%
