@@ -1,4 +1,4 @@
 library(testthat)
-library(pbs2dlm)
+library(gfdlm)
 
-test_check("pbs2dlm")
+test_check("gfdlm")

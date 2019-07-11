@@ -6,7 +6,7 @@
 #' @param method Download method. It seems that on "wget" works on MS Windows
 #' @param overwrite TRUE or FALSE to overwrite file
 #'
-#' @return
+#' @importFrom stringi stri_sub
 #' @export
 #'
 #' @examples

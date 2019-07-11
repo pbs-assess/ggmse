@@ -6,7 +6,7 @@ Authors@R:
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com")
-Description: What the package does (one paragraph).
+Description: Provides many tools for using DLMtool for producing groundfish section CSAS research documents.
 License: GPL-2
 Imports:
     DLMtool,
@@ -15,10 +15,20 @@ Imports:
     gfplot,
     reshape2,
     methods,
-    rlang
-Suggests: gfdata
+    rlang,
+    gfdata,
+    gfutilities,
+    ggplot2,
+    purrr,
+    ggsidekick,
+    lubridate,
+    readr,
+    stringi,
+    stringr,
+    tibble
+Suggests: 
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
-Remotes: github::pbs-assess/gfplot, github::pbs-assess/gfdata
+Remotes: github::pbs-assess/gfplot, github::pbs-assess/gfdata, github::pbs-assess/gfutilities

@@ -7,6 +7,7 @@
 #' @param alpha A cutoff value between 0 and 1 for the contour line.
 #'
 #' @return A list of two vectors of x and y-coordinates for the contour line.
+#' @importFrom grDevices contourLines
 quantile_contour <- function(x, alpha = 0.8){
   zdens <- rev(sort(x$z))
   cumu_zdens <- cumsum(zdens)
@@ -63,9 +64,14 @@ calc_contour_lines <- function(d,
 #' @param y_ref_lines A vector of horizontal lines to draw as reference point lines.
 #'
 #' @return A ggplot object
+#' @importFrom reshape2 melt
+#' @importFrom dplyr filter select rename inner_join left_join
+#' @importFrom ggsidekick theme_sleek
+#' @importFrom ggplot2 geom_point geom_path scale_color_viridis_c labs facet_wrap guides geom_vline
+#' @importFrom ggplot2 ggplot geom_hline aes
 #' @export
 #'
-#' @example
+#' @examples
 #' \dontrun{
 #' plot_contours(mse)
 #' }

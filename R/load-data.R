@@ -5,6 +5,7 @@
 #' @param file The filename to load from
 #'
 #' @return A function which can be used to load data automatically
+#' @importFrom gfdata get_catch get_commercial_samples get_survey_samples get_survey_index
 #' @export
 #'
 #' @examples
@@ -65,6 +66,8 @@ load_data_rex <- load_data_factory("rex sole",
 #'  field of the survey_index item of the call to [gfdata::get_survey_index()]
 #'
 #' @return The filtered data
+#' @importFrom dplyr mutate filter %>%
+#' @importFrom lubridate year
 #' @export
 filter_data_rex <- function(d,
                             minimum_year = 1996,

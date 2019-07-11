@@ -18,6 +18,9 @@ get_obj_name <- function(rmd, obj_base_name){
 #'  string, any previous suffixes will be removed.
 #'
 #' @return Nothing
+#' @importFrom purrr map
+#' @importFrom gfutilities has_specials
+#' @importFrom stringr str_split
 #' @export
 #'
 #' @examples
@@ -136,6 +139,9 @@ check_tags <- function(rmd){
 #'  Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it.
 #'
 #' @return Nothing
+#' @importFrom readr read_csv
+#' @importFrom stringr str_split
+#' @importFrom dplyr filter arrange pull transmute
 #' @export
 #'
 #' @examples
@@ -429,6 +435,7 @@ create_default_rmd <- function(file_name, overwrite = FALSE,
 #' @param inst_obj_name The name to use for the instance of the object
 #'
 #' @return The Rmd - formatted vector of strings
+#' @importFrom dplyr mutate
 #' @noRd
 #'
 #' @examples

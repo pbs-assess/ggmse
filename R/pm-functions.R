@@ -7,9 +7,10 @@
 #' @param refs Optional. List containing the reference limits for each metric
 #' @param yrs Optional. Numeric vector of length 2 with year indices to summarize performance
 #'
-#' @returns A data frame containing the Management procedures, Performace metrics,
-#'  probability, probability caption, description, and class of the management procedure.
-#' @example
+#' @return A data frame containing the Management procedures, Performace metrics, probability, probability caption, description, and class of the management procedure.
+#' @importFrom DLMtool MPtype
+#' @importFrom tibble as_tibble
+#' @examples
 #' \dontrun{
 #' eval_pm(mse, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
 #' }
@@ -71,6 +72,7 @@ eval_pm <- function(mse_obj,
 #' @param yrs A vector of years to include. If NULL, all will be used.
 #'
 #' @return A DLMtool PM function
+#' @importFrom DLMtool calcProb calcMean ChkYrs
 #' @export
 #'
 #' @examples
@@ -85,18 +87,18 @@ pm_factory <- function(pm_type,
   pm_obj@Ref <- ref
   if(pm_type == "SBMSY"){
     created_by_pm_factory <- function(mse_obj){
-      yrs <- ChkYrs(yrs, mse_obj)
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- "Spawning Biomass relative to SBMSY"
       pm_obj@Caption <- paste0("Prob. SB > ", ifelse(ref == 1, "", ref), " SBMSY (Years ", yrs[1], " - ", yrs[2], ")")
       pm_obj@Stat <- mse_obj@B_BMSY[ , , yrs[1]:yrs[2]]
-      pm_obj@Prob <- calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
-      pm_obj@Mean <- calcMean(pm_obj@Prob)
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
   }else if(pm_type == "AAVY"){
     created_by_pm_factory <- function(mse_obj){
-      yrs <- ChkYrs(yrs, mse_obj)
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <-  paste0("Average Annual Variability in Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <-  paste0('Prob. AAVY < ', ref * 100, "% (Years ", yrs[1], "-", yrs[2], ")")
       y1 <- yrs[1]:(yrs[2] - 1)
@@ -110,43 +112,43 @@ pm_factory <- function(pm_type,
         pm_obj@Stat <- array(apply(((((mse_obj@C[, 1, y1] - mse_obj@C[, 1, y2]) /
                                         mse_obj@C[, 1, y2]) ^ 2) ^ 0.5), c(1), mean))
       }
-      pm_obj@Prob <- calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
-      pm_obj@Mean <- calcMean(pm_obj@Prob)
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
   }else if(pm_type == "PNOF"){
     created_by_pm_factory <- function(mse_obj){
-      yrs <- ChkYrs(yrs, mse_obj)
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- "Probability of not overfishing (F<FMSY)"
       pm_obj@Caption <- paste0("Prob. F < ", ifelse(ref == 1, "", ref), " FMSY (Years ", yrs[1], " - ", yrs[2], ")")
       pm_obj@Stat <- mse_obj@F_FMSY[ , , yrs[1]:yrs[2]]
-      pm_obj@Prob <- calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
-      pm_obj@Mean <- calcMean(pm_obj@Prob)
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
   }else if(pm_type == "LTY"){
     created_by_pm_factory <- function(mse_obj){
-      yrs <- ChkYrs(yrs, mse_obj)
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
       ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
       pm_obj@Stat <- mse_obj@C[, , yrs[1]:yrs[2]] / ref_yield
-      pm_obj@Prob <- calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
-      pm_obj@Mean <- calcMean(pm_obj@Prob)
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
   }else if(pm_type == "Yield"){
     created_by_pm_factory <- function(mse_obj){
-      yrs <- ChkYrs(yrs, mse_obj)
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
       ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
       pm_obj@Stat <- mse_obj@C[, , yrs[1]:yrs[2]] / ref_yield
-      pm_obj@Prob <- calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
-      pm_obj@Mean <- calcMean(pm_obj@Prob)
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
