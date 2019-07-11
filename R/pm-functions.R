@@ -7,9 +7,10 @@
 #' @param refs Optional. List containing the reference limits for each metric
 #' @param yrs Optional. Numeric vector of length 2 with year indices to summarize performance
 #'
-#' @return A data frame containing the Management procedures, Performace metrics, probability, probability caption, description, and class of the management procedure.
+#' @return A data frame containing the Management procedures, Performance metrics, probability, probability caption, description, and class of the management procedure.
 #' @importFrom DLMtool MPtype
 #' @importFrom tibble as_tibble
+#' @export
 #' @examples
 #' \dontrun{
 #' eval_pm(mse, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))

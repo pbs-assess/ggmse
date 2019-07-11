@@ -16,7 +16,7 @@ eval_pm(mse_obj, pm_list = NULL, refs = NULL, yrs = NULL)
 \item{yrs}{Optional. Numeric vector of length 2 with year indices to summarize performance}
 }
 \value{
-A data frame containing the Management procedures, Performace metrics, probability, probability caption, description, and class of the management procedure.
+A data frame containing the Management procedures, Performance metrics, probability, probability caption, description, and class of the management procedure.
 }
 \description{
 Evaluate Performance Metrics

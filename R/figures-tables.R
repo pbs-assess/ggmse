@@ -4,7 +4,7 @@
 #' @param ... List of performace metrics
 #' @param refs List containing the reference limits for each metric
 #'
-#' @return List of length 2, first item is a data frame of the output, second item is a list of captions for the metrics
+#' @return A tibble of the output
 #' @importFrom tibble as_tibble
 #' @importFrom DLMtool avail
 #' @export
@@ -54,7 +54,10 @@ get_probs <- function(object,
                    signif(do.call('cbind', means),2), stringsAsFactors = FALSE)
   colnames(df)[2:(length(pm_list) + 1)] <- pm_list
 
-  list(as_tibble(df), captions)
+  # If the following list is returned, the second item will be a list of captions
+  #  representing the columns of the data frame in item 1
+  #list(as_tibble(df), captions)
+  as_tibble(df)
 }
 
 #' Summary of probabilities of things from the MSE object in a colored tile table format
@@ -82,8 +85,10 @@ plot_probs <- function(probs_dat,
                        scale_0_1 = FALSE,
                        sort_by = "decreasing"){
 
-  df <- probs_dat[[1]]
-  captions <- probs_dat[[2]]
+  df <- probs_dat
+  # Used if captions are to be used for top labels
+  #df <- probs_dat[[1]]
+  #captions <- probs_dat[[2]]
 
   if(sort_by == "decreasing"){
     df$MP <- factor(df$MP, levels = df$MP[do.call(order, df[-1])])
@@ -99,8 +104,8 @@ plot_probs <- function(probs_dat,
                        variable.name = "type",
                        value.name = "value")
 
-  ## Set up expressions for tick labels
-  probs <- as.vector(do.call('rbind', captions))
+  ## Set up expressions for tick labels - only used if captions are to be used as top labels
+  ## probs <- as.vector(do.call('rbind', captions))
 
   df$txt <- vapply(df$value, function(x){
     gfutilities::f(x, digits)
@@ -119,14 +124,17 @@ plot_probs <- function(probs_dat,
   g <- ggplot(df, aes(x = type, y = MP)) +
     geom_tile(aes(fill = value), color = "white") +
     gfplot::theme_pbs() +
-    theme(panel.border=element_blank(),
+    theme(panel.border = element_blank(),
           axis.ticks.x = element_blank(),
           axis.ticks.y = element_blank(),
           axis.text.x = element_text(size = 7)) +
     scale_fill_gradient(low = "white", high = "grey50", limits = c(0, 1)) +
     guides(fill = FALSE) + xlab("") + ylab("") +
+
     geom_text(aes(x = type, label = txt)) +
-    scale_x_discrete(labels = parse(text = probs), position = "left")
+    # Used if captions are used for labelling
+    #scale_x_discrete(labels = parse(text = probs), position = "left")
+    scale_x_discrete(position = "top")
 
   g
 }

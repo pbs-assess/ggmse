@@ -202,3 +202,17 @@ test_that("All lines that should have had sufixes added do", {
 # test_that("Duplicate ordering values in custom description file produces error", {
 #   expect_error(create_rmd("test-desc.rmd", "test-desc.csv", "test-slot-type-order.csv"))
 # })
+
+## ------------------------------------------------------------------------------------------------
+context("Check that get_probs() is working")
+
+probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+test_that("get_probs() returns correct values", {
+  expect_equal(as.character(probs[1,1]), "AvC")
+  expect_equal(as.numeric(probs[1,2]), 0.12)
+  expect_equal(as.numeric(probs[1,3]), 0.02)
+  expect_equal(as.numeric(probs[1,4]), 0.027)
+  expect_equal(as.numeric(probs[1,5]), 0.3)
+  expect_equal(as.numeric(probs[1,6]), 0.67)
+})
+

@@ -4,7 +4,7 @@
 library(DLMtool)
 om <- testOM
 om@nsim <- 3
-mse <- runMSE(OM = om, MPs = "AvC")
+mse <- runMSE(OM = om)
 P40 <- pm_factory("SBMSY", 0.4)
 
 use_data(om, overwrite = TRUE)

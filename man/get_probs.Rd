@@ -14,7 +14,7 @@ get_probs(object, ..., refs = NULL)
 \item{refs}{List containing the reference limits for each metric}
 }
 \value{
-List of length 2, first item is a data frame of the output, second item is a list of captions for the metrics
+A tibble of the output
 }
 \description{
 Summary of probabilities of performance metrics from the MSE object
