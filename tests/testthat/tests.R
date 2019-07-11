@@ -23,103 +23,103 @@ create_default_rmd("test-desc.rmd")
 test_that("New .rmd description file is present", {
   expect_true(file.exists("test-desc.rmd"))
 })
-#
-# ## ------------------------------------------------------------------------------------------------
-# context("Check if an slot-chunk tag is manually or accidentally removed from the file")
-#
-# if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
-# create_default_rmd("test-desc.rmd")
-# rmd <- readLines("test-desc.rmd")
-# ## Remove last autogen end tag from file
-# rmd <- rmd[-969]
-# unlink("test-desc.rmd")
-# conn <- file("test-desc.rmd")
-# write(rmd, conn)
-# close(conn)
-#
-# test_that("Removal of an autogen tag results in error", {
-#   expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
-# })
-#
-# ## ------------------------------------------------------------------------------------------------
-# context("Check if a description header was manually or accidentally removed from the file")
-#
-# if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
-# create_default_rmd("test-desc.rmd")
-# rmd <- readLines("test-desc.rmd")
-# ## Remove last description from file
-# rmd <- rmd[-974]
-# unlink("test-desc.rmd")
-# conn <- file("test-desc.rmd")
-# write(rmd, conn)
-# close(conn)
-#
-# test_that("Removal of a description results in error", {
-#   expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
-# })
-#
-# ## ------------------------------------------------------------------------------------------------
-# context("Check if more than one description header in an autogen chunk")
-# if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
-# create_default_rmd("test-desc.rmd")
-# rmd <- readLines("test-desc.rmd")
-# ## Add duplicate description to file
-# rmd <- append(rmd, rmd[974], after = 974)
-# unlink("test-desc.rmd")
-# conn <- file("test-desc.rmd")
-# write(rmd, conn)
-# close(conn)
-#
-# test_that("Duplicate description results in error", {
-#   expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
-# })
-#
-# ## ------------------------------------------------------------------------------------------------
-# context("Check that adding a suffix to the chunk names works")
-# if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
-# create_default_rmd("test-desc.rmd")
-# change_chunk_suffix("test-desc.rmd", "testme")
-# rmd <- readLines("test-desc.rmd")
-# chunk_name_regex <- "(?<=desc-)[\\w-]+(?=\\}| *,)"
-# val <- grep(chunk_name_regex, rmd, perl = TRUE)
-# mtch <- grep("testme", rmd[val])
-#
-# test_that("All lines that should have had sufixes added do", {
-#   expect_equal(length(val), length(mtch))
-# })
-#
-# ## ------------------------------------------------------------------------------------------------
-# context("Check that adding a suffix with special characters or a vector of suffixes gives an error")
-# if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
-# create_default_rmd("test-desc.rmd")
-#
-# test_that("All lines that should have had sufixes added do", {
-#   expect_error(change_chunk_suffix("test-desc.rmd", "hello?"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "world!"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "foo."))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "."))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "0<1"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "1>0"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "\\"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "\\\\"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\\\"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\\\\\"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "1|2"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "3&4"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5:6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "7^8"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "hello@worldcom"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5;6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "a~b"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5(6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5)6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5[6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5]6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5{6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "5}6"))
-#   expect_error(change_chunk_suffix("test-desc.rmd", "hello`"))
-# })
+
+## ------------------------------------------------------------------------------------------------
+context("Check if an slot-chunk tag is manually or accidentally removed from the file")
+
+if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+create_default_rmd("test-desc.rmd")
+rmd <- readLines("test-desc.rmd")
+## Remove last autogen end tag from file
+rmd <- rmd[-969]
+unlink("test-desc.rmd")
+conn <- file("test-desc.rmd")
+write(rmd, conn)
+close(conn)
+
+test_that("Removal of an autogen tag results in error", {
+  expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
+})
+
+## ------------------------------------------------------------------------------------------------
+context("Check if a description header was manually or accidentally removed from the file")
+
+if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+create_default_rmd("test-desc.rmd")
+rmd <- readLines("test-desc.rmd")
+## Remove last description from file
+rmd <- rmd[-974]
+unlink("test-desc.rmd")
+conn <- file("test-desc.rmd")
+write(rmd, conn)
+close(conn)
+
+test_that("Removal of a description results in error", {
+  expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
+})
+
+## ------------------------------------------------------------------------------------------------
+context("Check if more than one description header in an autogen chunk")
+if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+create_default_rmd("test-desc.rmd")
+rmd <- readLines("test-desc.rmd")
+## Add duplicate description to file
+rmd <- append(rmd, rmd[974], after = 974)
+unlink("test-desc.rmd")
+conn <- file("test-desc.rmd")
+write(rmd, conn)
+close(conn)
+
+test_that("Duplicate description results in error", {
+  expect_error(create_rmd("test-desc.rmd", "test-slot-descriptions.csv"))
+})
+
+## ------------------------------------------------------------------------------------------------
+context("Check that adding a suffix to the chunk names works")
+if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+create_default_rmd("test-desc.rmd")
+change_chunk_suffix("test-desc.rmd", "testme")
+rmd <- readLines("test-desc.rmd")
+chunk_name_regex <- "(?<=desc-)[\\w-]+(?=\\}| *,)"
+val <- grep(chunk_name_regex, rmd, perl = TRUE)
+mtch <- grep("testme", rmd[val])
+
+test_that("All lines that should have had sufixes added do", {
+  expect_equal(length(val), length(mtch))
+})
+
+## ------------------------------------------------------------------------------------------------
+context("Check that adding a suffix with special characters or a vector of suffixes gives an error")
+if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+create_default_rmd("test-desc.rmd")
+
+test_that("All lines that should have had sufixes added do", {
+  expect_error(change_chunk_suffix("test-desc.rmd", "hello?"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "world!"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "foo."))
+  expect_error(change_chunk_suffix("test-desc.rmd", "."))
+  expect_error(change_chunk_suffix("test-desc.rmd", "0<1"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "1>0"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "\\"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "\\\\"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\\\"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "\\\\\\\\\\\\"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "1|2"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "3&4"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5:6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "7^8"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "hello@worldcom"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5;6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "a~b"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5(6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5)6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5[6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5]6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5{6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "5}6"))
+  expect_error(change_chunk_suffix("test-desc.rmd", "hello`"))
+})
 
 ## ------------------------------------------------------------------------------------------------
 # context("Check that ordering and showing/blocking of slots is working")
