@@ -1,4 +1,4 @@
-#'Summary of probabilities of performance metrics from the MSE object
+#' Summary of probabilities of performance metrics from the MSE object
 #'
 #' @param object MSE object, output of the [DLMtool::runMSE()] function
 #' @param ... List of performace metrics
@@ -87,7 +87,9 @@ get_probs <- function(object,
 #'  scale_0_1 is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
 #' @param sort_by show values in decreasing or increasing format
+#' @param use_full_desc
 #' @param digits How many decimal places to show in the tiles for the values
+#'
 #' @importFrom reshape2 melt
 #' @importFrom gfutilities f
 #' @importFrom dplyr ungroup mutate group_by
