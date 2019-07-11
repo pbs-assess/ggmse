@@ -4,7 +4,7 @@
 \alias{plot_projection_ts}
 \title{Plot projection time series}
 \usage{
-plot_projection_ts(object, type = c("Catch", "SSB"), n_samples = 50,
+plot_projection_ts(object, type = c("F_FMSY", "B_BMSY"), n_samples = 3,
   this_year = 2018, observed_ts = NULL, legend_position = c(0.9,
   0.85))
 }
@@ -12,8 +12,9 @@ plot_projection_ts(object, type = c("Catch", "SSB"), n_samples = 50,
 \item{object}{A DLMtool object of class \code{mse} that was created by
 running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
 
-\item{type}{A character object describing the element of \code{mse@} to
-plot.}
+\item{type}{A character vector describing the element of \code{mse@} to
+plot. Each of these "types" will be included as a column in the
+final plot.}
 
 \item{n_samples}{The number of timeseries samples to illustrate.}
 
@@ -24,4 +25,12 @@ ggplot object
 }
 \description{
 Plot projection time series
+}
+\examples{
+library(DLMtool)
+om@nsim <- 10
+x <- runMSE(om, MPs = c("AvC", "CC1"))
+set.seed(1)
+plot_projection_ts(x)
+plot_projection_ts(x, type = "SSB")
 }
