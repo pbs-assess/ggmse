@@ -3,7 +3,7 @@
 
 library(DLMtool)
 om <- testOM
-om@nsim <- 3
+om@nsim <- 10
 mse <- runMSE(OM = om)
 P40 <- pm_factory("SBMSY", 0.4)
 
