@@ -9,8 +9,8 @@
 #' @importFrom DLMtool avail
 #' @export
 #'
-#' @examples
-#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+# @examples
+# probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,
                       refs = NULL){
