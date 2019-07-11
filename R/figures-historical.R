@@ -1,6 +1,7 @@
 #' Plot historical time series
 #'
-#' @param object A DLMtool object of class `MSE`.
+#' @param object A DLMtool object of class `MSE` that was created by
+#'  running [DLMtool::runMSE()] with `Hist = TRUE`.
 #' @param type A character object describing the element of `object@TSdata` to
 #'   plot.
 #' @param n_samples The number of timeseries samples to illustrate.
@@ -16,12 +17,21 @@
 #'
 #' @return ggplot object
 #' @export
+#' @examples
+#' library(DLMtool)
+#' historical_mse <- runMSE(om, Hist = TRUE)
+#' plot_historical_ts(historical_mse, n_samples = 2)
+#' plot_historical_ts(historical_mse, n_samples = 2,
+#'   observed_ts = rlnorm(50, 1, 0.3))
+#'
+
 plot_historical_ts <- function(object,
                                type = c("Catch", "SSB"),
                                n_samples = 50,
                                this_year = 2018,
                                observed_ts = NULL,
                                legend_position = c(0.9, 0.85)) {
+
   all_years <- seq(this_year - object@Data@LHYear + 1, this_year)
 
   x <- object@TSdata[[type[[1]]]] %>%
@@ -68,7 +78,8 @@ plot_historical_ts <- function(object,
     colour = NA, fill = "grey90", inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_line(aes(size = type)) +
-    ggplot2::ylab("Historical catch\n(scaled by geometric mean)") +
+    ggplot2::ylab(paste0("Historical ", type[[1]],
+      "\n(scaled by geometric mean)")) +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +
     ggplot2::scale_colour_manual(values = c("Simulated" = "#00000050", "Observed" = "red")) +

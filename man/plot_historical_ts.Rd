@@ -9,7 +9,8 @@ plot_historical_ts(object, type = c("Catch", "SSB"), n_samples = 50,
   0.85))
 }
 \arguments{
-\item{object}{A DLMtool object of class \code{MSE}.}
+\item{object}{A DLMtool object of class \code{MSE} that was created by
+running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} with \code{Hist = TRUE}.}
 
 \item{type}{A character object describing the element of \code{object@TSdata} to
 plot.}
@@ -27,4 +28,12 @@ ggplot object
 }
 \description{
 Plot historical time series
+}
+\examples{
+library(DLMtool)
+historical_mse <- runMSE(om, Hist = TRUE)
+plot_historical_ts(historical_mse, n_samples = 2)
+plot_historical_ts(historical_mse, n_samples = 2,
+  observed_ts = rlnorm(50, 1, 0.3))
+
 }
