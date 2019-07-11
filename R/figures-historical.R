@@ -15,6 +15,9 @@
 #'   xlab ylab scale_size_manual labs theme geom_line guides
 #' @importFrom gfplot theme_pbs
 #' @importFrom stats quantile
+#' @importFrom methods .hasSlot
+#' @importFrom rlang .data
+#' @importFrom stats median
 #'
 #' @return ggplot object
 #' @export
