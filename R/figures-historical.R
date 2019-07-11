@@ -5,8 +5,9 @@
 #' @param type A character object describing the element of `object@TSdata` to
 #'   plot.
 #' @param n_samples The number of timeseries samples to illustrate.
-#' @param this_year The last year of the historical times there is.
+#' @param this_year The last year of the historical timeseries.
 #' @param observed_ts An optional observed timeseries to add is a comparison.
+#' @param scale Should the timeseries be scaled by their geometric mean?
 #' @param legend_position The x and y coordinates of the legend.
 #' @importFrom reshape2 melt
 #' @importFrom dplyr transmute filter mutate group_by summarize bind_rows
@@ -21,21 +22,25 @@
 #' library(DLMtool)
 #' historical_mse <- runMSE(om, Hist = TRUE)
 #' plot_historical_ts(historical_mse, n_samples = 2)
-#' plot_historical_ts(historical_mse, n_samples = 2,
-#'   observed_ts = rlnorm(50, 1, 0.3))
-#'
-
+#' plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
+#' plot_historical_ts(historical_mse, type = "RecDev", n_samples = 2)
+#' plot_historical_ts(historical_mse,
+#'   n_samples = 2,
+#'   observed_ts = rlnorm(50, 1, 0.3)
+#' )
 plot_historical_ts <- function(object,
-                               type = c("Catch", "SSB"),
+                               type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray", "RecDev"),
                                n_samples = 50,
                                this_year = 2018,
                                observed_ts = NULL,
+                               scale = if (!is.null(observed_ts)) TRUE else FALSE,
                                legend_position = c(0.9, 0.85)) {
-
-  if (!.hasSlot(object, "Data" || class(object) != "Hist")) {
-    stop("`object` must be a DLMtool object of class `Hist`",
+  if (!.hasSlot(object, "Data") || class(object) != "Hist") {
+    stop(
+      "`object` must be a DLMtool object of class `Hist`",
       "that was created by running `DLMtool::runMSE()` with",
-      "`Hist = TRUE`.")
+      "`Hist = TRUE`."
+    )
   }
   all_years <- seq(this_year - object@Data@LHYear + 1, this_year)
 
@@ -47,9 +52,9 @@ plot_historical_ts <- function(object,
     )
 
   x <- x %>%
-    filter(!is.na(value)) %>%
-    # group_by(sample_id)
-    mutate(value = value / exp(mean(log(value))))
+    filter(!is.na(value))
+
+  if (scale) x <- mutate(x, value = value / exp(mean(log(value))))
 
 
   outer_bounds <- x %>%
@@ -59,13 +64,12 @@ plot_historical_ts <- function(object,
       upper = quantile(value, probs = 1)
     )
 
-
   if (!is.null(observed_ts)) {
     real_x <- data.frame(
       year = unique(x$year), value = observed_ts,
       type = "Observed", stringsAsFactors = FALSE
-    ) %>%
-      mutate(value = value / exp(mean(log(value))))
+    )
+    real_x <- mutate(real_x, value = value / exp(mean(log(value))))
   }
 
   sampled_ids <- sample(unique(x$sample_id), size = n_samples)
@@ -83,8 +87,10 @@ plot_historical_ts <- function(object,
     colour = NA, fill = "grey90", inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_line(aes(size = type)) +
-    ggplot2::ylab(paste0("Historical ", type[[1]],
-      "\n(scaled by geometric mean)")) +
+    ggplot2::ylab(paste0(
+      "Historical ", type[[1]],
+      if (scale) "\n(scaled by geometric mean)" else ""
+    )) +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +
     ggplot2::scale_colour_manual(values = c("Simulated" = "#00000050", "Observed" = "red")) +
