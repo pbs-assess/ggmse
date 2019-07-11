@@ -7,9 +7,7 @@
 #' @return List of length 2, first item is a data frame of the output, second item is a list of captions for the metrics
 #' @importFrom tibble as_tibble
 #' @examples
-#' \dontrun{
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
-#' }
 get_probs <- function(object,
                       ...,
                       refs = NULL){
