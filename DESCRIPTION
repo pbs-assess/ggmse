@@ -8,28 +8,30 @@ Authors@R:
            email = "first.last@example.com")
 Description: Provides many tools for using DLMtool for producing groundfish section CSAS research documents.
 License: GPL-2
+Depends: R (>= 2.10)
 Imports:
     DLMtool,
-    magrittr,
-    dplyr,
-    gfplot,
-    reshape2,
-    methods,
-    rlang,
-    gfdata,
-    gfutilities,
-    ggplot2,
-    purrr,
-    ggsidekick,
-    lubridate,
-    readr,
-    stringi,
-    stringr,
-    tibble,
     MASS,
     TMB,
+    dplyr,
+    gfdata,
+    gfplot,
+    gfutilities,
+    ggplot2,
+    ggsidekick,
+    here,
+    lubridate,
+    magrittr,
+    methods,
     plyr,
-    here
+    purrr,
+    readr,
+    reshape2,
+    rlang,
+    stringi,
+    stringr,
+    testthat,
+    tibble
 Suggests: 
 Encoding: UTF-8
 LazyData: true
