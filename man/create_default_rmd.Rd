@@ -23,5 +23,6 @@ Nothing
 Create template Rmd file describing DLMtool Objects and Slots
 }
 \examples{
-create_default_rmd("test.Rmd", overwrite = TRUE)
+unlink("test.Rmd")
+create_default_rmd("test.Rmd")
 }

@@ -9,8 +9,10 @@
 #' @importFrom DLMtool avail
 #' @export
 #'
-# @examples
-# probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' @examples
+#' library(tibble)
+#' library(DLMtool)
+#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,
                       refs = NULL){
@@ -76,9 +78,10 @@ get_probs <- function(object,
 #' @importFrom ggplot2 ggplot theme geom_tile geom_text scale_fill_gradient scale_x_discrete aes
 #' @importFrom ggplot2 element_blank element_text guides xlab ylab
 #' @importFrom gfplot theme_pbs
-# @examples
-# probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
-# plot_probs(probs)
+#' @examples
+#' library(ggplot2)
+#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' plot_probs(probs)
 plot_probs <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,

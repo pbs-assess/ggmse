@@ -37,7 +37,5 @@ A ggplot object
 Make a panel of contour plots by management procedure for B/BMSY by F/FMSY
 }
 \examples{
-\dontrun{
 plot_contours(mse)
-}
 }

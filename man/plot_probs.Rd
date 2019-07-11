@@ -23,3 +23,8 @@ scale_0_1 is used, this will be ignored}
 \description{
 Summary of probabilities of things from the MSE object in a colored tile table format
 }
+\examples{
+library(ggplot2)
+probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+plot_probs(probs)
+}

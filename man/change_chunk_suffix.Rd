@@ -21,6 +21,7 @@ Nothing
 Change the chunk and tag suffixes for a .Rmd file
 }
 \examples{
+unlink("test.Rmd")
 create_default_rmd("test.Rmd")
 change_chunk_suffix("test.Rmd", "test-suffix")
 }

@@ -27,6 +27,7 @@ get_obj_name <- function(rmd, obj_base_name){
 #' @export
 #'
 #' @examples
+#' unlink("test.Rmd")
 #' create_default_rmd("test.Rmd")
 #' change_chunk_suffix("test.Rmd", "test-suffix")
 change_chunk_suffix <- function(file_name,
@@ -400,7 +401,8 @@ create_rmd <- function(file_name,
 #' @export
 #'
 #' @examples
-#' create_default_rmd("test.Rmd", overwrite = TRUE)
+#' unlink("test.Rmd")
+#' create_default_rmd("test.Rmd")
 create_default_rmd <- function(file_name, overwrite = FALSE,
   knitr_results = TRUE, knitr_echo = TRUE) {
   if (file.exists(file_name) && !overwrite)
