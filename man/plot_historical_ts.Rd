@@ -9,17 +9,18 @@ plot_historical_ts(object, type = c("Catch", "SSB"), n_samples = 50,
   0.85))
 }
 \arguments{
-\item{object}{object}
+\item{object}{A DLMtool object of class \code{MSE}.}
 
-\item{type}{type}
+\item{type}{A character object describing the element of \code{object@TSdata} to
+plot.}
 
-\item{n_samples}{number of samples}
+\item{n_samples}{The number of timeseries samples to illustrate.}
 
-\item{this_year}{the year}
+\item{this_year}{The last year of the historical times there is.}
 
-\item{observed_ts}{obeserved ts}
+\item{observed_ts}{An optional observed timeseries to add is a comparison.}
 
-\item{legend_position}{legend position}
+\item{legend_position}{The x and y coordinates of the legend.}
 }
 \value{
 ggplot object

@@ -1,15 +1,16 @@
 #' Plot historical time series
 #'
-#' @param object object
-#' @param type type
-#' @param n_samples number of samples
-#' @param this_year the year
-#' @param observed_ts obeserved ts
-#' @param legend_position legend position
+#' @param object A DLMtool object of class `MSE`.
+#' @param type A character object describing the element of `object@TSdata` to
+#'   plot.
+#' @param n_samples The number of timeseries samples to illustrate.
+#' @param this_year The last year of the historical times there is.
+#' @param observed_ts An optional observed timeseries to add is a comparison.
+#' @param legend_position The x and y coordinates of the legend.
 #' @importFrom reshape2 melt
 #' @importFrom dplyr transmute filter mutate group_by summarize bind_rows
-#' @importFrom ggplot2 ggplot aes aes_string scale_colour_manual geom_ribbon xlab ylab scale_size_manual
-#'  labs theme geom_line guides
+#' @importFrom ggplot2 ggplot aes aes_string scale_colour_manual geom_ribbon
+#'   xlab ylab scale_size_manual labs theme geom_line guides
 #' @importFrom gfplot theme_pbs
 #' @importFrom stats quantile
 #'
