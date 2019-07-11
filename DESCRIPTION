@@ -19,6 +19,7 @@ Imports:
     gfutilities,
     ggplot2,
     ggsidekick,
+    ggspider,
     here,
     lubridate,
     magrittr,
