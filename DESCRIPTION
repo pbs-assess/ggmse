@@ -31,7 +31,8 @@ Imports:
     stringi,
     stringr,
     testthat,
-    tibble
+    tibble,
+    RColorBrewer
 Suggests: 
 Encoding: UTF-8
 LazyData: true

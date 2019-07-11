@@ -7,6 +7,9 @@
 #'   final plot.
 #' @param n_samples The number of timeseries samples to illustrate.
 #' @param this_year The last year of the historical timeseries.
+#' @param probs A numeric vector of the quantiles to plot as ribbons. Must be of length 2.
+#' @param ribbon_colours A character vector of length three giving the colours for
+#'   the outer uncertainty ribbon, inner uncertainty ribbon, and median.
 #' @param bbmsy_zones A numeric vector of status zone lines to add to
 #'   the B/Bmsy panel if it is present.
 #'
@@ -23,7 +26,9 @@ plot_projection_ts <- function(object,
                                type = c("F_FMSY", "B_BMSY"),
                                n_samples = 3,
                                this_year = 2018,
-  bbmsy_zones = c(0.4, 0.8)) {
+                               probs = c(0.1, 0.5),
+                               ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
+                               bbmsy_zones = c(0.4, 0.8)) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be aa DLMtool object of class `mse`",
@@ -56,11 +61,11 @@ plot_projection_ts <- function(object,
     dplyr::group_by(mp_name, real_year, Type) %>%
     dplyr::summarize(
       median_value = median(value),
-      l = quantile(value, probs = 0.75),
-      u = quantile(value, probs = 0.25),
+      l = quantile(value, probs = 1 - probs[2] / 2),
+      u = quantile(value, probs = probs[2] / 2),
       m = quantile(value, probs = 0.50),
-      ll = quantile(value, probs = 0.95),
-      uu = quantile(value, probs = 0.05)
+      ll = quantile(value, probs = 1 - probs[1] / 2),
+      uu = quantile(value, probs = probs[1] / 2)
     )
 
   sampled_ids <- sample(unique(ts_data$iter), size = n_samples)
@@ -82,21 +87,21 @@ plot_projection_ts <- function(object,
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
     ggplot2::aes_string(x = "real_year", ymin = "ll", ymax = "uu"),
-    colour = NA, fill = "grey90", inherit.aes = FALSE
+    colour = NA, fill = ribbon_colours[1], inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
     ggplot2::aes_string(x = "real_year", ymin = "l", ymax = "u"),
-    colour = NA, fill = "grey70", inherit.aes = FALSE
+    colour = NA, fill = ribbon_colours[2], inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_line(
     data = quantiles,
     ggplot2::aes_string(x = "real_year", y = "m"),
-    colour = "grey40", lwd = 1.1, inherit.aes = FALSE
+    colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30") +
     ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey40")
-  g <- g + ggplot2::geom_line(alpha = 0.5, lty = 1) +
+  g <- g + ggplot2::geom_line(alpha = 0.5, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Projected value") +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +

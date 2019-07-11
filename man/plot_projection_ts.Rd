@@ -5,7 +5,9 @@
 \title{Plot projection time series}
 \usage{
 plot_projection_ts(object, type = c("F_FMSY", "B_BMSY"), n_samples = 3,
-  this_year = 2018, bbmsy_zones = c(0.4, 0.8))
+  this_year = 2018, probs = c(0.1, 0.5),
+  ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
+  bbmsy_zones = c(0.4, 0.8))
 }
 \arguments{
 \item{object}{A DLMtool object of class \code{mse} that was created by
@@ -18,6 +20,11 @@ final plot.}
 \item{n_samples}{The number of timeseries samples to illustrate.}
 
 \item{this_year}{The last year of the historical timeseries.}
+
+\item{probs}{A numeric vector of the quantiles to plot as ribbons. Must be of length 2.}
+
+\item{ribbon_colours}{A character vector of length three giving the colours for
+the outer uncertainty ribbon, inner uncertainty ribbon, and median.}
 
 \item{bbmsy_zones}{A numeric vector of status zone lines to add to
 the B/Bmsy panel if it is present.}
