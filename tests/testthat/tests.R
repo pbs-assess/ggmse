@@ -1,3 +1,5 @@
+library(DLMtool)
+
 ## Create temporary directory in file system
 testing_path <- paste0(tempdir(), "/testing_directory")
 dir.create(testing_path, showWarnings = FALSE)

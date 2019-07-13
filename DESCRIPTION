@@ -6,7 +6,8 @@ Authors@R:
            family = "Last",
            role = c("aut", "cre"),
            email = "first.last@example.com")
-Description: Provides many tools for using DLMtool for producing groundfish section CSAS research documents.
+Description: Provides many tools for using 'DLMtool' for producing
+    DFO PBS Groundfish Section CSAS Research Rocuments.
 License: GPL-2
 Depends: R (>= 2.10)
 Imports:

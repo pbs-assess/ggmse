@@ -11,7 +11,9 @@
 #' @export
 #'
 #' @examples
+#' \donttest{
 #' download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
+#' }
 download_om <- function(file = "default-download-om.rds",
                         web_file,
                         base_url = "http://www.datalimitedtoolkit.org/Case_Studies_Table/",

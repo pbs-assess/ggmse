@@ -10,7 +10,6 @@
 #' @export
 #'
 #' @examples
-#' library(tibble)
 #' library(DLMtool)
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
@@ -32,16 +31,9 @@ get_probs <- function(object,
       call. = FALSE
     )
   }
-  for (X in seq_along(pm_list)) {
-    if (!pm_list[X] %in% avail("PM")) {
-      stop(pm_list[X], " is not a valid PM method",
-        call. = FALSE
-      )
-    }
-  }
 
   means <- names <- captions <- mps <- list()
-  for (X in 1:length(pm_list)) {
+  for (X in seq_len(length(pm_list))) {
     ref <- refs[[pm_list[X]]]
     if (is.null(ref)) {
       run_pm <- eval(call(pm_list[X], object))
@@ -82,6 +74,7 @@ get_probs <- function(object,
 #' @importFrom ggplot2 ggplot theme geom_tile geom_text scale_fill_gradient scale_x_discrete aes
 #' @importFrom ggplot2 element_blank element_text guides xlab ylab
 #' @importFrom gfplot theme_pbs
+#' @export
 #' @examples
 #' library(ggplot2)
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")

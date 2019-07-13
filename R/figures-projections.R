@@ -14,6 +14,7 @@
 #'   the B/Bmsy panel if it is present.
 #'
 #' @return ggplot object
+#' @importFrom rlang .data
 #' @export
 #' @examples
 #' library(DLMtool)
@@ -50,7 +51,8 @@ plot_projection_ts <- function(object,
   for (i in seq_along(type)) {
     ts_data[[i]] <- slot(object, type[i]) %>%
       reshape2::melt() %>%
-      dplyr::rename(iter = Var1, mp = Var2, value = value, year = Var3) %>%
+      dplyr::rename(iter = .data$Var1, mp = .data$Var2,
+        value = .data$value, year = .data$Var3) %>%
       dplyr::left_join(mps, by = "mp") %>%
       dplyr::mutate(Type = type[i])
   }
@@ -58,18 +60,18 @@ plot_projection_ts <- function(object,
   ts_data <- dplyr::left_join(ts_data, years_df, by = "year")
 
   quantiles <- ts_data %>%
-    dplyr::group_by(mp_name, real_year, Type) %>%
+    dplyr::group_by(.data$mp_name, .data$real_year, .data$Type) %>%
     dplyr::summarize(
-      median_value = median(value),
-      l = quantile(value, probs = 1 - probs[2] / 2),
-      u = quantile(value, probs = probs[2] / 2),
-      m = quantile(value, probs = 0.50),
-      ll = quantile(value, probs = 1 - probs[1] / 2),
-      uu = quantile(value, probs = probs[1] / 2)
+      median_value = median(.data$value),
+      l = quantile(.data$value, probs = 1 - probs[2] / 2),
+      u = quantile(.data$value, probs = probs[2] / 2),
+      m = quantile(.data$value, probs = 0.50),
+      ll = quantile(.data$value, probs = 1 - probs[1] / 2),
+      uu = quantile(.data$value, probs = probs[1] / 2)
     )
 
   sampled_ids <- sample(unique(ts_data$iter), size = n_samples)
-  d <- dplyr::filter(ts_data, iter %in% sampled_ids)
+  d <- dplyr::filter(ts_data, .data$iter %in% sampled_ids)
 
   .type_labels <- gsub("_", "/", type)
   .type_labels <- gsub("MSY", "[MSY]", .type_labels)

@@ -20,7 +20,6 @@ A tibble of the output
 Summary of probabilities of performance metrics from the MSE object
 }
 \examples{
-library(tibble)
 library(DLMtool)
 probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 }

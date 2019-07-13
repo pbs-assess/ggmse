@@ -23,5 +23,7 @@ download_om(file = "default-download-om.rds", web_file,
 Download an operating model from the DLMtool website
 }
 \examples{
+\donttest{
 download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
+}
 }

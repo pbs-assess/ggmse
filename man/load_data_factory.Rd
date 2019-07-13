@@ -20,6 +20,9 @@ Factory to create loading functions for various species
 }
 \examples{
 load_data_pcod <- load_data_factory("pacific cod",
-  file = here::here("generated-data",
-                    "pacific-cod.rds"))
+  file = here::here(
+    "generated-data",
+    "pacific-cod.rds"
+  )
+)
 }
