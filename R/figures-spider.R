@@ -5,7 +5,7 @@
 #' @param palette A palette color as recognized by [ggplot2::scale_color_brewer()]
 #'
 #' @return A ggplot object
-#' @importFrom ggspider
+#' @importFrom ggspider spider_web
 #' @export
 #'
 #' @examples

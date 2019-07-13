@@ -53,7 +53,6 @@ load_data_pcod <- load_data_factory("pacific cod",
 #' @param private If TRUE, do not include commercial samples and catch in the returned data
 #'
 #' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
-#' @importFrom here here
 #' @export
 load_data_shortraker <- load_data_factory("shortraker rockfish",
   file = here("generated-data", "shortraker-rockfish.rds")
@@ -65,7 +64,6 @@ load_data_shortraker <- load_data_factory("shortraker rockfish",
 #' @param private If TRUE, do not include commercial samples and catch in the returned data
 #'
 #' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
-#' @importFrom here here
 #' @export
 load_data_rex <- load_data_factory("rex sole",
   file = here("generated-data", "rex-sole.rds")
@@ -81,7 +79,7 @@ load_data_rex <- load_data_factory("rex sole",
 #'  field of the survey_index item of the call to [gfdata::get_survey_index()]
 #'
 #' @return The filtered data
-#' @importFrom dplyr mutate filter %>%
+#' @importFrom dplyr mutate filter
 #' @importFrom lubridate year
 #' @export
 filter_data_rex <- function(d,
