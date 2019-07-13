@@ -10,8 +10,11 @@
 #'
 #' @examples
 #' load_data_pcod <- load_data_factory("pacific cod",
-#'   file = here::here("generated-data",
-#'                     "pacific-cod.rds"))
+#'   file = here::here(
+#'     "generated-data",
+#'     "pacific-cod.rds"
+#'   )
+#' )
 load_data_factory <- function(species_name, file) {
   created_by_load_data_factory <- function(unsorted_only = TRUE, private = FALSE) {
     if (!file.exists(file)) {

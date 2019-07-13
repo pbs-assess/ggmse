@@ -45,14 +45,14 @@
 #' create_dlm_data(d, name = "Shortraker Rockfish", area = "5[ABCD]+")
 #' }
 create_dlm_data <- function(dat,
-  name = "",
-  common_name = "",
-  area = "3[CD]+",
-  survey = "SYN WCVI",
-  max_year = max_year_dat,
-  min_mean_length = 10,
-  length_bin_interval = 2,
-  unsorted_only = FALSE) {
+                            name = "",
+                            common_name = "",
+                            area = "3[CD]+",
+                            survey = "SYN WCVI",
+                            max_year = max_year_dat,
+                            min_mean_length = 10,
+                            length_bin_interval = 2,
+                            unsorted_only = FALSE) {
 
   # Setup ----------
   obj <- methods::new("Data")
@@ -60,11 +60,13 @@ create_dlm_data <- function(dat,
   obj@Common_Name <- common_name
   obj@Units <- "kg"
 
-  max_year_dat <- max(dat$survey_samples$year,
-                      dat$commercial_samples$year,
-                      dat$catch$year,
-                      dat$survey_index$year)
-  dat <- purrr::map(dat, ~filter(.x, year <= max_year))
+  max_year_dat <- max(
+    dat$survey_samples$year,
+    dat$commercial_samples$year,
+    dat$catch$year,
+    dat$survey_index$year
+  )
+  dat <- purrr::map(dat, ~ filter(.x, year <= max_year))
 
   # Catch ----------
   catch <- tidy_catch(dat$catch, areas = area)
@@ -95,8 +97,9 @@ create_dlm_data <- function(dat,
   samps <- dat$survey_samples
   m_mat <- fit_mat_ogive(samps, type = "length")
   mat_perc <- extract_maturity_perc(stats::coef(m_mat$model))
-  se_l50 <- delta_method(~ -(log((1/0.5) - 1) + x1 + x3) / (x2 + x4),
-    mean = stats::coef(m_mat$model), cov = stats::vcov(m_mat$model))
+  se_l50 <- delta_method(~ -(log((1 / 0.5) - 1) + x1 + x3) / (x2 + x4),
+    mean = stats::coef(m_mat$model), cov = stats::vcov(m_mat$model)
+  )
 
   obj@L50 <- mat_perc$f.p0.5 # TODO, female only?
   obj@L95 <- mat_perc$f.p0.95
@@ -105,8 +108,8 @@ create_dlm_data <- function(dat,
   # VB model ----------
   mvb <- suppressWarnings(fit_vb(samps, sex = "female"))
   .summary <- summary(TMB::sdreport(mvb$model))
-  se <- .summary[,"Std. Error"]
-  cv <- se / abs(.summary[,"Estimate"])
+  se <- .summary[, "Std. Error"]
+  cv <- se / abs(.summary[, "Estimate"])
 
   obj@vbK <- mvb$pars[["k"]]
   obj@vbLinf <- mvb$pars[["linf"]]
@@ -119,7 +122,7 @@ create_dlm_data <- function(dat,
   # Length weight model ----------
   mlw <- fit_length_weight(samps, sex = "female")
   .summary <- summary(TMB::sdreport(mlw$model))
-  se <- .summary[,"Std. Error"]
+  se <- .summary[, "Std. Error"]
 
   obj@wla <- exp(mlw$pars[["log_a"]])
   obj@wlb <- mlw$pars[["b"]]
@@ -127,7 +130,7 @@ create_dlm_data <- function(dat,
   obj@CV_wlb <- se[["b"]] / mlw$pars[["b"]]
 
   # Mean length timeseries ----------
-  if(unsorted_only){
+  if (unsorted_only) {
     dat$commercial_samples <- dat$commercial_samples %>%
       filter(sampling_desc == "UNSORTED")
   }
@@ -145,8 +148,10 @@ create_dlm_data <- function(dat,
   # CAL Catch-at-length data. An array with dimensions nsim x nyears
   # x length(CAL_bins). Non-negative integers
   length_bins <- seq(0, 1e4, length_bin_interval)
-  obj@CAL <- tidy_cal(dat$commercial_samples, interval = length_bin_interval,
-    yrs = all_years$year)
+  obj@CAL <- tidy_cal(dat$commercial_samples,
+    interval = length_bin_interval,
+    yrs = all_years$year
+  )
   # CAL_bins The values delimiting the length bins for the catch-at-length
   # data. Vector. Non-negative real numbers
   obj@CAL_bins <- get_cal_bins(obj@CAL, length_bin_interval = length_bin_interval) # mid points
@@ -166,7 +171,7 @@ tidy_mean_length <- function(dat, unsorted_only = FALSE) {
   if ("sampling_desc" %in% names(dat) && unsorted_only) {
     dat <- filter(dat, .data$sampling_desc == "UNSORTED")
   }
-  dat <- filter(dat, !is.na(.data$sex), !is.na(.data$length)) #RF removed female filtering #female only, .data$sex %in% 2
+  dat <- filter(dat, !is.na(.data$sex), !is.na(.data$length)) # RF removed female filtering #female only, .data$sex %in% 2
   group_by(dat, .data$year) %>%
     summarise(n = n(), mean_length = mean(.data$length)) %>%
     ungroup()
@@ -175,22 +180,26 @@ tidy_mean_length <- function(dat, unsorted_only = FALSE) {
 #' @export
 #' @rdname tidy_caa
 get_cal_bins <- function(cal_dat, length_bin_interval) {
-  seq(length_bin_interval,
+  seq(
+    length_bin_interval,
     ncol(cal_dat[1, , ]) * length_bin_interval,
-    length_bin_interval) - length_bin_interval / 2 # mid points
+    length_bin_interval
+  ) - length_bin_interval / 2 # mid points
 }
 
 #' @export
 #' @rdname tidy_caa
 tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
-  sex = c(1, 2)) {
+                     sex = c(1, 2)) {
   length_bins <- seq(0, 1e4, interval)
   dat %>%
     select(-.data$age) %>%
     mutate(length_bin = length_bins[findInterval(.data$length, length_bins)]) %>%
     rename(age = .data$length_bin) %>% # hack
-    tidy_caa(yrs = yrs, interval = interval, unsorted_only = unsorted_only,
-      sex = sex)
+    tidy_caa(
+      yrs = yrs, interval = interval, unsorted_only = unsorted_only,
+      sex = sex
+    )
 }
 
 #' Generate length-at-age or catch-at-age data
@@ -218,7 +227,7 @@ tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
 #' }
 #' @export
 tidy_caa <- function(dat, yrs, unsorted_only = FALSE, interval = 1,
-  sex = c(1, 2)) {
+                     sex = c(1, 2)) {
   dat <- dat[!duplicated(dat$specimen_id), , drop = FALSE]
   if ("sampling_desc" %in% names(dat) && unsorted_only) {
     dat <- filter(dat, .data$sampling_desc == "UNSORTED")
@@ -251,14 +260,22 @@ extract_maturity_perc <- function(object) {
   m.p0.95 <- logit_perc(a = object[[1]], b = object[[2]], perc = 0.95)
   m.p0.05 <- logit_perc(a = object[[1]], b = object[[2]], perc = 0.05)
 
-  f.p0.5 <- logit_perc(a = object[[1]] + object[[3]],
-    b = object[[2]] + object[[4]], perc = 0.5)
-  f.p0.95 <- logit_perc(a = object[[1]] + object[[3]],
-    b = object[[2]] + object[[4]], perc = 0.95)
-  f.p0.05 <- logit_perc(a = object[[1]] + object[[3]],
-    b = object[[2]] + object[[4]], perc = 0.05)
-  list(m.p0.5 = m.p0.5, m.p0.95 = m.p0.95, m.p0.05 = m.p0.05, f.p0.5 = f.p0.5,
-    f.p0.95 = f.p0.95, f.p0.05 = f.p0.05)
+  f.p0.5 <- logit_perc(
+    a = object[[1]] + object[[3]],
+    b = object[[2]] + object[[4]], perc = 0.5
+  )
+  f.p0.95 <- logit_perc(
+    a = object[[1]] + object[[3]],
+    b = object[[2]] + object[[4]], perc = 0.95
+  )
+  f.p0.05 <- logit_perc(
+    a = object[[1]] + object[[3]],
+    b = object[[2]] + object[[4]], perc = 0.05
+  )
+  list(
+    m.p0.5 = m.p0.5, m.p0.95 = m.p0.95, m.p0.05 = m.p0.05, f.p0.5 = f.p0.5,
+    f.p0.95 = f.p0.95, f.p0.05 = f.p0.05
+  )
 }
 
 delta_method <- function(g, mean, cov) {

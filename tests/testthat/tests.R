@@ -1,10 +1,10 @@
 ## Create temporary directory in file system
 testing_path <- paste0(tempdir(), "/testing_directory")
 dir.create(testing_path, showWarnings = FALSE)
-if(getwd() != testing_path){
+if (getwd() != testing_path) {
   setwd(testing_path)
 }
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 
 ## ------------------------------------------------------------------------------------------------
 context("Check that the package files are present")
@@ -17,7 +17,7 @@ test_that("Custom .csvfiles are present in installed package", {
 ## ------------------------------------------------------------------------------------------------
 context("Create a default .rmd file")
 
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 
 test_that("New .rmd description file is present", {
@@ -27,7 +27,7 @@ test_that("New .rmd description file is present", {
 ## ------------------------------------------------------------------------------------------------
 context("Check if an slot-chunk tag is manually or accidentally removed from the file")
 
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 rmd <- readLines("test-desc.rmd")
 ## Remove last autogen end tag from file
@@ -44,7 +44,7 @@ test_that("Removal of an autogen tag results in error", {
 ## ------------------------------------------------------------------------------------------------
 context("Check if a description header was manually or accidentally removed from the file")
 
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 rmd <- readLines("test-desc.rmd")
 ## Remove last description from file
@@ -60,7 +60,7 @@ test_that("Removal of a description results in error", {
 
 ## ------------------------------------------------------------------------------------------------
 context("Check if more than one description header in an autogen chunk")
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 rmd <- readLines("test-desc.rmd")
 ## Add duplicate description to file
@@ -76,7 +76,7 @@ test_that("Duplicate description results in error", {
 
 ## ------------------------------------------------------------------------------------------------
 context("Check that adding a suffix to the chunk names works")
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 change_chunk_suffix("test-desc.rmd", "testme")
 rmd <- readLines("test-desc.rmd")
@@ -90,7 +90,7 @@ test_that("All lines that should have had sufixes added do", {
 
 ## ------------------------------------------------------------------------------------------------
 context("Check that adding a suffix with special characters or a vector of suffixes gives an error")
-if(file.exists("test-desc.rmd")) unlink("test-desc.rmd")
+if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 create_default_rmd("test-desc.rmd")
 
 test_that("All lines that should have had sufixes added do", {
@@ -208,18 +208,17 @@ context("Check that get_probs() is working")
 
 probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 test_that("get_probs() returns correct values", {
-  expect_equal(as.character(probs[1,1]), "AvC")
-  expect_equal(as.numeric(probs[1,2]), 0.72)
-  expect_equal(as.numeric(probs[1,3]), 0.68)
-  expect_equal(as.numeric(probs[1,4]), 0.68)
-  expect_equal(as.numeric(probs[1,5]), 0.66)
-  expect_equal(as.numeric(probs[1,6]), 0.9)
+  expect_equal(as.character(probs[1, 1]), "AvC")
+  expect_equal(as.numeric(probs[1, 2]), 0.72)
+  expect_equal(as.numeric(probs[1, 3]), 0.68)
+  expect_equal(as.numeric(probs[1, 4]), 0.68)
+  expect_equal(as.numeric(probs[1, 5]), 0.66)
+  expect_equal(as.numeric(probs[1, 6]), 0.9)
 
-  expect_equal(as.character(probs[2,1]), "DCAC")
-  expect_equal(as.numeric(probs[2,2]), 0.66)
-  expect_equal(as.numeric(probs[2,3]), 0.52)
-  expect_equal(as.numeric(probs[2,4]), 0.51)
-  expect_equal(as.numeric(probs[2,5]), 0.7)
-  expect_equal(as.numeric(probs[2,6]), 0.9)
+  expect_equal(as.character(probs[2, 1]), "DCAC")
+  expect_equal(as.numeric(probs[2, 2]), 0.66)
+  expect_equal(as.numeric(probs[2, 3]), 0.52)
+  expect_equal(as.numeric(probs[2, 4]), 0.51)
+  expect_equal(as.numeric(probs[2, 5]), 0.7)
+  expect_equal(as.numeric(probs[2, 6]), 0.9)
 })
-

@@ -16,15 +16,16 @@ download_om <- function(file = "default-download-om.rds",
                         web_file,
                         base_url = "http://www.datalimitedtoolkit.org/Case_Studies_Table/",
                         method = "wget",
-                        overwrite = FALSE){
+                        overwrite = FALSE) {
   nc <- nchar(file)
-  if(tolower(stringi::stri_sub(file, from = nc - 3, to = nc)) != ".rds"){
+  if (tolower(stringi::stri_sub(file, from = nc - 3, to = nc)) != ".rds") {
     file <- paste0(file, ".rds")
   }
 
-  if(overwrite | !file.exists(file)){
+  if (overwrite | !file.exists(file)) {
     download.file(paste0(base_url, web_file),
-                  file,
-                  method = method)
+      file,
+      method = method
+    )
   }
 }

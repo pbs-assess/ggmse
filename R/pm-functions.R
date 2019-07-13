@@ -18,50 +18,51 @@
 eval_pm <- function(mse_obj,
                     pm_list = NULL,
                     refs = NULL,
-                    yrs = NULL){
-
-  if(is.null(pm_list)){
+                    yrs = NULL) {
+  if (is.null(pm_list)) {
     stop("pm_list is a required argument.",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   run_pm <- list()
-  for(i in seq_along(pm_list)){
+  for (i in seq_along(pm_list)) {
     ref <- refs[[pm_list[i]]]
     yr <- yrs[pm_list[i]]
-    if(is.null(ref)){
-      if(is.null(yr)){
+    if (is.null(ref)) {
+      if (is.null(yr)) {
         run_pm[[i]] <- eval(call(pm_list[[i]], mse_obj))
-      }else{
+      } else {
         run_pm[[i]] <- eval(call(pm_list[[i]], mse_obj, Yrs = yr))
       }
-    }else{
-      if(is.null(yr)){
+    } else {
+      if (is.null(yr)) {
         run_pm[[i]] <- eval(call(pm_list[[i]], mse_obj, Ref = ref))
-      }else{
+      } else {
         run_pm[[i]] <- eval(call(pm_list[[i]], mse_obj, Ref = ref, Yrs = yr))
       }
     }
   }
 
   out <- list()
-  for(i in seq_along(pm_list)){
+  for (i in seq_along(pm_list)) {
     pm <- pm_list[[i]]
     prob <- run_pm[[match(pm, pm_list)]]@Mean
     probcap <- run_pm[[match(pm, pm_list)]]@Caption
     name <- run_pm[[match(pm, pm_list)]]@Name
 
     mp_type <- MPtype(mse_obj@MPs)
-    class <- mp_type[match(mse_obj@MPs, mp_type[,1]), 2]
+    class <- mp_type[match(mse_obj@MPs, mp_type[, 1]), 2]
 
-    out[[i]] <- as_tibble(data.frame(id = i,
-                                     mp = mse_obj@MPs,
-                                     pm = pm,
-                                     prob = prob,
-                                     probcap = probcap,
-                                     english = name,
-                                     class = class))
-
+    out[[i]] <- as_tibble(data.frame(
+      id = i,
+      mp = mse_obj@MPs,
+      pm = pm,
+      prob = prob,
+      probcap = probcap,
+      english = name,
+      class = class
+    ))
   }
   do.call(rbind, out)
 }
@@ -81,57 +82,59 @@ eval_pm <- function(mse_obj,
 #' P10 <- pm_factory("SBMSY", 0.1)
 pm_factory <- function(pm_type,
                        ref = 0.1,
-                       yrs = NULL){
+                       yrs = NULL) {
   force(pm_type)
   force(ref)
   force(yrs)
   pm_obj <- new("PMobj")
   pm_obj@Ref <- ref
-  if(pm_type == "SBMSY"){
-    created_by_pm_factory <- function(mse_obj){
+  if (pm_type == "SBMSY") {
+    created_by_pm_factory <- function(mse_obj) {
       yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- "Spawning Biomass relative to SBMSY"
       pm_obj@Caption <- paste0("Prob. SB > ", ifelse(ref == 1, "", ref), " SBMSY (Years ", yrs[1], " - ", yrs[2], ")")
-      pm_obj@Stat <- mse_obj@B_BMSY[ , , yrs[1]:yrs[2]]
+      pm_obj@Stat <- mse_obj@B_BMSY[, , yrs[1]:yrs[2]]
       pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
       pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
-  }else if(pm_type == "AAVY"){
-    created_by_pm_factory <- function(mse_obj){
+  } else if (pm_type == "AAVY") {
+    created_by_pm_factory <- function(mse_obj) {
       yrs <- DLMtool::ChkYrs(yrs, mse_obj)
-      pm_obj@Name <-  paste0("Average Annual Variability in Yield (Years ", yrs[1], "-", yrs[2], ")")
-      pm_obj@Caption <-  paste0('Prob. AAVY < ', ref * 100, "% (Years ", yrs[1], "-", yrs[2], ")")
+      pm_obj@Name <- paste0("Average Annual Variability in Yield (Years ", yrs[1], "-", yrs[2], ")")
+      pm_obj@Caption <- paste0("Prob. AAVY < ", ref * 100, "% (Years ", yrs[1], "-", yrs[2], ")")
       y1 <- yrs[1]:(yrs[2] - 1)
-      y2 <-(yrs[1] + 1):yrs[2]
-      if(mse_obj@nMPs > 1){
-        pm_obj@Stat <-  apply(((((mse_obj@C[, , y1] - mse_obj@C[, , y2]) /
-                                  mse_obj@C[, , y2]) ^ 2) ^ 0.5),
-                              c(1, 2),
-                              mean)
-      }else{
+      y2 <- (yrs[1] + 1):yrs[2]
+      if (mse_obj@nMPs > 1) {
+        pm_obj@Stat <- apply(
+          ((((mse_obj@C[, , y1] - mse_obj@C[, , y2]) /
+            mse_obj@C[, , y2])^2)^0.5),
+          c(1, 2),
+          mean
+        )
+      } else {
         pm_obj@Stat <- array(apply(((((mse_obj@C[, 1, y1] - mse_obj@C[, 1, y2]) /
-                                        mse_obj@C[, 1, y2]) ^ 2) ^ 0.5), c(1), mean))
+          mse_obj@C[, 1, y2])^2)^0.5), c(1), mean))
       }
       pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
       pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
-  }else if(pm_type == "PNOF"){
-    created_by_pm_factory <- function(mse_obj){
+  } else if (pm_type == "PNOF") {
+    created_by_pm_factory <- function(mse_obj) {
       yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- "Probability of not overfishing (F<FMSY)"
       pm_obj@Caption <- paste0("Prob. F < ", ifelse(ref == 1, "", ref), " FMSY (Years ", yrs[1], " - ", yrs[2], ")")
-      pm_obj@Stat <- mse_obj@F_FMSY[ , , yrs[1]:yrs[2]]
+      pm_obj@Stat <- mse_obj@F_FMSY[, , yrs[1]:yrs[2]]
       pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
       pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
-  }else if(pm_type == "LTY"){
-    created_by_pm_factory <- function(mse_obj){
+  } else if (pm_type == "LTY") {
+    created_by_pm_factory <- function(mse_obj) {
       yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
@@ -142,8 +145,8 @@ pm_factory <- function(pm_type,
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
-  }else if(pm_type == "Yield"){
-    created_by_pm_factory <- function(mse_obj){
+  } else if (pm_type == "Yield") {
+    created_by_pm_factory <- function(mse_obj) {
       yrs <- DLMtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")

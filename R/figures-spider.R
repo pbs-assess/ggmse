@@ -11,20 +11,23 @@
 #' @examples
 #' spider(mse)
 spider <- function(mse_obj,
-                   pm_list = list("LTY",
-                                  "P10",
-                                  "P40",
-                                  "P80",
-                                  "P100",
-                                  "PNOF",
-                                  "AAVY"),
-                   palette = "Spectral"){
+                   pm_list = list(
+                     "LTY",
+                     "P10",
+                     "P40",
+                     "P80",
+                     "P100",
+                     "PNOF",
+                     "AAVY"
+                   ),
+                   palette = "Spectral") {
   x <- eval_pm(mse_obj, pm_list)
   ggspider::spider_web(x,
-                       "mp",
-                       "pm",
-                       "prob",
-                       palette = palette,
-                       leg_main_title = "Management Procedure",
-                       leg_lty_title = "MP type")
+    "mp",
+    "pm",
+    "prob",
+    palette = palette,
+    leg_main_title = "Management Procedure",
+    leg_lty_title = "MP type"
+  )
 }

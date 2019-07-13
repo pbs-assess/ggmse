@@ -35,12 +35,18 @@ fetch_data <- function(species_name = "shortraker rockfish", file) {
 #' d <- load_data()
 #' }
 load_data <- function(species_name = "shortraker rockfish",
-                      file = file.path(here::here("generated-data"),
-                                       paste0(gsub(" ",
-                                                   "-",
-                                                   species_name),
-                                              ".rds"))){
-  if(!file.exists(file)){
+                      file = file.path(
+                        here::here("generated-data"),
+                        paste0(
+                          gsub(
+                            " ",
+                            "-",
+                            species_name
+                          ),
+                          ".rds"
+                        )
+                      )) {
+  if (!file.exists(file)) {
     abort("Error, file ", file, " does not exist. To create it, run fetch_data().\n")
   }
   readRDS(file)
@@ -60,11 +66,17 @@ load_data <- function(species_name = "shortraker rockfish",
 #' data_file_exists("shortraker rockfish")
 #' }
 data_file_exists <- function(species_name,
-                             file = file.path(here::here("generated-data"),
-                                              paste0(gsub(" ",
-                                                          "-",
-                                                          species_name),
-                                                     ".rds"))){
+                             file = file.path(
+                               here::here("generated-data"),
+                               paste0(
+                                 gsub(
+                                   " ",
+                                   "-",
+                                   species_name
+                                 ),
+                                 ".rds"
+                               )
+                             )) {
   file.exists(file)
 }
 
@@ -113,7 +125,7 @@ create_dlm_stock <- function(dat = NULL,
                              ksd = obj@Ksd,
                              linfsd = obj@Linfsd,
                              l50 = obj@L50,
-                             l50_95= obj@L50_95,
+                             l50_95 = obj@L50_95,
                              d = obj@D,
                              a = obj@a,
                              b = obj@b,
@@ -121,15 +133,16 @@ create_dlm_stock <- function(dat = NULL,
                              frac_area_1 = obj@Frac_area_1,
                              prob_staying = obj@Prob_staying,
                              fdisc = obj@Fdisc,
-                             src = obj@Source){
-
-  if(is.na(starting_stock)){
+                             src = obj@Source) {
+  if (is.na(starting_stock)) {
     obj <- methods::new("Stock")
-  }else if(starting_stock %in% avail("Stock")){
+  } else if (starting_stock %in% avail("Stock")) {
     obj <- get(starting_stock)
-  }else{
-    stop("starting_stock '", starting_stock, "', doesn't exist. Use one of:\n",
-         paste(avail("Stock"), collapse = "\n"))
+  } else {
+    stop(
+      "starting_stock '", starting_stock, "', doesn't exist. Use one of:\n",
+      paste(avail("Stock"), collapse = "\n")
+    )
   }
 
   obj@Name <- ifelse(is.null(dat), name, dat@Name)
@@ -157,7 +170,7 @@ create_dlm_stock <- function(dat = NULL,
   obj@Linfsd <- ifelse(is.null(dat), linfsd, dat@CV_vbLinf)
   # obj@Linfgrad <- linfgrad
   obj@L50 <- ifelse(is.null(dat), l50, dat@L50)
-  obj@L50_95<- ifelse(is.null(dat), l50_95, dat@L95 - dat@L50)
+  obj@L50_95 <- ifelse(is.null(dat), l50_95, dat@L95 - dat@L50)
   obj@D <- d
   obj@a <- ifelse(is.null(dat), a, dat@wla)
   obj@b <- ifelse(is.null(dat), b, dat@wlb)
@@ -217,15 +230,16 @@ create_dlm_fleet <- function(dat = NULL,
                              vmaxlower = obj@VmaxLower,
                              vmaxupper = obj@VmaxUpper,
                              currentyr = obj@CurrentYr,
-                             mpa = obj@MPA){
-
-  if(is.na(starting_fleet)){
+                             mpa = obj@MPA) {
+  if (is.na(starting_fleet)) {
     obj <- methods::new("Fleet")
-  }else if(starting_fleet %in% avail("Fleet")){
+  } else if (starting_fleet %in% avail("Fleet")) {
     obj <- get(starting_fleet)
-  }else{
-    stop("starting_fleet '", starting_fleet, "', doesn't exist. Use one of:\n",
-          paste(avail("Fleet"), collapse = "\n"))
+  } else {
+    stop(
+      "starting_fleet '", starting_fleet, "', doesn't exist. Use one of:\n",
+      paste(avail("Fleet"), collapse = "\n")
+    )
   }
 
   obj@Name <- ifelse(is.null(dat), name, dat@Name)
@@ -307,15 +321,16 @@ create_dlm_obs <- function(dat = NULL,
                            dbiascv = obj@Dbiascv,
                            dobs = obj@Dobs,
                            hbiascv = obj@hbiascv,
-                           recbiascv = obj@Recbiascv){
-
-  if(is.na(starting_obs)){
+                           recbiascv = obj@Recbiascv) {
+  if (is.na(starting_obs)) {
     obj <- methods::new("Obs")
-  }else if(starting_obs %in% avail("Obs")){
+  } else if (starting_obs %in% avail("Obs")) {
     obj <- get(starting_obs)
-  }else{
-    stop("starting_obs '", starting_obs, "', doesn't exist. Use one of:\n",
-          paste(avail("Obs"), collapse = "\n"))
+  } else {
+    stop(
+      "starting_obs '", starting_obs, "', doesn't exist. Use one of:\n",
+      paste(avail("Obs"), collapse = "\n")
+    )
   }
 
   obj@Name <- ifelse(is.null(dat), name, dat@Name)
@@ -330,7 +345,7 @@ create_dlm_obs <- function(dat = NULL,
   obj@Btobs <- btobs
   obj@Btbiascv <- btbiascv
   obj@beta <- beta
-  obj@LenMbiascv <-lenmbiascv
+  obj@LenMbiascv <- lenmbiascv
   obj@Mbiascv <- mbiascv
   obj@Kbiascv <- kbiascv
   obj@t0biascv <- t0biascv
@@ -378,15 +393,16 @@ create_dlm_imp <- function(dat = NULL,
                            taefrac = obj@TAEFrac,
                            taesd = obj@TAESD,
                            sizelimfrac = obj@SizeLimFrac,
-                           sizelimsd = obj@SizeLimSD){
-
-  if(is.na(starting_imp)){
+                           sizelimsd = obj@SizeLimSD) {
+  if (is.na(starting_imp)) {
     obj <- methods::new("Imp")
-  }else if(starting_imp %in% avail("Imp")){
+  } else if (starting_imp %in% avail("Imp")) {
     obj <- get(starting_imp)
-  }else{
-    stop("starting_imp '", starting_imp, "', doesn't exist. Use one of:\n",
-          paste(avail("Imp"), collapse = "\n"))
+  } else {
+    stop(
+      "starting_imp '", starting_imp, "', doesn't exist. Use one of:\n",
+      paste(avail("Imp"), collapse = "\n")
+    )
   }
 
   obj@Name <- ifelse(is.null(dat), name, dat@Name)

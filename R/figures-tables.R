@@ -15,26 +15,28 @@
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,
-                      refs = NULL){
-
-  if (class(object) != "MSE"){
+                      refs = NULL) {
+  if (class(object) != "MSE") {
     stop("object must be class `MSE`",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   pm_list <- unlist(list(...))
-  if(!length(pm_list)){
+  if (!length(pm_list)) {
     warning("No PM's included. Using defaults")
     pm_list <- c("PNOF", "P50", "AAVY", "LTY")
   }
-  if(class(pm_list) != 'character'){
+  if (class(pm_list) != "character") {
     stop("Must provide names of PM methods",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
-  for(X in seq_along(pm_list)){
-    if (!pm_list[X] %in% avail("PM")){
+  for (X in seq_along(pm_list)) {
+    if (!pm_list[X] %in% avail("PM")) {
       stop(pm_list[X], " is not a valid PM method",
-           call. = FALSE)
+        call. = FALSE
+      )
     }
   }
 
@@ -52,13 +54,15 @@ get_probs <- function(object,
     mps[[X]] <- run_pm@MPs
   }
 
-  df <- data.frame('MP' = mps[[1]],
-                   signif(do.call('cbind', means),2), stringsAsFactors = FALSE)
+  df <- data.frame(
+    "MP" = mps[[1]],
+    signif(do.call("cbind", means), 2), stringsAsFactors = FALSE
+  )
   colnames(df)[2:(length(pm_list) + 1)] <- pm_list
 
   # If the following list is returned, the second item will be a list of captions
   #  representing the columns of the data frame in item 1
-  #list(as_tibble(df), captions)
+  # list(as_tibble(df), captions)
   as_tibble(df)
 }
 
@@ -86,39 +90,40 @@ plot_probs <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
-                       sort_by = "decreasing"){
-
+                       sort_by = "decreasing") {
   df <- probs_dat
   # Used if captions are to be used for top labels
-  #df <- probs_dat[[1]]
-  #captions <- probs_dat[[2]]
+  # df <- probs_dat[[1]]
+  # captions <- probs_dat[[2]]
 
-  if(sort_by == "decreasing"){
+  if (sort_by == "decreasing") {
     df$MP <- factor(df$MP, levels = df$MP[do.call(order, df[-1])])
-  }else if(sort_by == "increasing"){
+  } else if (sort_by == "increasing") {
     df$MP <- factor(df$MP, levels = df$MP[rev(do.call(order, df[-1]))])
-  }else{
+  } else {
     stop("sort_by must be either 'increasing' or 'decreasing'",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 
   df <- reshape2::melt(df,
-                       id.vars = "MP",
-                       variable.name = "type",
-                       value.name = "value")
+    id.vars = "MP",
+    variable.name = "type",
+    value.name = "value"
+  )
 
   ## Set up expressions for tick labels - only used if captions are to be used as top labels
   ## probs <- as.vector(do.call('rbind', captions))
 
-  df$txt <- vapply(df$value, function(x){
+  df$txt <- vapply(df$value, function(x) {
     gfutilities::f(x, digits)
   }, FUN.VALUE = character(1L))
-  if(relative_max){
+  if (relative_max) {
     df <- group_by(df, type) %>%
       mutate(value = value / max(value)) %>%
       ungroup()
   }
-  if(scale_0_1){
+  if (scale_0_1) {
     df <- group_by(df, type) %>%
       mutate(value = (value - min(value)) / (max(value) - min(value))) %>%
       ungroup()
@@ -127,18 +132,19 @@ plot_probs <- function(probs_dat,
   g <- ggplot(df, aes(x = type, y = MP)) +
     geom_tile(aes(fill = value), color = "white") +
     gfplot::theme_pbs() +
-    theme(panel.border = element_blank(),
-          axis.ticks.x = element_blank(),
-          axis.ticks.y = element_blank(),
-          axis.text.x = element_text(size = 7)) +
+    theme(
+      panel.border = element_blank(),
+      axis.ticks.x = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.text.x = element_text(size = 7)
+    ) +
     scale_fill_gradient(low = "white", high = "grey50", limits = c(0, 1)) +
     guides(fill = FALSE) + xlab("") + ylab("") +
 
     geom_text(aes(x = type, label = txt)) +
     # Used if captions are used for labelling
-    #scale_x_discrete(labels = parse(text = probs), position = "left")
+    # scale_x_discrete(labels = parse(text = probs), position = "left")
     scale_x_discrete(position = "top")
 
   g
 }
-

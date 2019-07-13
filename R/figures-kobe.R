@@ -8,7 +8,7 @@
 #'
 #' @return A list of two vectors of x and y-coordinates for the contour line.
 #' @importFrom grDevices contourLines
-quantile_contour <- function(x, alpha = 0.8){
+quantile_contour <- function(x, alpha = 0.8) {
   zdens <- rev(sort(x$z))
   cumu_zdens <- cumsum(zdens)
   cumu_zdens <- (cumu_zdens / cumu_zdens[length(zdens)])
@@ -30,19 +30,21 @@ quantile_contour <- function(x, alpha = 0.8){
 #'  coordinates for the contour lines for each alpha and mp.
 calc_contour_lines <- function(d,
                                alpha = c(0.025, 0.5, 0.975),
-                               n = 200){
+                               n = 200) {
   d <- split(d, d$mp)
-  lapply(alpha, function(j){
-    lapply(seq_along(d), function(i){
+  lapply(alpha, function(j) {
+    lapply(seq_along(d), function(i) {
       x <- d[[i]]$x
       y <- d[[i]]$y
       x_bw <- MASS::bandwidth.nrd(na.omit(x))
       y_bw <- MASS::bandwidth.nrd(na.omit(y))
       dens <- quantile_contour(MASS::kde2d(x,
-                                           y,
-                                           h = c(x_bw, y_bw),
-                                           n = n),
-                               alpha = j)
+        y,
+        h = c(x_bw, y_bw),
+        n = n
+      ),
+      alpha = j
+      )
       dens$alpha <- rep(j, length(dens$x))
       dens$mp <- rep(i, length(dens$x))
       dens$mp_name <- rep(as.character(d[[i]]$mp_name[1]), length(dens$x))
@@ -85,41 +87,49 @@ plot_contours <- function(object,
                           x_lim = xlim(0, 3.5),
                           y_lim = ylim(0, 3.5),
                           x_ref_lines = c(0.4, 0.8),
-                          y_ref_lines = 1){
-
-  ffmsy <- object@F_FMSY[,,yend] %>%
+                          y_ref_lines = 1) {
+  ffmsy <- object@F_FMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, ffmsy = value)
-  bbmsy <- object@B_BMSY[,,yend] %>%
+  bbmsy <- object@B_BMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, bbmsy = value)
   dl <- inner_join(ffmsy, bbmsy)
   dr <- data.frame(mp = seq_along(object@MPs), mp_name = object@MPs)
   d <- left_join(dl, dr) %>%
-    filter(!mp_name %in% dontshow_mp)%>%
+    filter(!mp_name %in% dontshow_mp) %>%
     select(-iter) %>%
-    rename(x = bbmsy,
-           y = ffmsy)
+    rename(
+      x = bbmsy,
+      y = ffmsy
+    )
 
   contour_lines <- calc_contour_lines(d,
-                                      alpha = alpha,
-                                      n = n)
+    alpha = alpha,
+    n = n
+  )
   g <- ggplot(d, aes(x, y)) +
     geom_point(alpha = 0.2) +
-    geom_path(data = contour_lines,
-              aes(color = alpha,
-                  group = as.factor(alpha)),
-              alpha = 0.5) +
+    geom_path(
+      data = contour_lines,
+      aes(
+        color = alpha,
+        group = as.factor(alpha)
+      ),
+      alpha = 0.5
+    ) +
     scale_color_viridis_c(end = 0.9) +
     ggsidekick::theme_sleek() +
     facet_wrap(~mp_name) +
     y_lim +
     x_lim +
-    labs(colour = "Prob. density", x = expression(B/B[MSY]),
-         y = expression(F/F[MSY])) +
+    labs(
+      colour = "Prob. density", x = expression(B / B[MSY]),
+      y = expression(F / F[MSY])
+    ) +
     guides(colour = FALSE)
 
-  if(show_ref_pt_lines){
+  if (show_ref_pt_lines) {
     g <- g +
       geom_vline(xintercept = x_ref_lines, alpha = 0.2) +
       geom_hline(yintercept = y_ref_lines, alpha = 0.2)
