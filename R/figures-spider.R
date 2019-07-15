@@ -20,7 +20,7 @@ spider <- function(mse_obj,
                      "PNOF",
                      "AAVY"
                    ),
-                   palette = "Spectral") {
+                   palette = "Set2") {
   x <- eval_pm(mse_obj, pm_list)
   ggspider::spider_web(x,
     "mp",

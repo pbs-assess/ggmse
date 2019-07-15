@@ -5,7 +5,7 @@
 \title{Create a spider plot}
 \usage{
 spider(mse_obj, pm_list = list("LTY", "P10", "P40", "P80", "P100",
-  "PNOF", "AAVY"), palette = "Spectral")
+  "PNOF", "AAVY"), palette = "Set2")
 }
 \arguments{
 \item{mse_obj}{A DLMtool object of class \linkS4class{MSE}}
