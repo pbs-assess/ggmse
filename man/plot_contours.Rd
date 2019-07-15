@@ -5,9 +5,9 @@
 \title{Make a panel of contour plots by management procedure for B/BMSY by F/FMSY}
 \usage{
 plot_contours(object, yend = max(object@proyears), dontshow_mp = NULL,
-  show_ref_pt_lines = FALSE, alpha = c(0.2, 0.4, 0.6, 0.8), n = 200,
-  x_lim = xlim(0, 3.5), y_lim = ylim(0, 3.5), x_ref_lines = c(0.4,
-  0.8), y_ref_lines = 1)
+  show_ref_pt_lines = TRUE, alpha = c(0.2, 0.4, 0.6, 0.8), n = 200,
+  xlim = c(0, 3.5), ylim = c(0, 3.5), x_ref_lines = c(0.4, 0.8),
+  y_ref_lines = 1)
 }
 \arguments{
 \item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
@@ -22,13 +22,13 @@ plot_contours(object, yend = max(object@proyears), dontshow_mp = NULL,
 
 \item{n}{As defined in \code{\link[MASS:kde2d]{MASS::kde2d()}}.}
 
-\item{x_lim}{The \code{\link[ggplot2:xlim]{ggplot2::xlim()}} values for x-axis limits.}
-
-\item{y_lim}{The \code{\link[ggplot2:ylim]{ggplot2::ylim()}} values for y-axis limits.}
-
 \item{x_ref_lines}{A vector of vertical lines to draw as reference point lines.}
 
 \item{y_ref_lines}{A vector of horizontal lines to draw as reference point lines.}
+
+\item{x_lim}{The \code{\link[ggplot2:xlim]{ggplot2::xlim()}} values for x-axis limits.}
+
+\item{y_lim}{The \code{\link[ggplot2:ylim]{ggplot2::ylim()}} values for y-axis limits.}
 }
 \value{
 A ggplot object

@@ -81,11 +81,11 @@ calc_contour_lines <- function(d,
 plot_contours <- function(object,
                           yend = max(object@proyears),
                           dontshow_mp = NULL,
-                          show_ref_pt_lines = FALSE,
+                          show_ref_pt_lines = TRUE,
                           alpha = c(0.2, 0.4, 0.6, 0.8),
                           n = 200,
-                          x_lim = xlim(0, 3.5),
-                          y_lim = ylim(0, 3.5),
+                          xlim = c(0, 3.5),
+                          ylim = c(0, 3.5),
                           x_ref_lines = c(0.4, 0.8),
                           y_ref_lines = 1) {
   ffmsy <- object@F_FMSY[, , yend] %>%
@@ -94,9 +94,9 @@ plot_contours <- function(object,
   bbmsy <- object@B_BMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, bbmsy = value)
-  dl <- inner_join(ffmsy, bbmsy)
+  dl <- inner_join(ffmsy, bbmsy, by = c("iter", "mp"))
   dr <- data.frame(mp = seq_along(object@MPs), mp_name = object@MPs)
-  d <- left_join(dl, dr) %>%
+  d <- left_join(dl, dr, by = "mp") %>%
     filter(!mp_name %in% dontshow_mp) %>%
     select(-iter) %>%
     rename(
@@ -121,12 +121,11 @@ plot_contours <- function(object,
     scale_color_viridis_c(end = 0.9) +
     ggsidekick::theme_sleek() +
     facet_wrap(~mp_name) +
-    y_lim +
-    x_lim +
     labs(
       colour = "Prob. density", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
+    ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
     guides(colour = FALSE)
 
   if (show_ref_pt_lines) {
