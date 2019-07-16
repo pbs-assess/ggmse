@@ -103,7 +103,7 @@ plot_projection_ts <- function(object,
   )
   g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30") +
     ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey40")
-  g <- g + ggplot2::geom_line(alpha = 0.5, lwd = 0.4) + # sampled lines
+  g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Projected value") +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +
