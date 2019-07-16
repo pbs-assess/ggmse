@@ -101,7 +101,9 @@ plot_projection_ts <- function(object,
     ggplot2::aes_string(x = "real_year", y = "m"),
     colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
-  g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30") +
+  g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30")
+  if ("B_BMSY" %in% type)
+  g <- g +
     ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey40")
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Projected value") +
