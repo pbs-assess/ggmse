@@ -99,15 +99,19 @@ plot_contours <- function(object,
   d <- left_join(dl, dr, by = "mp") %>%
     filter(!mp_name %in% dontshow_mp) %>%
     select(-iter) %>%
-    rename(
-      x = bbmsy,
-      y = ffmsy
+    mutate(
+      x = log(bbmsy),
+      y = log(ffmsy)
     )
 
   contour_lines <- calc_contour_lines(d,
     alpha = alpha,
     n = n
   )
+  contour_lines$x <- exp(contour_lines$x)
+  contour_lines$y <- exp(contour_lines$y)
+  d$x <- exp(d$x)
+  d$y <- exp(d$y)
   g <- ggplot(d, aes(x, y)) +
     geom_point(alpha = 0.2) +
     geom_path(
