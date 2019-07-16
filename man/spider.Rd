@@ -5,7 +5,7 @@
 \title{Create a spider plot}
 \usage{
 spider(mse_obj, pm_list = list("LTY", "P10", "P40", "P80", "P100",
-  "PNOF", "AAVY"), palette = "Set2")
+  "PNOF", "AAVY"), palette = "Set2", ...)
 }
 \arguments{
 \item{mse_obj}{A DLMtool object of class \linkS4class{MSE}}
@@ -13,6 +13,8 @@ spider(mse_obj, pm_list = list("LTY", "P10", "P40", "P80", "P100",
 \item{pm_list}{A list of strings defining valid Performance metrics}
 
 \item{palette}{A palette color as recognized by \code{\link[ggplot2:scale_color_brewer]{ggplot2::scale_color_brewer()}}}
+
+\item{...}{Other arguments to pass to \code{\link[ggspider:spider_web]{ggspider::spider_web()}}.}
 }
 \value{
 A ggplot object
