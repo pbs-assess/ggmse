@@ -6,12 +6,13 @@
 #' @param method Download method. It seems that on "wget" works on MS Windows
 #' @param overwrite TRUE or FALSE to overwrite file
 #'
-#' @importFrom stringi stri_sub
+#' @importFrom gfutilities file_addext
 #' @importFrom utils download.file
 #' @export
 #'
 #' @examples
 #' \donttest{
+#' library(gfdlm)
 #' download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
 #' }
 download_om <- function(file = "default-download-om.rds",
@@ -19,10 +20,8 @@ download_om <- function(file = "default-download-om.rds",
                         base_url = "http://www.datalimitedtoolkit.org/Case_Studies_Table/",
                         method = "wget",
                         overwrite = FALSE) {
-  nc <- nchar(file)
-  if (tolower(stringi::stri_sub(file, from = nc - 3, to = nc)) != ".rds") {
-    file <- paste0(file, ".rds")
-  }
+
+  file <- gfutilities::file_addext(file, "rds")
 
   if (overwrite | !file.exists(file)) {
     download.file(paste0(base_url, web_file),
