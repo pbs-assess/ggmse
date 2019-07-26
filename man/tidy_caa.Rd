@@ -21,6 +21,8 @@ Only applies to the commercial data.}
 
 \item{interval}{Interval for the complete set of ages or lengths. For example,
 for length bins of interval 2, \code{interval = 2}.}
+
+\item{sex}{1 or 2 for male or female.}
 }
 \value{
 A catch at age or catch at length matrix as an array.

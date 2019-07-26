@@ -1,11 +1,10 @@
 Package: gfdlm
-Title: Various Functions For DLMtool
+Title: Various Functions For 'DLMtool'
 Version: 0.0.0.9000
 Authors@R:
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com")
+    c(person(c("Sean", "C."), "Anderson",
+    email = "sean.anderson@dfo-mpo.gc.ca", role = c("aut", "cre")),
+    person("Chris", "Grandin", role = "aut"))
 Description: Provides many tools for using 'DLMtool' for producing
     DFO PBS Groundfish Section CSAS Research Rocuments.
 License: GPL-2

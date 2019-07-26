@@ -22,13 +22,13 @@ plot_contours(object, yend = max(object@proyears), dontshow_mp = NULL,
 
 \item{n}{As defined in \code{\link[MASS:kde2d]{MASS::kde2d()}}.}
 
+\item{xlim}{The values for x-axis limits.}
+
+\item{ylim}{The values for y-axis limits.}
+
 \item{x_ref_lines}{A vector of vertical lines to draw as reference point lines.}
 
 \item{y_ref_lines}{A vector of horizontal lines to draw as reference point lines.}
-
-\item{x_lim}{The \code{\link[ggplot2:xlim]{ggplot2::xlim()}} values for x-axis limits.}
-
-\item{y_lim}{The \code{\link[ggplot2:ylim]{ggplot2::ylim()}} values for y-axis limits.}
 }
 \value{
 A ggplot object

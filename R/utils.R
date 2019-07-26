@@ -24,6 +24,7 @@ get_cal_bins <- function(cal_dat, length_bin_interval) {
   ) - length_bin_interval / 2 # mid points
 }
 
+#' @param sex 1 or 2 for male or female.
 #' @export
 #' @rdname tidy_caa
 tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,

@@ -63,8 +63,8 @@ calc_contour_lines <- function(d,
 #' @param show_ref_pt_lines Show the reference point lines at the values in *_ref_lines arguments
 #' @param alpha A vector of levels between 0 and 1 for the contour lines.
 #' @param n  As defined in [MASS::kde2d()].
-#' @param x_lim The [ggplot2::xlim()] values for x-axis limits.
-#' @param y_lim The [ggplot2::ylim()] values for y-axis limits.
+#' @param xlim The values for x-axis limits.
+#' @param ylim The values for y-axis limits.
 #' @param x_ref_lines A vector of vertical lines to draw as reference point lines.
 #' @param y_ref_lines A vector of horizontal lines to draw as reference point lines.
 #'
