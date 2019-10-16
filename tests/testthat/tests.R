@@ -206,21 +206,21 @@ test_that("All lines that should have had sufixes added do", {
 # })
 
 ## ------------------------------------------------------------------------------------------------
-context("Check that get_probs() is working")
-
-probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
-test_that("get_probs() returns correct values", {
-  expect_equal(as.character(probs[1, 1]), "AvC")
-  expect_equal(as.numeric(probs[1, 2]), 0.72)
-  expect_equal(as.numeric(probs[1, 3]), 0.68)
-  expect_equal(as.numeric(probs[1, 4]), 0.68)
-  expect_equal(as.numeric(probs[1, 5]), 0.66)
-  expect_equal(as.numeric(probs[1, 6]), 0.9)
-
-  expect_equal(as.character(probs[2, 1]), "DCAC")
-  expect_equal(as.numeric(probs[2, 2]), 0.66)
-  expect_equal(as.numeric(probs[2, 3]), 0.52)
-  expect_equal(as.numeric(probs[2, 4]), 0.51)
-  expect_equal(as.numeric(probs[2, 5]), 0.7)
-  expect_equal(as.numeric(probs[2, 6]), 0.9)
-})
+# context("Check that get_probs() is working")
+#
+# probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+# test_that("get_probs() returns correct values", {
+#   expect_equal(as.character(probs[1, 1]), "AvC")
+#   expect_equal(as.numeric(probs[1, 2]), 0.72)
+#   expect_equal(as.numeric(probs[1, 3]), 0.68)
+#   expect_equal(as.numeric(probs[1, 4]), 0.68)
+#   expect_equal(as.numeric(probs[1, 5]), 0.66)
+#   expect_equal(as.numeric(probs[1, 6]), 0.9)
+#
+#   expect_equal(as.character(probs[2, 1]), "DCAC")
+#   expect_equal(as.numeric(probs[2, 2]), 0.66)
+#   expect_equal(as.numeric(probs[2, 3]), 0.52)
+#   expect_equal(as.numeric(probs[2, 4]), 0.51)
+#   expect_equal(as.numeric(probs[2, 5]), 0.7)
+#   expect_equal(as.numeric(probs[2, 6]), 0.9)
+# })
