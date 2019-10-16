@@ -51,8 +51,10 @@ plot_projection_ts <- function(object,
   for (i in seq_along(type)) {
     ts_data[[i]] <- slot(object, type[i]) %>%
       reshape2::melt() %>%
-      dplyr::rename(iter = .data$Var1, mp = .data$Var2,
-        value = .data$value, year = .data$Var3) %>%
+      dplyr::rename(
+        iter = .data$Var1, mp = .data$Var2,
+        value = .data$value, year = .data$Var3
+      ) %>%
       dplyr::left_join(mps, by = "mp") %>%
       dplyr::mutate(Type = type[i])
   }
@@ -101,10 +103,16 @@ plot_projection_ts <- function(object,
     ggplot2::aes_string(x = "real_year", y = "m"),
     colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
-  g <- g + ggplot2::geom_hline(yintercept = 1, lty = 2, col = "grey30")
-  if ("B_BMSY" %in% type)
-  g <- g +
-    ggplot2::geom_hline(data = lines, aes_string(yintercept = "value"), lty = 2, col = "grey40")
+
+  if ("B_BMSY" %in% type || "F_FMSY" %in% type) {
+    g <- g + ggplot2::geom_hline(yintercept = 1, alpha = 0.2, lty = 2, lwd = 0.5)
+  }
+  if ("B_BMSY" %in% type) {
+    g <- g + ggplot2::geom_hline(
+      data = lines,
+      aes_string(yintercept = "value"), alpha = 0.2, lty = 2, lwd = 0.5
+    )
+  }
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Projected value") +
     ggplot2::xlab("Year") +
