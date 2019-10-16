@@ -24,6 +24,7 @@ Download an operating model from the DLMtool website
 }
 \examples{
 \donttest{
+library(gfdlm)
 download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
 }
 }

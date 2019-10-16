@@ -23,6 +23,8 @@ Only applies to the commercial data.}
 for length bins of interval 2, \code{interval = 2}.}
 
 \item{sex}{1 or 2 for male or female.}
+
+\item{sex}{Numeric vector indicating males and/or or females.}
 }
 \value{
 A catch at age or catch at length matrix as an array.

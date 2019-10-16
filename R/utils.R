@@ -49,6 +49,7 @@ tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
 #'   Only applies to the commercial data.
 #' @param interval Interval for the complete set of ages or lengths. For example,
 #'   for length bins of interval 2, `interval = 2`.
+#' @param sex Numeric vector indicating males and/or or females.
 #'
 #' @return A catch at age or catch at length matrix as an array.
 #'   1 x nyears x nage/nlength
