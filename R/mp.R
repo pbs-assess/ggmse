@@ -72,6 +72,14 @@ remove_years <- function(dat, slot, index) {
 
 #' @rdname MPs
 #' @export
+.DDSS_MSY <- reduce_survey(MSEtool::DDSS_MSY)
+
+#' @rdname MPs
+#' @export
+.DDSS_4010 <- reduce_survey(MSEtool::DDSS_4010)
+
+#' @rdname MPs
+#' @export
 .GB_slope <- reduce_survey(DLMtool::GB_slope)
 
 #' @rdname MPs
@@ -112,6 +120,22 @@ remove_years <- function(dat, slot, index) {
 
 #' @rdname MPs
 #' @export
+.Itarget1 <- reduce_survey(DLMtool::Itarget1)
+
+#' @rdname MPs
+#' @export
+.Itarget2 <- reduce_survey(DLMtool::Itarget2)
+
+#' @rdname MPs
+#' @export
+.Itarget3 <- reduce_survey(DLMtool::Itarget3)
+
+#' @rdname MPs
+#' @export
+.Itarget4 <- reduce_survey(DLMtool::Itarget4)
+
+#' @rdname MPs
+#' @export
 .ITM <- reduce_survey(DLMtool::ITM)
 
 #' @rdname MPs
@@ -137,6 +161,10 @@ remove_years <- function(dat, slot, index) {
 #' @rdname MPs
 #' @export
 .SP_MSY <- reduce_survey(MSEtool::SP_MSY)
+
+#' @rdname MPs
+#' @export
+.SPMSY <- reduce_survey(DLMtool::SPMSY)
 
 #' @rdname MPs
 #' @export

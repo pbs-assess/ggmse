@@ -3,6 +3,8 @@
 \name{.DD}
 \alias{.DD}
 \alias{.DD4010}
+\alias{.DDSS_MSY}
+\alias{.DDSS_4010}
 \alias{.GB_slope}
 \alias{.ICI}
 \alias{.ICI2}
@@ -13,6 +15,10 @@
 \alias{.Islope4}
 \alias{.IT5}
 \alias{.IT10}
+\alias{.Itarget1}
+\alias{.Itarget2}
+\alias{.Itarget3}
+\alias{.Itarget4}
 \alias{.ITM}
 \alias{.SBT1}
 \alias{.SBT2}
@@ -20,12 +26,17 @@
 \alias{.SCA_MSY}
 \alias{.SP_4010}
 \alias{.SP_MSY}
+\alias{.SPMSY}
 \alias{.SPmod}
 \title{Biennial survey versions of many \pkg{DLMtool} and \pkg{MSEtool} MP functions}
 \usage{
 .DD(x, Data, reps = 100, ...)
 
 .DD4010(x, Data, reps = 100, ...)
+
+.DDSS_MSY(x, Data, reps = 100, ...)
+
+.DDSS_4010(x, Data, reps = 100, ...)
 
 .GB_slope(x, Data, reps = 100, ...)
 
@@ -47,6 +58,14 @@
 
 .IT10(x, Data, reps = 100, ...)
 
+.Itarget1(x, Data, reps = 100, ...)
+
+.Itarget2(x, Data, reps = 100, ...)
+
+.Itarget3(x, Data, reps = 100, ...)
+
+.Itarget4(x, Data, reps = 100, ...)
+
 .ITM(x, Data, reps = 100, ...)
 
 .SBT1(x, Data, reps = 100, ...)
@@ -60,6 +79,8 @@
 .SP_4010(x, Data, reps = 100, ...)
 
 .SP_MSY(x, Data, reps = 100, ...)
+
+.SPMSY(x, Data, reps = 100, ...)
 
 .SPmod(x, Data, reps = 100, ...)
 }
