@@ -53,8 +53,8 @@ remove_years <- function(dat, slot, index) {
 #' Biennial survey versions of many \pkg{DLMtool} and \pkg{MSEtool} MP functions
 #'
 #' These management procedures (MPs) use [reduce_survey()] to eliminate odd
-#' years of survey observations to reflect the biannual nature of most
-#' groundfish surveys.
+#' years of survey observations to reflect the biennial nature of most
+#' groundfish surveys in British Columbia.
 #'
 #' @param x A position in the data object. As per \pkg{DLMtool}.
 #' @param Data A data object. As per \pkg{DLMtool}.

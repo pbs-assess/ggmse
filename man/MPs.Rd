@@ -75,6 +75,6 @@ per \pkg{DLMtool}.}
 }
 \description{
 These management procedures (MPs) use \code{\link[=reduce_survey]{reduce_survey()}} to eliminate odd
-years of survey observations to reflect the biannual nature of most
-groundfish surveys.
+years of survey observations to reflect the biennial nature of most
+groundfish surveys in British Columbia.
 }
