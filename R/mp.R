@@ -1,10 +1,10 @@
 #' Eliminate survey data for selected years
 #'
-#' This function factory removes the selected years of observations before
-#' feeding the data to an existing management procedure function in
-#' \pkg{DLMtool}. For example, this can be used to turn an annual survey into a
-#' biennial or triennial survey. It could also be used to eliminate commercial
-#' observations from some years.
+#' This function factory creates a \pkg{DLMtool} management procedure (MP)
+#' function that only sees survey data from selected years. For example, this
+#' could change the data that an MP sees from an annual survey into a biennial
+#' or triennial survey. It could also be used to eliminate commercial
+#' observations from some years if the default slots affected were changed.
 #'
 #' @param mp An existing management procedure function of class `"MP"` that will
 #'   work with \pkg{DLMtool}.
