@@ -20,6 +20,15 @@
 \alias{.Itarget3}
 \alias{.Itarget4}
 \alias{.ITM}
+\alias{.LstepCC1}
+\alias{.LstepCC2}
+\alias{.LstepCC3}
+\alias{.LstepCC4}
+\alias{.Ltarget1}
+\alias{.Ltarget2}
+\alias{.Ltarget3}
+\alias{.Ltarget4}
+\alias{.Ltarget95}
 \alias{.SBT1}
 \alias{.SBT2}
 \alias{.SCA_4010}
@@ -67,6 +76,24 @@
 .Itarget4(x, Data, reps = 100, ...)
 
 .ITM(x, Data, reps = 100, ...)
+
+.LstepCC1(x, Data, reps = 100, ...)
+
+.LstepCC2(x, Data, reps = 100, ...)
+
+.LstepCC3(x, Data, reps = 100, ...)
+
+.LstepCC4(x, Data, reps = 100, ...)
+
+.Ltarget1(x, Data, reps = 100, ...)
+
+.Ltarget2(x, Data, reps = 100, ...)
+
+.Ltarget3(x, Data, reps = 100, ...)
+
+.Ltarget4(x, Data, reps = 100, ...)
+
+.Ltarget95(x, Data, reps = 100, ...)
 
 .SBT1(x, Data, reps = 100, ...)
 

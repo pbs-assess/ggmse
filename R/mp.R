@@ -24,7 +24,7 @@
 #' om@nsim <- 3
 #' temp_mp <- reduce_survey(Islope1)
 #' mse <- runMSE(OM = om, MPs = "temp_mp")
-reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL"),
+reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL", "ML"),
                           index = function(x) seq(1, x, by = 2)) {
   f <- function(x, Data, reps = 100, ...) {
     for (slot_i in slots) {
@@ -137,6 +137,42 @@ remove_years <- function(dat, slot, index) {
 #' @rdname MPs
 #' @export
 .ITM <- reduce_survey(DLMtool::ITM)
+
+#' @rdname MPs
+#' @export
+.LstepCC1 <- reduce_survey(DLMtool::LstepCC1)
+
+#' @rdname MPs
+#' @export
+.LstepCC2 <- reduce_survey(DLMtool::LstepCC2)
+
+#' @rdname MPs
+#' @export
+.LstepCC3 <- reduce_survey(DLMtool::LstepCC3)
+
+#' @rdname MPs
+#' @export
+.LstepCC4 <- reduce_survey(DLMtool::LstepCC4)
+
+#' @rdname MPs
+#' @export
+.Ltarget1 <- reduce_survey(DLMtool::Ltarget1)
+
+#' @rdname MPs
+#' @export
+.Ltarget2 <- reduce_survey(DLMtool::Ltarget2)
+
+#' @rdname MPs
+#' @export
+.Ltarget3 <- reduce_survey(DLMtool::Ltarget3)
+
+#' @rdname MPs
+#' @export
+.Ltarget4 <- reduce_survey(DLMtool::Ltarget4)
+
+#' @rdname MPs
+#' @export
+.Ltarget95 <- reduce_survey(DLMtool::Ltarget95)
 
 #' @rdname MPs
 #' @export
