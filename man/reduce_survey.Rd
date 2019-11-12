@@ -4,8 +4,11 @@
 \alias{reduce_survey}
 \title{Eliminate survey data for selected years}
 \usage{
-reduce_survey(mp, slots = c("Ind", "CAA", "CAL", "ML"),
-  index = function(x) seq(1, x, by = 2))
+reduce_survey(
+  mp,
+  slots = c("Ind", "CAA", "CAL", "ML"),
+  index = function(x) seq(1, x, by = 2)
+)
 }
 \arguments{
 \item{mp}{An existing management procedure function of class \code{"MP"} that will

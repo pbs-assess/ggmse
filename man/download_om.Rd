@@ -4,9 +4,13 @@
 \alias{download_om}
 \title{Download an operating model from the DLMtool website}
 \usage{
-download_om(file = "default-download-om.rds", web_file,
+download_om(
+  file = "default-download-om.rds",
+  web_file,
   base_url = "http://www.datalimitedtoolkit.org/Case_Studies_Table/",
-  method = "wget", overwrite = FALSE)
+  method = "wget",
+  overwrite = FALSE
+)
 }
 \arguments{
 \item{file}{The name of the file. If there is no .rds extension one will be appended}

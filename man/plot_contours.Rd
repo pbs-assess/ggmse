@@ -4,10 +4,18 @@
 \alias{plot_contours}
 \title{Make a panel of contour plots by management procedure for B/BMSY by F/FMSY}
 \usage{
-plot_contours(object, yend = max(object@proyears), dontshow_mp = NULL,
-  show_ref_pt_lines = TRUE, alpha = c(0.2, 0.4, 0.6, 0.8), n = 200,
-  xlim = c(0, 3.5), ylim = c(0, 3.5), x_ref_lines = c(0.4, 0.8),
-  y_ref_lines = 1)
+plot_contours(
+  object,
+  yend = max(object@proyears),
+  dontshow_mp = NULL,
+  show_ref_pt_lines = TRUE,
+  alpha = c(0.2, 0.4, 0.6, 0.8),
+  n = 200,
+  xlim = c(0, 3.5),
+  ylim = c(0, 3.5),
+  x_ref_lines = c(0.4, 0.8),
+  y_ref_lines = 1
+)
 }
 \arguments{
 \item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}

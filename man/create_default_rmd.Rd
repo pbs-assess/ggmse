@@ -4,8 +4,12 @@
 \alias{create_default_rmd}
 \title{Create template Rmd file describing DLMtool Objects and Slots}
 \usage{
-create_default_rmd(file_name, overwrite = FALSE, knitr_results = TRUE,
-  knitr_echo = TRUE)
+create_default_rmd(
+  file_name,
+  overwrite = FALSE,
+  knitr_results = TRUE,
+  knitr_echo = TRUE
+)
 }
 \arguments{
 \item{file_name}{Filename/path of where to save the .Rmd file.}

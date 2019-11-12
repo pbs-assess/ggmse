@@ -4,9 +4,13 @@
 \alias{filter_data_rex}
 \title{Filter Rex sole data}
 \usage{
-filter_data_rex(d, minimum_year = 1996, maximum_year = 2018,
+filter_data_rex(
+  d,
+  minimum_year = 1996,
+  maximum_year = 2018,
   major_stat_area_codes = c("03", "04"),
-  survey_series_descs = c("West Coast Vancouver Island Synoptic Bottom Trawl"))
+  survey_series_descs = c("West Coast Vancouver Island Synoptic Bottom Trawl")
+)
 }
 \arguments{
 \item{d}{data as retrieved from \code{\link[gfdata:get_commercial_samples]{gfdata::get_commercial_samples()}} and similar functions}

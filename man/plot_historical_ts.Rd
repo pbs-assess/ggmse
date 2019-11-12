@@ -4,11 +4,16 @@
 \alias{plot_historical_ts}
 \title{Plot historical time series}
 \usage{
-plot_historical_ts(object, type = c("Catch", "SSB", "B", "VB",
-  "Removals", "Rec", "N", "Find", "Marray", "RecDev"), n_samples = 50,
-  this_year = 2018, observed_ts = NULL, scale = if
-  (!is.null(observed_ts)) TRUE else FALSE, legend_position = c(0.9,
-  0.85))
+plot_historical_ts(
+  object,
+  type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray",
+    "RecDev"),
+  n_samples = 50,
+  this_year = 2018,
+  observed_ts = NULL,
+  scale = if (!is.null(observed_ts)) TRUE else FALSE,
+  legend_position = c(0.9, 0.85)
+)
 }
 \arguments{
 \item{object}{A DLMtool object of class \code{Hist} that was created by

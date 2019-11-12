@@ -7,8 +7,7 @@
 \usage{
 tidy_cal(dat, yrs, unsorted_only = TRUE, interval = 1, sex = c(1, 2))
 
-tidy_caa(dat, yrs, unsorted_only = FALSE, interval = 1, sex = c(1,
-  2))
+tidy_caa(dat, yrs, unsorted_only = FALSE, interval = 1, sex = c(1, 2))
 }
 \arguments{
 \item{dat}{Commercial or biological samples from \code{\link[=get_commercial_samples]{get_commercial_samples()}} or
@@ -21,8 +20,6 @@ Only applies to the commercial data.}
 
 \item{interval}{Interval for the complete set of ages or lengths. For example,
 for length bins of interval 2, \code{interval = 2}.}
-
-\item{sex}{1 or 2 for male or female.}
 
 \item{sex}{Numeric vector indicating males and/or or females.}
 }

@@ -4,8 +4,13 @@
 \alias{plot_probs}
 \title{Summary of probabilities of things from the MSE object in a colored tile table format}
 \usage{
-plot_probs(probs_dat, digits = 2, relative_max = FALSE,
-  scale_0_1 = FALSE, sort_by = "decreasing")
+plot_probs(
+  probs_dat,
+  digits = 2,
+  relative_max = FALSE,
+  scale_0_1 = FALSE,
+  sort_by = "decreasing"
+)
 }
 \arguments{
 \item{probs_dat}{A list of length 2 - a data frame and another list of captions describing the

@@ -4,11 +4,12 @@
 \alias{create_rmd}
 \title{Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it}
 \usage{
-create_rmd(file_name,
-  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package
-  = "gfdlm"),
-  slot_type_order_file_name = system.file("slot-type-order.csv", package
-  = "gfdlm"), ...)
+create_rmd(
+  file_name,
+  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
+  slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
+  ...
+)
 }
 \arguments{
 \item{file_name}{Filename of the .rmd file to create/modify. If it does not exist,
