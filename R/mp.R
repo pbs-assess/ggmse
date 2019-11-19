@@ -238,6 +238,12 @@ IDX <- function(x, Data, reps = 100, plot = FALSE, delta_min = -0.5,
   delta_ind_y <- Data@Ind[x, this_year] / Data@Ind[x, this_year - 1] - 1
   catch_rec <- Data@Cat[x, length(Data@Cat[x, ])]
 
+  # FIXME: should we make this stochastic?
+  # e.g. from Iratio:
+  # I.num <- trlnorm(reps * length(ind.num), Data@Ind[x,
+    # ind.num], Data@CV_Ind[x, 1])
+  # I.den <- trlnorm(reps * length(ind.den), Data@Ind[x,
+    # ind.den], Data@CV_Ind[x, 1])
   if (delta_ind_y <= delta_min) {
     TAC <- tac_floor
   }
