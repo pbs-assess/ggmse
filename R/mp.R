@@ -205,3 +205,52 @@ remove_years <- function(dat, slot, index) {
 #' @rdname MPs
 #' @export
 .SPmod <- reduce_survey(DLMtool::SPmod)
+
+#' Index-based MP from Cox et al. (2019)
+#'
+#' Index-based MP used in the most recent outside Yelloweye Rockfish assessment
+#' in BC.
+#'
+#' @param x A position in the data object.
+#' @param Data A data object.
+#' @param reps The number of stochastic samples of the MP recommendation(s).
+#' @param plot Logical. Show the plot? (Not implemented)
+#' @param delta_min Most negative drop proportion allowed in the index.
+#' @param delta_max Most positive increased proportion allowed in the index.
+#' @param lambda Smoothing parameter. 0 means always use the last TAC. 1 means
+#'   no smoothing. Can take any value in between.
+#' @param tac_floor TAC when `delta_min` is met or exceeded.
+#'
+#' @export
+#' @references
+#' Sean P Cox, Beau Doherty, Ashleen J Benson, Samuel DN Johnson, and Dana
+#' Haggarty. Evaluation of potential rebuilding strategies for Outside Yelloweye
+#' Rockfish in British Columbia. Working Paper 2017GRF02.
+#'
+#' @examples
+#' IDX(1, DLMtool::SimulatedData)
+#' IDX(1, DLMtool::SimulatedData, lambda = 0.5)
+IDX <- function(x, Data, reps = 100, plot = FALSE, delta_min = -0.5,
+                delta_max = 0.25, lambda = 1, tac_floor = 0) {
+  dependencies <- "Data@Ind"
+
+  this_year <- length(Data@Year)
+  delta_ind_y <- Data@Ind[x, this_year] / Data@Ind[x, this_year - 1] - 1
+  catch_rec <- Data@Cat[x, length(Data@Cat[x, ])]
+
+  if (delta_ind_y <= delta_min) {
+    TAC <- tac_floor
+  }
+  if (delta_min < delta_ind_y && delta_ind_y <= delta_max) {
+    TAC <- (1 + delta_ind_y) * catch_rec
+  }
+  if (delta_ind_y > delta_max) {
+    TAC <- (1 + delta_max) * catch_rec
+  }
+
+  TAC <- lambda * TAC + (1 - lambda) * catch_rec
+
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
+}
