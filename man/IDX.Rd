@@ -8,7 +8,6 @@ IDX(
   x,
   Data,
   reps = 100,
-  plot = FALSE,
   delta_min = -0.5,
   delta_max = 0.25,
   lambda = 1,
@@ -21,8 +20,6 @@ IDX(
 \item{Data}{A data object.}
 
 \item{reps}{The number of stochastic samples of the MP recommendation(s).}
-
-\item{plot}{Logical. Show the plot? (Not implemented)}
 
 \item{delta_min}{Most negative drop proportion allowed in the index.}
 
