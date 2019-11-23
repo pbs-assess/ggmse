@@ -44,11 +44,15 @@
 \alias{.SP4010}
 \alias{SP8040}
 \alias{.SP8040}
+\alias{SP8040_Fox}
+\alias{.SP8040_Fox}
 \alias{SP6040}
 \alias{.SP6040}
+\alias{SP6040_Fox}
+\alias{.SP6040_Fox}
 \alias{.SP_MSY}
-\alias{.SCA_4010}
-\alias{.SCA_MSY}
+\alias{SP_MSY_Fox}
+\alias{.SP_MSY_Fox}
 \alias{IT5_hist}
 \alias{.IT5_hist}
 \alias{IT10_hist}
@@ -141,17 +145,23 @@ SP8040(x, Data, reps = 1)
 
 .SP8040(x, Data, reps = 100, ...)
 
+SP8040_Fox(x, Data, reps = 1)
+
+.SP8040_Fox(x, Data, reps = 100, ...)
+
 SP6040(x, Data, reps = 1)
 
 .SP6040(x, Data, reps = 100, ...)
 
-.SP_MSY(x, Data, reps = 100, ...)
+SP6040_Fox(x, Data, reps = 1)
 
-.SCA_4010(x, Data, reps = 100, ...)
-
-.SCA_MSY(x, Data, reps = 100, ...)
+.SP6040_Fox(x, Data, reps = 100, ...)
 
 .SP_MSY(x, Data, reps = 100, ...)
+
+SP_MSY_Fox(x, Data, reps = 1)
+
+.SP_MSY_Fox(x, Data, reps = 100, ...)
 
 IT5_hist(x, Data, reps = 100, ...)
 

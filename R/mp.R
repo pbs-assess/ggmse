@@ -355,7 +355,7 @@ IDX_smooth <- function(x, Data, reps = 100, ...) {
 
 #' @rdname MPs
 #' @export
-SP4010 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.1, TRP = 0.4)
+SP4010 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
 
 #' @rdname MPs
 #' @export
@@ -363,7 +363,7 @@ SP4010 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.1, TRP = 0.4)
 
 #' @rdname MPs
 #' @export
-SP8040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.8)
+SP8040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY")
 
 #' @rdname MPs
 #' @export
@@ -371,7 +371,15 @@ SP8040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.8)
 
 #' @rdname MPs
 #' @export
-SP6040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.6)
+SP8040_Fox <- MSEtool::make_MP("SP_Fox", "HCR_ramp", LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY")
+
+#' @rdname MPs
+#' @export
+.SP8040_Fox <- reduce_survey(SP8040_Fox)
+
+#' @rdname MPs
+#' @export
+SP6040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY")
 
 #' @rdname MPs
 #' @export
@@ -379,19 +387,23 @@ SP6040 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.4, TRP = 0.6)
 
 #' @rdname MPs
 #' @export
-.SP_MSY <- reduce_survey(SP_MSY)
+SP6040_Fox <- MSEtool::make_MP("SP_Fox", "HCR_ramp", LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY")
 
 #' @rdname MPs
 #' @export
-.SCA_4010 <- reduce_survey(MSEtool::SCA_4010)
-
-#' @rdname MPs
-#' @export
-.SCA_MSY <- reduce_survey(MSEtool::SCA_MSY)
+.SP6040_Fox <- reduce_survey(SP6040_Fox)
 
 #' @rdname MPs
 #' @export
 .SP_MSY <- reduce_survey(MSEtool::SP_MSY)
+
+#' @rdname MPs
+#' @export
+SP_MSY_Fox <- MSEtool::make_MP("SP_Fox", "HCR_MSY")
+
+#' @rdname MPs
+#' @export
+.SP_MSY_Fox <- reduce_survey(SP_MSY_Fox)
 
 IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 10) {
   # Based on DLMtool::IT_
@@ -407,16 +419,16 @@ IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 1
   if (deltaI < (1 - mc)) deltaI <- 1 - mc
   if (deltaI > (1 + mc)) deltaI <- 1 + mc
   TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
-  DLMtool::TACfilter(TAC)
+  TAC <- DLMtool::TACfilter(TAC)
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
 }
 
 #' @rdname MPs
 #' @export
 IT5_hist <- function(x, Data, reps = 100, ...) {
-  TAC <- IT_hist_(x, Data, reps, yrsmth = 5, mc = 0.05, yrsmth_hist = 10)
-  Rec <- new("Rec")
-  Rec@TAC <- TAC
-  Rec
+  IT_hist_(x, Data, reps, yrsmth = 5, mc = 0.05, yrsmth_hist = 10)
 }
 class(IT5_hist) <- "MP"
 
@@ -427,10 +439,7 @@ class(IT5_hist) <- "MP"
 #' @rdname MPs
 #' @export
 IT10_hist <- function(x, Data, reps = 100, ...) {
-  TAC <- IT_hist_(x, Data, reps, yrsmth = 5, mc = 0.10, yrsmth_hist = 10)
-  Rec <- new("Rec")
-  Rec@TAC <- TAC
-  Rec
+  IT_hist_(x, Data, reps, yrsmth = 5, mc = 0.10, yrsmth_hist = 10)
 }
 class(IT10_hist) <- "MP"
 
