@@ -38,6 +38,8 @@
 \alias{.Itarget3}
 \alias{.Itarget4}
 \alias{.ITM}
+\alias{ITM_hist}
+\alias{.ITM_hist}
 \alias{.SBT1}
 \alias{.IDX}
 \alias{IDX_smooth}
@@ -139,6 +141,10 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .Itarget4(x, Data, reps = 100, ...)
 
 .ITM(x, Data, reps = 100, ...)
+
+ITM_hist(x, Data, reps = 100, yrsmth_hist = 10, ...)
+
+.ITM_hist(x, Data, reps = 100, ...)
 
 .SBT1(x, Data, reps = 100, ...)
 

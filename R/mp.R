@@ -256,6 +256,39 @@ class(Islope0.2_80) <- "MP"
 #' @export
 .ITM <- reduce_survey(DLMtool::ITM)
 
+#' @rdname MPs
+#' @export
+ITM_hist <- function(x, Data, reps = 100, yrsmth_hist = 10, ...) {
+  mc <- (5 + Data@Mort[x] * 25) / 100
+  if (mc > 0.2) mc <- 0.2
+  yrsmth <- floor(4 * (1 / Data@Mort[x])^(1 / 4))
+  ind <- max(1, (length(Data@Year) - yrsmth + 1)):length(Data@Year)
+
+  # get mean index over last 10 historical years:
+  yrlast <- match(Data@LHYear[1], Data@Year)
+  yrfirst <- yrlast - yrsmth_hist + 1
+  I_ref <- Data@Ind[x, seq(yrfirst, yrlast)]
+  I_ref <- mean(I_ref, na.rm = TRUE)
+
+  deltaI <- mean(Data@Ind[x, ind], na.rm = TRUE) / I_ref
+  if (deltaI < (1 - mc)) {
+    deltaI <- 1 - mc
+  }
+  if (deltaI > (1 + mc)) {
+    deltaI <- 1 + mc
+  }
+  TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[ x, 1])
+  TAC <- DLMtool::TACfilter(TAC)
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
+}
+class(ITM_hist) <- "MP"
+
+#' @rdname MPs
+#' @export
+.ITM_hist<- reduce_survey(ITM_hist)
+
 # #' @rdname MPs
 # #' @export
 # .LstepCC1 <- reduce_survey(DLMtool::LstepCC1)
