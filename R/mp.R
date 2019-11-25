@@ -72,9 +72,11 @@ remove_years <- function(dat, slot, index) {
 # #' @export
 # .DD4010 <- reduce_survey(DLMtool::DD4010)
 
+#' @export
 AvC20 <- function(x, Data, reps = 100, ...) {
   DLMtool::CC1(x, Data, reps, yrsmth = 20, xx = 0, ...)
 }
+class(AvC20) <- "MP"
 
 #' @rdname MPs
 #' @export
@@ -89,6 +91,7 @@ AvC20 <- function(x, Data, reps = 100, ...) {
 GB_slope6_0.66 <- function(x, Data, reps = 100, ...) {
   DLMtool::GB_slope(x, Data, reps, yrsmth = 6, lambda = 0.66, ...)
 }
+class(GB_slope6_0.66) <- "MP"
 
 #' @rdname MPs
 #' @export
@@ -99,6 +102,8 @@ GB_slope6_0.66 <- function(x, Data, reps = 100, ...) {
 GB_slope6_1 <- function(x, Data, reps = 100, ...) {
   DLMtool::GB_slope(x, Data, reps, yrsmth = 6, lambda = 1, ...)
 }
+class(GB_slope6_1) <- "MP"
+
 #' @rdname MPs
 #' @export
 .GB_slope6_1 <- reduce_survey(GB_slope6_1)
@@ -108,6 +113,7 @@ GB_slope6_1 <- function(x, Data, reps = 100, ...) {
 GB_slope8_0.66 <- function(x, Data, reps = 100, ...) {
   DLMtool::GB_slope(x, Data, reps, yrsmth = 8, lambda = 0.66, ...)
 }
+class(GB_slope8_0.66) <- "MP"
 
 #' @rdname MPs
 #' @export
@@ -118,6 +124,8 @@ GB_slope8_0.66 <- function(x, Data, reps = 100, ...) {
 GB_slope8_1 <- function(x, Data, reps = 100, ...) {
   DLMtool::GB_slope(x, Data, reps, yrsmth = 8, lambda = 1, ...)
 }
+GB_slope8_1
+
 #' @rdname MPs
 #' @export
 .GB_slope8_1 <- reduce_survey(GB_slope8_1)
@@ -135,6 +143,8 @@ GB_slope8_1 <- function(x, Data, reps = 100, ...) {
 Iratio6 <- function(x, Data, reps = 100, ...) {
   DLMtool::Iratio(x, Data, reps, yrs = c(3, 6), ...)
 }
+class(Iratio6) <- "MP"
+
 #' @rdname MPs
 #' @export
 .Iratio6 <- reduce_survey(Iratio6)
@@ -144,6 +154,7 @@ Iratio6 <- function(x, Data, reps = 100, ...) {
 Iratio8 <- function(x, Data, reps = 100, ...) {
   DLMtool::Iratio(x, Data, reps, yrs = c(4, 8), ...)
 }
+class(Iratio8) <- "MP"
 
 #' @rdname MPs
 #' @export
@@ -161,40 +172,47 @@ Islope_mod_ <- function(x, Data, reps = 100, yrsmith = 6, lambda, xx, ...) {
 
 #' @rdname MPs
 #' @export
-Islope_mod1 <- function(x, Data, reps = 100, ...) {
+Islope_0.4_100 <- function(x, Data, reps = 100, ...) {
+  Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0, ...)
+}
+class(Islope_0.4_100) <- "MP"
+
+#' @rdname MPs
+#' @export
+.Islope_0.4_100 <- reduce_survey(Islope_0.4_100)
+
+#' @rdname MPs
+#' @export
+Islope_0.4_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0.2, ...)
 }
+class(Islope_0.4_80) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_mod1 <- reduce_survey(Islope_mod1)
+.Islope_0.4_80 <- reduce_survey(Islope_0.4_80)
 
 #' @rdname MPs
 #' @export
-Islope_mod2 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0.3, ...)
+Islope_0.2_100 <- function(x, Data, reps = 100, ...) {
+  Islope_mod_(x, Data, reps = 100, lambda = 0.2, xx = 0, ...)
 }
-.Islope_mod2 <- reduce_survey(Islope_mod2)
+class(Islope_0.2_100) <- "MP"
 
 #' @rdname MPs
 #' @export
-Islope_mod3 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0.3, ...)
-}
+.Islope_0.2_100 <- reduce_survey(Islope_0.2_100)
 
 #' @rdname MPs
 #' @export
-.Islope_mod3 <- reduce_survey(Islope_mod3)
-
-#' @rdname MPs
-#' @export
-Islope_mod4 <- function(x, Data, reps = 100, ...) {
+Islope_0.2_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = 100, lambda = 0.2, xx = 0.2, ...)
 }
+class(Islope_0.2_80) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_mod4 <- reduce_survey(Islope_mod4)
+.Islope_0.2_80 <- reduce_survey(.Islope_0.2_80)
 
 #' @rdname MPs
 #' @export
@@ -348,6 +366,7 @@ class(IDX) <- "MP"
 IDX_smooth <- function(x, Data, reps = 100, ...) {
   IDX(x, Data, reps, lambda = 0.5, ...)
 }
+class(IDX_smooth) <- "MP"
 
 #' @rdname MPs
 #' @export

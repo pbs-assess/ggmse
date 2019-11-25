@@ -18,13 +18,14 @@
 \alias{.Iratio6}
 \alias{Iratio8}
 \alias{.Iratio8}
-\alias{Islope_mod1}
-\alias{.Islope_mod1}
-\alias{Islope_mod2}
-\alias{Islope_mod3}
-\alias{.Islope_mod3}
-\alias{Islope_mod4}
-\alias{.Islope_mod4}
+\alias{Islope_0.4_100}
+\alias{.Islope_0.4_100}
+\alias{Islope_0.4_80}
+\alias{.Islope_0.4_80}
+\alias{Islope_0.2_100}
+\alias{.Islope_0.2_100}
+\alias{Islope_0.2_80}
+\alias{.Islope_0.2_80}
 \alias{.Islope1}
 \alias{.Islope2}
 \alias{.Islope3}
@@ -93,19 +94,21 @@ Iratio8(x, Data, reps = 100, ...)
 
 .Iratio8(x, Data, reps = 100, ...)
 
-Islope_mod1(x, Data, reps = 100, ...)
+Islope_0.4_100(x, Data, reps = 100, ...)
 
-.Islope_mod1(x, Data, reps = 100, ...)
+.Islope_0.4_100(x, Data, reps = 100, ...)
 
-Islope_mod2(x, Data, reps = 100, ...)
+Islope_0.4_80(x, Data, reps = 100, ...)
 
-Islope_mod3(x, Data, reps = 100, ...)
+.Islope_0.4_80(x, Data, reps = 100, ...)
 
-.Islope_mod3(x, Data, reps = 100, ...)
+Islope_0.2_100(x, Data, reps = 100, ...)
 
-Islope_mod4(x, Data, reps = 100, ...)
+.Islope_0.2_100(x, Data, reps = 100, ...)
 
-.Islope_mod4(x, Data, reps = 100, ...)
+Islope_0.2_80(x, Data, reps = 100, ...)
+
+.Islope_0.2_80(x, Data, reps = 100, ...)
 
 .Islope1(x, Data, reps = 100, ...)
 
