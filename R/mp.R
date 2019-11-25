@@ -215,7 +215,7 @@ class(Islope_0.2_80) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_0.2_80 <- reduce_survey(.Islope_0.2_80)
+.Islope_0.2_80 <- reduce_survey(Islope_0.2_80)
 
 #' @rdname MPs
 #' @export
