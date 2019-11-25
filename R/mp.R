@@ -160,13 +160,12 @@ class(Iratio8) <- "MP"
 #' @export
 .Iratio8 <- reduce_survey(Iratio8)
 
-Islope_mod_ <- function(x, Data, reps = 100, yrsmith = 6, lambda, xx,
+Islope_mod_ <- function(x, Data, reps = 100, yrsmth = 6, lambda, xx,
   increase_cap = 1.2, ...) {
-  tac <- DLMtool::Islope_(x, Data, reps, yrsmth = yrsmith,
+  tac <- DLMtool::Islope_(x, Data, reps, yrsmth = yrsmth,
     lambda = lambda, xx = xx, ...
   )$TAC
-  browser()
-  last_catch_rec <- Data@Cat[x, length(Data@Cat[x, ])]
+  last_catch_rec <- Data@MPrec[x]
   tac[tac > (increase_cap * last_catch_rec)] <- increase_cap * last_catch_rec
   tac <- DLMtool::TACfilter(tac)
   Rec <- new("Rec")
@@ -177,7 +176,7 @@ Islope_mod_ <- function(x, Data, reps = 100, yrsmith = 6, lambda, xx,
 #' @rdname MPs
 #' @export
 Islope_0.4_100 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0, ...)
+  Islope_mod_(x, Data, reps = reps, lambda = 0.4, xx = 0, ...)
 }
 class(Islope_0.4_100) <- "MP"
 
@@ -188,7 +187,7 @@ class(Islope_0.4_100) <- "MP"
 #' @rdname MPs
 #' @export
 Islope_0.4_80 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.4, xx = 0.2, ...)
+  Islope_mod_(x, Data, reps = reps, lambda = 0.4, xx = 0.2, ...)
 }
 class(Islope_0.4_80) <- "MP"
 
@@ -199,7 +198,7 @@ class(Islope_0.4_80) <- "MP"
 #' @rdname MPs
 #' @export
 Islope_0.2_100 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.2, xx = 0, ...)
+  Islope_mod_(x, Data, reps = reps, lambda = 0.2, xx = 0, ...)
 }
 class(Islope_0.2_100) <- "MP"
 
@@ -210,7 +209,7 @@ class(Islope_0.2_100) <- "MP"
 #' @rdname MPs
 #' @export
 Islope_0.2_80 <- function(x, Data, reps = 100, ...) {
-  Islope_mod_(x, Data, reps = 100, lambda = 0.2, xx = 0.2, ...)
+  Islope_mod_(x, Data, reps = reps, lambda = 0.2, xx = 0.2, ...)
 }
 class(Islope_0.2_80) <- "MP"
 
