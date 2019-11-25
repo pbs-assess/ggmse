@@ -63,20 +63,15 @@ remove_years <- function(dat, slot, index) {
 #' @param ... Other arguments to pass to the MP function.
 #'
 #' @rdname MPs
-
-# #' @rdname MPs
-# #' @export
-# .DD <- reduce_survey(DLMtool::DD)
-#
-# #' @rdname MPs
-# #' @export
-# .DD4010 <- reduce_survey(DLMtool::DD4010)
-
 #' @export
-AvC20 <- function(x, Data, reps = 100, ...) {
+CC_hist20 <- function(x, Data, reps = 100, ...) {
   DLMtool::CC1(x, Data, reps, yrsmth = 20, xx = 0, ...)
 }
-class(AvC20) <- "MP"
+class(CC_hist20) <- "MP"
+
+#' @rdname MPs
+#' @export
+CC_hist <- DLMtool::AvC
 
 #' @rdname MPs
 #' @export
@@ -175,47 +170,47 @@ Islope_mod_ <- function(x, Data, reps = 100, yrsmth = 6, lambda, xx,
 
 #' @rdname MPs
 #' @export
-Islope_0.4_100 <- function(x, Data, reps = 100, ...) {
+Islope0.4_100 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.4, xx = 0, ...)
 }
-class(Islope_0.4_100) <- "MP"
+class(Islope0.4_100) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_0.4_100 <- reduce_survey(Islope_0.4_100)
+.Islope0.4_100 <- reduce_survey(Islope0.4_100)
 
 #' @rdname MPs
 #' @export
-Islope_0.4_80 <- function(x, Data, reps = 100, ...) {
+Islope0.4_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.4, xx = 0.2, ...)
 }
-class(Islope_0.4_80) <- "MP"
+class(Islope0.4_80) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_0.4_80 <- reduce_survey(Islope_0.4_80)
+.Islope0.4_80 <- reduce_survey(Islope0.4_80)
 
 #' @rdname MPs
 #' @export
-Islope_0.2_100 <- function(x, Data, reps = 100, ...) {
+Islope0.2_100 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.2, xx = 0, ...)
 }
-class(Islope_0.2_100) <- "MP"
+class(Islope0.2_100) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_0.2_100 <- reduce_survey(Islope_0.2_100)
+.Islope0.2_100 <- reduce_survey(Islope0.2_100)
 
 #' @rdname MPs
 #' @export
-Islope_0.2_80 <- function(x, Data, reps = 100, ...) {
+Islope0.2_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.2, xx = 0.2, ...)
 }
-class(Islope_0.2_80) <- "MP"
+class(Islope0.2_80) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope_0.2_80 <- reduce_survey(Islope_0.2_80)
+.Islope0.2_80 <- reduce_survey(Islope0.2_80)
 
 #' @rdname MPs
 #' @export
@@ -477,3 +472,23 @@ class(IT10_hist) <- "MP"
 #' @rdname MPs
 #' @export
 .IT10_hist <- reduce_survey(IT10_hist)
+
+#' @rdname MPs
+#' @export
+CC100 <- DLMtool::CC1
+
+#' @rdname MPs
+#' @export
+CC90 <- DLMtool::CC2
+
+#' @rdname MPs
+#' @export
+CC80 <- DLMtool::CC3
+
+#' @rdname MPs
+#' @export
+CC70 <- DLMtool::CC4
+
+#' @rdname MPs
+#' @export
+CC60 <- DLMtool::CC5
