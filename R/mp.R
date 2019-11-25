@@ -160,14 +160,18 @@ class(Iratio8) <- "MP"
 #' @export
 .Iratio8 <- reduce_survey(Iratio8)
 
-Islope_mod_ <- function(x, Data, reps = 100, yrsmith = 6, lambda, xx, ...) {
-  tac <- DLMtool::Islope1(x, Data, reps,
-    yrsmth = yrsmith,
+Islope_mod_ <- function(x, Data, reps = 100, yrsmith = 6, lambda, xx,
+  increase_cap = 1.2, ...) {
+  tac <- DLMtool::Islope_(x, Data, reps, yrsmth = yrsmith,
     lambda = lambda, xx = xx, ...
-  )
+  )$TAC
+  browser()
   last_catch_rec <- Data@Cat[x, length(Data@Cat[x, ])]
-  tac[tac > (1.2 * last_catch_rec)] <- 1.2 * last_catch_rec
-  tac
+  tac[tac > (increase_cap * last_catch_rec)] <- increase_cap * last_catch_rec
+  tac <- DLMtool::TACfilter(tac)
+  Rec <- new("Rec")
+  Rec@TAC <- tac
+  Rec
 }
 
 #' @rdname MPs
@@ -302,6 +306,12 @@ class(Islope_0.2_80) <- "MP"
 # #' @export
 # .SBT2 <- reduce_survey(DLMtool::SBT2)
 
+stepwise_NAs <- function(x) {
+  df <- data.frame(x = x)
+  out <- tidyr::fill(df, x, .direction = "down")
+  out$x
+}
+
 #' Index-based MP from Cox et al. (2019)
 #'
 #' Index-based MP used in the most recent outside Yelloweye Rockfish assessment
@@ -334,7 +344,10 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   if (tac_floor < 0) tac_floor <- 0
 
   this_year <- length(Data@Year)
-  delta_ind_y <- Data@Ind[x, this_year] / Data@Ind[x, this_year - 1] - 1
+
+  # Stepwise fill in NAs with last available value:
+  temp_Ind <- stepwise_NAs(Data@Ind[x,,drop=TRUE])
+  delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - 1] - 1
   catch_rec <- Data@MPrec[x]
 
   # FIXME: Data@Cat vs. MPrec (last TAC)? Different now, right? Which to use?
