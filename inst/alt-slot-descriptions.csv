@@ -48,7 +48,7 @@ Fleet,Vmaxlen,12,TRUE,TRUE,The vulnerability of fish at `Linf`. Uniform distribu
 Fleet,isRel,13,TRUE,TRUE,"Are the selectivity parameters in units of size-of-maturity (`TRUE`) (or absolute units, for example, cm) (`FALSE`)."
 Fleet,LR5,14,TRUE,TRUE,Shortest length corresponding ot 5% retention. Uniform distribution lower and upper bounds.
 Fleet,LFR,15,TRUE,TRUE,Shortest length that is fully retained. Uniform distribution lower and upper bounds.
-Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf` . Uniform distribution lower and upper bounds.
+Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform distribution lower and upper bounds.
 Fleet,DR,17,TRUE,TRUE,Discard rate: the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction.
 Fleet,SelYears,18,FALSE,TRUE,(Optional) Years representing vertices at which historical selectivity pattern changes. Vector.
 Fleet,AbsSelYears,19,FALSE,TRUE,"(Optional) Calendar years corresponding with `SelYears` (e.g., 1951, rather than 1); used for plotting only. Vector of same length as `SelYears`)."
