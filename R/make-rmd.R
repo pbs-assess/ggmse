@@ -1,5 +1,5 @@
 #' Get the actual name of the object for the base name object. e.g. stock
-#' object may have a suffix and be stock_pc <- new('Stock') or similar
+#' object may have a suffix and be stock_pc <- new("Stock") or similar
 #' Assumes the first instance of stock* <- contains the object name
 #'
 #' @param rmd Lines of an Rmd file as read in by [readLines()]
@@ -335,7 +335,7 @@ create_rmd <- function(file_name,
             paste0("## STOCK SLOT DESCRIPTIONS {#app:desc-stock", chunk_suffix, "}"),
             "",
             "```{r warnings = FALSE}",
-            paste0(stock_obj_name, " <- methods::new('Stock')"),
+            paste0(stock_obj_name, " <- methods::new(\"Stock\")"),
             "```",
             "",
             ifelse(!is.na(cust_chunks[[1]]), cust_chunks[[1]], ""),
@@ -523,7 +523,7 @@ format_desc <- function(df,
     ),
     paste0(
       "```{r warnings = FALSE}\n",
-      inst_obj_name, " <- methods::new('", obj_name, "')\n```\n"
+      inst_obj_name, " <- methods::new(\"", obj_name, "\")\n```\n"
     ),
     apply(df, 1, function(x) paste0(x, collapse = "\n\n"))
   )
