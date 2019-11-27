@@ -256,7 +256,19 @@ class(Islope0.2_80) <- "MP"
 #' @export
 .ITM <- reduce_survey(DLMtool::ITM)
 
-#' @rdname MPs
+#' Historical Index Target based on natural mortality rate
+#'
+#' This MP is based on [DLMtool::ITM()] but since the reference index level to
+#' the index over some historical time period.
+#'
+#' @param x A position in the data object. As per \pkg{DLMtool}.
+#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param reps The number of stochastic samples of the MP recommendation(s). As
+#'   per \pkg{DLMtool}.
+#' @param yrsmth_hist Number of historical years to consider for reference index
+#'   level.
+#' @param ... Other arguments to pass to the MP function.
+#'
 #' @export
 ITM_hist <- function(x, Data, reps = 100, yrsmth_hist = 10, ...) {
   mc <- (5 + Data@Mort[x] * 25) / 100
@@ -325,13 +337,64 @@ class(ITM_hist) <- "MP"
 # #' @export
 # .Ltarget95 <- reduce_survey(DLMtool::Ltarget95)
 
+#' SBT simple MP in log space
+#'
+#' This MP is based on [DLMtool::SBT1()] but fits the linear regression in log space.
+#'
+#' @param x A position in the data object. As per \pkg{DLMtool}.
+#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param reps The number of stochastic samples of the MP recommendation(s). As
+#'   per \pkg{DLMtool}.
+#' @param plot Logical.
+#' @param yrsmth The number of years for evaluating trend in relative abundance indices.
+#' @param k1 Control parameter.
+#' @param k2 Control parameter.
+#' @param gamma Control parameter.
+#'
+#' @export
+SBT1_log <- function(x, Data, reps = 100, plot = FALSE, yrsmth = 10, k1 = 1.5,
+                 k2 = 3, gamma = 1) {
+  dependencies <- "Data@Cat, Data@Year, Data@Ind"
+  Cr <- length(Data@Cat[x, ])
+  cct <- trlnorm(reps, Data@Cat[x, Cr], Data@CV_Cat)
+  ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
+  I_hist <- Data@Ind[x, ind]
+  test <- summary(lm(log(I_hist) ~ ind))$coefficients[2, 1:2]
+  if (reps > 1) {
+    lambda <- rnorm(reps, test[1], test[2])
+  }
+  else {
+    lambda <- test[1]
+  }
+  TAC <- cct * (1 + k2 * lambda)
+  cond <- lambda < 0
+  TAC[cond] <- cct[cond] * (1 - k1 * -lambda[cond]^gamma)
+  TAC <- TACfilter(TAC)
+  if (plot) {
+    op <- par(no.readonly = TRUE)
+    on.exit(par(op))
+    par(mfrow = c(1, 2))
+    plot(Data@Year[ind], log(I_hist),
+      bty = "l", xlab = "Year",
+      ylab = "log(Index)", type = "l", lwd = 2
+    )
+    lines(Data@Year[ind], predict(lm(log(I_hist) ~ ind)), lty = 2)
+    ylim <- range(c(Data@Cat[x, ind], TAC))
+    plot(c(Data@Year[ind], max(Data@Year[ind]) + 1), c(Data@Cat[x, ind], NA),
+      bty = "l", xlab = "Year", ylab = paste0("Catch (", Data@Units, ")"),
+      type = "l", lwd = 2, ylim = ylim
+    )
+    points(max(Data@Year[ind]), Data@Cat[x, max(ind)], pch = 16, cex = 1.5)
+    boxplot(TAC, at = max(Data@Year[ind]) + 1, add = TRUE, axes = FALSE, col = "blue")
+  }
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
+}
+
 #' @rdname MPs
 #' @export
-.SBT1 <- reduce_survey(DLMtool::SBT1)
-
-# #' @rdname MPs
-# #' @export
-# .SBT2 <- reduce_survey(DLMtool::SBT2)
+.SBT1_log <- reduce_survey(SBT1_log)
 
 stepwise_NAs <- function(x) {
   df <- data.frame(x = x)
