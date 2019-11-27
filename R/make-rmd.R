@@ -268,7 +268,7 @@ create_rmd <- function(file_name,
     x
   })
 
-  ## Remove any list elements that became NULL do to non-inclusion ini the above lapply
+  ## Remove any list elements that became NULL do to non-inclusion in the above lapply
   slots[sapply(slots, is.null)] <- NULL
 
   if (length(unique(slot_type_order$order)) != nrow(slot_type_order)) {
