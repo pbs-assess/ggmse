@@ -415,8 +415,15 @@ create_rmd <- function(file_name,
 
   new_rmd <- unlist(c(pre, ordered_slots, post))
 
+  # Remove multiple empty lines in a row:
+  empties <- purrr::map_int(seq_along(new_rmd), ~
+      if (new_rmd[[.x]] == "") .x else NA)
+  remove_i <- purrr::map_int(seq_along(empties), ~
+      if (!is.na(empties[.x]) && !is.na(empties[.x-1])) .x else NA)
+  remove_i <- remove_i[!is.na(remove_i)]
+
   conn <- file(file_name)
-  write(new_rmd, conn)
+  write(new_rmd[-remove_i], conn)
   close(conn)
 }
 
