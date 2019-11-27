@@ -1,98 +1,98 @@
 slot_type,slot,slot_order,show_slot,use_custom_description,custom_description
-Stock,Name,1,TRUE,FALSE,The name of the Stock object. Single value. Character string
-Stock,Common_Name,2,TRUE,FALSE,Common name of the species. Character string
-Stock,Species,3,TRUE,FALSE,Scientific name of the species. Genus and species name. Character string
-Stock,maxage,4,TRUE,FALSE,The maximum age of individuals that is simulated (there is no plus group ). Single value. Positive integer
-Stock,R0,5,TRUE,FALSE,The magnitude of unfished recruitment. Single value. Positive real number
-Stock,M,6,TRUE,FALSE,Natural mortality rate. Uniform distribution lower and upper bounds. Positive real number
-Stock,M2,7,FALSE,FALSE,(Optional) Natural mortality rate at age. Vector of length maxage . Positive real number
+Stock,Name,1,TRUE,FALSE,The name of the Stock object. Character string
+Stock,Common_Name,2,TRUE,FALSE,Common name of the species.
+Stock,Species,3,TRUE,FALSE,Scientific name of the species.
+Stock,maxage,4,TRUE,FALSE,The maximum age of individuals that is simulated (there is no plus group). Positive integer.
+Stock,R0,5,TRUE,FALSE,The magnitude of unfished recruitment.  An arbitrary value that scales all results. Set to 1000.
+Stock,M,6,TRUE,FALSE,Natural mortality rate. Uniform distribution lower and upper bounds.
+Stock,M2,7,FALSE,FALSE,(Optional) Natural mortality rate at age. Vector of length `maxage`.
 Stock,Mexp,8,FALSE,FALSE,Exponent of the Lorenzen function assuming an inverse relationship between M and weight. Uniform distribution lower and upper bounds. Real numbers <= 0.
-Stock,Msd,9,FALSE,FALSE,Inter-annual variability in natural mortality rate expressed as a coefficient of variation. Uniform distribution lower and upper bounds. Non-negative real numbers
+Stock,Msd,9,FALSE,FALSE,Inter-annual variability in natural mortality rate expressed as a CV. Uniform distribution lower and upper bounds.
 Stock,Mgrad,10,FALSE,FALSE,"No longer used. Previously mean temporal trend in natural mortality rate, expressed as a percentage change in M per year."
-Stock,h,11,TRUE,FALSE,Steepness of the stock recruit relationship. Uniform distribution lower and upper bounds. Values from 1/5 to 1
-Stock,SRrel,12,TRUE,FALSE,"Type of stock-recruit relationship. Single value, switch (1) Beverton-Holt (2) Ricker. Integer"
-Stock,Perr,13,TRUE,FALSE,"Process error, the CV of lognormal recruitment deviations. Uniform distribution lower and upper bounds. Non-negative real numbers"
-Stock,AC,14,TRUE,FALSE,Autocorrelation in recruitment deviations rec(t)=AC*rec(t-1)+(1-AC)*sigma(t). Uniform distribution lower and upper bounds. Non-negative real numbers
-Stock,Period,15,FALSE,FALSE,(Optional) Period for cyclical recruitment pattern in years. Uniform distribution lower and upper bounds. Non-negative real numbers
-Stock,Amplitude,16,FALSE,FALSE,(Optional) Amplitude in deviation from long-term average recruitment during recruitment cycle (eg a range from 0 to 1 means recruitment decreases or increases by up to 100% each cycle). Uniform distribution lower and upper bounds. 0 < Amplitude < 1
-Stock,Linf,17,TRUE,FALSE,Maximum length. Uniform distribution lower and upper bounds. Positive real numbers
-Stock,K,18,TRUE,FALSE,von Bertalanffy growth parameter k. Uniform distribution lower and upper bounds. Positive real numbers
-Stock,t0,19,TRUE,FALSE,von Bertalanffy theoretical age at length zero. Uniform distribution lower and upper bounds. Non-positive real numbers
-Stock,LenCV,20,TRUE,FALSE,Coefficient of variation of length-at-age (assumed constant for all age classes). Uniform distribution lower and upper bounds. Positive real numbers
-Stock,Ksd,21,FALSE,FALSE,Inter-annual variability in growth parameter k expressed as coefficient of variation. Uniform distribution lower and upper bounds. Non-negative real numbers
+Stock,h,11,TRUE,FALSE,Steepness of the stock-recruit relationship. Uniform distribution lower and upper bounds with values from 1/5 to 1.
+Stock,SRrel,12,TRUE,FALSE,"Type of stock-recruit relationship. Single integer value, switch (1) Beverton-Holt (2) Ricker."
+Stock,Perr,13,TRUE,FALSE,"Process error, the CV of lognormal recruitment deviations. Uniform distribution lower and upper bounds."
+Stock,AC,14,TRUE,FALSE,Autocorrelation in recruitment deviations. Uniform distribution lower and upper bounds.
+Stock,Period,15,FALSE,FALSE,(Optional) Period for cyclical recruitment pattern in years. Uniform distribution lower and upper bounds.
+Stock,Amplitude,16,FALSE,FALSE,"(Optional) Amplitude in deviation from long-term average recruitment during recruitment cycle (e.g., a range from 0 to 1 means recruitment decreases or increases by up to 100% each cycle). Uniform distribution lower and upper bounds. 0 < Amplitude < 1."
+Stock,Linf,17,TRUE,FALSE,Maximum length. Uniform distribution lower and upper bounds.
+Stock,K,18,TRUE,FALSE,von Bertalanffy growth parameter k. Uniform distribution lower and upper bounds.
+Stock,t0,19,TRUE,FALSE,von Bertalanffy theoretical age at length zero. Uniform distribution lower and upper bounds.
+Stock,LenCV,20,TRUE,FALSE,CV of length-at-age (assumed constant for all age classes). Uniform distribution lower and upper bounds.
+Stock,Ksd,21,FALSE,FALSE,Inter-annual variability in growth parameter k expressed as a CV. Uniform distribution lower and upper bounds.
 Stock,Kgrad,22,FALSE,FALSE,"No longer used. Previously mean temporal trend in growth parameter k, expressed as a percentage change in k per year."
-Stock,Linfsd,23,FALSE,FALSE,Inter-annual variability in maximum length expressed as a coefficient of variation. Uniform distribution lower and upper bounds. Non-negative real numbers
+Stock,Linfsd,23,FALSE,FALSE,Inter-annual variability in maximum length expressed as a CV. Uniform distribution lower and upper bounds.
 Stock,Linfgrad,24,FALSE,FALSE,"No longer used. Previously mean temporal trend in maximum length, expressed as a percentage change in Linf per year."
-Stock,L50,25,TRUE,FALSE,Length at 50 percent maturity. Uniform distribution lower and upper bounds. Positive real numbers
-Stock,L50_95,26,TRUE,FALSE,Length increment from 50 percent to 95 percent maturity. Uniform distribution lower and upper bounds. Positive real numbers
-Stock,D,27,TRUE,FALSE,Current level of stock depletion SSB(current)/SSB(unfished). Uniform distribution lower and upper bounds. Fraction
-Stock,a,28,TRUE,FALSE,Length-weight parameter alpha. Single value. Positive real number
-Stock,b,29,TRUE,FALSE,Length-weight parameter beta. Single value. Positive real number
-Stock,Size_area_1,30,FALSE,TRUE,The default OM has two areas. size_area_1 is the geographical size of the area relative to the TOTAL area.Set to 0.5 to approximate single area model
-Stock,Frac_area_1,31,FALSE,TRUE,"Frac_area_1 is the amount of unfished habitat in that area, expressed as a fraction of the TOTAL habitat.Set to 0.5 to approximate single area model"
+Stock,L50,25,TRUE,FALSE,Length at 50% maturity. Uniform distribution lower and upper bounds.
+Stock,L50_95,26,TRUE,FALSE,Length increment from 50% to 95% maturity. Uniform distribution lower and upper bounds.
+Stock,D,27,TRUE,FALSE,"Current level of stock depletion SSB~current~/SSB~unfished~. Uniform distribution lower and upper bounds representing a fraction."
+Stock,a,28,TRUE,FALSE,Length-weight parameter alpha. Positive real number.
+Stock,b,29,TRUE,FALSE,Length-weight parameter beta. Positive real number.
+Stock,Size_area_1,30,FALSE,TRUE,"The default OM has two areas. `size_area_1` is the geographical size of the area relative to the total area. Set to 0.5 to approximate a single area model."
+Stock,Frac_area_1,31,FALSE,TRUE,"`Frac_area_1` is the amount of unfished habitat in that area, expressed as a fraction of the total habitat. Set to 0.5 to approximate single area model."
 Stock,Prob_staying,32,FALSE,FALSE,The probability of inviduals in area 1 remaining in area 1 over the course of one year. Uniform distribution lower and upper bounds. Positive fraction.
-Stock,Fdisc,33,TRUE,FALSE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds. Non-negative real numbers
-Stock,Source,34,TRUE,FALSE,A reference to a website or article from which parameters were taken to define the stock object. Single value. Character string.
-Fleet,Name,1,TRUE,FALSE,Name of the Fleet object. Single value. Character string.
-Fleet,nyears,2,TRUE,FALSE,The number of years for the historical spool-up simulation. Single value. Positive integer
-Fleet,Spat_targ,3,TRUE,FALSE,Distribution of fishing in relation to spatial biomass: fishing distribution is proportional to B^Spat_targ. Uniform distribution lower and upper bounds. Real numbers
-Fleet,EffYears,4,FALSE,FALSE,Years representing join-points (vertices) of time-varying effort. Vector. Non-negative real numbers
-Fleet,EffLower,5,FALSE,FALSE,Lower bound on relative effort corresponding to EffYears. Vector. Non-negative real numbers
-Fleet,EffUpper,6,FALSE,FALSE,Upper bound on relative effort corresponding to EffYears. Vector. Non-negative real numbers
-Fleet,Esd,7,FALSE,FALSE,Additional inter-annual variability in fishing mortality rate. Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,qinc,8,FALSE,FALSE,Average percentage change in fishing efficiency (applicable only to forward projection and input controls). Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,qcv,9,FALSE,FALSE,Inter-annual variability in fishing efficiency (applicable only to forward projection and input controls). Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,L5,10,TRUE,FALSE,Shortest length corresponding to 5 percent vulnerability. Uniform distribution lower and upper bounds. Positive real numbers
-Fleet,LFS,11,TRUE,FALSE,Shortest length that is fully vulnerable to fishing. Uniform distribution lower and upper bounds. Positive real numbers
-Fleet,Vmaxlen,12,TRUE,FALSE,The vulnerability of fish at Stock@Linf . Uniform distribution lower and upper bounds. Fraction
-Fleet,isRel,13,TRUE,FALSE,Selectivity parameters in units of size-of-maturity (or absolute eg cm). Single value. Boolean.
-Fleet,LR5,14,TRUE,FALSE,Shortest length corresponding ot 5 percent retention. Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,LFR,15,TRUE,FALSE,Shortest length that is fully retained. Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,Rmaxlen,16,TRUE,FALSE,The retention of fish at Stock@Linf . Uniform distribution lower and upper bounds. Non-negative real numbers
-Fleet,DR,17,TRUE,FALSE,Discard rate - the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction
-Fleet,SelYears,18,FALSE,FALSE,(Optional) Years representing join-points (vertices) at which historical selectivity pattern changes. Vector. Positive real numbers
-Fleet,AbsSelYears,19,FALSE,FALSE,"(Optional) Calendar years corresponding with SelYears (eg 1951, rather than 1), used for plotting only. Vector (of same length as SelYears). Positive real numbers"
-Fleet,L5Lower,20,FALSE,FALSE,(Optional) Lower bound of L5 (use ChooseSelect function to set these). Vector. Non-negative real numbers
-Fleet,L5Upper,21,FALSE,FALSE,(Optional) Upper bound of L5 (use ChooseSelect function to set these). Vector. Non-negative real numbers
-Fleet,LFSLower,22,FALSE,FALSE,(Optional) Lower bound of LFS (use ChooseSelect function to set these). Vector. Non-negative real numbers
-Fleet,LFSUpper,23,FALSE,FALSE,(Optional) Upper bound of LFS (use ChooseSelect function to set these). Vector. Non-negative real numbers
+Stock,Fdisc,33,TRUE,FALSE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
+Stock,Source,34,TRUE,FALSE,A reference to a website or article from which parameters were taken to define the stock object.
+Fleet,Name,1,TRUE,FALSE,Name of the Fleet object.
+Fleet,nyears,2,TRUE,FALSE,The number of years for the historical spool-up simulation.
+Fleet,Spat_targ,3,TRUE,FALSE,"Distribution of fishing in relation to spatial biomass: fishing distribution is proportional to B^`Spat_targ`^. Uniform distribution lower and upper bounds."
+Fleet,EffYears,4,FALSE,FALSE,Years representing vertices of time-varying effort. Vector.
+Fleet,EffLower,5,FALSE,FALSE,Lower bound on relative effort corresponding to `EffYears`. Vector.
+Fleet,EffUpper,6,FALSE,FALSE,Upper bound on relative effort corresponding to `EffYears`. Vector.
+Fleet,Esd,7,FALSE,FALSE,Additional inter-annual variability in fishing mortality rate. Uniform distribution lower and upper bounds.
+Fleet,qinc,8,FALSE,FALSE,Average percentage change in fishing efficiency (applicable only to forward projection and input controls). Uniform distribution lower and upper bounds.
+Fleet,qcv,9,FALSE,FALSE,Inter-annual variability in fishing efficiency (applicable only to forward projection and input controls). Uniform distribution lower and upper bounds.
+Fleet,L5,10,TRUE,FALSE,Shortest length corresponding to 5% vulnerability. Uniform distribution lower and upper bounds.
+Fleet,LFS,11,TRUE,FALSE,Shortest length that is fully vulnerable to fishing. Uniform distribution lower and upper bounds.
+Fleet,Vmaxlen,12,TRUE,FALSE,The vulnerability of fish at `Linf` . Uniform distribution lower and upper bounds. Fraction.
+Fleet,isRel,13,TRUE,FALSE,Are the selectivity parameters in units of size-of-maturity (`TRUE`) (or absolute units, for example, cm) (`FALSE`).
+Fleet,LR5,14,TRUE,FALSE,Shortest length corresponding ot 5% retention. Uniform distribution lower and upper bounds.
+Fleet,LFR,15,TRUE,FALSE,Shortest length that is fully retained. Uniform distribution lower and upper bounds.
+Fleet,Rmaxlen,16,TRUE,FALSE,The retention of fish at `Linf` . Uniform distribution lower and upper bounds.
+Fleet,DR,17,TRUE,FALSE,Discard rate: the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction.
+Fleet,SelYears,18,FALSE,FALSE,(Optional) Years representing vertices at which historical selectivity pattern changes. Vector.
+Fleet,AbsSelYears,19,FALSE,FALSE,"(Optional) Calendar years corresponding with `SelYears` (e.g., 1951, rather than 1); used for plotting only. Vector of same length as `SelYears`). "
+Fleet,L5Lower,20,FALSE,FALSE,(Optional) Lower bound of L5 (use ChooseSelect function to set these). Vector.
+Fleet,L5Upper,21,FALSE,FALSE,(Optional) Upper bound of L5 (use ChooseSelect function to set these). Vector.
+Fleet,LFSLower,22,FALSE,FALSE,(Optional) Lower bound of LFS (use ChooseSelect function to set these). Vector.
+Fleet,LFSUpper,23,FALSE,FALSE,(Optional) Upper bound of LFS (use ChooseSelect function to set these). Vector.
 Fleet,VmaxLower,24,FALSE,FALSE,(Optional) Lower bound of Vmaxlen (use ChooseSelect function to set these). Vector. Fraction
 Fleet,VmaxUpper,25,FALSE,FALSE,(Optional) Upper bound of Vmaxlen (use ChooseSelect function to set these). Vector. Fraction
-Fleet,CurrentYr,26,TRUE,FALSE,The current calendar year (final year) of the historical simulations (eg 2011). Single value. Positive integer.
+Fleet,CurrentYr,26,TRUE,FALSE,"The current calendar year (final year) of the historical simulations (e.g., 2019)."
 Fleet,MPA,27,FALSE,FALSE,(Optional) Matrix specifying spatial closures for historical years.
-Obs,Name,1,TRUE,FALSE,The name of the observation model object. Single value. Character string.
-Obs,Cobs,2,TRUE,FALSE,Log-normal catch observation error expressed as a coefficient of variation. Uniform distribution lower and upper bounds. Non-negative real numbers
-Obs,Cbiascv,3,TRUE,FALSE,Log-normal coefficient of variation controlling the sampling of bias in catch observations for each simulation. Uniform distribution lower and upper bounds. Non-negative real numbers
-Obs,CAA_nsamp,4,TRUE,FALSE,Number of catch-at-age observation per time step. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,CAA_ESS,5,TRUE,FALSE,Effective sample size (independent age draws) of the multinomial catch-at-age observation error model. Uniform distribution lower and upper bounds. Positive integers
-Obs,CAL_nsamp,6,TRUE,FALSE,Number of catch-at-length observation per time step. Uniform distribution lower and upper bounds. Positive integers
-Obs,CAL_ESS,7,TRUE,FALSE,Effective sample size (independent length draws) of the multinomial catch-at-length observation error model. Uniform distribution lower and upper bounds. Positive integers
-Obs,Iobs,8,TRUE,FALSE,Observation error in the relative abundance indices expressed as a coefficient of variation. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Ibiascv,9,TRUE,FALSE,Log-normal coefficient of variation controlling error in observations of relative abundance index. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Btobs,10,TRUE,FALSE,Log-normal coefficient of variation controlling error in observations of current stock biomass among years. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Btbiascv,11,TRUE,FALSE,Uniform-log bounds for sampling persistent bias in current stock biomass. Uniform-log distribution lower and upper bounds. Positive real numbers
-Obs,beta,12,TRUE,FALSE,A parameter controlling hyperstability/hyperdepletion where values below 1 lead to hyperstability (an index that decreases slower than true abundance) and values above 1 lead to hyperdepletion (an index that decreases more rapidly than true abundance). Uniform distribution lower and upper bounds. Positive real numbers
-Obs,LenMbiascv,13,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in length at 50 percent maturity. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Mbiascv,14,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in observed natural mortality rate. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Kbiascv,15,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in observed growth parameter K. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,t0biascv,16,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in observed t0. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Linfbiascv,17,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in observed maximum length. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,LFCbiascv,18,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in observed length at first capture. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,LFSbiascv,19,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in length-at-full selection. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,FMSYbiascv,20,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in FMSY. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,FMSY_Mbiascv,21,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in FMSY/M. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,BMSY_B0biascv,22,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in BMSY relative to unfished. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Irefbiascv,23,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in relative abundance index at BMSY. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Brefbiascv,24,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in BMSY. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Crefbiascv,25,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in MSY. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Dbiascv,26,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in stock depletion. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Dobs,27,TRUE,FALSE,Log-normal coefficient of variation controlling error in observations of stock depletion among years. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,hbiascv,28,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in steepness. Uniform distribution lower and upper bounds. Positive real numbers
-Obs,Recbiascv,29,TRUE,FALSE,Log-normal coefficient of variation for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds. Positive real numbers
-Imp,Name,1,TRUE,FALSE,The name of the Implementation error object. Single value. Character string.
-Imp,TACFrac,2,TRUE,FALSE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds. Positive real number.
-Imp,TACSD,3,TRUE,FALSE,Log-normal coefficient of variation in the fraction of Total Allowable Catch (TAC) taken. Uniform distribution lower and upper bounds. Non-negative real numbers.
-Imp,TAEFrac,4,FALSE,FALSE,Mean fraction of TAE taken. Uniform distribution lower and upper bounds. Positive real number.
-Imp,TAESD,5,FALSE,FALSE,Log-normal coefficient of variation in the fraction of Total Allowable Effort (TAE) taken. Uniform distribution lower and upper bounds. Non-negative real numbers.
-Imp,SizeLimFrac,6,FALSE,FALSE,The real minimum size that is retained expressed as a fraction of the size. Uniform distribution lower and upper bounds. Positive real number.
-Imp,SizeLimSD,7,FALSE,FALSE,Log-normal coefficient of variation controlling mismatch between a minimum size limit and the real minimum size retained. Uniform distribution lower and upper bounds. Non-negative real numbers.
+Obs,Name,1,TRUE,FALSE,The name of the observation model object.
+Obs,Cobs,2,TRUE,FALSE,Log-normal catch observation error expressed as a CV. Uniform distribution lower and upper bounds.
+Obs,Cbiascv,3,TRUE,FALSE,Log-normal CV controlling the sampling of bias in catch observations for each simulation. Uniform distribution lower and upper bounds.
+Obs,CAA_nsamp,4,TRUE,FALSE,Number of catch-at-age observation per time step. Uniform distribution lower and upper bounds.
+Obs,CAA_ESS,5,TRUE,FALSE,Effective sample size (independent age draws) of the multinomial catch-at-age observation error model. Uniform distribution lower and upper bounds.
+Obs,CAL_nsamp,6,TRUE,FALSE,Number of catch-at-length observation per time step. Uniform distribution lower and upper bounds.
+Obs,CAL_ESS,7,TRUE,FALSE,Effective sample size (independent length draws) of the multinomial catch-at-length observation error model. Uniform distribution lower and upper bounds.
+Obs,Iobs,8,TRUE,FALSE,Observation error in the relative abundance indices expressed as a CV. Uniform distribution lower and upper bounds.
+Obs,Ibiascv,9,TRUE,FALSE,Log-normal CV controlling error in observations of relative abundance index. Uniform distribution lower and upper bounds.
+Obs,Btobs,10,TRUE,FALSE,Log-normal CV controlling error in observations of current stock biomass among years. Uniform distribution lower and upper bounds.
+Obs,Btbiascv,11,TRUE,FALSE,Uniform log bounds for persistent sampling bias in current stock biomass. Uniform log distribution lower and upper bounds.
+Obs,beta,12,TRUE,FALSE,A parameter controlling hyperstability/hyperdepletion where values below 1 lead to hyperstability (an index that decreases more slowly than true abundance) and values above 1 lead to hyperdepletion (an index that decreases more rapidly than true abundance). Uniform distribution lower and upper bounds.
+Obs,LenMbiascv,13,TRUE,FALSE,Log-normal CV for sampling persistent bias in length at 50 percent maturity. Uniform distribution lower and upper bounds.
+Obs,Mbiascv,14,TRUE,FALSE,Log-normal CV for sampling persistent bias in observed natural mortality rate. Uniform distribution lower and upper bounds.
+Obs,Kbiascv,15,TRUE,FALSE,Log-normal CV for sampling persistent bias in observed growth parameter K. Uniform distribution lower and upper bounds.
+Obs,t0biascv,16,TRUE,FALSE,Log-normal CV for sampling persistent bias in observed t0. Uniform distribution lower and upper bounds.
+Obs,Linfbiascv,17,TRUE,FALSE,Log-normal CV for sampling persistent bias in observed maximum length. Uniform distribution lower and upper bounds.
+Obs,LFCbiascv,18,TRUE,FALSE,Log-normal CV for sampling persistent bias in observed length at first capture. Uniform distribution lower and upper bounds.
+Obs,LFSbiascv,19,TRUE,FALSE,Log-normal CV for sampling persistent bias in length-at-full selection. Uniform distribution lower and upper bounds.
+Obs,FMSYbiascv,20,TRUE,FALSE,Log-normal CV for sampling persistent bias in FMSY. Uniform distribution lower and upper bounds.
+Obs,FMSY_Mbiascv,21,TRUE,FALSE,Log-normal CV for sampling persistent bias in FMSY/M. Uniform distribution lower and upper bounds.
+Obs,BMSY_B0biascv,22,TRUE,FALSE,Log-normal CV for sampling persistent bias in BMSY relative to unfished. Uniform distribution lower and upper bounds.
+Obs,Irefbiascv,23,TRUE,FALSE,Log-normal CV for sampling persistent bias in relative abundance index at BMSY. Uniform distribution lower and upper bounds.
+Obs,Brefbiascv,24,TRUE,FALSE,Log-normal CV for sampling persistent bias in BMSY. Uniform distribution lower and upper bounds.
+Obs,Crefbiascv,25,TRUE,FALSE,Log-normal CV for sampling persistent bias in MSY. Uniform distribution lower and upper bounds.
+Obs,Dbiascv,26,TRUE,FALSE,Log-normal CV for sampling persistent bias in stock depletion. Uniform distribution lower and upper bounds.
+Obs,Dobs,27,TRUE,FALSE,Log-normal CV controlling error in observations of stock depletion among years. Uniform distribution lower and upper bounds.
+Obs,hbiascv,28,TRUE,FALSE,Log-normal CV for sampling persistent bias in steepness. Uniform distribution lower and upper bounds.
+Obs,Recbiascv,29,TRUE,FALSE,Log-normal CV for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds.
+Imp,Name,1,TRUE,FALSE,The name of the Implementation error object.
+Imp,TACFrac,2,TRUE,FALSE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds.
+Imp,TACSD,3,TRUE,FALSE,Log-normal CV in the fraction of Total Allowable Catch (TAC) taken. Uniform distribution lower and upper bounds.
+Imp,TAEFrac,4,FALSE,FALSE,Mean fraction of TAE taken. Uniform distribution lower and upper bounds.
+Imp,TAESD,5,FALSE,FALSE,Log-normal CV in the fraction of Total Allowable Effort (TAE) taken. Uniform distribution lower and upper bounds.
+Imp,SizeLimFrac,6,FALSE,FALSE,The real minimum size that is retained expressed as a fraction of the size. Uniform distribution lower and upper bounds.
+Imp,SizeLimSD,7,FALSE,FALSE,Log-normal CV controlling mismatch between a minimum size limit and the real minimum size retained. Uniform distribution lower and upper bounds.
