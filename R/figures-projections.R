@@ -32,7 +32,7 @@ plot_projection_ts <- function(object,
                                bbmsy_zones = c(0.4, 0.8)) {
   if (!class(object) != "mse") {
     stop(
-      "`object` must be aa DLMtool object of class `mse`",
+      "`object` must be a DLMtool object of class `mse`",
       "that was created by running `DLMtool::runMSE()`."
     )
   }
