@@ -2,7 +2,7 @@ slot_type,slot,slot_order,show_slot,use_custom_description,custom_description
 Stock,Name,1,TRUE,TRUE,The name of the Stock object.
 Stock,Common_Name,2,TRUE,TRUE,Common name of the species.
 Stock,Species,3,TRUE,TRUE,Scientific name of the species.
-Stock,maxage,4,TRUE,TRUE,The maximum age of individuals that is simulated (there is no plus group). Positive integer.
+Stock,maxage,4,TRUE,TRUE,The maximum age of individuals that is simulated. Positive integer.
 Stock,R0,5,TRUE,TRUE,The magnitude of unfished recruitment. An arbitrary value that scales all results. Set to 1000.
 Stock,M,6,TRUE,TRUE,Natural mortality rate. Uniform distribution lower and upper bounds.
 Stock,M2,7,FALSE,TRUE,(Optional) Natural mortality rate at age. Vector of length `maxage`.
@@ -32,7 +32,7 @@ Stock,Size_area_1,30,FALSE,TRUE,The default OM has two areas. `size_area_1` is t
 Stock,Frac_area_1,31,FALSE,TRUE,"`Frac_area_1` is the amount of unfished habitat in that area, expressed as a fraction of the total habitat. Set to 0.5 to approximate single area model."
 Stock,Prob_staying,32,FALSE,TRUE,The probability of inviduals in area 1 remaining in area 1 over the course of one year. Uniform distribution lower and upper bounds. Positive fraction.
 Stock,Fdisc,33,TRUE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
-Stock,Source,34,TRUE,TRUE,A reference to a website or article from which parameters were taken to define the stock object.
+Stock,Source,34,FALSE,TRUE,A reference to a website or article from which parameters were taken to define the stock object.
 Fleet,Name,1,TRUE,TRUE,Name of the Fleet object.
 Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool-up simulation.
 Fleet,Spat_targ,3,TRUE,TRUE,Distribution of fishing in relation to spatial biomass: fishing distribution is proportional to B^`Spat_targ`^. Uniform distribution lower and upper bounds.
