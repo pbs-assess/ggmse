@@ -34,5 +34,5 @@ per \pkg{DLMtool}.}
 \item{gamma}{Control parameter.}
 }
 \description{
-This MP is based on \code{\link[DLMtool:SBT1]{DLMtool::SBT1()}} but fits the linear regression in log space.
+This MP is based on \code{\link[DLMtool:SBT1]{DLMtool::SBT1()}} but fits the linear regression in log space. SBT stands for "southern bluefin tuna".
 }

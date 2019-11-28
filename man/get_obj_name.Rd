@@ -3,7 +3,7 @@
 \name{get_obj_name}
 \alias{get_obj_name}
 \title{Get the actual name of the object for the base name object. e.g. stock
-object may have a suffix and be stock_pc <- new('Stock') or similar
+object may have a suffix and be stock_pc <- new("Stock") or similar
 Assumes the first instance of stock* <- contains the object name}
 \usage{
 get_obj_name(rmd, obj_base_name)
@@ -15,6 +15,6 @@ get_obj_name(rmd, obj_base_name)
 }
 \description{
 Get the actual name of the object for the base name object. e.g. stock
-object may have a suffix and be stock_pc <- new('Stock') or similar
+object may have a suffix and be stock_pc <- new("Stock") or similar
 Assumes the first instance of stock* <- contains the object name
 }

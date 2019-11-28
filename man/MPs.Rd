@@ -56,6 +56,9 @@
 \alias{.SP_MSY}
 \alias{SP_MSY_Fox}
 \alias{.SP_MSY_Fox}
+\alias{.SCA4010}
+\alias{SCA6040}
+\alias{.SCA6040}
 \alias{IT5_hist}
 \alias{.IT5_hist}
 \alias{IT10_hist}
@@ -176,6 +179,12 @@ SP6040_Fox(x, Data, reps = 1)
 SP_MSY_Fox(x, Data, reps = 1)
 
 .SP_MSY_Fox(x, Data, reps = 100, ...)
+
+.SCA4010(x, Data, reps = 100, ...)
+
+SCA6040(x, Data, reps = 1)
+
+.SCA6040(x, Data, reps = 100, ...)
 
 IT5_hist(x, Data, reps = 100, ...)
 
