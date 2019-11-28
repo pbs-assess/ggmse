@@ -339,7 +339,7 @@ class(ITM_hist) <- "MP"
 
 #' SBT simple MP in log space
 #'
-#' This MP is based on [DLMtool::SBT1()] but fits the linear regression in log space.
+#' This MP is based on [DLMtool::SBT1()] but fits the linear regression in log space. SBT stands for "southern bluefin tuna".
 #'
 #' @param x A position in the data object. As per \pkg{DLMtool}.
 #' @param Data A data object. As per \pkg{DLMtool}.
@@ -475,9 +475,19 @@ class(IDX_smooth) <- "MP"
 #' @export
 .IDX_smooth <- reduce_survey(IDX_smooth)
 
+# SP_prior <- MSEtool::SP
+# formals(SP_prior)$use_r_prior <- TRUE
+# class(SP_prior) <- "Assess"
+#
+# SP_Fox_prior <- MSEtool::SP_Fox
+# formals(SP_Fox_prior)$use_r_prior <- TRUE
+# class(SP_Fox_prior) <- "Assess"
+
 #' @rdname MPs
 #' @export
 SP4010 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
+
+#' SP4010_prior <- MSEtool::make_MP("SP_prior", "HCR_ramp", LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
 
 #' @rdname MPs
 #' @export
@@ -526,6 +536,18 @@ SP_MSY_Fox <- MSEtool::make_MP("SP_Fox", "HCR_MSY")
 #' @rdname MPs
 #' @export
 .SP_MSY_Fox <- reduce_survey(SP_MSY_Fox)
+
+#' @rdname MPs
+#' @export
+.SCA4010 <- reduce_survey(MSEtool::SCA_4010)
+
+#' @rdname MPs
+#' @export
+SCA6040 <- MSEtool::make_MP("SCA", "HCR_ramp", LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY")
+
+#' @rdname MPs
+#' @export
+.SCA6040 <- reduce_survey(SCA6040)
 
 IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 10) {
   # Based on DLMtool::IT_
