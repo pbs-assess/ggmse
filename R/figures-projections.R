@@ -12,6 +12,10 @@
 #'   the outer uncertainty ribbon, inner uncertainty ribbon, and median.
 #' @param bbmsy_zones A numeric vector of status zone lines to add to
 #'   the B/Bmsy panel if it is present.
+#' @param clip_ylim An optional numeric value to set the upper ylim
+#'   value. `clip_ylim` is multiplied by the highest median value
+#'   across the panels. Useful if there are outlying timeseries that distort
+#'   the y axis limits.
 #'
 #' @return ggplot object
 #' @importFrom rlang .data
@@ -29,7 +33,8 @@ plot_projection_ts <- function(object,
                                this_year = 2018,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
-                               bbmsy_zones = c(0.4, 0.8)) {
+                               bbmsy_zones = c(0.4, 0.8),
+                               clip_ylim = NULL) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be a DLMtool object of class `mse`",
@@ -118,7 +123,9 @@ plot_projection_ts <- function(object,
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
-    ggplot2::coord_cartesian(expand = FALSE) +
+    ggplot2::coord_cartesian(expand = FALSE,
+      ylim = if (is.null(clip_ylim)) NULL else c(0, clip_ylim * max(quantiles$m))) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines"))
   g
+
 }
