@@ -43,6 +43,7 @@
 \alias{.IDX}
 \alias{IDX_smooth}
 \alias{.IDX_smooth}
+\alias{SP4010_prior}
 \alias{SP4010}
 \alias{.SP4010}
 \alias{SP8040}
@@ -68,6 +69,11 @@
 \alias{CC80}
 \alias{CC70}
 \alias{CC60}
+\alias{SP6040_prior}
+\alias{.SP6040_prior}
+\alias{SP8040_prior}
+\alias{.SP8040_prior}
+\alias{.SP4010_prior}
 \title{Alternative versions of \pkg{DLMtool} and \pkg{MSEtool} MP functions}
 \usage{
 CC_hist20(x, Data, reps = 100, ...)
@@ -154,6 +160,8 @@ IDX_smooth(x, Data, reps = 100, ...)
 
 .IDX_smooth(x, Data, reps = 100, ...)
 
+SP4010_prior(x, Data, reps = 1)
+
 SP4010(x, Data, reps = 1)
 
 .SP4010(x, Data, reps = 100, ...)
@@ -203,6 +211,18 @@ CC80(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.2)
 CC70(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.3)
 
 CC60(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.4)
+
+SP6040_prior(x, Data, reps = 1)
+
+.SP6040_prior(x, Data, reps = 100, ...)
+
+SP8040_prior(x, Data, reps = 1)
+
+.SP8040_prior(x, Data, reps = 100, ...)
+
+SP4010_prior(x, Data, reps = 1)
+
+.SP4010_prior(x, Data, reps = 100, ...)
 }
 \arguments{
 \item{x}{A position in the data object. As per \pkg{DLMtool}.}
