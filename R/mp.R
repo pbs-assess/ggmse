@@ -475,19 +475,19 @@ class(IDX_smooth) <- "MP"
 #' @export
 .IDX_smooth <- reduce_survey(IDX_smooth)
 
-# SP_prior <- MSEtool::SP
-# formals(SP_prior)$use_r_prior <- TRUE
-# class(SP_prior) <- "Assess"
-#
-# SP_Fox_prior <- MSEtool::SP_Fox
-# formals(SP_Fox_prior)$use_r_prior <- TRUE
-# class(SP_Fox_prior) <- "Assess"
+#' @rdname MPs
+#' @export
+SP4010_prior <- function (x, Data, reps = 1) {
+  do_Assessment <- SP(x = x, Data = Data, use_r_prior = TRUE)
+  Rec <- HCR_ramp(Assessment = do_Assessment, reps = reps,
+    LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
+  Rec
+}
+class(SP4010_prior) <- "MP"
 
 #' @rdname MPs
 #' @export
 SP4010 <- MSEtool::make_MP("SP", "HCR_ramp", LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
-
-#' SP4010_prior <- MSEtool::make_MP("SP_prior", "HCR_ramp", LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
 
 #' @rdname MPs
 #' @export
@@ -610,3 +610,85 @@ CC70 <- DLMtool::CC4
 #' @rdname MPs
 #' @export
 CC60 <- DLMtool::CC5
+
+#' PBS groundfish surplus production wrapper function
+#'
+#' @param x Index
+#' @param Data Data
+#' @param reps Reps
+#' @param LRP Lower reference point
+#' @param TRP Target reference point
+#' @param RP_type Reference point type
+#' @param start Starting list for the model
+#' @param use_r_prior Logical but whether to use a prior
+#' @param tac_max_increase Maximum proportional increase in TAC
+#' @param tac_max_decrease Maximum proportional decrease in TAC
+#' @param tac_floor Floor for TAC
+#' @param tac_increase_buffer Proportional buffer below which TAC won't change
+#'
+#' @export
+SP_gf <- function (x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
+  start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
+  dependencies <- "Data@Cat, Data@Ind"
+  do_Assessment <- SP(x = x, Data = Data,
+    control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
+    use_r_prior = use_r_prior, start = start)
+  Rec <- HCR_ramp(Assessment = do_Assessment, reps = reps, LRP = LRP,
+    TRP = TRP, RP_type = RP_type)
+  if (!is.na(Rec@TAC)) {
+    if (as.list(do_Assessment@SD, "Std. Error")$log_FMSY > 1) {
+      warning("Std. Error too large.")
+      Rec@TAC <- Data@MPrec[x]
+    }
+    if (Rec@TAC > Data@MPrec[x] && Rec@TAC < tac_increase_buffer * Data@MPrec[x]) {
+      Rec@TAC <- Data@MPrec[x]
+    }
+    if (Rec@TAC > tac_max_increase * Data@MPrec[x]) {
+      warning("TAC > 1.2 last TAC.")
+      Rec@TAC <- tac_max_increase * Data@MPrec[x]
+    }
+    if (Rec@TAC < tac_max_decrease * Data@MPrec[x]) {
+      warning("TAC < 0.5 last TAC.")
+      Rec@TAC <- tac_max_decrease * Data@MPrec[x]
+    }
+    if (Rec@TAC < tac_floor * Data@Cat[x,Data@LHYear]) {
+      warning("TAC < 0.1 last historical catch.")
+      Rec@TAC <- tac_floor * Data@Cat[x,Data@LHYear]
+    }
+  }
+  Rec@Misc <- MSEtool:::Assess_diagnostic(x, Data, do_Assessment, include_assessment = FALSE)
+  return(Rec)
+}
+
+#' @rdname MPs
+#' @export
+SP6040_prior <- function(x, Data, reps = 1) {
+  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY")
+}
+class(SP6040_prior) <- "MP"
+
+#' @rdname MPs
+#' @export
+.SP6040_prior <- reduce_survey(SP6040_prior)
+
+#' @rdname MPs
+#' @export
+SP8040_prior <- function(x, Data, reps = 1) {
+  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY")
+}
+class(SP8040_prior) <- "MP"
+
+#' @rdname MPs
+#' @export
+.SP8040_prior <- reduce_survey(SP8040_prior)
+
+#' @rdname MPs
+#' @export
+SP4010_prior <- function(x, Data, reps = 1) {
+  SP_gf(x, Data, reps = 1, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
+}
+class(SP4010_prior) <- "MP"
+
+#' @rdname MPs
+#' @export
+.SP4010_prior <- reduce_survey(SP4010_prior)
