@@ -66,6 +66,58 @@ plot_projection_ts <- function(object,
   ts_data <- dplyr::bind_rows(ts_data)
   ts_data <- dplyr::left_join(ts_data, years_df, by = "year")
 
+  # --------------
+  # historical
+
+  n_hist_years <- dim(object@SSB_hist)[3]
+  .hist_years <- seq(this_year - n_hist_years + 1, this_year)
+  years_df <- data.frame(
+    year = seq_len(n_hist_years), real_year = .hist_years,
+    stringsAsFactors = FALSE
+  )
+  hist_data <- list()
+
+  for (i in seq_along(type)) {
+    hist_data[[i]] <- slot(object, paste0(type[i],
+      ifelse(type[i] == "C", "B_hist", "_hist"))) %>%
+      apply(c(1, 3), sum) %>%
+    reshape2::melt() %>%
+      dplyr::rename(
+        iter = .data$Var1,
+        value = .data$value, year = .data$Var2
+      ) %>%
+      dplyr::mutate(Type = type[i])
+  }
+  hist_data <- dplyr::bind_rows(hist_data)
+  hist_data <- dplyr::left_join(hist_data, years_df, by = "year")
+  hist_data2 <- do.call("rbind",
+    replicate(length(mps$mp), hist_data, simplify = FALSE))
+  hist_data2[["mp_name"]] <- rep(mps$mp_name, each = nrow(hist_data))
+
+
+  ts_data <- bind_rows(ts_data, hist_data2)
+
+  iters <- max(ts_data$iter)
+  ref_ssb <- data.frame(ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters), Type = "SSB", stringsAsFactors = FALSE)
+  ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE)
+  ref_f <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE)
+  refs <- bind_rows(ref_ssb, ref_msy) %>%
+    bind_rows(ref_f)
+
+  ts_data <- left_join(ts_data, refs, by = c("iter", "Type")) %>%
+    mutate(value = value / ref)
+
+  # Temporary hack until I figure out historical total fishing mortality across ages and areas:
+  ts_data <- filter(ts_data, !(Type == "FM" & real_year %in%
+      unique(hist_data$real_year)))
+
+  type[type == "SSB"] <- "B_BMSY"
+  type[type == "FM"] <- "F_FMSY"
+  type[type == "C"] <- "Catch"
+  ts_data$Type[ts_data$Type == "FM"] <- "F_FMSY"
+  ts_data$Type[ts_data$Type == "SSB"] <- "B_BMSY"
+  ts_data$Type[ts_data$Type == "C"] <- "Catch"
+
   quantiles <- ts_data %>%
     dplyr::group_by(.data$mp_name, .data$real_year, .data$Type) %>%
     dplyr::summarize(
@@ -125,7 +177,8 @@ plot_projection_ts <- function(object,
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
     ggplot2::coord_cartesian(expand = FALSE,
       ylim = if (is.null(clip_ylim)) NULL else c(0, clip_ylim * max(quantiles$m))) +
-    ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines"))
+    ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
+    geom_vline(xintercept = this_year, lty = 2, alpha = 0.3)
   g
 
 }
