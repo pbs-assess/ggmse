@@ -16,6 +16,7 @@
 #'   value. `clip_ylim` is multiplied by the highest median value
 #'   across the panels. Useful if there are outlying timeseries that distort
 #'   the y axis limits.
+#' @param seed The seed to set before drawing samples.
 #'
 #' @return ggplot object
 #' @importFrom rlang .data
@@ -34,7 +35,8 @@ plot_projection_ts <- function(object,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
                                bbmsy_zones = c(0.4, 0.8),
-                               clip_ylim = NULL) {
+                               clip_ylim = NULL,
+                               seed = 42) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be a DLMtool object of class `mse`",
@@ -126,6 +128,7 @@ plot_projection_ts <- function(object,
       uu = quantile(.data$value, probs = probs[1] / 2)
     )
 
+  set.seed(seed)
   sampled_ids <- sample(unique(ts_data$iter), size = n_samples)
   d <- dplyr::filter(ts_data, .data$iter %in% sampled_ids)
 
