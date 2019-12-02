@@ -65,6 +65,8 @@ plot_projection_ts <- function(object,
   }
   ts_data <- dplyr::bind_rows(ts_data)
   ts_data <- dplyr::left_join(ts_data, years_df, by = "year")
+  iters <- dim(object@SSB)[1]
+  ts_data$iter <- rep(seq_len(iters), length(unique(ts_data$Type))) # parallel messed this up
 
   # --------------
   # historical
@@ -89,15 +91,14 @@ plot_projection_ts <- function(object,
       dplyr::mutate(Type = type[i])
   }
   hist_data <- dplyr::bind_rows(hist_data)
+  hist_data$iter <- rep(seq_len(iters), length(unique(hist_data$Type))) # parallel messed this up
   hist_data <- dplyr::left_join(hist_data, years_df, by = "year")
   hist_data2 <- do.call("rbind",
     replicate(length(mps$mp), hist_data, simplify = FALSE))
   hist_data2[["mp_name"]] <- rep(mps$mp_name, each = nrow(hist_data))
 
-
   ts_data <- bind_rows(ts_data, hist_data2)
 
-  iters <- max(ts_data$iter)
   ref_ssb <- data.frame(ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters), Type = "SSB", stringsAsFactors = FALSE)
   ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE)
   ref_f <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE)
