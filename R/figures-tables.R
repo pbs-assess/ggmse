@@ -111,6 +111,10 @@ plot_probs <- function(probs_dat,
   df$txt <- vapply(df$value, function(x) {
     gfutilities::f(x, digits)
   }, FUN.VALUE = character(1L))
+
+  df$txt <- gsub("1\\.00", ">0.99", df$txt)
+  df$txt <- gsub("0\\.00", "<0.01", df$txt)
+
   if (relative_max) {
     df <- group_by(df, type) %>%
       mutate(value = value / max(value)) %>%
@@ -130,10 +134,10 @@ plot_probs <- function(probs_dat,
       axis.ticks.x = element_blank(),
       axis.ticks.y = element_blank()
     ) +
-    scale_fill_gradient(low = "white", high = "grey50", limits = c(0, 1)) +
+    ggplot2::scale_fill_viridis_c(limits = c(0, 1), alpha = 0.6, option = "D", direction = 1) +
     guides(fill = FALSE) + xlab("") + ylab("") +
 
-    geom_text(aes(x = type, label = txt)) +
+    geom_text(aes(x = type, label = txt), size = ggplot2::rel(3)) +
     # Used if captions are used for labelling
     # scale_x_discrete(labels = parse(text = probs), position = "left")
     scale_x_discrete(position = "top")
