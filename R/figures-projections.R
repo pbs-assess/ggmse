@@ -82,7 +82,7 @@ plot_projection_ts <- function(object,
   for (i in seq_along(type)) {
     hist_data[[i]] <- slot(object, paste0(type[i],
       ifelse(type[i] == "C", "B_hist", "_hist"))) %>%
-      apply(c(1, 3), sum) %>%
+      apply(c(1, 3), if(type[i] == "FM") max else sum) %>%
     reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
@@ -107,10 +107,6 @@ plot_projection_ts <- function(object,
 
   ts_data <- left_join(ts_data, refs, by = c("iter", "Type")) %>%
     mutate(value = value / ref)
-
-  # Temporary hack until I figure out historical total fishing mortality across ages and areas:
-  ts_data <- filter(ts_data, !(Type == "FM" & real_year %in%
-      unique(hist_data$real_year)))
 
   type[type == "SSB"] <- "B_BMSY"
   type[type == "FM"] <- "F_FMSY"
