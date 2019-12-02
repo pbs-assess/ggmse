@@ -24,6 +24,8 @@
 \alias{LTY}
 \alias{Yield}
 \alias{AAVY}
+\alias{LTY_MSY}
+\alias{STY_MSY}
 \title{Various performance metrics}
 \usage{
 P10(mse_obj)
@@ -71,6 +73,10 @@ LTY(mse_obj)
 Yield(mse_obj)
 
 AAVY(mse_obj)
+
+LTY_MSY(mse_obj, ref = 0.5, yrs = c(36, 50))
+
+STY_MSY(mse_obj, ref = 0.5, yrs = c(6, 20))
 }
 \arguments{
 \item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}

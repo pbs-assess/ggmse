@@ -260,3 +260,34 @@ Yield <- pm_factory("Yield", 1)
 #' @rdname pm
 #' @export
 AAVY <- pm_factory("AAVY", 0.2)
+
+#' @rdname pm
+#' @export
+LTY_MSY <- function(mse_obj, ref = 0.5, yrs = c(36, 50)) {
+  pm_obj <- new("PMobj")
+  pm_obj@Ref <- ref
+  yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+  pm_obj@Name <- paste0("Average Yield relative to Yield from FMSYref (Years ", yrs[1], "-", yrs[2], ")")
+  pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
+
+  if (!"FMSYref" %in% mse_obj@MPs) {
+    stop("FMSYref must be an MP to use this performance metric.", call. = FALSE)
+  }
+  FMSYref_i <- which(mse_obj@MPs == "FMSYref")
+  ref_yield <- array(NA, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
+
+  for (i in seq_len(dim(ref_yield)[2])) {
+    ref_yield[,i,] <- mse_obj@C[,FMSYref_i,yrs[1]:yrs[2]]
+  }
+  pm_obj@Stat <- mse_obj@C[, , yrs[1]:yrs[2]] / ref_yield
+  pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
+  pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
+  pm_obj@MPs <- mse_obj@MPs
+  pm_obj
+}
+class(LTY_MSY) <- "PM"
+
+#' @rdname pm
+#' @export
+STY_MSY <- LTY_MSY
+formals(STY_MSY)$yrs <- c(6, 20)
