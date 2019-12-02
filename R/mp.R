@@ -415,6 +415,11 @@ stepwise_NAs <- function(x) {
 #' @param lambda Smoothing parameter. 0 means always use the last TAC. 1 means
 #'   no smoothing. Can take any value in between.
 #' @param tac_floor TAC when `delta_min` is met or exceeded.
+#' @param year_ref Number of years before the present year for the comparison of
+#'   the index value. Default looks back one year. For a biennial survey this
+#'   should be changed to something larger such as 2 or the recommended TAC will
+#'   never change. Note that the algorithm fills in `NA` values in the index as
+#'   the previous non-NA value.
 #'
 #' @export
 #' @references
@@ -426,7 +431,8 @@ stepwise_NAs <- function(x) {
 #' IDX(1, DLMtool::SimulatedData)
 #' IDX(1, DLMtool::SimulatedData, lambda = 0.5)
 IDX <- function(x, Data, reps = 100, delta_min = -0.5,
-                delta_max = 0.25, lambda = 1, tac_floor = 0) {
+                delta_max = 0.25, lambda = 1, tac_floor = 0,
+                year_ref = 1) {
   dependencies <- "Data@Ind"
 
   if (lambda < 0) lambda <- 0
@@ -437,7 +443,7 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
 
   # Stepwise fill in NAs with last available value:
   temp_Ind <- stepwise_NAs(Data@Ind[x,,drop=TRUE])
-  delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - 1] - 1
+  delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - year_ref] - 1
   catch_rec <- Data@MPrec[x]
 
   if (delta_ind_y <= delta_min) {
@@ -459,20 +465,26 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
 }
 class(IDX) <- "MP"
 
-#' @rdname MPs
-#' @export
-.IDX <- reduce_survey(IDX)
+IDX2 <- IDX
+formals(IDX2)$tac_floor <- 2
 
 #' @rdname MPs
 #' @export
-IDX_smooth <- function(x, Data, reps = 100, ...) {
-  IDX(x, Data, reps, lambda = 0.5, ...)
+.IDX <- reduce_survey(IDX2)
+
+#' @rdname IDX
+#' @export
+IDX_smooth <- function(x, Data, reps = 100, tac_floor = 1, ...) {
+  IDX(x, Data, reps, lambda = 0.5, tac_floor = tac_floor, ...)
 }
 class(IDX_smooth) <- "MP"
 
+IDX_smooth2 <- IDX_smooth
+formals(IDX_smooth2)$tac_floor <- 2
+
 #' @rdname MPs
 #' @export
-.IDX_smooth <- reduce_survey(IDX_smooth)
+.IDX_smooth <- reduce_survey(IDX_smooth2)
 
 #' @rdname MPs
 #' @export

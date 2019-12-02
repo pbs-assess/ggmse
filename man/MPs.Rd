@@ -41,7 +41,6 @@
 \alias{.ITM_hist}
 \alias{.SBT1_log}
 \alias{.IDX}
-\alias{IDX_smooth}
 \alias{.IDX_smooth}
 \alias{SP4010_prior}
 \alias{SP4010}
@@ -155,8 +154,6 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .SBT1_log(x, Data, reps = 100, ...)
 
 .IDX(x, Data, reps = 100, ...)
-
-IDX_smooth(x, Data, reps = 100, ...)
 
 .IDX_smooth(x, Data, reps = 100, ...)
 

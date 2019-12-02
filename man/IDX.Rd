@@ -2,6 +2,7 @@
 % Please edit documentation in R/mp.R
 \name{IDX}
 \alias{IDX}
+\alias{IDX_smooth}
 \title{Index-based MP from Cox et al. (2019)}
 \usage{
 IDX(
@@ -11,8 +12,11 @@ IDX(
   delta_min = -0.5,
   delta_max = 0.25,
   lambda = 1,
-  tac_floor = 0
+  tac_floor = 0,
+  year_ref = 1
 )
+
+IDX_smooth(x, Data, reps = 100, tac_floor = 1, ...)
 }
 \arguments{
 \item{x}{A position in the data object.}
@@ -29,6 +33,12 @@ IDX(
 no smoothing. Can take any value in between.}
 
 \item{tac_floor}{TAC when \code{delta_min} is met or exceeded.}
+
+\item{year_ref}{Number of years before the present year for the comparison of
+the index value. Default looks back one year. For a biennial survey this
+should be changed to something larger such as 2 or the recommended TAC will
+never change. Note that the algorithm fills in \code{NA} values in the index as
+the previous non-NA value.}
 }
 \description{
 Index-based MP used in the most recent outside Yelloweye Rockfish assessment
