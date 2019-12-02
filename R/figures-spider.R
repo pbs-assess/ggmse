@@ -28,8 +28,8 @@ spider <- function(mse_obj,
     "pm",
     "prob",
     palette = palette,
-    leg_main_title = "Management Procedure",
+    leg_main_title = "MP",
     leg_lty_title = "MP type",
     ...
-  )
+  ) + ggplot2::labs(color = "MP")
 }
