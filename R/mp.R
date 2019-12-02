@@ -440,7 +440,6 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - 1] - 1
   catch_rec <- Data@MPrec[x]
 
-  # FIXME: Data@Cat vs. MPrec (last TAC)? Different now, right? Which to use?
   if (delta_ind_y <= delta_min) {
     TAC <- tac_floor
   }
