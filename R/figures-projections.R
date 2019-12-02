@@ -12,6 +12,8 @@
 #'   the outer uncertainty ribbon, inner uncertainty ribbon, and median.
 #' @param bbmsy_zones A numeric vector of status zone lines to add to
 #'   the B/Bmsy panel if it is present.
+#' @param catch_reference The number of years over which to calculate the
+#'   average catch and show as a horizontal line in a plot of catch.
 #' @param clip_ylim An optional numeric value to set the upper ylim
 #'   value. `clip_ylim` is multiplied by the highest median value
 #'   across the panels. Useful if there are outlying timeseries that distort
@@ -35,6 +37,7 @@ plot_projection_ts <- function(object,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
                                bbmsy_zones = c(0.4, 0.8),
+                               catch_reference = 5,
                                clip_ylim = NULL,
                                seed = 42) {
   if (!class(object) != "mse") {
@@ -169,6 +172,13 @@ plot_projection_ts <- function(object,
       data = lines,
       aes_string(yintercept = "value"), alpha = 0.2, lty = 2, lwd = 0.5
     )
+  }
+
+  if ("Catch" %in% type) {
+    average_catch <- filter(d, Type == "Catch", real_year %in%
+        .hist_years[(length(.hist_years)-(catch_reference-1)):length(.hist_years)]) %>%
+      summarize(average_catch = mean(value)) %>% pull(average_catch)
+    g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
   }
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Projected value") +

@@ -12,6 +12,7 @@ plot_projection_ts(
   probs = c(0.1, 0.5),
   ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
   bbmsy_zones = c(0.4, 0.8),
+  catch_reference = 5,
   clip_ylim = NULL,
   seed = 42
 )
@@ -35,6 +36,9 @@ the outer uncertainty ribbon, inner uncertainty ribbon, and median.}
 
 \item{bbmsy_zones}{A numeric vector of status zone lines to add to
 the B/Bmsy panel if it is present.}
+
+\item{catch_reference}{The number of years over which to calculate the
+average catch and show as a horizontal line in a plot of catch.}
 
 \item{clip_ylim}{An optional numeric value to set the upper ylim
 value. \code{clip_ylim} is multiplied by the highest median value
