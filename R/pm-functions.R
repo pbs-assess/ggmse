@@ -291,3 +291,34 @@ class(LTY_MSY) <- "PM"
 #' @export
 STY_MSY <- LTY_MSY
 formals(STY_MSY)$yrs <- c(6, 20)
+
+#' @rdname pm
+#' @export
+Decline <- function(mse_obj, ref = 0, yrs = c(6, 20)) {
+  pm_obj <- new("PMobj")
+  pm_obj@Ref <- ref
+  yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+  pm_obj@Name <- paste0("Probability of decline (Years ",
+    yrs[1], "-", yrs[2], ")")
+  pm_obj@Caption <- paste0("Prob. decline in SSB ",
+    "(Years ", yrs[1], "-", yrs[2], ")")
+
+  slopes <- apply(mse_obj@SSB[, , yrs[1]:yrs[2]], c(1, 2), function(.x) {
+    X <- cbind(rep(1, length(.x)), seq_along(.x))
+    m <- stats::.lm.fit(X, log(.x))
+    stats::coef(m)[[2]]
+  })
+
+  # fake to make DLMtool happy:
+  Stat <- array(NA, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
+  for (i in seq_len(dim(mse_obj@SSB[, , yrs[1]:yrs[2]])[3])) {
+    Stat[,,i] <- slopes
+  }
+
+  pm_obj@Stat <- Stat
+  pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
+  pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
+  pm_obj@MPs <- mse_obj@MPs
+  pm_obj
+}
+class(Decline) <- "PM"
