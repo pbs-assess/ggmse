@@ -67,6 +67,7 @@ calc_contour_lines <- function(d,
 #' @param ylim The [ggplot2::ylim()] values for y-axis limits.
 #' @param x_ref_lines A vector of vertical lines to draw as reference point lines.
 #' @param y_ref_lines A vector of horizontal lines to draw as reference point lines.
+#' @param show_contours Logical: show contour lines?
 #'
 #' @return A ggplot object
 #' @importFrom reshape2 melt
@@ -87,7 +88,8 @@ plot_contours <- function(object,
                           xlim = c(0, 3.5),
                           ylim = c(0, 3.5),
                           x_ref_lines = c(0.4, 0.8),
-                          y_ref_lines = 1) {
+                          y_ref_lines = 1,
+                          show_contours = TRUE) {
   ffmsy <- object@F_FMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, ffmsy = value)
@@ -99,31 +101,24 @@ plot_contours <- function(object,
   d <- left_join(dl, dr, by = "mp") %>%
     filter(!mp_name %in% dontshow_mp) %>%
     select(-iter) %>%
-    mutate(
-      x = log(bbmsy),
-      y = log(ffmsy)
-    )
+    mutate(x = log(bbmsy), y = log(ffmsy))
 
-  contour_lines <- calc_contour_lines(d,
-    alpha = alpha,
-    n = n
-  )
+  contour_lines <- calc_contour_lines(d, alpha = alpha, n = n)
   contour_lines$x <- exp(contour_lines$x)
   contour_lines$y <- exp(contour_lines$y)
   d$x <- exp(d$x)
   d$y <- exp(d$y)
   g <- ggplot(d, aes(x, y)) +
-    geom_point(alpha = 0.2) +
-    geom_path(
+    geom_point(alpha = 0.2)
+
+  if (show_contours) {
+    g <- g + geom_path(
       data = contour_lines,
-      aes(
-        color = alpha,
-        group = as.factor(alpha)
-      ),
-      alpha = 0.5
+      aes(color = alpha, group = as.factor(alpha)), alpha = 0.5
     ) +
-    scale_color_viridis_c(end = 0.9) +
-    ggsidekick::theme_sleek() +
+      scale_color_viridis_c(end = 0.9)
+  }
+  g <- g + ggsidekick::theme_sleek() +
     facet_wrap(~mp_name) +
     labs(
       colour = "Prob. density", x = expression(B / B[MSY]),

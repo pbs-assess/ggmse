@@ -14,7 +14,8 @@ plot_contours(
   xlim = c(0, 3.5),
   ylim = c(0, 3.5),
   x_ref_lines = c(0.4, 0.8),
-  y_ref_lines = 1
+  y_ref_lines = 1,
+  show_contours = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ plot_contours(
 \item{x_ref_lines}{A vector of vertical lines to draw as reference point lines.}
 
 \item{y_ref_lines}{A vector of horizontal lines to draw as reference point lines.}
+
+\item{show_contours}{Logical: show contour lines?}
 }
 \value{
 A ggplot object
