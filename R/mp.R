@@ -135,25 +135,19 @@ GB_slope8_1
 
 #' @rdname MPs
 #' @export
-Iratio6 <- function(x, Data, reps = 100, ...) {
-  DLMtool::Iratio(x, Data, reps, yrs = c(3, 6), ...)
+Iratio2 <- function(x, Data, reps = 100, ...) {
+  ind <- which(!is.na(Data@Ind[x,,drop=TRUE]))
+  numerator_yrs <- rev(which(!is.na(ind)))[1:2]
+  denominator_yrs <- rev(which(!is.na(ind)))[3:5]
+  yrs1 <- length(ind) - min(numerator_yrs) + 1
+  yrs2 <- length(ind) - min(denominator_yrs) + 1
+  DLMtool::Iratio(x, Data, reps, yrs = c(yrs1, yrs2), ...)
 }
-class(Iratio6) <- "MP"
+class(Iratio2) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Iratio6 <- reduce_survey(Iratio6)
-
-#' @rdname MPs
-#' @export
-Iratio8 <- function(x, Data, reps = 100, ...) {
-  DLMtool::Iratio(x, Data, reps, yrs = c(4, 8), ...)
-}
-class(Iratio8) <- "MP"
-
-#' @rdname MPs
-#' @export
-.Iratio8 <- reduce_survey(Iratio8)
+.Iratio2 <- reduce_survey(Iratio2)
 
 Islope_mod_ <- function(x, Data, reps = 100, yrsmth = 6, lambda, xx,
   increase_cap = 1.2, ...) {
