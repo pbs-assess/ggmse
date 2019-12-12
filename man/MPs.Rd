@@ -15,10 +15,8 @@
 \alias{.GB_slope8_1}
 \alias{.ICI}
 \alias{.ICI2}
-\alias{Iratio6}
-\alias{.Iratio6}
-\alias{Iratio8}
-\alias{.Iratio8}
+\alias{Iratio2}
+\alias{.Iratio2}
 \alias{Islope0.4_100}
 \alias{.Islope0.4_100}
 \alias{Islope0.4_80}
@@ -37,6 +35,7 @@
 \alias{.Itarget2}
 \alias{.Itarget3}
 \alias{.Itarget4}
+\alias{.Itarget5}
 \alias{.ITM}
 \alias{.ITM_hist}
 \alias{.SBT1_log}
@@ -103,13 +102,9 @@ GB_slope8_1(x, Data, reps = 100, ...)
 
 .ICI2(x, Data, reps = 100, ...)
 
-Iratio6(x, Data, reps = 100, ...)
+Iratio2(x, Data, reps = 100, ...)
 
-.Iratio6(x, Data, reps = 100, ...)
-
-Iratio8(x, Data, reps = 100, ...)
-
-.Iratio8(x, Data, reps = 100, ...)
+.Iratio2(x, Data, reps = 100, ...)
 
 Islope0.4_100(x, Data, reps = 100, ...)
 
@@ -146,6 +141,8 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .Itarget3(x, Data, reps = 100, ...)
 
 .Itarget4(x, Data, reps = 100, ...)
+
+.Itarget5(x, Data, reps = 100, ...)
 
 .ITM(x, Data, reps = 100, ...)
 
