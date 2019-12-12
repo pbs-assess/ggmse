@@ -285,7 +285,7 @@ Itarget5 <- function (x, Data, reps = 1, yrsmth = 5, xx = 0,
 
 #' @rdname MPs
 #' @export
-.Itarget5 <- reduce_survey(DLMtool::Itarget5)
+.Itarget5 <- reduce_survey(Itarget5)
 
 #' @rdname MPs
 #' @export
