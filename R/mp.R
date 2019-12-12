@@ -246,6 +246,47 @@ class(Islope0.2_80) <- "MP"
 #' @export
 .Itarget4 <- reduce_survey(DLMtool::Itarget4)
 
+#' Itarget 5 MP
+#'
+#' @param x A position in the data object. As per \pkg{DLMtool}.
+#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param reps The number of stochastic samples of the MP recommendation(s). As
+#'   per \pkg{DLMtool}.
+#' @param yrsmth Years over which the average index is calculated.
+#' @param xx Parameter controlling the fraction of mean catch to start using in first year.
+#' @param Imulti Parameter controlling how much larger target CPUE / index is compared with recent levels.
+#'
+#' @export
+Itarget5 <- function (x, Data, reps = 1, yrsmth = 5, xx = 0,
+    Imulti = 2) {
+    ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
+    ylast <- (Data@LHYear[1] - Data@Year[1]) + 1
+    ind2 <- ((ylast - (yrsmth - 1)):ylast)
+    ind3 <- ((ylast - (yrsmth * 2 - 1)):ylast)
+    C_dat <- Data@Cat[x, ind2]
+    TACstar <- (1 - xx) * trlnorm(reps, mean(C_dat, na.rm = TRUE),
+      Data@CV_Cat[x, 1]/(yrsmth^0.5))
+    Irecent <- mean(Data@Ind[x, ind], na.rm = TRUE)
+    Iave <- mean(Data@Ind[x, ind3], na.rm = TRUE)
+    Itarget <- Iave * Imulti
+    I0 <- 1 * Iave
+    if (Irecent > I0) {
+      TAC <- TACstar * (1 + ((Irecent - I0)/(Itarget -
+          I0)))
+    }
+    else {
+      TAC <- TACstar * (Irecent/I0)^2
+    }
+    TAC <- TACfilter(TAC)
+    Rec <- new("Rec")
+    Rec@TAC <- TAC
+    Rec
+}
+
+#' @rdname MPs
+#' @export
+.Itarget5 <- reduce_survey(DLMtool::Itarget5)
+
 #' @rdname MPs
 #' @export
 .ITM <- reduce_survey(DLMtool::ITM)
