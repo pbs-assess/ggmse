@@ -6,7 +6,7 @@
 \usage{
 plot_projection_ts(
   object,
-  type = c("F_FMSY", "B_BMSY"),
+  type = c("SSB", "FM"),
   n_samples = 3,
   this_year = 2018,
   probs = c(0.1, 0.5),
