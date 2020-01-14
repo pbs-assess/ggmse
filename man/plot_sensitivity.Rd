@@ -23,7 +23,7 @@ combination, i.e., across time) from the object returned by this function.}
 object). Defaults to all.}
 
 \item{slots}{A character vector of OM slots to plot. Will be plotted in this
-order.}
+order. Set \code{slots = "all"} to plot all available OM and observation slots.}
 
 \item{ylab}{The y-axis label.}
 }

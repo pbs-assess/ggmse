@@ -9,7 +9,7 @@
 #' @param mp A character vector of MPs to plot (must be included in the MSE
 #'   object). Defaults to all.
 #' @param slots A character vector of OM slots to plot. Will be plotted in this
-#'   order.
+#'   order. Set `slots = "all"` to plot all available OM and observation slots.
 #' @param ylab The y-axis label.
 #'
 #' @return
@@ -29,7 +29,7 @@ plot_sensitivity <- function(object, pm_function, mp = object@MPs,
     stop("`object` must be class 'MSE'", call. = FALSE)
   if (class(pm_function) != "PM")
     stop("`pm_function` must be a function of class 'PM'", call. = FALSE)
-  if (any(!slots %in% union(colnames(x@OM), colnames(x@Obs))))
+  if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs))))
     stop("All `slots` must be valid `object@OM` or `object@Obs` slot names.", call. = FALSE)
 
   obs <- suppressMessages(reshape2::melt(object@Obs,
@@ -54,6 +54,9 @@ plot_sensitivity <- function(object, pm_function, mp = object@MPs,
     mutate(iter = rep(seq_len(dim(xx)[1]), dim(xx)[2]))
 
   dat <- dplyr::inner_join(om, pm, by = "iter")
+
+  if (slots[[1]] == "all" && length(slots) == 1L)
+    slots <- union(colnames(object@OM), colnames(object@Obs))
 
   dplyr::filter(
     dat,
