@@ -39,6 +39,8 @@ the index value. Default looks back one year. For a biennial survey this
 should be changed to something larger such as 2 or the recommended TAC will
 never change. Note that the algorithm fills in \code{NA} values in the index as
 the previous non-NA value.}
+
+\item{...}{Other arguments to pass to \link{IDX}.}
 }
 \description{
 Index-based MP used in the most recent outside Yelloweye Rockfish assessment

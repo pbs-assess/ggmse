@@ -17,6 +17,8 @@
 #'   \pkg{DLMtool}.
 #' @export
 #' @importFrom methods slot slot<-
+#' @importFrom graphics boxplot lines par points
+#' @importFrom stats lm predict rnorm
 #'
 #' @examples
 #' library(DLMtool)
@@ -264,7 +266,7 @@ Itarget5 <- function (x, Data, reps = 1, yrsmth = 5, xx = 0,
     ind2 <- ((ylast - (yrsmth - 1)):ylast)
     ind3 <- ((ylast - (yrsmth * 2 - 1)):ylast)
     C_dat <- Data@Cat[x, ind2]
-    TACstar <- (1 - xx) * trlnorm(reps, mean(C_dat, na.rm = TRUE),
+    TACstar <- (1 - xx) * DLMtool::trlnorm(reps, mean(C_dat, na.rm = TRUE),
       Data@CV_Cat[x, 1]/(yrsmth^0.5))
     Irecent <- mean(Data@Ind[x, ind], na.rm = TRUE)
     Iave <- mean(Data@Ind[x, ind3], na.rm = TRUE)
@@ -277,7 +279,7 @@ Itarget5 <- function (x, Data, reps = 1, yrsmth = 5, xx = 0,
     else {
       TAC <- TACstar * (Irecent/I0)^2
     }
-    TAC <- TACfilter(TAC)
+    TAC <- DLMtool::TACfilter(TAC)
     Rec <- new("Rec")
     Rec@TAC <- TAC
     Rec
@@ -404,7 +406,7 @@ SBT1_log <- function(x, Data, reps = 100, plot = FALSE, yrsmth = 10, k1 = 1.5,
   TAC <- cct * (1 + k2 * lambda)
   cond <- lambda < 0
   TAC[cond] <- cct[cond] * (1 - k1 * -lambda[cond]^gamma)
-  TAC <- TACfilter(TAC)
+  TAC <- DLMtool::TACfilter(TAC)
   if (plot) {
     op <- par(no.readonly = TRUE)
     on.exit(par(op))
@@ -507,6 +509,7 @@ formals(IDX2)$tac_floor <- 2
 #' @export
 .IDX <- reduce_survey(IDX2)
 
+#' @param ... Other arguments to pass to [IDX].
 #' @rdname IDX
 #' @export
 IDX_smooth <- function(x, Data, reps = 100, tac_floor = 1, ...) {
@@ -602,10 +605,10 @@ CC60 <- DLMtool::CC5
 SP_gf <- function (x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
   start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
   dependencies <- "Data@Cat, Data@Ind"
-  do_Assessment <- SP(x = x, Data = Data,
+  do_Assessment <- MSEtool::SP(x = x, Data = Data,
     control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
     use_r_prior = use_r_prior, start = start)
-  Rec <- HCR_ramp(Assessment = do_Assessment, reps = reps, LRP = LRP,
+  Rec <- MSEtool::HCR_ramp(Assessment = do_Assessment, reps = reps, LRP = LRP,
     TRP = TRP, RP_type = RP_type)
   if (!is.na(Rec@TAC)) {
     if (as.list(do_Assessment@SD, "Std. Error")$log_FMSY > 1) {

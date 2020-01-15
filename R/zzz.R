@@ -19,5 +19,19 @@ globalVariables(c(
   "sample_id",
   "MP",
   "type",
-  "txt"
+  "txt",
+  ".hist_years",
+  "Type",
+  "l",
+  "m o",
+  "m_slot",
+  "om_value",
+  "om_value_group",
+  "om_value_lwr",
+  "om_value_upr",
+  "pm_value points",
+  "real_year",
+  "ref",
+  "rnorm",
+  "u"
 ))

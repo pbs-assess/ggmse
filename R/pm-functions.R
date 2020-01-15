@@ -165,6 +165,8 @@ pm_factory <- function(pm_type,
 #' Various performance metrics
 #'
 #' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#' @param refs List containing the reference limits for each metric
+#' @param yrs Numeric vector of length 2 with year indices to summarize performance
 #'
 #' @return An object of class [PMobj-class] from the [DLMtool] package
 #' @export

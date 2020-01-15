@@ -83,6 +83,10 @@ Decline(mse_obj, ref = 0, yrs = c(6, 20))
 }
 \arguments{
 \item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}
+
+\item{yrs}{Numeric vector of length 2 with year indices to summarize performance}
+
+\item{refs}{List containing the reference limits for each metric}
 }
 \value{
 An object of class \linkS4class{PMobj} from the \link{DLMtool} package
