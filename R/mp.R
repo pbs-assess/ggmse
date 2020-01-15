@@ -616,26 +616,26 @@ SP_gf <- function (x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMS
     TRP = TRP, RP_type = RP_type)
   if (!is.na(Rec@TAC)) {
     if (as.list(do_Assessment@SD, "Std. Error")$log_FMSY > 1) {
-      warning("Std. Error too large.")
+      warning("Std. Error too large; using last TAC")
       Rec@TAC <- Data@MPrec[x]
     }
     if (Rec@TAC > Data@MPrec[x] && Rec@TAC < tac_increase_buffer * Data@MPrec[x]) {
       Rec@TAC <- Data@MPrec[x]
     }
     if (Rec@TAC > tac_max_increase * Data@MPrec[x]) {
-      warning("TAC > 1.2 last TAC.")
+      warning("TAC > tac_max_increase; using tac_max_increase")
       Rec@TAC <- tac_max_increase * Data@MPrec[x]
     }
     if (Rec@TAC < tac_max_decrease * Data@MPrec[x]) {
-      warning("TAC < 0.5 last TAC.")
+      warning("TAC < tac_max_decrease last TAC; using tac_max_decrease")
       Rec@TAC <- tac_max_decrease * Data@MPrec[x]
     }
     if (Rec@TAC < tac_floor * Data@Cat[x,Data@LHYear]) {
-      warning("TAC < 0.1 last historical catch.")
+      warning("TAC < tac_floor; using tac_floor")
       Rec@TAC <- tac_floor * Data@Cat[x,Data@LHYear]
     }
   }
-  Rec@Misc <- MSEtool:::Assess_diagnostic(x, Data, do_Assessment, include_assessment = FALSE)
+  # Rec@Misc <- MSEtool:::Assess_diagnostic(x, Data, do_Assessment, include_assessment = FALSE)
   return(Rec)
 }
 
