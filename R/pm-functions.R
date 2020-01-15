@@ -77,6 +77,7 @@ eval_pm <- function(mse_obj,
 #' @importFrom DLMtool calcProb calcMean ChkYrs
 #' @importFrom methods new
 #' @export
+#' @rdname pm
 #'
 #' @examples
 #' P10 <- pm_factory("SBMSY", 0.1)
@@ -165,8 +166,6 @@ pm_factory <- function(pm_type,
 #' Various performance metrics
 #'
 #' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
-#' @param refs List containing the reference limits for each metric
-#' @param yrs Numeric vector of length 2 with year indices to summarize performance
 #'
 #' @return An object of class [PMobj-class] from the [DLMtool] package
 #' @export

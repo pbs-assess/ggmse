@@ -393,7 +393,7 @@ SBT1_log <- function(x, Data, reps = 100, plot = FALSE, yrsmth = 10, k1 = 1.5,
                  k2 = 3, gamma = 1) {
   dependencies <- "Data@Cat, Data@Year, Data@Ind"
   Cr <- length(Data@Cat[x, ])
-  cct <- trlnorm(reps, Data@Cat[x, Cr], Data@CV_Cat)
+  cct <- DLMtool::trlnorm(reps, Data@Cat[x, Cr], Data@CV_Cat)
   ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
   I_hist <- Data@Ind[x, ind]
   test <- summary(lm(log(I_hist) ~ ind))$coefficients[2, 1:2]

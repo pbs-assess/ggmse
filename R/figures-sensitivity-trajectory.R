@@ -46,7 +46,7 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     mutate(slot_type = "OM")
   om <- suppressWarnings(bind_rows(obs, om))
 
-  dat_ts <- gfdlm:::get_ts(object)
+  dat_ts <- get_ts(object)
   dat <- dplyr::inner_join(om, dat_ts, by = "iter")
 
   if (slots[[1]] == "all" && length(slots) == 1L)
