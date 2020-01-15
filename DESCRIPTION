@@ -2,17 +2,20 @@ Package: gfdlm
 Title: Various Functions For 'DLMtool'
 Version: 0.0.0.9000
 Authors@R:
-    c(person(c("Sean", "C."), "Anderson",
-    email = "sean.anderson@dfo-mpo.gc.ca", role = c("aut", "cre")),
-    person("Chris", "Grandin", role = "aut"))
-Description: Provides many tools for using 'DLMtool' for producing
-    DFO PBS Groundfish Section CSAS Research Rocuments.
+    c(person(given = c("Sean", "C."),
+             family = "Anderson",
+             role = c("aut", "cre"),
+             email = "sean.anderson@dfo-mpo.gc.ca"),
+      person(given = "Chris",
+             family = "Grandin",
+             role = "aut"))
+Description: Provides many tools for using 'DLMtool' for
+    producing DFO PBS Groundfish Section CSAS Research Rocuments.
 License: GPL-2
-Depends: R (>= 2.10)
+Depends: 
+    R (>= 2.10)
 Imports:
     DLMtool,
-    MASS,
-    TMB,
     dplyr,
     gfdata,
     gfplot,
@@ -23,9 +26,12 @@ Imports:
     here,
     lubridate,
     magrittr,
+    MASS,
     methods,
+    MSEtool,
     plyr,
     purrr,
+    RColorBrewer,
     readr,
     reshape2,
     rlang,
@@ -33,11 +39,14 @@ Imports:
     stringr,
     testthat,
     tibble,
-    RColorBrewer,
-    tidyr
-Suggests: 
+    tidyr,
+    TMB
+Remotes: 
+    github::pbs-assess/gfdata,
+    github::pbs-assess/gfplot,
+    github::pbs-assess/gfutilities,
+    github::pbs-assess/ggspider
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.0.2
 Roxygen: list(markdown = TRUE)
-Remotes: github::pbs-assess/gfplot, github::pbs-assess/gfdata, github::pbs-assess/gfutilities, github::pbs-assess/ggspider
+RoxygenNote: 7.0.2
