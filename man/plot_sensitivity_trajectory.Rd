@@ -8,7 +8,8 @@ plot_sensitivity_trajectory(
   object,
   type = c("B_BMSY", "F_FMSY"),
   mp = object@MPs,
-  slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd")
+  slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
+  probs = 0.3
 )
 }
 \arguments{
@@ -21,13 +22,18 @@ object). Defaults to all.}
 
 \item{slots}{A character vector of OM slots to plot. Will be plotted in this
 order. Set \code{slots = "all"} to plot all available OM and observation slots.}
+
+\item{probs}{A numeric value corresponding to the tail probability for the ribbon.
+E.g., 0.5 corresponds to a ribbon at 0.25 and 0.75 quantiles.}
 }
 \value{
 A ggplot object
 }
 \description{
-Plot sensitivity of performance metrics to OM slots across iterations
-as trajectories.
+Plot sensitivity of performance metrics to OM slots across iterations as
+trajectories. First the iterations are divided into the upper and lower
+thirds of the respective OM slot values. Then ribbon plots are made within
+those groups across iterations through time.
 }
 \examples{
 library(DLMtool)

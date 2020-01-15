@@ -1,7 +1,9 @@
 #' Sensitivity trajectory plot
 #'
-#' Plot sensitivity of performance metrics to OM slots across iterations
-#' as trajectories.
+#' Plot sensitivity of performance metrics to OM slots across iterations as
+#' trajectories. First the iterations are divided into the upper and lower
+#' thirds of the respective OM slot values. Then ribbon plots are made within
+#' those groups across iterations through time.
 #'
 #' @param object A DLMtool MSE object.
 #' @param type Whether to make a B/Bmsy or F/Fmsy projection plot.
@@ -9,6 +11,8 @@
 #'   object). Defaults to all.
 #' @param slots A character vector of OM slots to plot. Will be plotted in this
 #'   order. Set `slots = "all"` to plot all available OM and observation slots.
+#' @param probs A numeric value corresponding to the tail probability for the ribbon.
+#'   E.g., 0.5 corresponds to a ribbon at 0.25 and 0.75 quantiles.
 #'
 #' @return
 #' A ggplot object
@@ -20,7 +24,8 @@
 #' x <- runMSE(om, MPs = c("AvC", "CC1"))
 #' plot_sensitivity_trajectory(x)
 plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp = object@MPs,
-                             slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd")) {
+                             slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
+                             probs = 0.3) {
 
   type <- match.arg(type)
   if (class(object) != "MSE")
@@ -55,7 +60,6 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     dplyr::filter(om_value < om_value_lwr | om_value > om_value_upr) %>%
     mutate(om_value_group = ifelse(om_value < om_value_lwr, "Lower", "Upper"))
 
-  probs <- 0.3
   dat_summarized <- dat %>%
     dplyr::group_by(om_value_group, om_slot, mp_name, real_year, Type) %>%
     dplyr::summarize(
