@@ -41,23 +41,6 @@
 \alias{.SBT1_log}
 \alias{.IDX}
 \alias{.IDX_smooth}
-\alias{SP4010_prior}
-\alias{SP4010}
-\alias{.SP4010}
-\alias{SP8040}
-\alias{.SP8040}
-\alias{SP8040_Fox}
-\alias{.SP8040_Fox}
-\alias{SP6040}
-\alias{.SP6040}
-\alias{SP6040_Fox}
-\alias{.SP6040_Fox}
-\alias{.SP_MSY}
-\alias{SP_MSY_Fox}
-\alias{.SP_MSY_Fox}
-\alias{.SCA4010}
-\alias{SCA6040}
-\alias{.SCA6040}
 \alias{IT5_hist}
 \alias{.IT5_hist}
 \alias{IT10_hist}
@@ -71,6 +54,7 @@
 \alias{.SP6040_prior}
 \alias{SP8040_prior}
 \alias{.SP8040_prior}
+\alias{SP4010_prior}
 \alias{.SP4010_prior}
 \title{Alternative versions of \pkg{DLMtool} and \pkg{MSEtool} MP functions}
 \usage{
@@ -153,40 +137,6 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .IDX(x, Data, reps = 100, ...)
 
 .IDX_smooth(x, Data, reps = 100, ...)
-
-SP4010_prior(x, Data, reps = 1)
-
-SP4010(x, Data, reps = 1)
-
-.SP4010(x, Data, reps = 100, ...)
-
-SP8040(x, Data, reps = 1)
-
-.SP8040(x, Data, reps = 100, ...)
-
-SP8040_Fox(x, Data, reps = 1)
-
-.SP8040_Fox(x, Data, reps = 100, ...)
-
-SP6040(x, Data, reps = 1)
-
-.SP6040(x, Data, reps = 100, ...)
-
-SP6040_Fox(x, Data, reps = 1)
-
-.SP6040_Fox(x, Data, reps = 100, ...)
-
-.SP_MSY(x, Data, reps = 100, ...)
-
-SP_MSY_Fox(x, Data, reps = 1)
-
-.SP_MSY_Fox(x, Data, reps = 100, ...)
-
-.SCA4010(x, Data, reps = 100, ...)
-
-SCA6040(x, Data, reps = 1)
-
-.SCA6040(x, Data, reps = 100, ...)
 
 IT5_hist(x, Data, reps = 100, ...)
 

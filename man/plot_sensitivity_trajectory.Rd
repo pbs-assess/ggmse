@@ -9,7 +9,8 @@ plot_sensitivity_trajectory(
   type = c("B_BMSY", "F_FMSY"),
   mp = object@MPs,
   slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
-  probs = 0.3
+  probs = 0.3,
+  this_year = 2018
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ order. Set \code{slots = "all"} to plot all available OM and observation slots.}
 
 \item{probs}{A numeric value corresponding to the tail probability for the ribbon.
 E.g., 0.5 corresponds to a ribbon at 0.25 and 0.75 quantiles.}
+
+\item{this_year}{The last year of the historical timeseries.}
 }
 \value{
 A ggplot object
