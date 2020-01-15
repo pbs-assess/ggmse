@@ -177,6 +177,12 @@ SP4010_prior(x, Data, reps = 1)
 per \pkg{DLMtool}.}
 
 \item{...}{Other arguments to pass to the MP function.}
+
+\item{plot}{Logical. Show the plot?}
+
+\item{yrsmth}{Years over which to calculate mean catches.}
+
+\item{xx}{Parameter controlling the TAC. Mean catches are multiplied by \code{(1 - xx)}.}
 }
 \description{
 Management procedures (MPs) with a \code{.} in front of their name use

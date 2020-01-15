@@ -37,5 +37,5 @@ Plot sensitivity of performance metrics to OM slots across iterations
 library(DLMtool)
 om@nsim <- 10
 x <- runMSE(om, MPs = c("AvC", "CC1"))
-plot_sensitivity(x)
+plot_sensitivity(x, LTY)
 }

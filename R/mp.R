@@ -566,6 +566,10 @@ class(IT10_hist) <- "MP"
 #' @export
 .IT10_hist <- reduce_survey(IT10_hist)
 
+#' @param plot Logical. Show the plot?
+#' @param yrsmth Years over which to calculate mean catches.
+#' @param xx Parameter controlling the TAC. Mean catches are multiplied by `(1 - xx)`.
+#'
 #' @rdname MPs
 #' @export
 CC100 <- DLMtool::CC1

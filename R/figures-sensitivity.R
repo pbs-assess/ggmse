@@ -20,7 +20,7 @@
 #' library(DLMtool)
 #' om@nsim <- 10
 #' x <- runMSE(om, MPs = c("AvC", "CC1"))
-#' plot_sensitivity(x)
+#' plot_sensitivity(x, LTY)
 plot_sensitivity <- function(object, pm_function, mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
                              ylab = "Performance metric value") {
