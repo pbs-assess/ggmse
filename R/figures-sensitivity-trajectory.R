@@ -13,6 +13,7 @@
 #'   order. Set `slots = "all"` to plot all available OM and observation slots.
 #' @param probs A numeric value corresponding to the tail probability for the ribbon.
 #'   E.g., 0.5 corresponds to a ribbon at 0.25 and 0.75 quantiles.
+#' @param this_year The last year of the historical timeseries.
 #'
 #' @return
 #' A ggplot object
@@ -25,7 +26,7 @@
 #' plot_sensitivity_trajectory(x)
 plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
-                             probs = 0.3) {
+                             probs = 0.3, this_year = 2018) {
 
   type <- match.arg(type)
   if (class(object) != "MSE")
@@ -78,29 +79,10 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     ggplot2::facet_grid(mp_name ~ om_slot) +
     gfplot::theme_pbs() +
     ggplot2::labs(x = "Year", y = ylab,
-      colour = "OM\nvalue\nthird", fill = "OM\nvalue\nthird") +
-    geom_vline(xintercept = 2018, lty = 2, colour = "grey50") +
-    geom_hline(yintercept = 1, lty = 2, colour = "grey50") +
+      colour = "OM value\nthird", fill = "OM value\nthird") +
+    geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
+    geom_hline(yintercept = 1, lty = 2, alpha = 0.3) +
     scale_color_manual(values = c("Lower" = pal[1], "Upper" = pal[2])) +
     scale_fill_manual(values = c("Lower" = pal[1], "Upper" = pal[2]))
-
-  # range01 <- function(x) (x - min(x)) / (max(x) - min(x))
-  #  %>%
-  #   mutate(om_value = range01(om_value)) %>%
-  #   mutate(om_value = om_value - 0.5) %>%
-  #   ungroup() %>%
-  #   mutate(om_slot = factor(om_slot, levels = slots)) %>%
-  #   ggplot2::ggplot(aes(real_year, value)) +
-  #   ggplot2::geom_line(alpha = 0.4, lwd = 0.5,
-  #     mapping = aes(colour = om_value, group = iter)) +
-  #   ggplot2::facet_grid(mp_name ~ om_slot, scales = "free_y") +
-  #   gfplot::theme_pbs() +
-  #   ggplot2::labs(x = "Year", y = expression(B/B[MSY])) +
-  #   # ggplot2::scale_color_viridis_c() +
-  #   ggplot2::scale_color_gradient2(low = scales::muted("blue"),
-  #     high = scales::muted("red"), mid = "grey60") +
-  #   geom_vline(xintercept = 2018, lty = 2, colour = "grey50") +
-  #   geom_hline(yintercept = 1, lty = 2, colour = "grey50") +
-  #   guides(colour = FALSE) +
-  #   coord_cartesian(ylim = c(0, 5))
+    # scale_x_continuous(breaks = seq(min(dat_summarized$real_year), max(dat_summarized$real_year), 10))
 }
