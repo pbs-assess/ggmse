@@ -5,13 +5,17 @@
 #'
 #' @param object A DLMtool MSE object.
 #' @param pm_list A list or vector of performance metrics as character.
+#' @param label_gap Controls the gap on the right of each panel to make space
+#'   for the MP labels. This value is multiplied by the maximum number of
+#'   iterations to expand the x axis.
 #'
 #' @return A ggplot2 plot.
 #' @export
 #'
 #' @examples
 #' plot_convergence(mse)
-plot_convergence <- function(object, pm_list = c("LTY", "PNOF")) {
+plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
+                             label_gap = 1.15) {
   if (class(object) != "MSE") {
     stop("`object` must be object of class 'MSE'", call. = FALSE)
   }
@@ -32,7 +36,7 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF")) {
     )
   })
 
-  last_iter <- df[df$iter == max(df$iter), , drop=FALSE]
+  last_iter <- df[df$iter == max(df$iter), , drop = FALSE]
   ggplot2::ggplot(df, aes_string("iter", "value", colour = "mp_name")) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(pm_name), ncol = 1) +
@@ -51,6 +55,9 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF")) {
       segment.size = 0.2
     ) +
     ggplot2::guides(colour = FALSE) +
-    ggplot2::scale_x_continuous(breaks = pretty(unique(df$iter)), limits = c(1, max(df$iter) * 1.5)) +
+    ggplot2::scale_x_continuous(
+      breaks = pretty(unique(df$iter)),
+      limits = c(1, max(df$iter) * label_gap)
+    ) +
     ggplot2::geom_vline(xintercept = max(df$iter), lty = 1, col = "grey65")
 }
