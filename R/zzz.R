@@ -33,5 +33,6 @@ globalVariables(c(
   "real_year",
   "ref",
   "rnorm",
-  "u"
+  "u",
+  "pm_name"
 ))
