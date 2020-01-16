@@ -47,11 +47,11 @@ plot_projection_ts <- function(object,
   sampled_ids <- sample(unique(ts_data$iter), size = n_samples)
   d <- dplyr::filter(ts_data, .data$iter %in% sampled_ids)
 
-  .type_labels <- gsub("_", "/", type)
+  .type_labels <- gsub("_", "/", unique(d$Type))
   .type_labels <- gsub("MSY", "[MSY]", .type_labels)
 
   type_df <- data.frame(
-    Type = type, type_labels = .type_labels,
+    Type = unique(d$Type), type_labels = .type_labels,
     stringsAsFactors = FALSE
   )
   d <- dplyr::left_join(d, type_df, by = "Type")
