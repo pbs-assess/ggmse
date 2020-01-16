@@ -46,7 +46,7 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
     ggplot2::facet_wrap(ggplot2::vars(pm_name)) +
     gfplot::theme_pbs() +
     ggplot2::labs(
-      x = "Iteration", y = "Performance metric value",
+      x = "Cumulative iteration", y = "Performance metric value",
       color = "MP"
     )
 
