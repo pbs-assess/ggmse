@@ -4,12 +4,26 @@
 \alias{plot_convergence}
 \title{Plot convergence}
 \usage{
-plot_convergence(object, pm_list = c("LTY", "PNOF"))
+plot_convergence(
+  object,
+  pm_list = c("LTY", "PNOF"),
+  label_gap = 1.15,
+  use_labels = FALSE,
+  ylim = c(NA, 1)
+)
 }
 \arguments{
 \item{object}{A DLMtool MSE object.}
 
 \item{pm_list}{A list or vector of performance metrics as character.}
+
+\item{label_gap}{Controls the gap on the right of each panel to make space
+for the MP labels. This value is multiplied by the maximum number of
+iterations to expand the x axis.}
+
+\item{use_labels}{Use labels (\code{TRUE}) or use a colour legend (\code{FALSE})?}
+
+\item{ylim}{Y limits.}
 }
 \value{
 A ggplot2 plot.
