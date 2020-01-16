@@ -12,7 +12,7 @@ plot_projection_ts(
   probs = c(0.1, 0.5),
   ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
   bbmsy_zones = c(0.4, 0.8),
-  catch_reference = 5,
+  catch_reference = 1,
   clip_ylim = NULL,
   seed = 42
 )

@@ -37,7 +37,7 @@ plot_projection_ts <- function(object,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
                                bbmsy_zones = c(0.4, 0.8),
-                               catch_reference = 5,
+                               catch_reference = 1,
                                clip_ylim = NULL,
                                seed = 42) {
   ts_data <- get_ts(object = object, type = type, this_year = this_year)
@@ -93,7 +93,7 @@ plot_projection_ts <- function(object,
     g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
   }
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
-    ggplot2::ylab("Projected value") +
+    ggplot2::ylab("Value") +
     ggplot2::xlab("Year") +
     gfplot::theme_pbs() +
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
