@@ -65,6 +65,7 @@ get_probs <- function(object,
 #' @param relative_max Make the plot have each column use a reletive maximum. If
 #'  scale_0_1 is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
+#' @param mp_order Optional hardcoded MP order
 #' @param sort_by show values in decreasing or increasing format
 #' @param digits How many decimal places to show in the tiles for the values
 #'
@@ -83,20 +84,25 @@ plot_probs <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
+                       mp_order = NULL,
                        sort_by = "decreasing") {
   df <- probs_dat
   # Used if captions are to be used for top labels
   # df <- probs_dat[[1]]
   # captions <- probs_dat[[2]]
 
-  if (sort_by == "decreasing") {
-    df$MP <- factor(df$MP, levels = df$MP[do.call(order, df[-1])])
-  } else if (sort_by == "increasing") {
-    df$MP <- factor(df$MP, levels = df$MP[rev(do.call(order, df[-1]))])
+  if (is.null(mp_order)) {
+    if (sort_by == "decreasing") {
+      df$MP <- factor(df$MP, levels = df$MP[do.call(order, df[-1])])
+    } else if (sort_by == "increasing") {
+      df$MP <- factor(df$MP, levels = df$MP[rev(do.call(order, df[-1]))])
+    } else {
+      stop("sort_by must be either 'increasing' or 'decreasing'",
+        call. = FALSE
+      )
+    }
   } else {
-    stop("sort_by must be either 'increasing' or 'decreasing'",
-      call. = FALSE
-    )
+    df$MP <- factor(df$MP, levels = mp_order)
   }
 
   df <- reshape2::melt(df,

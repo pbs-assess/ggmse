@@ -114,14 +114,14 @@ plot_contours <- function(object,
   if (show_contours) {
     g <- g + geom_path(
       data = contour_lines,
-      aes(color = alpha, group = as.factor(alpha)), alpha = 0.5
+      aes(color = alpha, group = as.factor(alpha)), alpha = 0.65, lwd = 0.75
     ) +
-      scale_color_viridis_c(end = 0.9)
+      scale_color_viridis_c(end = 0.95, option = "D", direction = -1)
   }
   g <- g + ggsidekick::theme_sleek() +
     facet_wrap(~mp_name) +
     labs(
-      colour = "Prob. density", x = expression(B / B[MSY]),
+      colour = "Prob. density", x = expression(SSB / SSB[MSY]),
       y = expression(F / F[MSY])
     ) +
     ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
@@ -129,8 +129,8 @@ plot_contours <- function(object,
 
   if (show_ref_pt_lines) {
     g <- g +
-      geom_vline(xintercept = x_ref_lines, alpha = 0.2) +
-      geom_hline(yintercept = y_ref_lines, alpha = 0.2)
+      geom_vline(xintercept = x_ref_lines, alpha = 0.2, lty = 2) +
+      geom_hline(yintercept = y_ref_lines, alpha = 0.2, lty = 2)
   }
   g
 }

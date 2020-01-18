@@ -49,15 +49,20 @@ plot_projection_ts <- function(object,
 
   .type_labels <- gsub("_", "/", unique(d$Type))
   .type_labels <- gsub("MSY", "[MSY]", .type_labels)
+  .type_labels <- gsub("B/B\\[MSY\\]", "SSB/SSB[MSY]", .type_labels)
 
   type_df <- data.frame(
     Type = unique(d$Type), type_labels = .type_labels,
     stringsAsFactors = FALSE
   )
+  if (all(type == c("SSB", "FM"))) {
+    type_df$type_labels <- factor(type_df$type_labels, levels = c("SSB/SSB[MSY]", "F/F[MSY]"))
+  }
+
   d <- dplyr::left_join(d, type_df, by = "Type")
   quantiles <- dplyr::left_join(quantiles, type_df, by = "Type")
 
-  lines <- data.frame(value = bbmsy_zones, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
+  lines <- data.frame(value = bbmsy_zones, type_labels = "SSB/SSB[MSY]", stringsAsFactors = FALSE)
 
   g <- ggplot2::ggplot(d, ggplot2::aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(

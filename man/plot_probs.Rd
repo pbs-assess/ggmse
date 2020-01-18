@@ -9,6 +9,7 @@ plot_probs(
   digits = 2,
   relative_max = FALSE,
   scale_0_1 = FALSE,
+  mp_order = NULL,
   sort_by = "decreasing"
 )
 }
@@ -22,6 +23,8 @@ columns of the data frame as returned from \code{\link[gfdlm:get_probs]{gfdlm::g
 scale_0_1 is used, this will be ignored}
 
 \item{scale_0_1}{Scale each column from 0 to 1, so that the colours in each column are fully represented}
+
+\item{mp_order}{Optional hardcoded MP order}
 
 \item{sort_by}{show values in decreasing or increasing format}
 }
