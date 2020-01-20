@@ -63,6 +63,9 @@ plot_projection_ts <- function(object,
   quantiles <- dplyr::left_join(quantiles, type_df, by = "Type")
 
   lines <- data.frame(value = bbmsy_zones, type_labels = "SSB/SSB[MSY]", stringsAsFactors = FALSE)
+  if (all(type == c("SSB", "FM"))) {
+    lines$type_labels <- factor(lines$type_labels, levels = c("SSB/SSB[MSY]", "F/F[MSY]"))
+  }
 
   g <- ggplot2::ggplot(d, ggplot2::aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
@@ -81,10 +84,10 @@ plot_projection_ts <- function(object,
     colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
 
-  if ("B_BMSY" %in% type || "F_FMSY" %in% type) {
+  if ("SSB" %in% type || "FM" %in% type) {
     g <- g + ggplot2::geom_hline(yintercept = 1, alpha = 0.2, lty = 2, lwd = 0.5)
   }
-  if ("B_BMSY" %in% type) {
+  if ("SSB" %in% type) {
     g <- g + ggplot2::geom_hline(
       data = lines,
       aes_string(yintercept = "value"), alpha = 0.2, lty = 2, lwd = 0.5
