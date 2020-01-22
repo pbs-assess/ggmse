@@ -204,11 +204,11 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
     dplyr::group_by(.data$mp_name, .data$real_year, .data$Type) %>%
     dplyr::summarize(
       median_value = median(.data$value),
-      l = quantile(.data$value, probs = 1 - probs[2] / 2),
-      u = quantile(.data$value, probs = probs[2] / 2),
+      u = quantile(.data$value, probs = 1 - probs[2] / 2),
+      l = quantile(.data$value, probs = probs[2] / 2),
       m = quantile(.data$value, probs = 0.50),
-      ll = quantile(.data$value, probs = 1 - probs[1] / 2),
-      uu = quantile(.data$value, probs = probs[1] / 2)
+      uu = quantile(.data$value, probs = 1 - probs[1] / 2),
+      ll = quantile(.data$value, probs = probs[1] / 2)
     ) %>%
     ungroup()
 }
