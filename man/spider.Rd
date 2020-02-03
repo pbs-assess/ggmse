@@ -27,5 +27,5 @@ A ggplot object
 Create a spider plot
 }
 \examples{
-spider(mse)
+spider(mse_example)
 }

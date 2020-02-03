@@ -49,14 +49,14 @@ plot_projection_ts <- function(object,
 
   .type_labels <- gsub("_", "/", unique(d$Type))
   .type_labels <- gsub("MSY", "[MSY]", .type_labels)
-  .type_labels <- gsub("B/B\\[MSY\\]", "SSB/SSB[MSY]", .type_labels)
+  # .type_labels <- gsub("B/B\\[MSY\\]", "SSB/SSB[MSY]", .type_labels)
 
   type_df <- data.frame(
     Type = unique(d$Type), type_labels = .type_labels,
     stringsAsFactors = FALSE
   )
   if (all(type == c("SSB", "FM"))) {
-    type_df$type_labels <- factor(type_df$type_labels, levels = c("SSB/SSB[MSY]", "F/F[MSY]"))
+    type_df$type_labels <- factor(type_df$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
   }
 
   d <- dplyr::left_join(d, type_df, by = "Type")
@@ -180,6 +180,7 @@ get_ts <- function(object,
 
   ts_data <- bind_rows(ts_data, hist_data2)
 
+  # dim(object@Misc$MSYRefs$ByYear$SSBMSY)
   ref_ssb <- data.frame(ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters),
     Type = "SSB", stringsAsFactors = FALSE)
   ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE)

@@ -78,7 +78,7 @@ calc_contour_lines <- function(d,
 #' @export
 #'
 #' @examples
-#' plot_contours(mse)
+#' plot_contours(mse_example)
 plot_contours <- function(object,
                           yend = max(object@proyears),
                           dontshow_mp = NULL,

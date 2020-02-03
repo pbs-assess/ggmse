@@ -12,9 +12,7 @@
 #' @importFrom tibble as_tibble
 #' @export
 #' @examples
-#' \dontrun{
-#' eval_pm(mse, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
-#' }
+#' eval_pm(mse_example, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
 eval_pm <- function(mse_obj,
                     pm_list = NULL,
                     refs = NULL,
@@ -171,8 +169,8 @@ pm_factory <- function(pm_type,
 #' @export
 #' @rdname pm
 #' @examples
-#' P10(mse)
-#' PNOF_yrs6_20(mse)
+#' P10(mse_example)
+#' PNOF_yrs6_20(mse_example)
 P10 <- pm_factory("SBMSY", 0.1)
 
 #' @rdname pm
@@ -301,7 +299,7 @@ Decline <- function(mse_obj, ref = 0, yrs = c(6, 20)) {
   yrs <- DLMtool::ChkYrs(yrs, mse_obj)
   pm_obj@Name <- paste0("Probability of decline (Years ",
     yrs[1], "-", yrs[2], ")")
-  pm_obj@Caption <- paste0("Prob. decline in SSB ",
+  pm_obj@Caption <- paste0("Prob. decline in B ",
     "(Years ", yrs[1], "-", yrs[2], ")")
 
   slopes <- apply(mse_obj@SSB[, , yrs[1]:yrs[2]], c(1, 2), function(.x) {

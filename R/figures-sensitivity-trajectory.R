@@ -69,7 +69,7 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
       m = quantile(.data$value, probs = 0.5)) %>%
     ungroup()
 
-  ylab <- if (type == "B_BMSY") expression(SSB/SSB[MSY]) else expression(F/F[MSY])
+  ylab <- if (type == "B_BMSY") expression(B/B[MSY]) else expression(F/F[MSY])
   pal <- RColorBrewer::brewer.pal(3, "Set2")[c(2, 3)]
   dat_summarized %>%
     mutate(om_slot = factor(om_slot, levels = slots)) %>%

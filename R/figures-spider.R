@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' spider(mse)
+#' spider(mse_example)
 spider <- function(mse_obj,
                    pm_list = list(
                      "LTY",
@@ -23,6 +23,8 @@ spider <- function(mse_obj,
                    ),
                    palette = "Set2", ...) {
   x <- eval_pm(mse_obj, pm_list)
+
+  browser()
   ggspider::spider_web(x,
     "mp",
     "pm",

@@ -22,7 +22,5 @@ A data frame containing the Management procedures, Performance metrics, probabil
 Evaluate Performance Metrics
 }
 \examples{
-\dontrun{
-eval_pm(mse, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
-}
+eval_pm(mse_example, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
 }

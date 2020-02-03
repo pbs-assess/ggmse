@@ -105,6 +105,6 @@ Various performance metrics
 }
 \examples{
 P10 <- pm_factory("SBMSY", 0.1)
-P10(mse)
-PNOF_yrs6_20(mse)
+P10(mse_example)
+PNOF_yrs6_20(mse_example)
 }

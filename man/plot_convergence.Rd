@@ -33,5 +33,5 @@ This function plots cumulative performance metric values across iterations to
 assess convergence.
 }
 \examples{
-plot_convergence(mse)
+plot_convergence(mse_example)
 }

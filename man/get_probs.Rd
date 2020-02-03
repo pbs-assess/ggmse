@@ -21,5 +21,5 @@ Summary of probabilities of performance metrics from the MSE object
 }
 \examples{
 library(DLMtool)
-probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 }

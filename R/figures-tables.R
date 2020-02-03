@@ -11,7 +11,7 @@
 #'
 #' @examples
 #' library(DLMtool)
-#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,
                       refs = NULL) {
@@ -65,9 +65,10 @@ get_probs <- function(object,
 #' @param relative_max Make the plot have each column use a reletive maximum. If
 #'  scale_0_1 is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
-#' @param mp_order Optional hardcoded MP order
 #' @param sort_by show values in decreasing or increasing format
+#' @param mp_order Optional hardcoded MP order
 #' @param digits How many decimal places to show in the tiles for the values
+#' @param satisficed TODO
 #'
 #' @importFrom reshape2 melt
 #' @importFrom gfutilities f
@@ -79,17 +80,19 @@ get_probs <- function(object,
 #' @examples
 #' library(ggplot2)
 #' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
-#' plot_probs(probs)
-plot_probs <- function(probs_dat,
+#' plot_prob_tigure(probs)
+#' plot_prob_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
+
+
+plot_prob_tigure <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
+                       sort_by = "decreasing",
                        mp_order = NULL,
-                       sort_by = "decreasing") {
+                       satisficed = NULL
+                       ) {
   df <- probs_dat
-  # Used if captions are to be used for top labels
-  # df <- probs_dat[[1]]
-  # captions <- probs_dat[[2]]
 
   if (is.null(mp_order)) {
     if (sort_by == "decreasing") {
@@ -110,9 +113,6 @@ plot_probs <- function(probs_dat,
     variable.name = "type",
     value.name = "value"
   )
-
-  ## Set up expressions for tick labels - only used if captions are to be used as top labels
-  ## probs <- as.vector(do.call('rbind', captions))
 
   df$txt <- vapply(df$value, function(x) {
     gfutilities::f(x, digits)
@@ -142,11 +142,14 @@ plot_probs <- function(probs_dat,
     ) +
     ggplot2::scale_fill_viridis_c(limits = c(0, 1), alpha = 0.6, option = "D", direction = 1) +
     guides(fill = FALSE) + xlab("") + ylab("") +
-
     geom_text(aes(x = type, label = txt), size = ggplot2::rel(3)) +
-    # Used if captions are used for labelling
-    # scale_x_discrete(labels = parse(text = probs), position = "left")
     scale_x_discrete(position = "top")
+
+  if (!is.null(satisficed)) {
+    h <- purrr::map_df(seq_along(satisficed),
+      ~ dplyr::filter(df, value > satisficed[[.x]] & type == names(satisficed)[.x]))
+    g <- g +  geom_tile(data = h, color = "grey30", lwd = 0.45, fill = NA)
+  }
 
   g
 }

@@ -15,7 +15,7 @@
 #' @export
 #'
 #' @examples
-#' plot_convergence(mse)
+#' plot_convergence(mse_example)
 plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
                              label_gap = 1.15, use_labels = FALSE,
                              ylim = c(NA, 1)) {

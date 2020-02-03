@@ -48,5 +48,5 @@ A ggplot object
 Make a panel of contour plots by management procedure for B/BMSY by F/FMSY
 }
 \examples{
-plot_contours(mse)
+plot_contours(mse_example)
 }
