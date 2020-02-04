@@ -10,7 +10,7 @@ plot_grid_pbs(
   label_fontface = "bold",
   label_size = 12,
   hjust = 0,
-  spider_margins = FALSE,
+  radar_margins = FALSE,
   ...
 )
 }
@@ -25,7 +25,7 @@ plot_grid_pbs(
 
 \item{hjust}{Horizontal adjustment value}
 
-\item{spider_margins}{Logical for margins that work well with \code{\link[=plot_spider]{plot_spider()}}}
+\item{radar_margins}{Logical for margins that work well with \code{\link[=plot_spider]{plot_spider()}}}
 
 \item{...}{Other arguments to pass to \code{\link[cowplot:plot_grid]{cowplot::plot_grid()}}. In particular,
 you will probably want to use the \code{labels} argument.}
@@ -39,7 +39,7 @@ This is a slightly customized wrapper for \code{\link[cowplot:plot_grid]{cowplot
 \examples{
 probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 g <- list()
-g[[1]] <- plot_spider(probs)
-g[[2]] <- plot_spider(probs)
-plot_grid_pbs(g, labels = c("First plot", "Second plot"), spider_margins = TRUE)
+g[[1]] <- plot_radar(probs)
+g[[2]] <- plot_radar(probs)
+plot_grid_pbs(g, labels = c("First plot", "Second plot"), radar_margins = TRUE)
 }
