@@ -41,7 +41,8 @@ Imports:
     testthat,
     tibble,
     tidyr,
-    TMB
+    TMB,
+    cowplot
 Remotes: 
     github::pbs-assess/gfdata,
     github::pbs-assess/gfplot,

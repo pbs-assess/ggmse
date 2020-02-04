@@ -36,5 +36,5 @@ library(DLMtool)
 om <- DLMtool::testOM
 om@nsim <- 3
 temp_mp <- reduce_survey(Islope1)
-mse <- runMSE(OM = om, MPs = "temp_mp")
+# mse <- runMSE(OM = om, MPs = "temp_mp")
 }

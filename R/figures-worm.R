@@ -1,8 +1,10 @@
-#' plot_worms
+#' Make a Kobe "worm" timeseries plot with uncertainty
 #'
-#' @param object TODO
-#' @param this_year TODO
-#' @param prob TODO
+#' @param object An MSE object from DLMtool
+#' @param this_year This year as a numeric value
+#' @param prob Tail probability for the quantiles. 0.5 refers to an
+#'   interquartile range.
+#' @param include_historical Logical: include the historical time?
 #'
 #' @return A ggplot object
 #' @importFrom ggplot2 geom_polygon scale_fill_viridis_c scale_colour_viridis_c
@@ -10,9 +12,10 @@
 #' @export
 #'
 #' @examples
-#' plot_worms(mse_example)
-plot_worms <- function(object, prob = 0.5) {
-  ts <- get_ts(object, type = c("SSB", "FM"), this_year = this_year)
+#' plot_worms(mse_example, this_year = 2020)
+plot_worms <- function(object, this_year, prob = 0.5,
+                       include_historical = TRUE) {
+  ts <- get_ts(object, type = c("SSB", "FM"))
   ts_quantiles <- get_ts_quantiles(ts, probs = c(prob, prob))
   d <- filter(ts_quantiles, real_year >= this_year)
 
@@ -57,7 +60,7 @@ plot_worms <- function(object, prob = 0.5) {
     geom_path(lwd = 1.0, lineend = "round", linejoin = "bevel") +
     scale_color_viridis_c(option = "C", direction = -1) +
     scale_fill_viridis_c(option = "C", direction = -1) +
-    gfplot::theme_pbs() + facet_wrap(~mp_name) +
+    theme_pbs() + facet_wrap(~mp_name) +
     coord_fixed(xlim = c(0, 3), ylim = c(0, 3)) +
     geom_vline(xintercept = c(0.4, 0.8), lty = 2, alpha = 0.2, lwd = 0.5) +
     geom_hline(yintercept = 1, lty = 2, alpha = 0.2, lwd = 0.5) +

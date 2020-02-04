@@ -25,7 +25,7 @@
 #' om <- DLMtool::testOM
 #' om@nsim <- 3
 #' temp_mp <- reduce_survey(Islope1)
-#' mse <- runMSE(OM = om, MPs = "temp_mp")
+#' # mse <- runMSE(OM = om, MPs = "temp_mp")
 reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL", "ML"),
                           index = function(x) seq(1, x, by = 2)) {
   f <- function(x, Data, reps = 100, ...) {

@@ -2,23 +2,26 @@
 % Please edit documentation in R/figures-worm.R
 \name{plot_worms}
 \alias{plot_worms}
-\title{plot_worms}
+\title{Make a Kobe "worm" timeseries plot with uncertainty}
 \usage{
-plot_worms(object, prob = 0.5)
+plot_worms(object, this_year, prob = 0.5, include_historical = TRUE)
 }
 \arguments{
-\item{object}{TODO}
+\item{object}{An MSE object from DLMtool}
 
-\item{prob}{TODO}
+\item{this_year}{This year as a numeric value}
 
-\item{this_year}{TODO}
+\item{prob}{Tail probability for the quantiles. 0.5 refers to an
+interquartile range.}
+
+\item{include_historical}{Logical: include the historical time?}
 }
 \value{
 A ggplot object
 }
 \description{
-plot_worms
+Make a Kobe "worm" timeseries plot with uncertainty
 }
 \examples{
-plot_worms(mse_example)
+plot_worms(mse_example, this_year = 2020)
 }

@@ -34,5 +34,13 @@ globalVariables(c(
   "ref",
   "rnorm",
   "u",
-  "pm_name"
+  "pm_name",
+  "B_BMSY",
+  "F_FMSY",
+  "b_l",
+  "b_m",
+  "b_u",
+  "f_l",
+  "f_m",
+  "f_u"
 ))

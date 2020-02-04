@@ -54,10 +54,6 @@ ggplot object
 Plot projection time series
 }
 \examples{
-library(DLMtool)
-om@nsim <- 10
-x <- runMSE(om, MPs = c("AvC", "CC1"))
-set.seed(1)
-plot_projection_ts(x)
-plot_projection_ts(x, type = "SSB")
+plot_projection_ts(mse_example)
+plot_projection_ts(mse_example, type = "SSB")
 }

@@ -24,12 +24,8 @@
 #' @importFrom rlang .data
 #' @export
 #' @examples
-#' library(DLMtool)
-#' om@nsim <- 10
-#' x <- runMSE(om, MPs = c("AvC", "CC1"))
-#' set.seed(1)
-#' plot_projection_ts(x)
-#' plot_projection_ts(x, type = "SSB")
+#' plot_projection_ts(mse_example)
+#' plot_projection_ts(mse_example, type = "SSB")
 plot_projection_ts <- function(object,
                                type = c("SSB", "FM"),
                                n_samples = 3,
@@ -62,11 +58,11 @@ plot_projection_ts <- function(object,
   d <- dplyr::left_join(d, type_df, by = "Type")
   quantiles <- dplyr::left_join(quantiles, type_df, by = "Type")
 
-  # lines <- data.frame(value = bbmsy_zones, type_labels = "SSB/SSB[MSY]", stringsAsFactors = FALSE)
-  # if (all(type == c("SSB", "FM"))) {
-  #   browser()
-  #   lines$type_labels <- factor(lines$type_labels, levels = c("SSB/SSB[MSY]", "F/F[MSY]"))
-  # }
+  lines <- data.frame(value = bbmsy_zones, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
+  lines <- dplyr::bind_rows(lines, data.frame(value = 1, type_labels = "F/F[MSY]", stringsAsFactors = FALSE))
+  if (all(type == c("SSB", "FM"))) {
+    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
+  }
 
   g <- ggplot2::ggplot(d, ggplot2::aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
@@ -85,13 +81,14 @@ plot_projection_ts <- function(object,
     colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
 
-  if ("SSB" %in% type || "FM" %in% type) {
-    g <- g + ggplot2::geom_hline(yintercept = 1, alpha = 0.2, lty = 2, lwd = 0.5)
-  }
-  # if ("SSB" %in% type) {
-  #   g <- g + ggplot2::geom_hline(yintercept = 0.4, alpha = 0.2, lty = 2, lwd = 0.5)
-  #   g <- g + ggplot2::geom_hline(yintercept = 0.8, alpha = 0.2, lty = 2, lwd = 0.5)
+  # if ("SSB" %in% type || "FM" %in% type) {
+  #   g <- g + ggplot2::geom_hline(yintercept = 1, alpha = 0.2, lty = 2, lwd = 0.5)
   # }
+  if ("SSB" %in% type || "F" %in% type) {
+    # g <- g + ggplot2::geom_hline(yintercept = 0.4, alpha = 0.2, lty = 2, lwd = 0.5)
+    # g <- g + ggplot2::geom_hline(yintercept = 0.8, alpha = 0.2, lty = 2, lwd = 0.5)
+    g <- g + ggplot2::geom_hline(data = lines, mapping = aes(yintercept = value), alpha = 0.2, lty = 2, lwd = 0.5)
+  }
 
   if ("Catch" %in% type) {
     average_catch <- filter(d, Type == "Catch", real_year %in%
@@ -102,7 +99,7 @@ plot_projection_ts <- function(object,
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab("Value") +
     ggplot2::xlab("Year") +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
     ggplot2::coord_cartesian(expand = FALSE,
       ylim = if (is.null(clip_ylim)) NULL else c(0, clip_ylim * max(quantiles$m))) +
@@ -212,4 +209,59 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
       ll = quantile(.data$value, probs = probs[1] / 2)
     ) %>%
     ungroup()
+}
+
+#' Make a standard projection plot with SSB, F, and catch
+#'
+#' This is a wrapper for [plot_projection_ts()] that includes columns for SSB,
+#' F, and catch.
+#'
+#' @param object An MSE object from DLMtool.
+#' @param catch_breaks Optional y-axis tick locations for the catch column.
+#' @param catch_labels Optional y-axis tick labels for the catch column. Helpful
+#'   for dealing with large numbers.
+#' @param rel_widths A numeric vector of length 2 the controls the relative
+#'   width of the SSB and F columns (first element of the numeric vector) and
+#'   the catch column (second element of the numeric vector). Depending on the
+#'   number of years in the projection on the size of the axis labels, you may
+#'   need to tweak the second element of this vector to make all 3 columns the
+#'   same width. Figured it out by trial and error.
+#' @param msy_ylim SSB and F column y limits.
+#' @param catch_ylim Catch column y limits.
+#'
+#' @return A ggplot2 object
+#' @export
+#'
+#' @examples
+#' catch_breaks <- c(0, 1000, 2000, 3000)
+#' plot_main_projections(mse_example, catch_breaks = catch_breaks,
+#'   catch_labels = catch_breaks / 1000)
+plot_main_projections <- function(object,
+  catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
+  msy_ylim = c(0, 4.5), catch_ylim = NULL) {
+
+  g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
+    ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
+    ggplot2::theme(strip.text.y = ggplot2::element_blank(),
+      axis.title.y = ggplot2::element_blank())
+
+  g2 <- gfdlm::plot_projection_ts(object,
+    type = "C",
+    catch_reference = 1
+  ) + ggplot2::theme(axis.title.y = ggplot2::element_blank())
+
+  if (!is.null(catch_ylim)) {
+   g2 <- ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+  }
+
+  if (!is.null(catch_breaks) && is.null(catch_labels)) {
+    catch_labels <- catch_breaks
+  }
+  if (!is.null(catch_breaks)) {
+    g2 <- g2 +
+      ggplot2::scale_y_continuous(breaks = catch_breaks, labels = catch_labels)
+    g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+  }
+
+  cowplot::plot_grid(g1, g2, rel_widths = rel_widths, align = "h")
 }

@@ -75,16 +75,13 @@ get_probs <- function(object,
 #' @importFrom dplyr ungroup mutate group_by
 #' @importFrom ggplot2 ggplot theme geom_tile geom_text scale_fill_gradient scale_x_discrete aes
 #' @importFrom ggplot2 element_blank element_text guides xlab ylab
-#' @importFrom gfplot theme_pbs
 #' @export
 #' @examples
-#' library(ggplot2)
-#' probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
-#' plot_prob_tigure(probs)
-#' plot_prob_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
+#' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' plot_tigure(probs)
+#' plot_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
 
-
-plot_prob_tigure <- function(probs_dat,
+plot_tigure <- function(probs_dat,
                        digits = 2,
                        relative_max = FALSE,
                        scale_0_1 = FALSE,
@@ -134,7 +131,7 @@ plot_prob_tigure <- function(probs_dat,
 
   g <- ggplot(df, aes(x = type, y = MP)) +
     geom_tile(aes(fill = value), color = "white") +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     theme(
       panel.border = element_blank(),
       axis.ticks.x = element_blank(),
@@ -152,4 +149,33 @@ plot_prob_tigure <- function(probs_dat,
   }
 
   g
+}
+
+#' Make a set of tigure plots
+#'
+#' @param pm_df_list A named list of performance metric data frames from [get_probs()]. The names will be used as the plot labels.
+#' @param ncol An optional number of columns in the grid.
+#' @param nrow An optional number of rows in the grid.
+#' @param label_size Label size for the plots.
+#' @param ... Other arguments to pass to [plot_tigure()].
+#'
+#' @return
+#' A ggplot2 object
+#' @export
+#'
+#' @examples
+#' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' pm <- list()
+#' pm[[1]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' pm[[2]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+#' names(pm) <- c("Scenario 1", "Scenario 2")
+#' plot_tigure_facet(pm)
+plot_tigure_facet <- function(pm_df_list,
+  ncol = NULL, nrow = NULL, label_size = 12, ...) {
+  if (!is.list(pm_df_list))
+    stop("`pm_df_list` must be a list of data frames from `get_probs()`.",
+      call. = FALSE)
+  g <- purrr::map(pm_df_list, plot_tigure, ...)
+  plot_grid_pbs(g, labels = names(pm_df_list), ncol = ncol,
+    nrow = nrow, label_size = label_size)
 }

@@ -39,8 +39,5 @@ thirds of the respective OM slot values. Then ribbon plots are made within
 those groups across iterations through time.
 }
 \examples{
-library(DLMtool)
-om@nsim <- 10
-x <- runMSE(om, MPs = c("AvC", "CC1"))
-plot_sensitivity_trajectory(x)
+plot_sensitivity_trajectory(mse_example)
 }

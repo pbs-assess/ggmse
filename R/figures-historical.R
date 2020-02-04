@@ -13,7 +13,6 @@
 #' @importFrom dplyr transmute filter mutate group_by summarize bind_rows
 #' @importFrom ggplot2 ggplot aes aes_string scale_colour_manual geom_ribbon
 #'   xlab ylab scale_size_manual labs theme geom_line guides
-#' @importFrom gfplot theme_pbs
 #' @importFrom stats quantile
 #' @importFrom methods .hasSlot
 #' @importFrom rlang .data
@@ -95,7 +94,7 @@ plot_historical_ts <- function(object,
       if (scale) "\n(scaled by geometric mean)" else ""
     )) +
     ggplot2::xlab("Year") +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     ggplot2::scale_colour_manual(values = c("Simulated" = "#00000050", "Observed" = "red")) +
     ggplot2::scale_size_manual(values = c("Simulated" = 0.4, "Observed" = 0.9)) +
     ggplot2::labs(colour = "Type", size = "Type") +

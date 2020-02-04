@@ -78,18 +78,18 @@ calc_contour_lines <- function(d,
 #' @export
 #'
 #' @examples
-#' plot_contours(mse_example)
-plot_contours <- function(object,
-                          yend = max(object@proyears),
-                          dontshow_mp = NULL,
-                          show_ref_pt_lines = TRUE,
-                          alpha = c(0.2, 0.4, 0.6, 0.8),
-                          n = 200,
-                          xlim = c(0, 3.5),
-                          ylim = c(0, 3.5),
-                          x_ref_lines = c(0.4, 0.8),
-                          y_ref_lines = 1,
-                          show_contours = TRUE) {
+#' plot_kobe(mse_example)
+plot_kobe <- function(object,
+                      yend = max(object@proyears),
+                      dontshow_mp = NULL,
+                      show_ref_pt_lines = TRUE,
+                      alpha = c(0.1, 0.25, 0.5, 0.75),
+                      n = 200,
+                      xlim = c(0, 3.5),
+                      ylim = c(0, 3.5),
+                      x_ref_lines = c(0.4, 0.8),
+                      y_ref_lines = 1,
+                      show_contours = TRUE) {
   ffmsy <- object@F_FMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, ffmsy = value)

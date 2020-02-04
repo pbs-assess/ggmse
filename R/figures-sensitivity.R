@@ -17,10 +17,7 @@
 #' @export
 #'
 #' @examples
-#' library(DLMtool)
-#' om@nsim <- 10
-#' x <- runMSE(om, MPs = c("AvC", "CC1"))
-#' plot_sensitivity(x, LTY)
+#' plot_sensitivity(mse_example, LTY)
 plot_sensitivity <- function(object, pm_function, mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
                              ylab = "Performance metric value") {
@@ -70,6 +67,6 @@ plot_sensitivity <- function(object, pm_function, mp = object@MPs,
       se = FALSE, col = "red",
       method = "loess", span = 0.75, formula = "y ~ x"
     ) +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     ggplot2::labs(x = "Parameter value", y = ylab)
 }

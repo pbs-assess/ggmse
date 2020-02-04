@@ -9,7 +9,7 @@ plot_convergence(
   pm_list = c("LTY", "PNOF"),
   label_gap = 1.15,
   use_labels = FALSE,
-  ylim = c(NA, 1)
+  ylim = c(min(df$value), 1)
 )
 }
 \arguments{
@@ -23,7 +23,8 @@ iterations to expand the x axis.}
 
 \item{use_labels}{Use labels (\code{TRUE}) or use a colour legend (\code{FALSE})?}
 
-\item{ylim}{Y limits.}
+\item{ylim}{Y limits. Defaults to the minimum observed performance metric
+value (via lazy evaluation) and 1.}
 }
 \value{
 A ggplot2 plot.

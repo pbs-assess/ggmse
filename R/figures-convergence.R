@@ -9,7 +9,8 @@
 #'   for the MP labels. This value is multiplied by the maximum number of
 #'   iterations to expand the x axis.
 #' @param use_labels Use labels (`TRUE`) or use a colour legend (`FALSE`)?
-#' @param ylim Y limits.
+#' @param ylim Y limits. Defaults to the minimum observed performance metric
+#'   value (via lazy evaluation) and 1.
 #'
 #' @return A ggplot2 plot.
 #' @export
@@ -18,7 +19,7 @@
 #' plot_convergence(mse_example)
 plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
                              label_gap = 1.15, use_labels = FALSE,
-                             ylim = c(NA, 1)) {
+                             ylim = c(min(df$value), 1)) {
   if (class(object) != "MSE") {
     stop("`object` must be object of class 'MSE'", call. = FALSE)
   }
@@ -44,7 +45,7 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
   g <- ggplot2::ggplot(df, aes_string("iter", "value", colour = "mp_name")) +
     ggplot2::geom_line() +
     ggplot2::facet_wrap(ggplot2::vars(pm_name)) +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     ggplot2::labs(
       x = "Cumulative iteration", y = "Performance metric value",
       color = "MP"

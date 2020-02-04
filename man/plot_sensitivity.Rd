@@ -34,8 +34,5 @@ A ggplot object
 Plot sensitivity of performance metrics to OM slots across iterations
 }
 \examples{
-library(DLMtool)
-om@nsim <- 10
-x <- runMSE(om, MPs = c("AvC", "CC1"))
-plot_sensitivity(x, LTY)
+plot_sensitivity(mse_example, LTY)
 }

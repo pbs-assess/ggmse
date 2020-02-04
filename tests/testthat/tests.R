@@ -208,7 +208,7 @@ test_that("All lines that should have had sufixes added do", {
 ## ------------------------------------------------------------------------------------------------
 # context("Check that get_probs() is working")
 #
-# probs <- get_probs(mse, "P40", "P100", "PNOF", "LTY", "AAVY")
+# probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 # test_that("get_probs() returns correct values", {
 #   expect_equal(as.character(probs[1, 1]), "AvC")
 #   expect_equal(as.numeric(probs[1, 2]), 0.72)

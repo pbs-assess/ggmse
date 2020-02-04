@@ -20,10 +20,7 @@
 #' @export
 #'
 #' @examples
-#' library(DLMtool)
-#' om@nsim <- 10
-#' x <- runMSE(om, MPs = c("AvC", "CC1"))
-#' plot_sensitivity_trajectory(x)
+#' plot_sensitivity_trajectory(mse_example)
 plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
                              probs = 0.3, this_year = 2018) {
@@ -77,7 +74,7 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     ggplot2::geom_ribbon(mapping = aes(ymin = l, ymax = u, fill = om_value_group), alpha = 0.5) +
     ggplot2::geom_line(mapping = aes(colour = om_value_group)) +
     ggplot2::facet_grid(mp_name ~ om_slot) +
-    gfplot::theme_pbs() +
+    theme_pbs() +
     ggplot2::labs(x = "Year", y = ylab,
       colour = "OM value\nthird", fill = "OM value\nthird") +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
