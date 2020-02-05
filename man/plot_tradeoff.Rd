@@ -30,5 +30,5 @@ scenarios
 \examples{
 probs <- list(get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY"))
 names(probs) <- "Scenario 1"
-plot_tradeoff(probs)
+plot_tradeoff(probs, "P40", "LTY")
 }

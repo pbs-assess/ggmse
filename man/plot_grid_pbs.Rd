@@ -25,7 +25,7 @@ plot_grid_pbs(
 
 \item{hjust}{Horizontal adjustment value}
 
-\item{radar_margins}{Logical for margins that work well with \code{\link[=plot_spider]{plot_spider()}}}
+\item{radar_margins}{Logical for margins that work well with \code{\link[=plot_radar]{plot_radar()}}}
 
 \item{...}{Other arguments to pass to \code{\link[cowplot:plot_grid]{cowplot::plot_grid()}}. In particular,
 you will probably want to use the \code{labels} argument.}
