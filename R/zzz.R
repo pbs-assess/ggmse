@@ -42,5 +42,6 @@ globalVariables(c(
   "b_u",
   "f_l",
   "f_m",
-  "f_u"
+  "f_u",
+  "scenario"
 ))

@@ -21,10 +21,11 @@
 #' pm[[1]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' pm[[2]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' names(pm) <- c("Scenario 1", "Scenario 2")
-#' plot_parallel_coord(pm)
-#' plot_parallel_coord(pm, "single")
-plot_parallel_coord <- function(pm_df_list, type = c("facet", "single"),
-                                custom_pal = NULL, mp = NULL, rotate_labels = FALSE) {
+#' plot_parallel_coords(pm)
+#' plot_parallel_coords(pm, "single")
+plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
+                                 custom_pal = NULL, mp = NULL,
+                                 rotate_labels = type == "facet") {
   type <- match.arg(type)
 
   df <- purrr::map_df(
@@ -34,7 +35,7 @@ plot_parallel_coord <- function(pm_df_list, type = c("facet", "single"),
     )
   )
   if (!is.null(mp)) {
-    df <- dplyr::filter(df, MP %in% mps)
+    df <- dplyr::filter(df, MP %in% mp)
   }
 
   if (type == "facet") {
@@ -46,8 +47,8 @@ plot_parallel_coord <- function(pm_df_list, type = c("facet", "single"),
     df_long$`Reference MP` <- ifelse(grepl("ref", df_long$MP), "True", "False")
 
     nmp <- length(unique(df_long$MP))
-    g <- ggplot(df_long, aes(pm, prob, group = MP, colour = MP)) +
-      ggplot2::geom_line(lwd = 0.7, mapping = aes(lty = `Reference MP`)) +
+    g <- ggplot(df_long, aes_string("pm", "prob", group = "MP", colour = "MP")) +
+      ggplot2::geom_line(lwd = 0.7, mapping = ggplot2::aes_string(lty = "`Reference MP`")) +
       ggplot2::coord_cartesian(
         expand = FALSE, ylim = c(min(df_long$prob), 1.0),
         xlim = c(1 - nmp * .05, nmp - 1 + nmp * 0.05)
@@ -71,7 +72,7 @@ plot_parallel_coord <- function(pm_df_list, type = c("facet", "single"),
     pm$`Reference MP` <- ifelse(grepl("ref", pm$MP), "True", "False")
     g <- ggplot(pm, aes(pm, mean, group = MP, colour = MP)) +
       ggplot2::geom_ribbon(aes(ymin = min, ymax = max, fill = MP), alpha = 0.1, colour = NA) +
-      ggplot2::geom_line(alpha = 1, lwd = 0.85, mapping = aes(lty = `Reference MP`)) +
+      ggplot2::geom_line(alpha = 1, lwd = 0.85, mapping = ggplot2::aes_string(lty = "`Reference MP`")) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1))
   }
 
@@ -84,14 +85,13 @@ plot_parallel_coord <- function(pm_df_list, type = c("facet", "single"),
     ggplot2::guides(
       col = ggplot2::guide_legend(order = 1),
       fill = ggplot2::guide_legend(order = 1)
-    ) +
-    if (!is.null(custom_pal)) {
-      g <- g + ggplot2::scale_color_manual(values = custom_pal) +
-        ggplot2::scale_fill_manual(values = custom_pal)
-    }
-
+    )
+  if (!is.null(custom_pal)) {
+    g <- g + ggplot2::scale_color_manual(values = custom_pal) +
+      ggplot2::scale_fill_manual(values = custom_pal)
+  }
   if (rotate_labels) {
-    g <- ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1))
+    g <- g + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
   }
   g
 }

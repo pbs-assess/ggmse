@@ -240,10 +240,12 @@ plot_main_projections <- function(object,
   catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
   msy_ylim = c(0, 4.5), catch_ylim = NULL) {
 
-  g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
-    ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
-    ggplot2::theme(strip.text.y = ggplot2::element_blank(),
-      axis.title.y = ggplot2::element_blank())
+  suppressMessages({
+    g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
+      ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
+      ggplot2::theme(strip.text.y = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank())
+  })
 
   g2 <- gfdlm::plot_projection_ts(object,
     type = "C",
@@ -251,16 +253,20 @@ plot_main_projections <- function(object,
   ) + ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
   if (!is.null(catch_ylim)) {
-   g2 <- ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+    suppressMessages({
+      g2 <- ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+    })
   }
 
   if (!is.null(catch_breaks) && is.null(catch_labels)) {
     catch_labels <- catch_breaks
   }
   if (!is.null(catch_breaks)) {
-    g2 <- g2 +
-      ggplot2::scale_y_continuous(breaks = catch_breaks, labels = catch_labels)
-    g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+    suppressMessages({
+      g2 <- g2 +
+        ggplot2::scale_y_continuous(breaks = catch_breaks, labels = catch_labels)
+      g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+    })
   }
 
   cowplot::plot_grid(g1, g2, rel_widths = rel_widths, align = "h")

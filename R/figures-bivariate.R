@@ -18,9 +18,10 @@
 #' @examples
 #' probs <- list(get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY"))
 #' names(probs) <- "Scenario 1"
-#' plot_tradeoff(probs)
+#' plot_tradeoff(probs, "P40", "LTY")
 
 plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) {
+
   df <- purrr::map_df(
     names(pm_df_list),
     ~ dplyr::bind_cols(pm_df_list[[.x]],
@@ -28,7 +29,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
     )
   )
   if (!is.null(mp)) {
-    df <- dplyr::filter(df, MP %in% mps)
+    df <- dplyr::filter(df, MP %in% mp)
   }
   df_long <- reshape2::melt(df,
     id.vars = c("MP", "scenario"),
@@ -40,7 +41,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
     dplyr::mutate(`Reference MP` = ifelse(grepl("ref", MP), "True", "False"))
 
   g <- ggplot2::ggplot(df_wide,
-    aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")) +
+    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~scenario, nrow = 2) +
     theme_pbs() +
