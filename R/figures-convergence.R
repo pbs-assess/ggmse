@@ -44,7 +44,7 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
   last_iter <- df[df$iter == max(df$iter), , drop = FALSE]
   g <- ggplot2::ggplot(df, aes_string("iter", "value", colour = "mp_name")) +
     ggplot2::geom_line() +
-    ggplot2::facet_wrap(ggplot2::vars(pm_name)) +
+    ggplot2::facet_wrap(ggplot2::vars(pm_name), ncol = 2) +
     theme_pbs() +
     ggplot2::labs(
       x = "Cumulative iteration", y = "Performance metric value",
