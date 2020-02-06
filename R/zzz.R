@@ -43,5 +43,6 @@ globalVariables(c(
   "f_l",
   "f_m",
   "f_u",
-  "scenario"
+  "scenario",
+  "year"
 ))

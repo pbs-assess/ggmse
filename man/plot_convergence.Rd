@@ -8,7 +8,6 @@ plot_convergence(
   object,
   pm_list = c("LTY", "PNOF"),
   label_gap = 1.15,
-  use_labels = FALSE,
   ylim = c(min(df$value), 1)
 )
 }
@@ -20,8 +19,6 @@ plot_convergence(
 \item{label_gap}{Controls the gap on the right of each panel to make space
 for the MP labels. This value is multiplied by the maximum number of
 iterations to expand the x axis.}
-
-\item{use_labels}{Use labels (\code{TRUE}) or use a colour legend (\code{FALSE})?}
 
 \item{ylim}{Y limits. Defaults to the minimum observed performance metric
 value (via lazy evaluation) and 1.}

@@ -73,7 +73,6 @@ calc_contour_lines <- function(d,
 #' @return A ggplot object
 #' @importFrom reshape2 melt
 #' @importFrom dplyr filter select rename inner_join left_join
-#' @importFrom ggsidekick theme_sleek
 #' @importFrom ggplot2 geom_point geom_path scale_color_viridis_c labs facet_wrap guides geom_vline
 #' @importFrom ggplot2 ggplot geom_hline aes xlim ylim
 #' @export
@@ -127,12 +126,12 @@ plot_kobe <- function(object,
   if (show_contours) {
     g <- g + geom_path(
       data = contour_lines,
-      aes(color = alpha, group = as.factor(alpha)), alpha = 0.65, lwd = 0.75
+      aes_string(color = "alpha", group = "as.factor(alpha)"), alpha = 0.65, lwd = 0.75
     ) + scale
 
   }
   g <- g + theme_pbs() +
-    facet_wrap(~mp_name) +
+    ggplot2::facet_wrap(~mp_name) +
     labs(
       colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
@@ -172,7 +171,7 @@ plot_kobe_grid <- function(object_list, ...) {
     ) + gdat[[1]]$scale + gdat[[1]]$shape
   }
   g <- g + theme_pbs() +
-    facet_grid(mp_name~scenario) +
+    ggplot2::facet_grid(mp_name~scenario) +
     labs(
       colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])

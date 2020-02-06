@@ -8,7 +8,7 @@
 #' @param label_gap Controls the gap on the right of each panel to make space
 #'   for the MP labels. This value is multiplied by the maximum number of
 #'   iterations to expand the x axis.
-#' @param use_labels Use labels (`TRUE`) or use a colour legend (`FALSE`)?
+# @param use_labels Use labels (`TRUE`) or use a colour legend (`FALSE`)?
 #' @param ylim Y limits. Defaults to the minimum observed performance metric
 #'   value (via lazy evaluation) and 1.
 #'
@@ -18,7 +18,7 @@
 #' @examples
 #' plot_convergence(mse_example)
 plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
-                             label_gap = 1.15, use_labels = FALSE,
+                             label_gap = 1.15,
                              ylim = c(min(df$value), 1)) {
   if (class(object) != "MSE") {
     stop("`object` must be object of class 'MSE'", call. = FALSE)
@@ -51,25 +51,25 @@ plot_convergence <- function(object, pm_list = c("LTY", "PNOF"),
       color = "MP"
     )
 
-  if (use_labels) {
-    g <- g + ggrepel::geom_text_repel(
-      data = last_iter,
-      nudge_x = 0.2,
-      mapping = aes_string(label = "mp_name"),
-      direction = "y",
-      hjust = 0,
-      segment.size = 0.2
-    ) +
-      ggplot2::guides(colour = FALSE) +
-      ggplot2::scale_x_continuous(
-        breaks = pretty(unique(df$iter)),
-        limits = c(1, max(df$iter) * label_gap)
-      ) +
-      ggplot2::coord_cartesian(xlim = c(1, max(df$iter) * label_gap), expand = FALSE, ylim = ylim) +
-      ggplot2::geom_vline(xintercept = max(df$iter), lty = 1, col = "grey65")
-  } else {
-    g <- g + ggplot2::scale_x_continuous(breaks = pretty(unique(df$iter))) +
-      ggplot2::coord_cartesian(xlim = c(1, max(object@nsim)), ylim = ylim, expand = FALSE)
-  }
+  # if (use_labels) {
+  #   g <- g + ggrepel::geom_text_repel(
+  #     data = last_iter,
+  #     nudge_x = 0.2,
+  #     mapping = aes_string(label = "mp_name"),
+  #     direction = "y",
+  #     hjust = 0,
+  #     segment.size = 0.2
+  #   ) +
+  #     ggplot2::guides(colour = FALSE) +
+  #     ggplot2::scale_x_continuous(
+  #       breaks = pretty(unique(df$iter)),
+  #       limits = c(1, max(df$iter) * label_gap)
+  #     ) +
+  #     ggplot2::coord_cartesian(xlim = c(1, max(df$iter) * label_gap), expand = FALSE, ylim = ylim) +
+  #     ggplot2::geom_vline(xintercept = max(df$iter), lty = 1, col = "grey65")
+  # } else {
+  g <- g + ggplot2::scale_x_continuous(breaks = pretty(unique(df$iter))) +
+    ggplot2::coord_cartesian(xlim = c(1, max(object@nsim)), ylim = ylim, expand = FALSE)
+  # }
   g
 }

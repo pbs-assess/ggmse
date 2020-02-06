@@ -1,9 +1,9 @@
 #' Convert groundfish PBS data to a DLMtool Data object
 #'
-#' Takes the output from \pkg{gfplot} data fetching functions and converts them to a
+#' Takes the output from \pkg{gfdata} data fetching functions and converts them to a
 #' DLMtool data object.
 #'
-#' @param dat A list object output from [gfplot::cache_pbs_data()] or a list
+#' @param dat A list object output from [gfdata::cache_pbs_data()] or a list
 #'   object containing the elements `commercial_samples`, `survey_samples`,
 #'   `catch`, `survey_index`.
 #' @param name A name for the stock.
@@ -33,10 +33,10 @@
 #' library(gfplot)
 #' species <- "pacific cod"
 #' d <- list()
-#' d$commercial_samples <- get_commercial_samples(species)
-#' d$survey_samples <- get_survey_samples(species)
-#' d$catch <- get_catch(species)
-#' d$survey_index <- get_survey_index(species)
+#' d$commercial_samples <- gfdata::get_commercial_samples(species)
+#' d$survey_samples <- gfdata::get_survey_samples(species)
+#' d$catch <- gfdata::get_catch(species)
+#' d$survey_index <- gfdata::get_survey_index(species)
 #' create_dlm_data(d, name = "BC Pacific Cod", area = "3[CD]+")
 #'
 #' species <- "shortraker rockfish"

@@ -18,34 +18,26 @@ Imports:
     DLMtool,
     dplyr,
     gfdata,
-    gfplot,
     gfutilities,
     ggplot2,
-    ggsidekick,
     ggspider,
-    ggrepel,
-    here,
-    lubridate,
     magrittr,
     MASS,
     methods,
     MSEtool,
-    plyr,
     purrr,
     RColorBrewer,
     readr,
     reshape2,
     rlang,
-    stringi,
     stringr,
-    testthat,
     tibble,
     tidyr,
-    TMB,
     cowplot
+Suggests:
+    testthat
 Remotes: 
     github::pbs-assess/gfdata,
-    github::pbs-assess/gfplot,
     github::pbs-assess/gfutilities,
     github::pbs-assess/ggspider
 Encoding: UTF-8

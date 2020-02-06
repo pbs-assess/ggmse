@@ -9,12 +9,14 @@
 #' @export
 #'
 #' @examples
+#' \dontrun{
 #' load_data_pcod <- load_data_factory("pacific cod",
 #'   file = here::here(
 #'     "generated-data",
 #'     "pacific-cod.rds"
 #'   )
 #' )
+#' }
 load_data_factory <- function(species_name, file) {
   created_by_load_data_factory <- function(unsorted_only = TRUE, private = FALSE) {
     if (!file.exists(file)) {
@@ -38,76 +40,36 @@ load_data_factory <- function(species_name, file) {
   created_by_load_data_factory
 }
 
-#' Loads Pacific Cod data
-#'
-#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
-#' @param private If TRUE, do not include commercial samples and catch in the returned data
-#'
-#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
-#' @importFrom here here
-#' @export
-load_data_pcod <- load_data_factory("pacific cod",
-  file = here("generated-data", "pacific-cod.rds")
-)
-
-#' Loads Shortraker Rockfish data
-#'
-#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
-#' @param private If TRUE, do not include commercial samples and catch in the returned data
-#'
-#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
-#' @export
-load_data_shortraker <- load_data_factory("shortraker rockfish",
-  file = here("generated-data", "shortraker-rockfish.rds")
-)
-
-#' Loads Rex Sole data
-#'
-#' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
-#' @param private If TRUE, do not include commercial samples and catch in the returned data
-#'
-#' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()], [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
-#' @export
-load_data_rex <- load_data_factory("rex sole",
-  file = here("generated-data", "rex-sole.rds")
-)
-
-#' Filter Rex sole data
-#'
-#' @param d data as retrieved from [gfdata::get_commercial_samples()] and similar functions
-#' @param minimum_year Minimum year for filtering
-#' @param maximum_year Maximum year for filtering
-#' @param major_stat_area_codes vector of major stat area codes
-#' @param survey_series_descs vector of survey descriptions as they appear in the survey_series_desc
-#'  field of the survey_index item of the call to [gfdata::get_survey_index()]
-#'
-#' @return The filtered data
-#' @importFrom dplyr mutate filter
-#' @importFrom lubridate year
-#' @export
-filter_data_rex <- function(d,
-                            minimum_year = 1996,
-                            maximum_year = 2018,
-                            major_stat_area_codes = c("03", "04"),
-                            survey_series_descs = c("West Coast Vancouver Island Synoptic Bottom Trawl")) {
-  d$commercial_samples <- d$commercial_samples %>%
-    dplyr::filter(major_stat_area_code %in% major_stat_area_codes) %>%
-    dplyr::mutate(year = lubridate::year(trip_start_date)) %>%
-    dplyr::filter(year <= maximum_year, year >= minimum_year)
-
-  d$survey_samples <- d$survey_samples %>%
-    dplyr::filter(major_stat_area_code %in% major_stat_area_codes) %>%
-    dplyr::mutate(year = lubridate::year(trip_start_date)) %>%
-    dplyr::filter(year <= maximum_year, year >= minimum_year)
-
-  d$catch <- d$catch %>%
-    dplyr::filter(major_stat_area_code %in% major_stat_area_codes) %>%
-    dplyr::mutate(year = lubridate::year(fe_start_date)) %>%
-    dplyr::filter(year <= maximum_year, year >= minimum_year)
-
-  d$survey_index <- d$survey_index %>%
-    dplyr::filter(survey_series_desc %in% survey_series_descs) %>%
-    dplyr::filter(year <= maximum_year, year >= minimum_year)
-
-  d
-}
+# #' Loads Pacific Cod data
+# #'
+# #' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+# #' @param private If TRUE, do not include commercial samples and catch in the returned data
+# #'
+# #' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()]# , [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+# #' @importFrom here here
+# #' @export
+# load_data_pcod <- load_data_factory("pacific cod",
+#   file = here("generated-data", "pacific-cod.rds")
+# )
+#
+# #' Loads Shortraker Rockfish data
+# #'
+# #' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+# #' @param private If TRUE, do not include commercial samples and catch in the returned data
+# #'
+# #' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()]# , [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+# #' @export
+# load_data_shortraker <- load_data_factory("shortraker rockfish",
+#   file = here("generated-data", "shortraker-rockfish.rds")
+# )
+#
+# #' Loads Rex Sole data
+# #'
+# #' @param unsorted_only If TRUE, return only unsorted records in the commercial samples
+# #' @param private If TRUE, do not include commercial samples and catch in the returned data
+# #'
+# #' @return A list with the outputs of [gfdata::get_catch()], [gfdata::get_survey_samples()]# , [gfdata::get_survey_index()], and [gfdata::get_commercial_samples()].
+# #' @export
+# load_data_rex <- load_data_factory("rex sole",
+#   file = here("generated-data", "rex-sole.rds")
+# )

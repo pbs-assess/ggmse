@@ -23,7 +23,7 @@ download_om <- function(file = "default-download-om.rds",
 
   file <- gfutilities::file_addext(file, "rds")
 
-  if (overwrite | !file.exists(file)) {
+  if (overwrite || !file.exists(file)) {
     download.file(paste0(base_url, web_file),
       file,
       method = method

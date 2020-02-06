@@ -1,6 +1,6 @@
-#' Create the data file for the given species by running gfplot routines
+#' Create the data file for the given species by running gfdata routines
 #'
-#' @param species_name the name of the species or species code as described in gfplot
+#' @param species_name the name of the species or species code as described in gfdata
 #' @param file the full path filename including extension .rds
 #'
 #' @export
@@ -12,16 +12,16 @@
 #' }
 fetch_data <- function(species_name = "shortraker rockfish", file) {
   d <- list()
-  d$commercial_samples <- gfplot::get_commercial_samples(species_name)
-  d$survey_samples <- gfplot::get_survey_samples(species_name)
-  d$catch <- gfplot::get_catch(species_name)
-  d$survey_index <- gfplot::get_survey_index(species_name)
+  d$commercial_samples <- gfdata::get_commercial_samples(species_name)
+  d$survey_samples <- gfdata::get_survey_samples(species_name)
+  d$catch <- gfdata::get_catch(species_name)
+  d$survey_index <- gfdata::get_survey_index(species_name)
   saveRDS(d, file)
 }
 
 #' Load the data in from the data file for the given species
 #'
-#' @param species_name the name of the species or species code as described in gfplot
+#' @param species_name the name of the species or species code as described in gfdata
 #' @param file the full path filename including extension .rds
 #'
 #' @return the contents of the rds file as a list
@@ -54,7 +54,7 @@ load_data <- function(species_name = "shortraker rockfish",
 
 #' Does the data file exist or not for the given species
 #'
-#' @param species_name the name of the species or species code as described in gfplot
+#' @param species_name the name of the species or species code as described in gfdata
 #' @param file the full path filename including extension .rds
 #'
 #' @return the contents of the rds file as a list
@@ -91,7 +91,6 @@ data_file_exists <- function(species_name,
 #' @export
 #' @examples
 #' \dontrun{
-#' library(gfplot)
 #' species <- "shortraker rockfish"
 #' fetch_data(species)
 #' d <- load_data(species)
@@ -194,7 +193,6 @@ create_dlm_stock <- function(dat = NULL,
 #' @export
 #' @examples
 #' \dontrun{
-#' library(gfplot)
 #' species <- "shortraker rockfish"
 #' fetch_data(species)
 #' d <- load_data(species)
@@ -282,7 +280,6 @@ create_dlm_fleet <- function(dat = NULL,
 #' @export
 #' @examples
 #' \dontrun{
-#' library(gfplot)
 #' species <- "shortraker rockfish"
 #' fetch_data(species)
 #' d <- load_data(species)
@@ -376,7 +373,6 @@ create_dlm_obs <- function(dat = NULL,
 #'
 #' @examples
 #' \dontrun{
-#' library(gfplot)
 #' species <- "shortraker rockfish"
 #' fetch_data(species)
 #' d <- load_data(species)

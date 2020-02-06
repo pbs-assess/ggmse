@@ -19,10 +19,12 @@ A function which can be used to load data automatically
 Factory to create loading functions for various species
 }
 \examples{
+\dontrun{
 load_data_pcod <- load_data_factory("pacific cod",
   file = here::here(
     "generated-data",
     "pacific-cod.rds"
   )
 )
+}
 }
