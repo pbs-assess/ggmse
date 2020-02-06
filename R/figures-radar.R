@@ -5,7 +5,7 @@
 #' @param custom_pal A named character vector of custom colors to pass to
 #'   [ggplot2::scale_color_manual()]. This argument is used in favour of
 #'   `palette` if specified.
-#' @param ... Other arguments to pass to [ggspider::spider_web()].
+#' @param ... Other arguments to pass to [ggspider::spider_web()] or [plot_radar()].
 #'
 #' @return A ggplot object
 #' @importFrom ggspider spider_web
@@ -41,19 +41,13 @@ plot_radar <- function(pm_df,
   g
 }
 
-#' Make a set of radar plots
-#'
 #' @param pm_df_list A named list of performance metric data frames from
 #'   [get_probs()]. The names will be used as the plot labels.
-#' @param custom_pal An optional custom color palette. Will be fed to
-#'   [ggplot2::scale_color_manual()].
 #' @param ncol An optional number of columns in the grid.
 #' @param nrow An optional number of rows in the grid.
-#' @param label_size Label size for the plots.
-#' @param ... Other arguments to pass to [plot_radar()].
 #'
-#' @return A ggplot2 object
 #' @export
+#' @rdname plot_radar
 #'
 #' @examples
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
@@ -63,7 +57,7 @@ plot_radar <- function(pm_df,
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_radar_facet(pm)
 plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
-                             ncol = NULL, nrow = NULL, label_size = 12, ...) {
+                             ncol = NULL, nrow = NULL, ...) {
   if (!is.list(pm_df_list)) {
     stop("`pm_df_list` must be a list of data frames from `get_probs()`.",
       call. = FALSE
@@ -140,7 +134,7 @@ plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
   }
 
   g <- g + ggplot2::labs(colour = "MP", lty = "Reference MP")
-  g <- g + ggplot2::theme(strip.text = element_text(size = 12, face = "bold"))
+  g <- g + ggplot2::theme(strip.text = element_text(size = 11, face = "bold"))
 
   if (!is.null(custom_pal)) {
     suppressMessages({

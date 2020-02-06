@@ -2,87 +2,9 @@
 % Please edit documentation in R/pm-functions.R
 \name{pm_factory}
 \alias{pm_factory}
-\alias{P10}
-\alias{P10_yrs6_20}
-\alias{P10_yrs21_35}
-\alias{P10_yrs36_50}
-\alias{P40}
-\alias{P40_yrs6_20}
-\alias{P40_yrs21_35}
-\alias{P40_yrs36_50}
-\alias{P80}
-\alias{P80_yrs6_20}
-\alias{P80_yrs21_35}
-\alias{P80_yrs36_50}
-\alias{P100}
-\alias{P100_yrs6_20}
-\alias{P100_yrs21_35}
-\alias{P100_yrs36_50}
-\alias{PNOF}
-\alias{PNOF_yrs6_20}
-\alias{PNOF_yrs21_35}
-\alias{PNOF_yrs36_50}
-\alias{LTY}
-\alias{Yield}
-\alias{AAVY}
-\alias{LTY_MSY}
-\alias{STY_MSY}
-\alias{Decline}
-\title{Function factory for creating DLMtool Performace Metrics (class "PM") functions}
+\title{Function factory for creating DLMtool performace metric (class "PM") functions}
 \usage{
 pm_factory(pm_type, ref = 0.1, yrs = NULL)
-
-P10(mse_obj)
-
-P10_yrs6_20(mse_obj)
-
-P10_yrs21_35(mse_obj)
-
-P10_yrs36_50(mse_obj)
-
-P40(mse_obj)
-
-P40_yrs6_20(mse_obj)
-
-P40_yrs21_35(mse_obj)
-
-P40_yrs36_50(mse_obj)
-
-P80(mse_obj)
-
-P80_yrs6_20(mse_obj)
-
-P80_yrs21_35(mse_obj)
-
-P80_yrs36_50(mse_obj)
-
-P100(mse_obj)
-
-P100_yrs6_20(mse_obj)
-
-P100_yrs21_35(mse_obj)
-
-P100_yrs36_50(mse_obj)
-
-PNOF(mse_obj)
-
-PNOF_yrs6_20(mse_obj)
-
-PNOF_yrs21_35(mse_obj)
-
-PNOF_yrs36_50(mse_obj)
-
-LTY(mse_obj)
-
-Yield(mse_obj)
-
-AAVY(mse_obj)
-
-LTY_MSY(mse_obj, ref = 0.5, yrs = c(36, 50))
-
-STY_MSY(mse_obj, ref = 0.5, yrs = c(6, 20))
-
-Decline(mse_obj, ref = 0, yrs = c(6, 20))
 }
 \arguments{
 \item{pm_type}{The type of performance metric}
@@ -90,21 +12,13 @@ Decline(mse_obj, ref = 0, yrs = c(6, 20))
 \item{ref}{Reference level to use in secondary part of probability}
 
 \item{yrs}{A vector of years to include. If NULL, all will be used.}
-
-\item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}
 }
 \value{
 A DLMtool PM function
-
-An object of class \linkS4class{PMobj} from the \link{DLMtool} package
 }
 \description{
-Function factory for creating DLMtool Performace Metrics (class "PM") functions
-
-Various performance metrics
+Function factory for creating DLMtool performace metric (class "PM") functions
 }
 \examples{
 P10 <- pm_factory("SBMSY", 0.1)
-P10(mse_example)
-PNOF_yrs6_20(mse_example)
 }

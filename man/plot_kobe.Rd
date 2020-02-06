@@ -3,7 +3,7 @@
 \name{plot_kobe}
 \alias{plot_kobe}
 \alias{plot_kobe_grid}
-\title{Make a panel of contour plots by management procedure for B/BMSY by F/FMSY}
+\title{Make Kobe contour plots by management procedure for B/BMSY by F/FMSY}
 \usage{
 plot_kobe(
   object,
@@ -49,12 +49,14 @@ plot_kobe_grid(object_list, ...)
 
 \item{object_list}{A list of DLMtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
+
+\item{...}{Other arguments to pass to \code{\link[=plot_kobe]{plot_kobe()}}.}
 }
 \value{
 A ggplot object
 }
 \description{
-Make a panel of contour plots by management procedure for B/BMSY by F/FMSY
+Make Kobe contour plots by management procedure for B/BMSY by F/FMSY
 }
 \examples{
 plot_kobe(mse_example)

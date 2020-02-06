@@ -58,13 +58,14 @@ get_probs <- function(object,
   as_tibble(df)
 }
 
-#' Summary of probabilities of things from the MSE object in a colored tile table format
+#' Summary of performance metrics from MSE objects in a coloured tile table
+#' format
 #'
-#' @param probs_dat A list of length 2 - a data frame and another list of captions describing the
-#'   columns of the data frame as returned from [gfdlm::get_probs()]
+#' @param probs_dat A data frame as returned from [gfdlm::get_probs()].
 #' @param relative_max Make the plot have each column use a reletive maximum. If
-#'  scale_0_1 is used, this will be ignored
-#' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each column are fully represented
+#'   `scale_0_1` is used, this will be ignored
+#' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each
+#'   column are fully represented
 #' @param sort_by show values in decreasing or increasing format
 #' @param mp_order Optional hardcoded MP order
 #' @param digits How many decimal places to show in the tiles for the values
@@ -73,12 +74,13 @@ get_probs <- function(object,
 #'   (`>`) the cells will be outlined as "satisficed".
 #' @param return_data Logical. If `TRUE` then the underlying data frame is
 #'   returned instead of the plot.
-#' @param alpha Transparency of underlying color.
+#' @param alpha Transparency of underlying colour.
 #'
 #' @importFrom reshape2 melt
 #' @importFrom gfutilities f
 #' @importFrom dplyr ungroup mutate group_by
-#' @importFrom ggplot2 ggplot theme geom_tile geom_text scale_fill_gradient scale_x_discrete aes
+#' @importFrom ggplot2 ggplot theme geom_tile geom_text scale_fill_gradient
+#'   scale_x_discrete aes
 #' @importFrom ggplot2 element_blank element_text guides xlab ylab
 #' @export
 #' @examples
@@ -176,15 +178,13 @@ plot_tigure <- function(probs_dat,
   }
 }
 
-#' Make a set of tigure plots
-#'
-#' @param pm_df_list A named list of performance metric data frames from [get_probs()]. The names will be used as the plot labels.
+#' @param pm_df_list A named list of performance metric data frames from
+#'   [get_probs()]. The names will be used as the plot labels.
 #' @param ncol Optional number of columns.
 #' @param ... Other arguments to pass to [plot_tigure()].
 #'
-#' @return
-#' A ggplot2 object
 #' @export
+#' @rdname plot_tigure
 #'
 #' @examples
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")

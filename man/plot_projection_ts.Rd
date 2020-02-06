@@ -57,3 +57,6 @@ Plot projection time series
 plot_projection_ts(mse_example)
 plot_projection_ts(mse_example, type = "SSB")
 }
+\seealso{
+\code{\link[=plot_main_projections]{plot_main_projections()}}
+}

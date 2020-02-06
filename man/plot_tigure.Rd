@@ -2,7 +2,9 @@
 % Please edit documentation in R/figures-tigure.R
 \name{plot_tigure}
 \alias{plot_tigure}
-\title{Summary of probabilities of things from the MSE object in a colored tile table format}
+\alias{plot_tigure_facet}
+\title{Summary of performance metrics from MSE objects in a coloured tile table
+format}
 \usage{
 plot_tigure(
   probs_dat,
@@ -15,17 +17,19 @@ plot_tigure(
   return_data = FALSE,
   alpha = 0.6
 )
+
+plot_tigure_facet(pm_df_list, ncol = NULL, ...)
 }
 \arguments{
-\item{probs_dat}{A list of length 2 - a data frame and another list of captions describing the
-columns of the data frame as returned from \code{\link[gfdlm:get_probs]{gfdlm::get_probs()}}}
+\item{probs_dat}{A data frame as returned from \code{\link[gfdlm:get_probs]{gfdlm::get_probs()}}.}
 
 \item{digits}{How many decimal places to show in the tiles for the values}
 
 \item{relative_max}{Make the plot have each column use a reletive maximum. If
-scale_0_1 is used, this will be ignored}
+\code{scale_0_1} is used, this will be ignored}
 
-\item{scale_0_1}{Scale each column from 0 to 1, so that the colours in each column are fully represented}
+\item{scale_0_1}{Scale each column from 0 to 1, so that the colours in each
+column are fully represented}
 
 \item{sort_by}{show values in decreasing or increasing format}
 
@@ -38,14 +42,28 @@ the performance metrics on the values correspond to the values above which
 \item{return_data}{Logical. If \code{TRUE} then the underlying data frame is
 returned instead of the plot.}
 
-\item{alpha}{Transparency of underlying color.}
+\item{alpha}{Transparency of underlying colour.}
+
+\item{pm_df_list}{A named list of performance metric data frames from
+\code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}
+
+\item{ncol}{Optional number of columns.}
+
+\item{...}{Other arguments to pass to \code{\link[=plot_tigure]{plot_tigure()}}.}
 }
 \description{
-Summary of probabilities of things from the MSE object in a colored tile table format
+Summary of performance metrics from MSE objects in a coloured tile table
+format
 }
 \examples{
 probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 plot_tigure(probs)
 plot_tigure(probs, alpha = 0.9)
 plot_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
+probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+pm <- list()
+pm[[1]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+pm[[2]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
+names(pm) <- c("Scenario 1", "Scenario 2")
+plot_tigure_facet(pm)
 }

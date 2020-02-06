@@ -24,4 +24,5 @@ Make a Kobe "worm" timeseries plot with uncertainty
 }
 \examples{
 plot_worms(mse_example, this_year = 2020)
+plot_worms(mse_example, this_year = 2020, prob = 0.8)
 }

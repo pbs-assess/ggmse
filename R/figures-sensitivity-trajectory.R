@@ -86,5 +86,4 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     geom_hline(yintercept = 1, lty = 2, alpha = 0.3) +
     ggplot2::scale_color_manual(values = c("Lower" = pal[1], "Upper" = pal[2])) +
     ggplot2::scale_fill_manual(values = c("Lower" = pal[1], "Upper" = pal[2]))
-  # scale_x_continuous(breaks = seq(min(dat_summarized$real_year), max(dat_summarized$real_year), 10))
 }

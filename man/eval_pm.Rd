@@ -2,24 +2,27 @@
 % Please edit documentation in R/pm-functions.R
 \name{eval_pm}
 \alias{eval_pm}
-\title{Evaluate Performance Metrics}
+\title{Evaluate performance petrics}
 \usage{
 eval_pm(mse_obj, pm_list = NULL, refs = NULL, yrs = NULL)
 }
 \arguments{
-\item{mse_obj}{MSE object, output of the DLMtool \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} function}
+\item{mse_obj}{MSE object. Output of the DLMtool \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} function.}
 
 \item{pm_list}{List of performace metric names}
 
 \item{refs}{Optional. List containing the reference limits for each metric}
 
-\item{yrs}{Optional. Numeric vector of length 2 with year indices to summarize performance}
+\item{yrs}{Optional. Numeric vector of length 2 with year indices to
+summarize performance}
 }
 \value{
-A data frame containing the Management procedures, Performance metrics, probability, probability caption, description, and class of the management procedure.
+A data frame containing the management procedures, performance
+metrics, probability, probability caption, description, and class of the
+management procedure.
 }
 \description{
-Evaluate Performance Metrics
+Evaluate performance petrics
 }
 \examples{
 eval_pm(mse_example, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))

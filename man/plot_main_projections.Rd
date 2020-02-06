@@ -46,3 +46,6 @@ plot_main_projections(mse_example,
   catch_labels = catch_breaks / 1000
 )
 }
+\seealso{
+\code{\link[=plot_projection_ts]{plot_projection_ts()}}
+}

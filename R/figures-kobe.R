@@ -57,7 +57,7 @@ calc_contour_lines <- function(d,
     purrr::map_df(rbind)
 }
 
-#' Make a panel of contour plots by management procedure for B/BMSY by F/FMSY
+#' Make Kobe contour plots by management procedure for B/BMSY by F/FMSY
 #'
 #' @param object An MSE object as returned by [DLMtool::runMSE()].
 #' @param yend The end year
@@ -165,6 +165,7 @@ plot_kobe <- function(object,
 
 #' @param object_list A list of DLMtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
+#' @param ... Other arguments to pass to [plot_kobe()].
 #' @rdname plot_kobe
 #' @export
 #' @examples

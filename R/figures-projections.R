@@ -23,6 +23,7 @@
 #' @return ggplot object
 #' @importFrom rlang .data
 #' @export
+#' @seealso [plot_main_projections()]
 #' @examples
 #' plot_projection_ts(mse_example)
 #' plot_projection_ts(mse_example, type = "SSB")
@@ -239,6 +240,7 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #'
 #' @return A ggplot2 object
 #' @export
+#' @seealso [plot_projection_ts()]
 #'
 #' @examples
 #' catch_breaks <- c(0, 1000, 2000, 3000)

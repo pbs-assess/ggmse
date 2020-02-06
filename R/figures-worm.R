@@ -13,6 +13,7 @@
 #'
 #' @examples
 #' plot_worms(mse_example, this_year = 2020)
+#' plot_worms(mse_example, this_year = 2020, prob = 0.8)
 plot_worms <- function(object, this_year, prob = 0.5,
                        include_historical = TRUE) {
   ts <- get_ts(object, type = c("SSB", "FM"))
