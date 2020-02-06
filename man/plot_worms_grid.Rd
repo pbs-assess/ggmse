@@ -7,15 +7,15 @@
 plot_worms_grid(object_list, this_year, prob = 0.5, include_historical = TRUE)
 }
 \arguments{
+\item{object_list}{A named list of MSE objects from DLMtool.
+Names become scenario names.}
+
 \item{this_year}{This year as a numeric value.}
 
-\item{prob}{Tail probability for the quantiles. 0.5 refers to an
+\item{prob}{Tail probability for the quantiles. E.g., 0.5 refers to an
 interquartile range.}
 
 \item{include_historical}{Logical: include the historical time?}
-
-\item{object}{A named list of MSE objects from DLMtool.
-Names become scenario names.}
 }
 \value{
 A ggplot object

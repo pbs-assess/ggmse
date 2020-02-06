@@ -1,9 +1,9 @@
 #' Make a Kobe "worm" timeseries plot with uncertainty
 #'
-#' @param object A named list of MSE objects from DLMtool.
+#' @param object_list A named list of MSE objects from DLMtool.
 #'   Names become scenario names.
 #' @param this_year This year as a numeric value.
-#' @param prob Tail probability for the quantiles. 0.5 refers to an
+#' @param prob Tail probability for the quantiles. E.g., 0.5 refers to an
 #'   interquartile range.
 #' @param include_historical Logical: include the historical time?
 #'
