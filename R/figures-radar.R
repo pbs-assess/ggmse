@@ -41,54 +41,18 @@ plot_radar <- function(pm_df,
   g
 }
 
-#' Plot a grid of ggplots
-#'
-#' This is a slightly customized wrapper for [cowplot::plot_grid()].
-#'
-#' @param plotlist A list of plots
-#' @param align Alignment character value
-#' @param label_fontface Font face
-#' @param label_size Label size
-#' @param hjust Horizontal adjustment value
-#' @param radar_margins Logical for margins that work well with [plot_radar()]
-#' @param ... Other arguments to pass to [cowplot::plot_grid()]. In particular,
-#'   you will probably want to use the `labels` argument.
-#'
-#' @return A ggplot object
-#' @export
-#'
-#' @examples
-#' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
-#' g <- list()
-#' g[[1]] <- plot_radar(probs)
-#' g[[2]] <- plot_radar(probs)
-#' plot_grid_pbs(g, labels = c("First plot", "Second plot"), radar_margins = TRUE)
-plot_grid_pbs <- function(plotlist, align = "hv",
-                          label_fontface = "bold", label_size = 12,
-                          hjust = 0, radar_margins = FALSE, ...) {
-  out <- cowplot::plot_grid(
-    plotlist = plotlist, align = align,
-    label_fontface = label_fontface, hjust = hjust,
-    label_size = label_size, ...
-  )
-  if (radar_margins) {
-    out <- out +
-      ggplot2::theme(plot.margin = grid::unit(c(0.2, 0.2, -0.7, 1.0), "lines"))
-  }
-  out
-}
-
 #' Make a set of radar plots
 #'
-#' @param pm_df_list A named list of performance metric data frames from [get_probs()]. The names will be used as the plot labels.
-#' @param custom_pal An optional custom color palette. Will be fed to [ggplot2::scale_color_manual()].
+#' @param pm_df_list A named list of performance metric data frames from
+#'   [get_probs()]. The names will be used as the plot labels.
+#' @param custom_pal An optional custom color palette. Will be fed to
+#'   [ggplot2::scale_color_manual()].
 #' @param ncol An optional number of columns in the grid.
 #' @param nrow An optional number of rows in the grid.
 #' @param label_size Label size for the plots.
 #' @param ... Other arguments to pass to [plot_radar()].
 #'
-#' @return
-#' A ggplot2 object
+#' @return A ggplot2 object
 #' @export
 #'
 #' @examples

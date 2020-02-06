@@ -14,9 +14,11 @@ plot_radar_facet(
 )
 }
 \arguments{
-\item{pm_df_list}{A named list of performance metric data frames from \code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}
+\item{pm_df_list}{A named list of performance metric data frames from
+\code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}
 
-\item{custom_pal}{An optional custom color palette. Will be fed to \code{\link[ggplot2:scale_color_manual]{ggplot2::scale_color_manual()}}.}
+\item{custom_pal}{An optional custom color palette. Will be fed to
+\code{\link[ggplot2:scale_color_manual]{ggplot2::scale_color_manual()}}.}
 
 \item{ncol}{An optional number of columns in the grid.}
 

@@ -35,7 +35,8 @@ Imports:
     tidyr,
     cowplot
 Suggests:
-    testthat
+    testthat,
+    covr
 Remotes: 
     github::pbs-assess/gfdata,
     github::pbs-assess/gfutilities,
