@@ -1,5 +1,5 @@
 Package: gfdlm
-Title: Various Functions For 'DLMtool'
+Title: Tools for Working With 'DLMtool' and 'MSEtool'
 Version: 0.0.0.9000
 Authors@R:
     c(person(given = c("Sean", "C."),
@@ -8,13 +8,21 @@ Authors@R:
              email = "sean.anderson@dfo-mpo.gc.ca"),
       person(given = "Chris",
              family = "Grandin",
+             role = "aut"),
+      person(given = c("Robyn", "E."),
+             family = "Forrest",
              role = "aut"))
-Description: Provides many tools for using 'DLMtool' for
-    producing DFO PBS Groundfish Section CSAS Research Rocuments.
+Description: 'gfdlm' provides tools for using 'DLMtool' and
+    'MSEtool' with British Columbia groundfish stocks. The package
+    includes a number of plotting functions, custom management procedures,
+    and templates for populating operating models.
 License: GPL-2
+URL: https://github.com/pbs-assess/gfdlm
+BugReports: https://github.com/pbs-assess/gfdlm/issues
 Depends: 
-    R (>= 2.10)
+    R (>= 3.4.0)
 Imports:
+    cowplot,
     DLMtool,
     dplyr,
     gfdata,
@@ -32,11 +40,10 @@ Imports:
     rlang,
     stringr,
     tibble,
-    tidyr,
-    cowplot
+    tidyr
 Suggests:
-    testthat,
-    covr
+    covr,
+    testthat
 Remotes: 
     github::pbs-assess/gfdata,
     github::pbs-assess/gfutilities,
