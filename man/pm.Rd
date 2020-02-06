@@ -2,9 +2,27 @@
 % Please edit documentation in R/pm-functions.R
 \name{pm_factory}
 \alias{pm_factory}
+\alias{P10}
+\alias{P40}
+\alias{P100}
+\alias{PNOF}
+\alias{LTY}
+\alias{AAVY}
 \title{Function factory for creating DLMtool performace metric (class "PM") functions}
 \usage{
 pm_factory(pm_type, ref = 0.1, yrs = NULL)
+
+P10(mse_obj)
+
+P40(mse_obj)
+
+P100(mse_obj)
+
+PNOF(mse_obj)
+
+LTY(mse_obj)
+
+AAVY(mse_obj)
 }
 \arguments{
 \item{pm_type}{The type of performance metric}
@@ -12,13 +30,20 @@ pm_factory(pm_type, ref = 0.1, yrs = NULL)
 \item{ref}{Reference level to use in secondary part of probability}
 
 \item{yrs}{A vector of years to include. If NULL, all will be used.}
+
+\item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}
 }
 \value{
 A DLMtool PM function
+
+An object of class \linkS4class{PMobj} from the \link{DLMtool} package
 }
 \description{
 Function factory for creating DLMtool performace metric (class "PM") functions
+
+Various performance metrics
 }
 \examples{
 P10 <- pm_factory("SBMSY", 0.1)
+P10(mse_example)
 }

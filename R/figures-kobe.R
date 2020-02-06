@@ -188,7 +188,8 @@ plot_kobe_grid <- function(object_list, ...) {
   if (gdat[[1]]$show_contours) {
     g <- g + geom_path(
       data = contour_lines,
-      aes(color = alpha, group = as.factor(alpha)), alpha = 0.65, lwd = 0.75
+      ggplot2::aes_string(color = "alpha", group = "as.factor(alpha)"),
+      alpha = 0.65, lwd = 0.75
     ) + gdat[[1]]$scale + gdat[[1]]$shape
   }
   g <- g + theme_pbs() +

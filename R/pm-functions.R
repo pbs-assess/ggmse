@@ -13,7 +13,8 @@
 #' @importFrom tibble as_tibble
 #' @export
 #' @examples
-#' eval_pm(mse_example, list("PNOF", "P100", "P10", "P40", "LTY", "AAVY"))
+#' library(DLMtool)
+#' eval_pm(mse_example, list("PNOF", "P100", "P10", "LTY", "AAVY"))
 eval_pm <- function(mse_obj,
                     pm_list = NULL,
                     refs = NULL,
@@ -162,18 +163,17 @@ pm_factory <- function(pm_type,
   created_by_pm_factory
 }
 
-# #' Various performance metrics
-# #'
-# #' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
-# #'
-# #' @return An object of class [PMobj-class] from the [DLMtool] package
-# #' @export
-# #' @rdname pm
-# #' @examples
-# #' P10(mse_example)
-# #' PNOF_yrs6_20(mse_example)
-# P10 <- pm_factory("SBMSY", 0.1)
-#
+#' Various performance metrics
+#'
+#' @param mse_obj An object of class [MSE-class] from the [DLMtool] package
+#'
+#' @return An object of class [PMobj-class] from the [DLMtool] package
+#' @export
+#' @rdname pm
+#' @examples
+#' P10(mse_example)
+P10 <- pm_factory("SBMSY", 0.1)
+
 # #' @rdname pm
 # #' @export
 # P10_yrs6_20 <- pm_factory("SBMSY", 0.1, c(6, 20))
@@ -185,10 +185,11 @@ pm_factory <- function(pm_type,
 # #' @rdname pm
 # #' @export
 # P10_yrs36_50 <- pm_factory("SBMSY", 0.1, c(36, 50))
-#
-# #' @rdname pm
-# #' @export
-# P40 <- pm_factory("SBMSY", 0.4)
+
+#' @rdname pm
+#' @export
+P40 <- pm_factory("SBMSY", 0.4)
+
 # #' @rdname pm
 # #' @export
 # P40_yrs6_20 <- pm_factory("SBMSY", 0.4, c(6, 20))
@@ -216,11 +217,11 @@ pm_factory <- function(pm_type,
 # #' @rdname pm
 # #' @export
 # P80_yrs36_50 <- pm_factory("SBMSY", 0.8, c(36, 50))
-#
-# #' @rdname pm
-# #' @export
-# P100 <- pm_factory("SBMSY", 1)
-#
+
+#' @rdname pm
+#' @export
+P100 <- pm_factory("SBMSY", 1)
+
 # #' @rdname pm
 # #' @export
 # P100_yrs6_20 <- pm_factory("SBMSY", 1, c(6, 20))
@@ -232,11 +233,11 @@ pm_factory <- function(pm_type,
 # #' @rdname pm
 # #' @export
 # P100_yrs36_50 <- pm_factory("SBMSY", 1, c(36, 50))
-#
-# #' @rdname pm
-# #' @export
-# PNOF <- pm_factory("PNOF", 1)
-#
+
+#' @rdname pm
+#' @export
+PNOF <- pm_factory("PNOF", 1)
+
 # #' @rdname pm
 # #' @export
 # PNOF_yrs6_20 <- pm_factory("PNOF", 1, c(6, 20))
@@ -249,17 +250,17 @@ pm_factory <- function(pm_type,
 # #' @export
 # PNOF_yrs36_50 <- pm_factory("PNOF", 1, c(36, 50))
 #
-# #' @rdname pm
-# #' @export
-# LTY <- pm_factory("LTY", 0.5)
+#' @rdname pm
+#' @export
+LTY <- pm_factory("LTY", 0.5)
 #
 # #' @rdname pm
 # #' @export
 # Yield <- pm_factory("Yield", 1)
-#
-# #' @rdname pm
-# #' @export
-# AAVY <- pm_factory("AAVY", 0.2)
+
+#' @rdname pm
+#' @export
+AAVY <- pm_factory("AAVY", 0.2)
 
 # #' @rdname pm
 # #' @export
