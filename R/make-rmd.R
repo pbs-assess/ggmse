@@ -417,9 +417,9 @@ create_rmd <- function(file_name,
 
   # Remove multiple empty lines in a row:
   empties <- purrr::map_int(seq_along(new_rmd), ~
-      if (new_rmd[[.x]] == "") .x else NA)
+  if (new_rmd[[.x]] == "") .x else NA)
   remove_i <- purrr::map_int(seq_along(empties), ~
-      if (!is.na(empties[.x]) && !is.na(empties[.x-1])) .x else NA)
+  if (!is.na(empties[.x]) && !is.na(empties[.x - 1])) .x else NA)
   remove_i <- remove_i[!is.na(remove_i)]
 
   conn <- file(file_name)

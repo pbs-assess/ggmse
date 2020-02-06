@@ -138,7 +138,7 @@ GB_slope8_1
 #' @rdname MPs
 #' @export
 Iratio2 <- function(x, Data, reps = 100, ...) {
-  ind <- which(!is.na(Data@Ind[x,,drop=TRUE]))
+  ind <- which(!is.na(Data@Ind[x, , drop = TRUE]))
   numerator_yrs <- rev(which(!is.na(ind)))[1:2]
   denominator_yrs <- rev(which(!is.na(ind)))[3:5]
   yrs1 <- length(ind) - min(numerator_yrs) + 1
@@ -152,8 +152,9 @@ class(Iratio2) <- "MP"
 .Iratio2 <- reduce_survey(Iratio2)
 
 Islope_mod_ <- function(x, Data, reps = 100, yrsmth = 6, lambda, xx,
-  increase_cap = 1.2, ...) {
-  tac <- DLMtool::Islope_(x, Data, reps, yrsmth = yrsmth,
+                        increase_cap = 1.2, ...) {
+  tac <- DLMtool::Islope_(x, Data, reps,
+    yrsmth = yrsmth,
     lambda = lambda, xx = xx, ...
   )$TAC
   last_catch_rec <- Data@MPrec[x]
@@ -259,30 +260,32 @@ class(Islope0.2_80) <- "MP"
 #' @param Imulti Parameter controlling how much larger target CPUE / index is compared with recent levels.
 #'
 #' @export
-Itarget5 <- function (x, Data, reps = 1, yrsmth = 5, xx = 0,
-    Imulti = 2) {
-    ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
-    ylast <- (Data@LHYear[1] - Data@Year[1]) + 1
-    ind2 <- ((ylast - (yrsmth - 1)):ylast)
-    ind3 <- ((ylast - (yrsmth * 2 - 1)):ylast)
-    C_dat <- Data@Cat[x, ind2]
-    TACstar <- (1 - xx) * DLMtool::trlnorm(reps, mean(C_dat, na.rm = TRUE),
-      Data@CV_Cat[x, 1]/(yrsmth^0.5))
-    Irecent <- mean(Data@Ind[x, ind], na.rm = TRUE)
-    Iave <- mean(Data@Ind[x, ind3], na.rm = TRUE)
-    Itarget <- Iave * Imulti
-    I0 <- 1 * Iave
-    if (Irecent > I0) {
-      TAC <- TACstar * (1 + ((Irecent - I0)/(Itarget -
-          I0)))
-    }
-    else {
-      TAC <- TACstar * (Irecent/I0)^2
-    }
-    TAC <- DLMtool::TACfilter(TAC)
-    Rec <- new("Rec")
-    Rec@TAC <- TAC
-    Rec
+Itarget5 <- function(x, Data, reps = 1, yrsmth = 5, xx = 0,
+                     Imulti = 2) {
+  ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
+  ylast <- (Data@LHYear[1] - Data@Year[1]) + 1
+  ind2 <- ((ylast - (yrsmth - 1)):ylast)
+  ind3 <- ((ylast - (yrsmth * 2 - 1)):ylast)
+  C_dat <- Data@Cat[x, ind2]
+  TACstar <- (1 - xx) * DLMtool::trlnorm(
+    reps, mean(C_dat, na.rm = TRUE),
+    Data@CV_Cat[x, 1] / (yrsmth^0.5)
+  )
+  Irecent <- mean(Data@Ind[x, ind], na.rm = TRUE)
+  Iave <- mean(Data@Ind[x, ind3], na.rm = TRUE)
+  Itarget <- Iave * Imulti
+  I0 <- 1 * Iave
+  if (Irecent > I0) {
+    TAC <- TACstar * (1 + ((Irecent - I0) / (Itarget -
+      I0)))
+  }
+  else {
+    TAC <- TACstar * (Irecent / I0)^2
+  }
+  TAC <- DLMtool::TACfilter(TAC)
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
 }
 
 #' @rdname MPs
@@ -336,7 +339,7 @@ class(ITM_hist) <- "MP"
 
 #' @rdname MPs
 #' @export
-.ITM_hist<- reduce_survey(ITM_hist)
+.ITM_hist <- reduce_survey(ITM_hist)
 
 # #' @rdname MPs
 # #' @export
@@ -390,7 +393,7 @@ class(ITM_hist) <- "MP"
 #'
 #' @export
 SBT1_log <- function(x, Data, reps = 100, plot = FALSE, yrsmth = 10, k1 = 1.5,
-                 k2 = 3, gamma = 1) {
+                     k2 = 3, gamma = 1) {
   dependencies <- "Data@Cat, Data@Year, Data@Ind"
   Cr <- length(Data@Cat[x, ])
   cct <- DLMtool::trlnorm(reps, Data@Cat[x, Cr], Data@CV_Cat)
@@ -479,7 +482,7 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   this_year <- length(Data@Year)
 
   # Stepwise fill in NAs with last available value:
-  temp_Ind <- stepwise_NAs(Data@Ind[x,,drop=TRUE])
+  temp_Ind <- stepwise_NAs(Data@Ind[x, , drop = TRUE])
   delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - year_ref] - 1
   catch_rec <- Data@MPrec[x]
 
@@ -606,14 +609,18 @@ CC60 <- DLMtool::CC5
 #' @param tac_increase_buffer Proportional buffer below which TAC won't change
 #'
 #' @export
-SP_gf <- function (x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
-  start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
+SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
+                  start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
   dependencies <- "Data@Cat, Data@Ind"
-  do_Assessment <- MSEtool::SP(x = x, Data = Data,
+  do_Assessment <- MSEtool::SP(
+    x = x, Data = Data,
     control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
-    use_r_prior = use_r_prior, start = start)
-  Rec <- MSEtool::HCR_ramp(Assessment = do_Assessment, reps = reps, LRP = LRP,
-    TRP = TRP, RP_type = RP_type)
+    use_r_prior = use_r_prior, start = start
+  )
+  Rec <- MSEtool::HCR_ramp(
+    Assessment = do_Assessment, reps = reps, LRP = LRP,
+    TRP = TRP, RP_type = RP_type
+  )
   if (!is.na(Rec@TAC)) {
     if (as.list(do_Assessment@SD, "Std. Error")$log_FMSY > 1) {
       warning("Std. Error too large; using last TAC")
@@ -630,9 +637,9 @@ SP_gf <- function (x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMS
       warning("TAC < tac_max_decrease last TAC; using tac_max_decrease")
       Rec@TAC <- tac_max_decrease * Data@MPrec[x]
     }
-    if (Rec@TAC < tac_floor * Data@Cat[x,Data@LHYear]) {
+    if (Rec@TAC < tac_floor * Data@Cat[x, Data@LHYear]) {
       warning("TAC < tac_floor; using tac_floor")
-      Rec@TAC <- tac_floor * Data@Cat[x,Data@LHYear]
+      Rec@TAC <- tac_floor * Data@Cat[x, Data@LHYear]
     }
   }
   # Rec@Misc <- MSEtool:::Assess_diagnostic(x, Data, do_Assessment, include_assessment = FALSE)

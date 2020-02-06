@@ -19,9 +19,7 @@
 #' probs <- list(get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY"))
 #' names(probs) <- "Scenario 1"
 #' plot_tradeoff(probs, "P40", "LTY")
-
 plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) {
-
   df <- purrr::map_df(
     names(pm_df_list),
     ~ dplyr::bind_cols(pm_df_list[[.x]],
@@ -46,8 +44,10 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   xvar <- paste0("`", xvar, "`")
   yvar <- paste0("`", yvar, "`")
 
-  g <- ggplot2::ggplot(df_wide,
-    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")) +
+  g <- ggplot2::ggplot(
+    df_wide,
+    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")
+  ) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~scenario, nrow = 2) +
     theme_pbs() +

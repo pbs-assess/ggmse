@@ -41,6 +41,8 @@ F, and catch.
 }
 \examples{
 catch_breaks <- c(0, 1000, 2000, 3000)
-plot_main_projections(mse_example, catch_breaks = catch_breaks,
-  catch_labels = catch_breaks / 1000)
+plot_main_projections(mse_example,
+  catch_breaks = catch_breaks,
+  catch_labels = catch_breaks / 1000
+)
 }

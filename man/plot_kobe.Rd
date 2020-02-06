@@ -2,6 +2,7 @@
 % Please edit documentation in R/figures-kobe.R
 \name{plot_kobe}
 \alias{plot_kobe}
+\alias{plot_kobe_grid}
 \title{Make a panel of contour plots by management procedure for B/BMSY by F/FMSY}
 \usage{
 plot_kobe(
@@ -18,6 +19,8 @@ plot_kobe(
   show_contours = TRUE,
   return_data = FALSE
 )
+
+plot_kobe_grid(object_list, ...)
 }
 \arguments{
 \item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
@@ -43,6 +46,9 @@ plot_kobe(
 \item{show_contours}{Logical: show contour lines?}
 
 \item{return_data}{Logical: return the data instead of the plot?}
+
+\item{object_list}{A list of DLMtool MSE objects representing different
+scenarios. The list should be named with the scenario names.}
 }
 \value{
 A ggplot object
@@ -52,4 +58,9 @@ Make a panel of contour plots by management procedure for B/BMSY by F/FMSY
 }
 \examples{
 plot_kobe(mse_example)
+x <- list()
+x[[1]] <- mse_example
+x[[2]] <- mse_example
+names(x) <- c("Scenario 1", "Scenario 2")
+plot_kobe_grid(x)
 }

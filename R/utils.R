@@ -28,7 +28,7 @@ get_cal_bins <- function(cal_dat, length_bin_interval) {
 #' @export
 #' @rdname tidy_caa
 tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
-  sex = c(1, 2)) {
+                     sex = c(1, 2)) {
   length_bins <- seq(0, 1e4, interval)
   dat %>%
     select(-.data$age) %>%
@@ -61,11 +61,10 @@ tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
 #' d_survey <- gfdata::get_survey_samples(222, ssid = 1)
 #' caa <- tidy_caa(d_survey, yrs = 2010:2012)
 #' caa[1, , ]
-#'
 #' }
 #' @export
 tidy_caa <- function(dat, yrs, unsorted_only = FALSE, interval = 1,
-  sex = c(1, 2)) {
+                     sex = c(1, 2)) {
   dat <- dat[!duplicated(dat$specimen_id), , drop = FALSE]
   if ("sampling_desc" %in% names(dat) && unsorted_only) {
     dat <- filter(dat, .data$sampling_desc == "UNSORTED")

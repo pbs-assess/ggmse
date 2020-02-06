@@ -13,9 +13,11 @@ download_om(
 )
 }
 \arguments{
-\item{file}{The name of the file. If there is no .rds extension one will be appended}
+\item{file}{The name of the file. If there is no .rds extension one will be
+appended}
 
-\item{web_file}{Like this: "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata" See webpage for listing}
+\item{web_file}{Like this: "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata" See
+webpage for listing}
 
 \item{base_url}{The URL to find the web_file on}
 
@@ -28,7 +30,6 @@ Download an operating model from the DLMtool website
 }
 \examples{
 \donttest{
-library(gfdlm)
 download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
 }
 }

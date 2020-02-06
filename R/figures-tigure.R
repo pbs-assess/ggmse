@@ -152,9 +152,11 @@ plot_tigure <- function(probs_dat,
     ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
     ggplot2::geom_text(aes(x = type, label = txt), size = ggplot2::rel(3), colour = txt_col) +
     ggplot2::scale_x_discrete(position = "top") +
-    ggplot2::coord_cartesian(expand = FALSE,
+    ggplot2::coord_cartesian(
+      expand = FALSE,
       xlim = range(as.numeric(df$type) + c(-padding, padding)),
-      ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01))
+      ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01)
+    )
 
   g <- g + ggplot2::theme(axis.text.y = element_text(color = lab_cols))
   g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
@@ -213,8 +215,10 @@ plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
       strip.text = element_text(face = "bold", size = 11)
     ) +
     ggplot2::theme(strip.placement = "outside") +
-    ggplot2::scale_fill_viridis_c(limits = c(0, 1), begin = 0.15, end = 1, alpha = gdat[[1]]$alpha,
-      option = "D", direction = 1) +
+    ggplot2::scale_fill_viridis_c(
+      limits = c(0, 1), begin = 0.15, end = 1, alpha = gdat[[1]]$alpha,
+      option = "D", direction = 1
+    ) +
     ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
     ggplot2::geom_text(aes_string(x = "type", label = "txt"),
       size = ggplot2::rel(3), colour = txt_col

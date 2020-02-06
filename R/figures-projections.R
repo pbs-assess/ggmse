@@ -92,8 +92,9 @@ plot_projection_ts <- function(object,
 
   if ("Catch" %in% type) {
     average_catch <- filter(d, Type == "Catch", real_year %in%
-        .hist_years[(length(.hist_years)-(catch_reference-1)):length(.hist_years)]) %>%
-      summarize(average_catch = mean(value)) %>% pull(average_catch)
+      .hist_years[(length(.hist_years) - (catch_reference - 1)):length(.hist_years)]) %>%
+      summarize(average_catch = mean(value)) %>%
+      pull(average_catch)
     g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
   }
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
@@ -101,18 +102,19 @@ plot_projection_ts <- function(object,
     ggplot2::xlab("Year") +
     theme_pbs() +
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
-    ggplot2::coord_cartesian(expand = FALSE,
-      ylim = if (is.null(clip_ylim)) NULL else c(0, clip_ylim * max(quantiles$m))) +
+    ggplot2::coord_cartesian(
+      expand = FALSE,
+      ylim = if (is.null(clip_ylim)) NULL else c(0, clip_ylim * max(quantiles$m))
+    ) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3)
   g
-
 }
 
 
 get_ts <- function(object,
-  type = c("SSB", "FM"),
-  this_year = 2018) {
+                   type = c("SSB", "FM"),
+                   this_year = 2018) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be a DLMtool object of class `mse`",
@@ -158,9 +160,11 @@ get_ts <- function(object,
   hist_data <- list()
 
   for (i in seq_along(type)) {
-    hist_data[[i]] <- slot(object, paste0(type[i],
-      ifelse(type[i] == "C", "B_hist", "_hist"))) %>%
-      apply(c(1, 3), if(type[i] == "FM") max else sum) %>%
+    hist_data[[i]] <- slot(object, paste0(
+      type[i],
+      ifelse(type[i] == "C", "B_hist", "_hist")
+    )) %>%
+      apply(c(1, 3), if (type[i] == "FM") max else sum) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
@@ -171,15 +175,19 @@ get_ts <- function(object,
   hist_data <- dplyr::bind_rows(hist_data)
   hist_data$iter <- rep(seq_len(iters), length(unique(hist_data$Type))) # parallel messed this up
   hist_data <- dplyr::left_join(hist_data, years_df, by = "year")
-  hist_data2 <- do.call("rbind",
-    replicate(length(mps$mp), hist_data, simplify = FALSE))
+  hist_data2 <- do.call(
+    "rbind",
+    replicate(length(mps$mp), hist_data, simplify = FALSE)
+  )
   hist_data2[["mp_name"]] <- rep(mps$mp_name, each = nrow(hist_data))
 
   ts_data <- bind_rows(ts_data, hist_data2)
 
   # dim(object@Misc$MSYRefs$ByYear$SSBMSY)
-  ref_ssb <- data.frame(ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters),
-    Type = "SSB", stringsAsFactors = FALSE)
+  ref_ssb <- data.frame(
+    ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters),
+    Type = "SSB", stringsAsFactors = FALSE
+  )
   ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE)
   ref_f <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE)
   refs <- bind_rows(ref_ssb, ref_msy) %>%
@@ -234,17 +242,20 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #'
 #' @examples
 #' catch_breaks <- c(0, 1000, 2000, 3000)
-#' plot_main_projections(mse_example, catch_breaks = catch_breaks,
-#'   catch_labels = catch_breaks / 1000)
+#' plot_main_projections(mse_example,
+#'   catch_breaks = catch_breaks,
+#'   catch_labels = catch_breaks / 1000
+#' )
 plot_main_projections <- function(object,
-  catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
-  msy_ylim = c(0, 4.5), catch_ylim = NULL) {
-
+                                  catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
+                                  msy_ylim = c(0, 4.5), catch_ylim = NULL) {
   suppressMessages({
     g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
-      ggplot2::theme(strip.text.y = ggplot2::element_blank(),
-        axis.title.y = ggplot2::element_blank())
+      ggplot2::theme(
+        strip.text.y = ggplot2::element_blank(),
+        axis.title.y = ggplot2::element_blank()
+      )
   })
 
   g2 <- gfdlm::plot_projection_ts(object,

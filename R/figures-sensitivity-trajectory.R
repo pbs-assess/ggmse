@@ -22,14 +22,15 @@
 #' @examples
 #' plot_sensitivity_trajectory(mse_example)
 plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp = object@MPs,
-                             slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
-                             probs = 0.3, this_year = 2018) {
-
+                                        slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
+                                        probs = 0.3, this_year = 2018) {
   type <- match.arg(type)
-  if (class(object) != "MSE")
+  if (class(object) != "MSE") {
     stop("`object` must be class 'MSE'", call. = FALSE)
-  if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs))))
+  }
+  if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs)))) {
     stop("All `slots` must be valid `object@OM` or `object@Obs` slot names.", call. = FALSE)
+  }
 
   obs <- suppressMessages(reshape2::melt(object@Obs,
     variable.name = "om_slot", value.name = "om_value"
@@ -46,8 +47,9 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
   dat_ts <- get_ts(object)
   dat <- dplyr::inner_join(om, dat_ts, by = "iter")
 
-  if (slots[[1]] == "all" && length(slots) == 1L)
+  if (slots[[1]] == "all" && length(slots) == 1L) {
     slots <- union(colnames(object@OM), colnames(object@Obs))
+  }
 
   dat <- dat %>%
     dplyr::filter(Type == type) %>%
@@ -63,10 +65,11 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     dplyr::summarize(
       l = quantile(.data$value, probs = 1 - probs[1] / 2),
       u = quantile(.data$value, probs = probs[1] / 2),
-      m = quantile(.data$value, probs = 0.5)) %>%
+      m = quantile(.data$value, probs = 0.5)
+    ) %>%
     ungroup()
 
-  ylab <- if (type == "B_BMSY") expression(B/B[MSY]) else expression(F/F[MSY])
+  ylab <- if (type == "B_BMSY") expression(B / B[MSY]) else expression(F / F[MSY])
   pal <- RColorBrewer::brewer.pal(3, "Set2")[c(2, 3)]
   dat_summarized %>%
     mutate(om_slot = factor(om_slot, levels = slots)) %>%
@@ -75,11 +78,13 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
     ggplot2::geom_line(mapping = aes(colour = om_value_group)) +
     ggplot2::facet_grid(mp_name ~ om_slot) +
     theme_pbs() +
-    ggplot2::labs(x = "Year", y = ylab,
-      colour = "OM value\nthird", fill = "OM value\nthird") +
+    ggplot2::labs(
+      x = "Year", y = ylab,
+      colour = "OM value\nthird", fill = "OM value\nthird"
+    ) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     geom_hline(yintercept = 1, lty = 2, alpha = 0.3) +
     ggplot2::scale_color_manual(values = c("Lower" = pal[1], "Upper" = pal[2])) +
     ggplot2::scale_fill_manual(values = c("Lower" = pal[1], "Upper" = pal[2]))
-    # scale_x_continuous(breaks = seq(min(dat_summarized$real_year), max(dat_summarized$real_year), 10))
+  # scale_x_continuous(breaks = seq(min(dat_summarized$real_year), max(dat_summarized$real_year), 10))
 }

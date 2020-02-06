@@ -38,6 +38,5 @@ cal <- tidy_cal(d_commercial, yrs = 2005:2010, interval = 5)
 d_survey <- gfdata::get_survey_samples(222, ssid = 1)
 caa <- tidy_caa(d_survey, yrs = 2010:2012)
 caa[1, , ]
-
 }
 }

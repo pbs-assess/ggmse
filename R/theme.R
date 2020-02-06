@@ -17,10 +17,9 @@
 #'   ggplot2::geom_point(ggplot2::aes(x = wt, y = mpg, colour = factor(gear))) +
 #'   ggplot2::facet_wrap(~am)
 #' p + theme_pbs()
-#'
 #' @export
 theme_pbs <- function(base_size = 11, base_family = "", text_col = "grey20",
-  panel_border_col = "grey70") {
+                      panel_border_col = "grey70") {
   half_line <- base_size / 2
   theme_light(base_size = base_size, base_family = "") +
     theme(

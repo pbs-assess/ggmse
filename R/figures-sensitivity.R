@@ -21,13 +21,15 @@
 plot_sensitivity <- function(object, pm_function, mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
                              ylab = "Performance metric value") {
-
-  if (class(object) != "MSE")
+  if (class(object) != "MSE") {
     stop("`object` must be class 'MSE'", call. = FALSE)
-  if (class(pm_function) != "PM")
+  }
+  if (class(pm_function) != "PM") {
     stop("`pm_function` must be a function of class 'PM'", call. = FALSE)
-  if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs))))
+  }
+  if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs)))) {
     stop("All `slots` must be valid `object@OM` or `object@Obs` slot names.", call. = FALSE)
+  }
 
   obs <- suppressMessages(reshape2::melt(object@Obs,
     variable.name = "om_slot", value.name = "om_value"
@@ -52,8 +54,9 @@ plot_sensitivity <- function(object, pm_function, mp = object@MPs,
 
   dat <- dplyr::inner_join(om, pm, by = "iter")
 
-  if (slots[[1]] == "all" && length(slots) == 1L)
+  if (slots[[1]] == "all" && length(slots) == 1L) {
     slots <- union(colnames(object@OM), colnames(object@Obs))
+  }
 
   dplyr::filter(
     dat,
