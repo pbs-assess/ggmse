@@ -9,13 +9,14 @@ plot_kobe(
   yend = max(object@proyears),
   dontshow_mp = NULL,
   show_ref_pt_lines = TRUE,
-  alpha = c(0.1, 0.25, 0.5, 0.75),
+  alpha = c(0.25, 0.5, 0.75),
   n = 200,
   xlim = c(0, 3.5),
   ylim = c(0, 3.5),
   x_ref_lines = c(0.4, 0.8),
   y_ref_lines = 1,
-  show_contours = TRUE
+  show_contours = TRUE,
+  return_data = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ plot_kobe(
 \item{y_ref_lines}{A vector of horizontal lines to draw as reference point lines.}
 
 \item{show_contours}{Logical: show contour lines?}
+
+\item{return_data}{Logical: return the data instead of the plot?}
 }
 \value{
 A ggplot object

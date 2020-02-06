@@ -4,16 +4,12 @@
 \alias{plot_tigure_facet}
 \title{Make a set of tigure plots}
 \usage{
-plot_tigure_facet(pm_df_list, ncol = NULL, nrow = NULL, label_size = 12, ...)
+plot_tigure_facet(pm_df_list, ncol = NULL, ...)
 }
 \arguments{
 \item{pm_df_list}{A named list of performance metric data frames from \code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}
 
-\item{ncol}{An optional number of columns in the grid.}
-
-\item{nrow}{An optional number of rows in the grid.}
-
-\item{label_size}{Label size for the plots.}
+\item{ncol}{Optional number of columns.}
 
 \item{...}{Other arguments to pass to \code{\link[=plot_tigure]{plot_tigure()}}.}
 }

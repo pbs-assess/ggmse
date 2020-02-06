@@ -28,6 +28,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
       scenario = rep(.x, nrow(pm_df_list[[.x]]))
     )
   )
+
   if (!is.null(mp)) {
     df <- dplyr::filter(df, MP %in% mp)
   }
@@ -40,14 +41,19 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
     reshape2::dcast(MP + scenario ~ pm, value.var = "prob") %>%
     dplyr::mutate(`Reference MP` = ifelse(grepl("ref", MP), "True", "False"))
 
+  xmin <- pull(df_wide, !!xvar) %>% min()
+  ymin <- pull(df_wide, !!yvar) %>% min()
+  xvar <- paste0("`", xvar, "`")
+  yvar <- paste0("`", yvar, "`")
+
   g <- ggplot2::ggplot(df_wide,
     ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~scenario, nrow = 2) +
     theme_pbs() +
-    ggplot2::coord_fixed(
-      xlim = c(min(df_wide[[xvar]]) * 0.99, 1.005),
-      ylim = c(min(df_wide[[yvar]]) * 0.99, 1.005), expand = FALSE
+    ggplot2::coord_equal(
+      xlim = c(xmin * 0.99, 1.005),
+      ylim = c(ymin * 0.99, 1.005), expand = FALSE
     ) +
     ggplot2::scale_shape_manual(values = c(19, 21)) +
     ggplot2::guides(col = ggplot2::guide_legend(order = 1))

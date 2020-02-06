@@ -68,6 +68,7 @@ calc_contour_lines <- function(d,
 #' @param x_ref_lines A vector of vertical lines to draw as reference point lines.
 #' @param y_ref_lines A vector of horizontal lines to draw as reference point lines.
 #' @param show_contours Logical: show contour lines?
+#' @param return_data Logical: return the data instead of the plot?
 #'
 #' @return A ggplot object
 #' @importFrom reshape2 melt
@@ -83,13 +84,14 @@ plot_kobe <- function(object,
                       yend = max(object@proyears),
                       dontshow_mp = NULL,
                       show_ref_pt_lines = TRUE,
-                      alpha = c(0.1, 0.25, 0.5, 0.75),
+                      alpha = c(0.25, 0.5, 0.75),
                       n = 200,
                       xlim = c(0, 3.5),
                       ylim = c(0, 3.5),
                       x_ref_lines = c(0.4, 0.8),
                       y_ref_lines = 1,
-                      show_contours = TRUE) {
+                      show_contours = TRUE,
+                      return_data = FALSE) {
   ffmsy <- object@F_FMSY[, , yend] %>%
     reshape2::melt() %>%
     rename(iter = Var1, mp = Var2, ffmsy = value)
@@ -108,29 +110,82 @@ plot_kobe <- function(object,
   contour_lines$y <- exp(contour_lines$y)
   d$x <- exp(d$x)
   d$y <- exp(d$y)
-  g <- ggplot(d, aes(x, y)) +
-    geom_point(alpha = 0.2)
+  d$outside <- FALSE
+  d$outside[d$x >= xlim[2]] <- TRUE
+  d$outside[d$y >= ylim[2]] <- TRUE
+  d$x[d$x >= xlim[2] - 0.05] <- xlim[2] - 0.05
+  d$y[d$y >= ylim[2] - 0.05] <- ylim[2] - 0.05
 
+  g <- ggplot(d, ggplot2::aes_string("x", "y")) +
+    geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
+    ggplot2::guides(shape = FALSE)
+
+  scale <- scale_color_viridis_c(end = 0.95, option = "D", direction = -1,
+    breaks = unique(contour_lines$alpha),
+    guide = ggplot2::guide_legend(override.aes = list(alpha = 1)))
+  shape <- ggplot2::scale_shape_manual(values = c("TRUE" = 21, "FALSE" = 19))
   if (show_contours) {
     g <- g + geom_path(
       data = contour_lines,
       aes(color = alpha, group = as.factor(alpha)), alpha = 0.65, lwd = 0.75
-    ) +
-      scale_color_viridis_c(end = 0.95, option = "D", direction = -1)
+    ) + scale
+
   }
-  g <- g + ggsidekick::theme_sleek() +
+  g <- g + theme_pbs() +
     facet_wrap(~mp_name) +
     labs(
-      colour = "Prob. density", x = expression(SSB / SSB[MSY]),
+      colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
-    ggplot2::coord_cartesian(xlim = xlim, ylim = ylim) +
-    guides(colour = FALSE)
+    ggplot2::coord_equal(xlim = xlim + c(-0.05, 0.05), ylim = ylim + c(-0.05, 0.05), expand = FALSE)
+    # guides(colour = FALSE)
 
   if (show_ref_pt_lines) {
     g <- g +
       geom_vline(xintercept = x_ref_lines, alpha = 0.2, lty = 2) +
       geom_hline(yintercept = y_ref_lines, alpha = 0.2, lty = 2)
   }
+
+  if (!return_data)
+    g
+  else
+    list(df = d, show_ref_pt_lines = show_ref_pt_lines, show_contours = show_contours,
+      x_ref_lines = x_ref_lines, y_ref_lines = y_ref_lines, contour_lines = contour_lines,
+      xlim = xlim, ylim = ylim, scale = scale, shape = shape)
+}
+
+plot_kobe_grid <- function(object_list, ...) {
+  gdat <- purrr::map(object_list, plot_kobe, return_data = TRUE, ...)
+  df <- purrr::map_dfr(gdat, "df", .id = "scenario")
+  contour_lines <- purrr::map_dfr(gdat, "contour_lines", .id = "scenario")
+  x_ref_lines <- purrr::map_dfr(gdat, "x_ref_lines", .id = "scenario")
+  y_ref_lines <- purrr::map_dfr(gdat, "y_ref_lines", .id = "scenario")
+
+  g <- ggplot(df, ggplot2::aes_string("x", "y")) +
+    geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
+    ggplot2::guides(shape = FALSE)
+
+  if (gdat[[1]]$show_contours) {
+    g <- g + geom_path(
+      data = contour_lines,
+      aes(color = alpha, group = as.factor(alpha)), alpha = 0.65, lwd = 0.75
+    ) + gdat[[1]]$scale + gdat[[1]]$shape
+  }
+  g <- g + theme_pbs() +
+    facet_grid(mp_name~scenario) +
+    labs(
+      colour = "Prob.\ndensity", x = expression(B / B[MSY]),
+      y = expression(F / F[MSY])
+    ) +
+    ggplot2::coord_equal(xlim = gdat[[1]]$xlim + c(-0.05, 0.05),
+      ylim = gdat[[1]]$ylim + c(-0.05, 0.05), expand = FALSE)
+    # guides(colour = FALSE)
+
+  if (gdat[[1]]$show_ref_pt_lines) {
+    g <- g +
+      geom_vline(xintercept = gdat[[1]]$x_ref_lines, alpha = 0.2, lty = 2) +
+      geom_hline(yintercept = gdat[[1]]$y_ref_lines, alpha = 0.2, lty = 2)
+  }
+
   g
 }

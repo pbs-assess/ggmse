@@ -11,7 +11,9 @@ plot_tigure(
   scale_0_1 = FALSE,
   sort_by = "decreasing",
   mp_order = NULL,
-  satisficed = NULL
+  satisficed = NULL,
+  return_data = FALSE,
+  alpha = 0.6
 )
 }
 \arguments{
@@ -29,7 +31,14 @@ scale_0_1 is used, this will be ignored}
 
 \item{mp_order}{Optional hardcoded MP order}
 
-\item{satisficed}{TODO}
+\item{satisficed}{An optional named numeric vector. The names correspond to
+the performance metrics on the values correspond to the values above which
+(\code{>}) the cells will be outlined as "satisficed".}
+
+\item{return_data}{Logical. If \code{TRUE} then the underlying data frame is
+returned instead of the plot.}
+
+\item{alpha}{Transparency of underlying color.}
 }
 \description{
 Summary of probabilities of things from the MSE object in a colored tile table format
@@ -37,5 +46,6 @@ Summary of probabilities of things from the MSE object in a colored tile table f
 \examples{
 probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 plot_tigure(probs)
+plot_tigure(probs, alpha = 0.9)
 plot_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
 }

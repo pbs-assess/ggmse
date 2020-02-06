@@ -68,7 +68,12 @@ get_probs <- function(object,
 #' @param sort_by show values in decreasing or increasing format
 #' @param mp_order Optional hardcoded MP order
 #' @param digits How many decimal places to show in the tiles for the values
-#' @param satisficed TODO
+#' @param satisficed An optional named numeric vector. The names correspond to
+#'   the performance metrics on the values correspond to the values above which
+#'   (`>`) the cells will be outlined as "satisficed".
+#' @param return_data Logical. If `TRUE` then the underlying data frame is
+#'   returned instead of the plot.
+#' @param alpha Transparency of underlying color.
 #'
 #' @importFrom reshape2 melt
 #' @importFrom gfutilities f
@@ -79,16 +84,17 @@ get_probs <- function(object,
 #' @examples
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' plot_tigure(probs)
+#' plot_tigure(probs, alpha = 0.9)
 #' plot_tigure(probs, satisficed = c("P40" = 0.9, "LTY" = 0.9))
-
 plot_tigure <- function(probs_dat,
-                       digits = 2,
-                       relative_max = FALSE,
-                       scale_0_1 = FALSE,
-                       sort_by = "decreasing",
-                       mp_order = NULL,
-                       satisficed = NULL
-                       ) {
+                        digits = 2,
+                        relative_max = FALSE,
+                        scale_0_1 = FALSE,
+                        sort_by = "decreasing",
+                        mp_order = NULL,
+                        satisficed = NULL,
+                        return_data = FALSE,
+                        alpha = 0.6) {
   df <- probs_dat
 
   if (is.null(mp_order)) {
@@ -129,34 +135,49 @@ plot_tigure <- function(probs_dat,
       ungroup()
   }
 
-  g <- ggplot(df, aes(x = type, y = MP)) +
-    geom_tile(aes(fill = value), color = "white") +
+  df$MP <- as.factor(df$MP)
+  lab_cols <- ifelse(grepl("ref", levels(df$MP)), "grey65", "grey10")
+  txt_col <- ifelse(grepl("ref", df$MP), "grey45", "grey4")
+  padding <- 0.52
+  # browser()
+  g <- ggplot(df, ggplot2::aes_string(x = "type", y = "MP")) +
+    ggplot2::geom_tile(aes(fill = value), color = "white") +
     theme_pbs() +
-    theme(
-      panel.border = element_blank(),
-      axis.ticks.x = element_blank(),
-      axis.ticks.y = element_blank()
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_blank(),
+      axis.ticks.y = ggplot2::element_blank()
     ) +
-    ggplot2::scale_fill_viridis_c(limits = c(0, 1), alpha = 0.6, option = "D", direction = 1) +
-    guides(fill = FALSE) + xlab("") + ylab("") +
-    geom_text(aes(x = type, label = txt), size = ggplot2::rel(3)) +
-    scale_x_discrete(position = "top")
+    ggplot2::scale_fill_viridis_c(limits = c(0, 1), begin = 0.15, end = 1, alpha = alpha, option = "D", direction = 1) +
+    ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
+    ggplot2::geom_text(aes(x = type, label = txt), size = ggplot2::rel(3), colour = txt_col) +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::coord_cartesian(expand = FALSE,
+      xlim = range(as.numeric(df$type) + c(-padding, padding)),
+      ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01))
+
+  g <- g + ggplot2::theme(axis.text.y = element_text(color = lab_cols))
+  g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
 
   if (!is.null(satisficed)) {
-    h <- purrr::map_df(seq_along(satisficed),
-      ~ dplyr::filter(df, value > satisficed[[.x]] & type == names(satisficed)[.x]))
-    g <- g +  geom_tile(data = h, color = "grey30", lwd = 0.45, fill = NA)
+    h <- purrr::map_df(
+      seq_along(satisficed),
+      ~ dplyr::filter(df, value > satisficed[[.x]] & type == names(satisficed)[.x])
+    )
+    g <- g + geom_tile(data = h, color = "grey30", lwd = 0.45, fill = NA)
   }
 
-  g
+  if (!return_data) {
+    g
+  } else {
+    list(df = df, lab_cols = lab_cols, txt_col = txt_col, alpha = alpha)
+  }
 }
 
 #' Make a set of tigure plots
 #'
 #' @param pm_df_list A named list of performance metric data frames from [get_probs()]. The names will be used as the plot labels.
-#' @param ncol An optional number of columns in the grid.
-#' @param nrow An optional number of rows in the grid.
-#' @param label_size Label size for the plots.
+#' @param ncol Optional number of columns.
 #' @param ... Other arguments to pass to [plot_tigure()].
 #'
 #' @return
@@ -170,12 +191,39 @@ plot_tigure <- function(probs_dat,
 #' pm[[2]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_tigure_facet(pm)
-plot_tigure_facet <- function(pm_df_list,
-  ncol = NULL, nrow = NULL, label_size = 12, ...) {
-  if (!is.list(pm_df_list))
+plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
+  if (!is.list(pm_df_list)) {
     stop("`pm_df_list` must be a list of data frames from `get_probs()`.",
-      call. = FALSE)
-  g <- purrr::map(pm_df_list, plot_tigure, ...)
-  plot_grid_pbs(g, labels = names(pm_df_list), ncol = ncol,
-    nrow = nrow, label_size = label_size)
+      call. = FALSE
+    )
+  }
+
+  gdat <- purrr::map(pm_df_list, plot_tigure, return_data = TRUE, ...)
+  gdat2 <- purrr::map_dfr(gdat, "df", .id = "scenario")
+  txt_col <- ifelse(grepl("ref", gdat2$MP), "grey45", "grey4")
+
+  g <- ggplot(gdat2, ggplot2::aes_string(x = "type", y = "MP")) +
+    ggplot2::geom_tile(aes_string(fill = "value"), color = "white") +
+    theme_pbs() +
+    ggplot2::facet_wrap(ggplot2::vars(scenario), scales = "free_x", ncol = ncol) +
+    ggplot2::theme(
+      # panel.border = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_blank(),
+      axis.ticks.y = ggplot2::element_blank(),
+      strip.text = element_text(face = "bold", size = 11)
+    ) +
+    ggplot2::theme(strip.placement = "outside") +
+    ggplot2::scale_fill_viridis_c(limits = c(0, 1), begin = 0.15, end = 1, alpha = gdat[[1]]$alpha,
+      option = "D", direction = 1) +
+    ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
+    ggplot2::geom_text(aes_string(x = "type", label = "txt"),
+      size = ggplot2::rel(3), colour = txt_col
+    ) +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::coord_cartesian(expand = FALSE)
+
+  g <- g + ggplot2::theme(axis.text.y = element_text(color = gdat[[1]]$lab_cols))
+  g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
+
+  g
 }
