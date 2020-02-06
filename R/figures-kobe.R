@@ -193,7 +193,7 @@ plot_kobe_grid <- function(object_list, ...) {
     ) + gdat[[1]]$scale + gdat[[1]]$shape
   }
   g <- g + theme_pbs() +
-    ggplot2::facet_grid(mp_name ~ scenario) +
+    ggplot2::facet_grid(scenario ~ mp_name) +
     labs(
       colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
