@@ -18,7 +18,8 @@ plot_worms <- function(object, this_year, prob = 0.5,
                        include_historical = TRUE) {
   ts <- get_ts(object, type = c("SSB", "FM"))
   ts_quantiles <- get_ts_quantiles(ts, probs = c(prob, prob))
-  d <- filter(ts_quantiles, real_year >= this_year)
+  # d <- filter(ts_quantiles, real_year >= this_year)
+  d <- ts_quantiles
 
   now <- filter(ts_quantiles, real_year == this_year)
 
