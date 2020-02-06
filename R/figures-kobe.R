@@ -8,6 +8,7 @@
 #'
 #' @return A list of two vectors of x and y-coordinates for the contour line.
 #' @importFrom grDevices contourLines
+#' @noRd
 quantile_contour <- function(x, alpha = 0.8) {
   zdens <- rev(sort(x$z))
   cumu_zdens <- cumsum(zdens)
@@ -28,6 +29,7 @@ quantile_contour <- function(x, alpha = 0.8) {
 #'
 #' @return A data frame containing mp, mp_name, alpha, x, and y where x and y are the calculated
 #'  coordinates for the contour lines for each alpha and mp.
+#' @noRd
 calc_contour_lines <- function(d,
                                alpha = c(0.025, 0.5, 0.975),
                                n = 200) {
@@ -73,9 +75,11 @@ calc_contour_lines <- function(d,
 #' @return A ggplot object
 #' @importFrom reshape2 melt
 #' @importFrom dplyr filter select rename inner_join left_join
-#' @importFrom ggplot2 geom_point geom_path scale_color_viridis_c labs facet_wrap guides geom_vline
+#' @importFrom ggplot2 geom_point geom_path scale_color_viridis_c labs
+#'   facet_wrap guides geom_vline
 #' @importFrom ggplot2 ggplot geom_hline aes xlim ylim
 #' @export
+#' @rdname plot_kobe
 #'
 #' @examples
 #' plot_kobe(mse_example)
@@ -119,16 +123,17 @@ plot_kobe <- function(object,
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
     ggplot2::guides(shape = FALSE)
 
-  scale <- scale_color_viridis_c(end = 0.95, option = "D", direction = -1,
+  scale <- scale_color_viridis_c(
+    end = 0.95, option = "D", direction = -1,
     breaks = unique(contour_lines$alpha),
-    guide = ggplot2::guide_legend(override.aes = list(alpha = 1)))
+    guide = ggplot2::guide_legend(override.aes = list(alpha = 1))
+  )
   shape <- ggplot2::scale_shape_manual(values = c("TRUE" = 21, "FALSE" = 19))
   if (show_contours) {
     g <- g + geom_path(
       data = contour_lines,
       aes_string(color = "alpha", group = "as.factor(alpha)"), alpha = 0.65, lwd = 0.75
     ) + scale
-
   }
   g <- g + theme_pbs() +
     ggplot2::facet_wrap(~mp_name) +
@@ -136,8 +141,10 @@ plot_kobe <- function(object,
       colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
-    ggplot2::coord_equal(xlim = xlim + c(-0.05, 0.05), ylim = ylim + c(-0.05, 0.05), expand = FALSE)
-    # guides(colour = FALSE)
+    ggplot2::coord_equal(
+      xlim = xlim + c(-0.05, 0.05),
+      ylim = ylim + c(-0.05, 0.05), expand = FALSE
+    )
 
   if (show_ref_pt_lines) {
     g <- g +
@@ -145,14 +152,27 @@ plot_kobe <- function(object,
       geom_hline(yintercept = y_ref_lines, alpha = 0.2, lty = 2)
   }
 
-  if (!return_data)
+  if (!return_data) {
     g
-  else
-    list(df = d, show_ref_pt_lines = show_ref_pt_lines, show_contours = show_contours,
+  } else {
+    list(
+      df = d, show_ref_pt_lines = show_ref_pt_lines, show_contours = show_contours,
       x_ref_lines = x_ref_lines, y_ref_lines = y_ref_lines, contour_lines = contour_lines,
-      xlim = xlim, ylim = ylim, scale = scale, shape = shape)
+      xlim = xlim, ylim = ylim, scale = scale, shape = shape
+    )
+  }
 }
 
+#' @param object_list A list of DLMtool MSE objects representing different
+#'   scenarios. The list should be named with the scenario names.
+#' @rdname plot_kobe
+#' @export
+#' @examples
+#' x <- list()
+#' x[[1]] <- mse_example
+#' x[[2]] <- mse_example
+#' names(x) <- c("Scenario 1", "Scenario 2")
+#' plot_kobe_grid(x)
 plot_kobe_grid <- function(object_list, ...) {
   gdat <- purrr::map(object_list, plot_kobe, return_data = TRUE, ...)
   df <- purrr::map_dfr(gdat, "df", .id = "scenario")
@@ -171,20 +191,20 @@ plot_kobe_grid <- function(object_list, ...) {
     ) + gdat[[1]]$scale + gdat[[1]]$shape
   }
   g <- g + theme_pbs() +
-    ggplot2::facet_grid(mp_name~scenario) +
+    ggplot2::facet_grid(mp_name ~ scenario) +
     labs(
       colour = "Prob.\ndensity", x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
-    ggplot2::coord_equal(xlim = gdat[[1]]$xlim + c(-0.05, 0.05),
-      ylim = gdat[[1]]$ylim + c(-0.05, 0.05), expand = FALSE)
-    # guides(colour = FALSE)
+    ggplot2::coord_equal(
+      xlim = gdat[[1]]$xlim + c(-0.05, 0.05),
+      ylim = gdat[[1]]$ylim + c(-0.05, 0.05), expand = FALSE
+    )
 
   if (gdat[[1]]$show_ref_pt_lines) {
     g <- g +
       geom_vline(xintercept = gdat[[1]]$x_ref_lines, alpha = 0.2, lty = 2) +
       geom_hline(yintercept = gdat[[1]]$y_ref_lines, alpha = 0.2, lty = 2)
   }
-
   g
 }
