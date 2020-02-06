@@ -51,7 +51,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       ggplot2::geom_line(lwd = 0.7, mapping = ggplot2::aes_string(lty = "`Reference MP`")) +
       ggplot2::coord_cartesian(
         expand = FALSE, ylim = c(min(df_long$prob), 1.0),
-        xlim = c(1 - nmp * .05, nmp - 1 + nmp * 0.05)
+        xlim = c(1 - nmp * .05, nmp + nmp * 0.05)
       ) +
       ggplot2::facet_wrap(~scenario)
   } else {
