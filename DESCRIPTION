@@ -22,7 +22,9 @@ BugReports: https://github.com/pbs-assess/gfdlm/issues
 Depends: 
     R (>= 3.4.0)
 Imports:
+    clisymbols,
     cowplot,
+    crayon,
     DLMtool,
     dplyr,
     gfdata,

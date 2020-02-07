@@ -44,5 +44,9 @@ globalVariables(c(
   "f_m",
   "f_u",
   "scenario",
-  "year"
+  "year",
+  ".",
+  "PM",
+  "mp",
+  "scenario_type"
 ))
