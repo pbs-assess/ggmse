@@ -304,7 +304,7 @@ make_typical_plots <- function(
       scale_y_continuous(breaks = c(0, 1))
     # .ggsave("neon-worms-projection", 10, 8.5)
 
-    g$worm_hist_proj <-
+    g$worms_hist_proj <-
       d %>% plot_worms_grid(this_year = this_year, include_historical = TRUE) +
       coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
     # .ggsave("neon-worms-all", 10, 8.5)
