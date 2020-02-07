@@ -8,8 +8,8 @@
 #' @param pm A character vector of performance metrics. These performance
 #'   metrics should exist in current workspace.
 #' @param scenario_df A data frame with the columns `scenario`,
-#'   `scenarios_human`, and `scenario_type`. `scenario_type` should be one of
-#'   `Reference` or `Robustness`.
+#'   `scenario_human`, and `scenario_type`. `scenario_type` should contain of
+#'   `"Reference"` or `"Robustness"`.
 #' @param this_year The last year of historical data in the MSE.
 #' @param mp_sat A character vector of satisficed to management procedures
 #'   (MPs).
@@ -37,22 +37,60 @@
 #'
 #' @export
 make_typical_plots <- function(
-                           mse_list,
-                           pm,
-                           scenario_df,
-                           this_year,
-                           mp_sat,
-                           mp_not_sat,
-                           mp_not_sat_highlight,
-                           mp_ref,
-                           custom_pal,
-                           eg_scenario,
-                           catch_breaks = NULL,
-                           catch_labels = catch_breaks,
-                           satisficed_criteria = NULL) {
+                               mse_list,
+                               pm,
+                               scenario_df,
+                               this_year,
+                               mp_sat,
+                               mp_not_sat,
+                               mp_not_sat_highlight,
+                               mp_ref,
+                               custom_pal,
+                               eg_scenario,
+                               catch_breaks = NULL,
+                               catch_labels = catch_breaks,
+                               satisficed_criteria = NULL) {
+  if (!is.list(mse_list)) {
+    stop("`mse_list` must be a list.", call. = FALSE)
+  }
+  if (!all(vapply(mse, class, FUN.VALUE = character(1L)) == "MSE")) {
+    stop("`mse_list` must contain DLMtool MSE objects.", call. = FALSE)
+  }
+  if (!is.data.frame(scenario_df)) {
+    stop("`scenario_df` must be a data frame.", call. = FALSE)
+  }
+  if (!all(c("scenario", "scenario_human", "scenario_type")
+  %in% colnames(scenario_df))) {
+    stop("`scenario_df` must have columns `c(\"scenario\", \"scenario_human\", \"scenario_type\")`",
+      call. = FALSE
+    )
+  }
+  if (is.null(names(custom_pal))) {
+    stop("`custom_pal` must be a *named* character vector.", call. = FALSE)
+  }
+  if (is.null(names(satisficed_criteria))) {
+    stop("`satisficed_criteria` must be a *named* character vector.", call. = FALSE)
+  }
+  if (!all(names(satisficed_criteria) %in% pm)) {
+    stop("`names(satisficed_criteria)` not all in `pm`.", call. = FALSE)
+  }
+  if (!all(mp_sat %in% names(custom_pal))) {
+    stop("`custom_pal` must have names that include all of the satisficed MPs (`mp_sat`).", call. = FALSE)
+  }
+  if (!eg_scenario %in% scenario_df$scenario) {
+    stop("`eg_scenario` must be in `scenario_df$scenario`.", call. = FALSE)
+  }
+  if (!all(scenario_df$scenario %in% names(mse_list))) {
+    stop("Not all `scenario_df$scenario` in `names(mse_list)`.", call. = FALSE)
+  }
+  if (!all(names(mse_list) %in% scenario_df$scenario)) {
+    stop("Not all `names(mse_list)` in `scenario_df$scenario`.", call. = FALSE)
+  }
 
-  pro(before = "Calculating performance metrics",
-    after = "", text = "")
+  pro(
+    before = "Calculating performance metrics",
+    after = "", text = ""
+  )
   get_filtered_scenario <- function(type, column) {
     dplyr::filter(sc, scenario_type == type) %>%
       dplyr::pull(!!column) %>%
@@ -142,8 +180,10 @@ make_typical_plots <- function(
   mp_eg_not_sat <- mp_not_sat_highlight[mp_not_sat_highlight %in% mp_not_sat]
   g$projections_not_sat_highlight <-
     DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
-    plot_main_projections(catch_breaks = catch_breaks,
-      catch_labels = catch_labels)
+    plot_main_projections(
+      catch_breaks = catch_breaks,
+      catch_labels = catch_labels
+    )
   # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
 
   # Kobe ------------------------------------------------------------------------
@@ -233,19 +273,19 @@ make_typical_plots <- function(
     split(.$type) %>%
     purrr::map(select, -type)
   suppressMessages({
-  g_temp <- names(d) %>% map(~ {
-    gfdlm::plot_parallel_coords(d[.x], type = "single", rotate_labels = TRUE) +
-      ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11)) +
-      ggplot2::guides(lty = FALSE, fill = FALSE) +
-      ggplot2::scale_color_brewer(palette = "Set2") +
-      ggplot2::coord_cartesian(ylim = c(-0.01, 1.01), expand = FALSE) +
-      ggplot2::theme(plot.margin = grid::unit(c(1, .5, .5, .5), "lines")) +
-      ggplot2::theme(
-        panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
-        panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
-        panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
-      )
-  })
+    g_temp <- names(d) %>% map(~ {
+      gfdlm::plot_parallel_coords(d[.x], type = "single", rotate_labels = TRUE) +
+        ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11)) +
+        ggplot2::guides(lty = FALSE, fill = FALSE) +
+        ggplot2::scale_color_brewer(palette = "Set2") +
+        ggplot2::coord_cartesian(ylim = c(-0.01, 1.01), expand = FALSE) +
+        ggplot2::theme(plot.margin = grid::unit(c(1, .5, .5, .5), "lines")) +
+        ggplot2::theme(
+          panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
+          panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
+          panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
+        )
+    })
   })
   g$parallel_refset_mptypes_avg <-
     cowplot::plot_grid(
@@ -338,6 +378,8 @@ make_typical_plots <- function(
 }
 
 pro <- function(text, before = "Creating", after = "figures") {
-  cat(crayon::green(clisymbols::symbol$tick),
-    before, text, after, "\n")
+  cat(
+    crayon::green(clisymbols::symbol$tick),
+    before, text, after, "\n"
+  )
 }
