@@ -4,14 +4,19 @@
 #'   [get_probs()]. The names will be used as the plot labels.
 #' @param type The type of plot. Multipanel `"facet"` vs. single panel
 #'   `"single"`. In the single panel version, a shaded ribbon represents the
-#'   upper and lower values across the scenarios.
+#'   upper and lower values across the scenarios on the line represents the
+#'   mean.
 #' @param custom_pal An optional custom color palette. Should be a named
 #'   character vector
-#' @param mp An optional character vector of management procedures to filter to
-#'   include.
+#' @param groups An optional grouping structure to separate the lines. For
+#'   example, this allows for conservation and fisheries performance metrics to
+#'   use distinct line segments. Should be a list with the performance metrics
+#'   grouped. See the example below.
 #' @param rotate_labels Logical: rotate the performance metric labels 90
 #'   degrees?
-#'
+#' @importFrom ggplot2 coord_cartesian geom_ribbon guide_legend xlab ylab
+#'   element_line scale_color_manual scale_colour_manual scale_fill_manual theme
+#'   element_text aes_string guide_legend guides
 #' @return A ggplot2 object
 #' @export
 #'
@@ -23,8 +28,10 @@
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_parallel_coords(pm)
 #' plot_parallel_coords(pm, "single")
+#' plot_parallel_coords(pm, groups = list(c("P40", "P100", "PNOF"), c("LTY", "AAVY")))
 plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
-                                 custom_pal = NULL, mp = NULL,
+                                 custom_pal = NULL,
+                                 groups = NULL,
                                  rotate_labels = type == "facet") {
   type <- match.arg(type)
 
@@ -34,8 +41,9 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       scenario = rep(.x, nrow(pm_df_list[[.x]]))
     )
   )
-  if (!is.null(mp)) {
-    df <- dplyr::filter(df, MP %in% mp)
+
+  if (!is.null(groups)) {
+    ids <- purrr::map_df(groups, ~ tibble::tibble(pm = .x), .id = "group")
   }
 
   if (type == "facet") {
@@ -46,14 +54,23 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     )
     df_long$`Reference MP` <- ifelse(grepl("ref", df_long$MP), "True", "False")
 
-    nmp <- length(unique(df_long$MP))
-    g <- ggplot(df_long, aes_string("pm", "prob", group = "MP", colour = "MP")) +
-      ggplot2::geom_line(lwd = 0.7, mapping = ggplot2::aes_string(lty = "`Reference MP`")) +
-      ggplot2::coord_cartesian(
+    if (!is.null(groups)) {
+      if (is.factor(df_long$pm)) {
+        ids$pm <- factor(ids$pm, levels = levels(df_long$pm))
+      }
+      df_long <- left_join(df_long, ids, by = "pm")
+      df_long$group <- paste(df_long$group, df_long$MP)
+    } else {
+      df_long$group <- df_long$MP
+    }
+
+    g <- ggplot(df_long, aes_string("pm", "prob", group = "group", colour = "MP")) +
+      geom_line(lwd = 0.7, mapping = aes_string(lty = "`Reference MP`")) +
+      coord_cartesian(
         expand = FALSE, ylim = c(min(df_long$prob), 1.0),
-        xlim = c(1 - nmp * .05, nmp + nmp * 0.05)
+        xlim = NULL
       ) +
-      ggplot2::facet_wrap(~scenario)
+      facet_wrap(~scenario)
   } else {
     condense_func <- function(dat, f, label = "prob") {
       dplyr::group_by(dat, MP) %>%
@@ -70,28 +87,43 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     pm <- dplyr::left_join(pm_avg, pm_min, by = c("MP", "pm")) %>%
       dplyr::left_join(pm_max, by = c("MP", "pm"))
     pm$`Reference MP` <- ifelse(grepl("ref", pm$MP), "True", "False")
-    g <- ggplot(pm, aes(pm, mean, group = MP, colour = MP)) +
-      ggplot2::geom_ribbon(aes(ymin = min, ymax = max, fill = MP), alpha = 0.1, colour = NA) +
-      ggplot2::geom_line(alpha = 1, lwd = 0.85, mapping = ggplot2::aes_string(lty = "`Reference MP`")) +
-      ggplot2::coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1))
+
+    if (!is.null(groups)) {
+      if (is.factor(pm$pm)) {
+        ids$pm <- factor(ids$pm, levels = levels(pm$pm))
+      }
+      pm <- left_join(pm, ids, by = "pm")
+      pm$group <- paste(pm$group, pm$MP)
+    } else {
+      pm$group <- pm$MP
+    }
+
+    g <- ggplot(pm, aes_string("pm", "mean", group = "group", colour = "MP")) +
+      geom_ribbon(aes(ymin = min, ymax = max, fill = MP), alpha = 0.1, colour = NA) +
+      geom_line(alpha = 1, lwd = 0.85, mapping = aes_string(lty = "`Reference MP`")) +
+      coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1))
   }
 
-  g <- g + theme_pbs() + ggplot2::theme(
-    panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
-    panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
-    panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
-  ) +
-    ggplot2::xlab("Performance metric") + ggplot2::ylab("Probability") +
-    ggplot2::guides(
-      col = ggplot2::guide_legend(order = 1),
-      fill = ggplot2::guide_legend(order = 1)
-    )
+  g <- g + theme_pbs()
+
   if (!is.null(custom_pal)) {
-    g <- g + ggplot2::scale_color_manual(values = custom_pal) +
-      ggplot2::scale_fill_manual(values = custom_pal)
+    g <- g + scale_color_manual(values = custom_pal) +
+      scale_fill_manual(values = custom_pal)
   }
   if (rotate_labels) {
-    g <- g + ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1, vjust = 0.5))
+    g <- g + theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5))
   }
+
+  g <- g + theme(
+    panel.grid.major.y = element_line(colour = "grey85"),
+    panel.grid.major.x = element_line(colour = "grey85"),
+    panel.grid.minor.y = element_line(colour = "grey96")
+  ) +
+    xlab("Performance metric") + ylab("Probability") +
+    guides(
+      col = guide_legend(order = 1),
+      fill = guide_legend(order = 1)
+    )
+
   g
 }

@@ -8,7 +8,7 @@ plot_parallel_coords(
   pm_df_list,
   type = c("facet", "single"),
   custom_pal = NULL,
-  mp = NULL,
+  groups = NULL,
   rotate_labels = type == "facet"
 )
 }
@@ -18,13 +18,16 @@ plot_parallel_coords(
 
 \item{type}{The type of plot. Multipanel \code{"facet"} vs. single panel
 \code{"single"}. In the single panel version, a shaded ribbon represents the
-upper and lower values across the scenarios.}
+upper and lower values across the scenarios on the line represents the
+mean.}
 
 \item{custom_pal}{An optional custom color palette. Should be a named
 character vector}
 
-\item{mp}{An optional character vector of management procedures to filter to
-include.}
+\item{groups}{An optional grouping structure to separate the lines. For
+example, this allows for conservation and fisheries performance metrics to
+use distinct line segments. Should be a list with the performance metrics
+grouped. See the example below.}
 
 \item{rotate_labels}{Logical: rotate the performance metric labels 90
 degrees?}
@@ -43,4 +46,5 @@ pm[[2]] <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 names(pm) <- c("Scenario 1", "Scenario 2")
 plot_parallel_coords(pm)
 plot_parallel_coords(pm, "single")
+plot_parallel_coords(pm, groups = list(c("P40", "P100", "PNOF"), c("LTY", "AAVY")))
 }
