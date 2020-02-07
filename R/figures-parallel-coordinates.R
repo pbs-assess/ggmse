@@ -64,11 +64,12 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       df_long$group <- df_long$MP
     }
 
+    npm <- length(unique(df_long$pm))
     g <- ggplot(df_long, aes_string("pm", "prob", group = "group", colour = "MP")) +
       geom_line(lwd = 0.7, mapping = aes_string(lty = "`Reference MP`")) +
       coord_cartesian(
         expand = FALSE, ylim = c(min(df_long$prob), 1.0),
-        xlim = NULL
+        xlim = c(1 - 0.2, npm + 0.2)
       ) +
       facet_wrap(~scenario)
   } else {
@@ -98,10 +99,12 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       pm$group <- pm$MP
     }
 
+    npm <- length(unique(pm$pm))
     g <- ggplot(pm, aes_string("pm", "mean", group = "group", colour = "MP")) +
       geom_ribbon(aes(ymin = min, ymax = max, fill = MP), alpha = 0.1, colour = NA) +
       geom_line(alpha = 1, lwd = 0.85, mapping = aes_string(lty = "`Reference MP`")) +
-      coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1))
+      coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1),
+        xlim = c(1 - 0.2, npm + 0.2))
   }
 
   g <- g + theme_pbs()

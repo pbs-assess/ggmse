@@ -4,16 +4,19 @@
 \alias{plot_lollipop}
 \title{Make lollipop plot}
 \usage{
-plot_lollipop(pm_df_list, custom_pal = NULL, dodge = 0.5)
+plot_lollipop(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2)
 }
 \arguments{
 \item{pm_df_list}{A named list of performance metric data frames from
-\code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}
+\code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.
+Can also be a single data frame from \code{\link[=get_probs]{get_probs()}}.}
 
 \item{custom_pal}{An optional custom color palette. Should be a named
 character vector}
 
 \item{dodge}{The amount to separate or "dodge" the lollipop lines.}
+
+\item{pt_size}{Point size.}
 }
 \value{
 A ggplot2 object

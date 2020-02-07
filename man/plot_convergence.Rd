@@ -5,20 +5,24 @@
 \title{Plot convergence}
 \usage{
 plot_convergence(
-  object,
+  object_list,
   pm_list = c("LTY", "PNOF"),
   label_gap = 1.15,
+  custom_pal = NULL,
   ylim = c(min(df$value), 1)
 )
 }
 \arguments{
-\item{object}{A DLMtool MSE object.}
+\item{object_list}{A (named) list of DLMtool MSE objects.}
 
 \item{pm_list}{A list or vector of performance metrics as character.}
 
 \item{label_gap}{Controls the gap on the right of each panel to make space
 for the MP labels. This value is multiplied by the maximum number of
 iterations to expand the x axis.}
+
+\item{custom_pal}{An optional custom color palette. Should be a named
+character vector}
 
 \item{ylim}{Y limits. Defaults to the minimum observed performance metric
 value (via lazy evaluation) and 1.}
