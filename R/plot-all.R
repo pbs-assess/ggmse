@@ -222,16 +222,16 @@ make_typical_plots <- function(
     plot_radar(custom_pal = custom_pal)
   # .ggsave("spider-satisficed-min-reference", 6, 6)
 
-  d <- pm_avg %>%
-    dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
-    split(.$type) %>%
-    purrr::map(dplyr::select, -type)
-  g_temp <- d %>% purrr::map(plot_radar)
-  g$radar_refset_mptypes_avg <-
-    cowplot::plot_grid(
-      plotlist = g_temp, ncol = 2, labels = names(d),
-      hjust = 0, label_size = 11, align = "hv"
-    )
+  # d <- pm_avg %>%
+  #   dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
+  #   split(.$type) %>%
+  #   purrr::map(dplyr::select, -type)
+  # g_temp <- d %>% purrr::map(plot_radar)
+  # g$radar_refset_mptypes_avg <-
+  #   cowplot::plot_grid(
+  #     plotlist = g_temp, ncol = 2, labels = names(d),
+  #     hjust = 0, label_size = 11, align = "hv"
+  #   )
   # .ggsave("spider-all-avg-reference", 10, 10)
 
   # Parallel coordinate plots ---------------------------------------------------
@@ -268,31 +268,31 @@ make_typical_plots <- function(
   # .ggsave("parallel-coordinates-avg-grouped", 5.5, 3.5)
 
   # FIXME: pull this into package:
-  d <- pm_avg %>%
-    dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
-    split(.$type) %>%
-    purrr::map(select, -type)
-  suppressMessages({
-    g_temp <- names(d) %>% map(~ {
-      gfdlm::plot_parallel_coords(d[.x], type = "single", rotate_labels = TRUE) +
-        ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11)) +
-        ggplot2::guides(lty = FALSE, fill = FALSE) +
-        ggplot2::scale_color_brewer(palette = "Set2") +
-        ggplot2::coord_cartesian(ylim = c(-0.01, 1.01), expand = FALSE) +
-        ggplot2::theme(plot.margin = grid::unit(c(1, .5, .5, .5), "lines")) +
-        ggplot2::theme(
-          panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
-          panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
-          panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
-        )
-    })
-  })
-  g$parallel_refset_mptypes_avg <-
-    cowplot::plot_grid(
-      plotlist = g_temp, ncol = 2, labels = names(d),
-      hjust = 0, label_size = 11, vjust = 1, align = "hv"
-    ) +
-    ggplot2::theme(plot.margin = grid::unit(c(1, 0, 1, 1), "lines"))
+  # d <- pm_avg %>%
+  #   dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
+  #   split(.$type) %>%
+  #   purrr::map(select, -type)
+  # suppressMessages({
+  #   g_temp <- names(d) %>% map(~ {
+  #     gfdlm::plot_parallel_coords(d[.x], type = "single", rotate_labels = TRUE) +
+  #       ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11)) +
+  #       ggplot2::guides(lty = FALSE, fill = FALSE) +
+  #       ggplot2::scale_color_brewer(palette = "Set2") +
+  #       ggplot2::coord_cartesian(ylim = c(-0.01, 1.01), expand = FALSE) +
+  #       ggplot2::theme(plot.margin = grid::unit(c(1, .5, .5, .5), "lines")) +
+  #       ggplot2::theme(
+  #         panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
+  #         panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
+  #         panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
+  #       )
+  #   })
+  # })
+  # g$parallel_refset_mptypes_avg <-
+  #   cowplot::plot_grid(
+  #     plotlist = g_temp, ncol = 2, labels = names(d),
+  #     hjust = 0, label_size = 11, vjust = 1, align = "hv"
+  #   ) +
+  #   ggplot2::theme(plot.margin = grid::unit(c(1, 0, 1, 1), "lines"))
   # .ggsave("parallel-coordinates-all-avg-reference", 8.5, 8.5)
 
   # Lollipops -------------------------------------------------------------------
