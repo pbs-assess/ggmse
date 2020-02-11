@@ -36,6 +36,60 @@
 #' @importFrom ggplot2 scale_y_continuous scale_x_continuous
 #'
 #' @export
+#' @examples
+#' # Fake but fast example follows:
+#' # In reality, you might get here with something like:
+#' # mse <- lapply(om_list, runMSE, MPs = mps)
+#' # or
+#' # mse <- purrr::map(om_list, runMSE, MPs = mps)
+#' # Instead, use the same example thrice:
+#' mse <- list()
+#' mse[[1]] <- mse_example
+#' mse[[2]] <- mse_example
+#' mse[[3]] <- mse_example
+#' names(mse) <- c("sc1", "sc2", "sc3")
+#'
+#' # Use more meaningful names than this:
+#' scenario_df <- tibble::tribble(
+#'   ~scenario, ~scenario_human, ~scenario_type,
+#'   "sc1", "Scenario 1", "Reference",
+#'   "sc2", "Scenario 2", "Reference",
+#'   "sc3", "Scenario 3", "Robustness"
+#' )
+#'
+#' `LT LRP` <- gfdlm::pm_factory("SBMSY", 0.4, c(36, 50))
+#' `LT USR` <- gfdlm::pm_factory("SBMSY", 0.8, c(36, 50))
+#' STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
+#' LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
+#' pm <- c("LT LRP", "LT USR", "STC", "LTC")
+#'
+#' custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
+#' names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
+#'
+#' plots <- make_typical_plots(
+#'   mse,
+#'   pm = pm,
+#'   scenario_df = scenario_df,
+#'   this_year = 2019,
+#'   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
+#'   mp_not_sat = c("CC100"),
+#'   mp_not_sat_highlight = c("CC100"),
+#'   mp_ref = c("FMSYref75"),
+#'   custom_pal = custom_pal,
+#'   eg_scenario = "sc1",
+#'   satisficed_criteria = c("LT LRP" = 0.9, "STC" = 0.8)
+#' )
+#' names(plots)
+#' plots$tigure_minimum
+#' \donttest{
+#' plots$convergence
+#' plots$worms_proj
+#' plots$parallel_refset
+#' plots$radar_refset
+#' plots$lollipops_refset
+#' plots$projections$sc1
+#' plots$projections_not_sat
+#' }
 make_typical_plots <- function(
                                mse_list,
                                pm,
@@ -53,7 +107,7 @@ make_typical_plots <- function(
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
   }
-  if (!all(vapply(mse, class, FUN.VALUE = character(1L)) == "MSE")) {
+  if (!all(vapply(mse_list, class, FUN.VALUE = character(1L)) == "MSE")) {
     stop("`mse_list` must contain DLMtool MSE objects.", call. = FALSE)
   }
   if (!is.data.frame(scenario_df)) {
@@ -68,14 +122,18 @@ make_typical_plots <- function(
   if (is.null(names(custom_pal))) {
     stop("`custom_pal` must be a *named* character vector.", call. = FALSE)
   }
-  if (is.null(names(satisficed_criteria))) {
-    stop("`satisficed_criteria` must be a *named* character vector.", call. = FALSE)
-  }
-  if (!all(names(satisficed_criteria) %in% pm)) {
-    stop("`names(satisficed_criteria)` not all in `pm`.", call. = FALSE)
+  if (!is.null(satisficed_criteria)) {
+    if (is.null(names(satisficed_criteria))) {
+      stop("`satisficed_criteria` must be a *named* character vector.", call. = FALSE)
+    }
+    if (!all(names(satisficed_criteria) %in% pm)) {
+      stop("`names(satisficed_criteria)` not all in `pm`.", call. = FALSE)
+    }
   }
   if (!all(mp_sat %in% names(custom_pal))) {
-    stop("`custom_pal` must have names that include all of the satisficed MPs (`mp_sat`).", call. = FALSE)
+    stop("`custom_pal` must have names that include all of the satisficed MPs (`mp_sat`).",
+      call. = FALSE
+    )
   }
   if (!eg_scenario %in% scenario_df$scenario) {
     stop("`eg_scenario` must be in `scenario_df$scenario`.", call. = FALSE)
@@ -87,7 +145,7 @@ make_typical_plots <- function(
     stop("Not all `names(mse_list)` in `scenario_df$scenario`.", call. = FALSE)
   }
 
-  pro(
+  progress(
     before = "Calculating performance metrics",
     after = "", text = ""
   )
@@ -113,6 +171,7 @@ make_typical_plots <- function(
   pm_min <- dplyr::group_by(pm_df, MP) %>% dplyr::summarise_if(is.numeric, min)
 
   mse_sat <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat))
+  mp_sat_with_ref <- union(mp_sat, mp_ref)
   mse_sat_with_ref <-
     purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref))
 
@@ -136,16 +195,16 @@ make_typical_plots <- function(
   # .ggsave("pm-tigures-rob-set", 7, 2.25)
 
   # Convergence -----------------------------------------------------------------
-  pro("convergence")
+  progress("convergence")
 
   g$convergence <- scenarios %>%
     purrr::map(~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
     set_names(scenarios_human) %>%
-    gfdlm::plot_convergence(PM, ylim = c(0.3, 1), custom_pal = custom_pal)
+    gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal)
   # .ggsave("converge", 9, 10)
 
   # Projections -----------------------------------------------------------------
-  pro("projection")
+  progress("projection")
 
   g$projections <- map(names(mse_sat_with_ref), ~ {
     g <- plot_main_projections(mse_sat_with_ref[[.x]],
@@ -187,7 +246,7 @@ make_typical_plots <- function(
   # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
 
   # Kobe ------------------------------------------------------------------------
-  pro("Kobe")
+  progress("Kobe")
 
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
 
@@ -198,7 +257,7 @@ make_typical_plots <- function(
   # .ggsave("kobe-grid-satisficed", 9.5, 10.5)
 
   # Radar plots -----------------------------------------------------------------
-  pro("radar")
+  progress("radar")
 
   g$radar_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
@@ -235,7 +294,7 @@ make_typical_plots <- function(
   # .ggsave("spider-all-avg-reference", 10, 10)
 
   # Parallel coordinate plots ---------------------------------------------------
-  pro("parallel coordinate")
+  progress("parallel coordinate")
 
   # pm_groups <- list(c("LT LRP", "LT USR", "FMSY"), c("STC", "LTC", "AAVC"))
 
@@ -296,7 +355,7 @@ make_typical_plots <- function(
   # .ggsave("parallel-coordinates-all-avg-reference", 8.5, 8.5)
 
   # Lollipops -------------------------------------------------------------------
-  pro("lollipop")
+  progress("lollipop")
 
   g$lollipops_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
@@ -314,7 +373,7 @@ make_typical_plots <- function(
     gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = 0.65)
 
   # Bivariate trade-off plots ---------------------------------------------------
-  pro("bivariate trade-off")
+  progress("bivariate trade-off")
 
   g$tradeoff_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
@@ -330,7 +389,7 @@ make_typical_plots <- function(
   # .ggsave("bivariate-trade-off-robustness", 6, 3)
 
   # Psychedelic pyramid worms ---------------------------------------------------
-  pro("psychedelic worm")
+  progress("psychedelic worm")
 
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
   d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
@@ -377,7 +436,7 @@ make_typical_plots <- function(
   g
 }
 
-pro <- function(text, before = "Creating", after = "figures") {
+progress <- function(text, before = "Creating", after = "figures") {
   cat(
     crayon::green(clisymbols::symbol$tick),
     before, text, after, "\n"

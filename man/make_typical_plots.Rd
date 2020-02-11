@@ -28,8 +28,8 @@ scenarios. The list should be named with the scenario names.}
 metrics should exist in current workspace.}
 
 \item{scenario_df}{A data frame with the columns \code{scenario},
-\code{scenarios_human}, and \code{scenario_type}. \code{scenario_type} should be one of
-\code{Reference} or \code{Robustness}.}
+\code{scenario_human}, and \code{scenario_type}. \code{scenario_type} should contain of
+\code{"Reference"} or \code{"Robustness"}.}
 
 \item{this_year}{The last year of historical data in the MSE.}
 
@@ -67,4 +67,59 @@ A named list object containing the ggplot objects.
 \description{
 This function returns a large set of typical plots in a list object. These
 can then be printed to a file or included in an R Markdown document.
+}
+\examples{
+# Fake but fast example follows:
+# In reality, you might get here with something like:
+# mse <- lapply(om_list, runMSE, MPs = mps)
+# or
+# mse <- purrr::map(om_list, runMSE, MPs = mps)
+# Instead, use the same example thrice:
+mse <- list()
+mse[[1]] <- mse_example
+mse[[2]] <- mse_example
+mse[[3]] <- mse_example
+names(mse) <- c("sc1", "sc2", "sc3")
+
+# Use more meaningful names than this:
+scenario_df <- tibble::tribble(
+  ~scenario, ~scenario_human, ~scenario_type,
+  "sc1",     "Scenario 1",    "Reference",
+  "sc2",     "Scenario 2",    "Reference",
+  "sc3",     "Scenario 3",    "Robustness"
+)
+
+`LT LRP` <- gfdlm::pm_factory("SBMSY", 0.4, c(36, 50))
+`LT USR` <- gfdlm::pm_factory("SBMSY", 0.8, c(36, 50))
+STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
+LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
+pm <- c("LT LRP", "LT USR", "STC", "LTC")
+
+custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
+names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
+
+plots <- make_typical_plots(
+  mse,
+  pm = pm,
+  scenario_df = scenario_df,
+  this_year = 2019,
+  mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
+  mp_not_sat = c("CC100"),
+  mp_not_sat_highlight = c("CC100"),
+  mp_ref = c("FMSYref75"),
+  custom_pal = custom_pal,
+  eg_scenario = "sc1",
+  satisficed_criteria = c("LT LRP" = 0.9, "STC" = 0.8)
+)
+names(plots)
+plots$convergence
+plots$tigure_minimum
+\donttest{
+plots$worms_proj
+plots$parallel_refset
+plots$radar_refset
+plots$lollipops_refset
+plots$projections$sc1
+plots$projections_not_sat
+}
 }
