@@ -6,20 +6,20 @@
 #' @param mse_list A list of DLMtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param pm A character vector of performance metrics. These performance
-#'   metrics should exist in current workspace.
+#'   metrics should exist in the current workspace or via an attached package such as DLMtool.
 #' @param scenario_df A data frame with the columns `scenario`,
-#'   `scenario_human`, and `scenario_type`. `scenario_type` should contain of
-#'   `"Reference"` or `"Robustness"`.
+#'   `scenario_human`, and `scenario_type`. `scenario_type` should contain
+#'   `"Reference"` and `"Robustness"` entries.
 #' @param this_year The last year of historical data in the MSE.
-#' @param mp_sat A character vector of satisficed to management procedures
+#' @param mp_sat A character vector of satisficed management procedures
 #'   (MPs).
 #' @param mp_not_sat MPs that were *not* satisfied (a projection plot will be
-#'   made with these).
+#'   made with these) for `eg_scenario` (see below).
 #' @param mp_not_sat_highlight MPs that were *not* satisfied to highlight
-#'   in a projection plot. I.e. some subset of the full not satisfied set.
-#' @param mp_ref Reference MPs
+#'   in a projection plot for `eg_scenario` (see below). I.e. probably some subset of the full not satisfied set.
+#' @param mp_ref Reference MPs.
 #' @param custom_pal A named character vector of colors for the MPs.
-#'   Names should correspond to the MP names. Should include the
+#'   Names should correspond to the MP names. Should include all
 #'   satisficed and reference MPs.
 #' @param eg_scenario An example scenario (as character) which will be used for
 #'   the projection plot of not-satisficed MPs.
@@ -29,7 +29,7 @@
 #'   projection panels. This can be useful, for example, if you want the labels
 #'   to be in 1000 t insead of t.
 #' @param satisficed_criteria A named numeric vector designating the satisficed
-#'   criteria for use in a tigure plot. See [plot_tigure()].
+#'   criteria for use in a 'tigure' plot. See [plot_tigure()].
 #'
 #' @return A named list object containing the ggplot objects.
 #' @importFrom purrr set_names
@@ -42,7 +42,7 @@
 #' # mse <- lapply(om_list, runMSE, MPs = mps)
 #' # or
 #' # mse <- purrr::map(om_list, runMSE, MPs = mps)
-#' # Instead, use the same example thrice:
+#' # Instead, let's use the same example thrice:
 #' mse <- list()
 #' mse[[1]] <- mse_example
 #' mse[[2]] <- mse_example
@@ -66,7 +66,7 @@
 #' custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
 #' names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
 #'
-#' plots <- make_typical_plots(
+#' plots <- plot_factory(
 #'   mse,
 #'   pm = pm,
 #'   scenario_df = scenario_df,
@@ -90,20 +90,20 @@
 #' plots$projections$sc1
 #' plots$projections_not_sat
 #' }
-make_typical_plots <- function(
-                               mse_list,
-                               pm,
-                               scenario_df,
-                               this_year,
-                               mp_sat,
-                               mp_not_sat,
-                               mp_not_sat_highlight,
-                               mp_ref,
-                               custom_pal,
-                               eg_scenario,
-                               catch_breaks = NULL,
-                               catch_labels = catch_breaks,
-                               satisficed_criteria = NULL) {
+plot_factory <- function(
+                         mse_list,
+                         pm,
+                         scenario_df,
+                         this_year,
+                         mp_sat,
+                         mp_not_sat,
+                         mp_not_sat_highlight,
+                         mp_ref,
+                         custom_pal,
+                         eg_scenario,
+                         catch_breaks = NULL,
+                         catch_labels = catch_breaks,
+                         satisficed_criteria = NULL) {
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
   }
