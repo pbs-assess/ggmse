@@ -392,7 +392,7 @@ plot_factory <- function(
   # .ggsave("bivariate-trade-off-robustness", 6, 3)
 
   # Psychedelic pyramid worms ---------------------------------------------------
-  progress("psychedelic worm")
+  progress(paste("psychedelic worm", clisymbols::symbol$mustache))
 
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
   d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
