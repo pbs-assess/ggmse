@@ -15,6 +15,7 @@ plot_factory(
   mp_ref,
   custom_pal,
   eg_scenario,
+  tradeoff,
   catch_breaks = NULL,
   catch_labels = catch_breaks,
   satisficed_criteria = NULL
@@ -50,6 +51,8 @@ satisficed and reference MPs.}
 
 \item{eg_scenario}{An example scenario (as character) which will be used for
 the projection plot of not-satisficed MPs.}
+
+\item{tradeoff}{Character vector of length 2 of tradeoff PMs.}
 
 \item{catch_breaks}{An optional numeric vector of y-axis breaks for the catch
 projection panels.}
@@ -109,6 +112,7 @@ plots <- plot_factory(
   mp_ref = c("FMSYref75"),
   custom_pal = custom_pal,
   eg_scenario = "sc1",
+  tradeoff = c("LT LRP", "STC"),
   satisficed_criteria = c("LT LRP" = 0.9, "STC" = 0.8)
 )
 names(plots)

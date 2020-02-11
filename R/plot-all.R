@@ -23,6 +23,7 @@
 #'   satisficed and reference MPs.
 #' @param eg_scenario An example scenario (as character) which will be used for
 #'   the projection plot of not-satisficed MPs.
+#' @param tradeoff Character vector of length 2 of tradeoff PMs.
 #' @param catch_breaks An optional numeric vector of y-axis breaks for the catch
 #'   projection panels.
 #' @param catch_labels An optional numeric vector of y-axis labels for the catch
@@ -77,6 +78,7 @@
 #'   mp_ref = c("FMSYref75"),
 #'   custom_pal = custom_pal,
 #'   eg_scenario = "sc1",
+#'   tradeoff = c("LT LRP", "STC"),
 #'   satisficed_criteria = c("LT LRP" = 0.9, "STC" = 0.8)
 #' )
 #' names(plots)
@@ -101,6 +103,7 @@ plot_factory <- function(
                          mp_ref,
                          custom_pal,
                          eg_scenario,
+                         tradeoff,
                          catch_breaks = NULL,
                          catch_labels = catch_breaks,
                          satisficed_criteria = NULL) {
@@ -378,13 +381,13 @@ plot_factory <- function(
   g$tradeoff_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_tradeoff("LT LRP", "STC", custom_pal = custom_pal)
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
   # .ggsave("bivariate-trade-off-reference", 7.5, 6.5)
 
   g$tradeoff_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_tradeoff("LT LRP", "STC", custom_pal = custom_pal) +
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal) +
     facet_wrap(~scenario, ncol = 2)
   # .ggsave("bivariate-trade-off-robustness", 6, 3)
 
