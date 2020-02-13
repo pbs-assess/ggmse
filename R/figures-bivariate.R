@@ -37,7 +37,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   )
   df_wide <- df_long %>%
     reshape2::dcast(MP + scenario ~ pm, value.var = "prob") %>%
-    dplyr::mutate(`Reference MP` = ifelse(grepl("ref", MP), "True", "False"))
+    dplyr::mutate(`Reference` = ifelse(grepl("ref", MP), "True", "False"))
 
   xmin <- pull(df_wide, !!xvar) %>% min()
   ymin <- pull(df_wide, !!yvar) %>% min()
@@ -46,7 +46,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
 
   g <- ggplot2::ggplot(
     df_wide,
-    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference MP`")
+    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference`")
   ) +
     ggplot2::geom_point() +
     ggplot2::facet_wrap(~scenario, nrow = 2) +
@@ -65,7 +65,10 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   g <- g + ggplot2::theme(
     panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
     panel.grid.major.x = ggplot2::element_line(colour = "grey85")
-  )
+  ) + guides(
+      col = guide_legend(order = 1, override.aes = list(pch = 19)),
+      shape = guide_legend(override.aes = list(colour = "grey50"))
+    )
 
   g
 }

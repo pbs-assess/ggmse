@@ -37,7 +37,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     value.name = "prob",
     variable.name = "pm"
   )
-  df_long$`Reference MP` <- ifelse(grepl("ref", df_long$MP), "True", "False")
+  df_long$`Reference` <- ifelse(grepl("ref", df_long$MP), "True", "False")
   df_long$MP <- as.factor(df_long$MP)
 
   npm <- length(unique(df_long$pm))
@@ -51,7 +51,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     geom_linerange(aes_string(ymin = "0", ymax = "prob"),
       position = position_dodge(width = dodge), alpha = 0.8, lwd = 0.5
     ) +
-    geom_point(aes_string(shape = "`Reference MP`"),
+    geom_point(aes_string(shape = "`Reference`"),
       position = position_dodge(width = dodge), size = pt_size,
     ) +
     ggplot2::scale_x_discrete(limits = rev(levels(df_long$pm))) +
@@ -63,7 +63,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     ggplot2::scale_shape_manual(values = c(19, 21))
 
   df_temp <- df_long
-  df_temp$prob[df_temp$`Reference MP` != "True"] <- NA
+  df_temp$prob[df_temp$`Reference` != "True"] <- NA
 
   g <- g + geom_point(
     data = df_temp,

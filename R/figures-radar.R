@@ -133,7 +133,7 @@ plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
     )
   }
 
-  g <- g + ggplot2::labs(colour = "MP", lty = "Reference MP")
+  g <- g + ggplot2::labs(colour = "MP", lty = "Reference")
   g <- g + ggplot2::theme(strip.text = element_text(size = 11, face = "bold"))
 
   if (!is.null(custom_pal)) {

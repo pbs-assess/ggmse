@@ -52,7 +52,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       value.name = "prob",
       variable.name = "pm"
     )
-    df_long$`Reference MP` <- ifelse(grepl("ref", df_long$MP), "True", "False")
+    df_long$`Reference` <- ifelse(grepl("ref", df_long$MP), "True", "False")
 
     if (!is.null(groups)) {
       if (is.factor(df_long$pm)) {
@@ -66,7 +66,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
 
     npm <- length(unique(df_long$pm))
     g <- ggplot(df_long, aes_string("pm", "prob", group = "group", colour = "MP")) +
-      geom_line(lwd = 0.7, mapping = aes_string(lty = "`Reference MP`")) +
+      geom_line(lwd = 0.7, mapping = aes_string(lty = "`Reference`")) +
       coord_cartesian(
         expand = FALSE, ylim = c(min(df_long$prob), 1.0),
         xlim = c(1 - 0.2, npm + 0.2)
@@ -87,7 +87,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     pm_max <- condense_func(df, max, label = "max")
     pm <- dplyr::left_join(pm_avg, pm_min, by = c("MP", "pm")) %>%
       dplyr::left_join(pm_max, by = c("MP", "pm"))
-    pm$`Reference MP` <- ifelse(grepl("ref", pm$MP), "True", "False")
+    pm$`Reference` <- ifelse(grepl("ref", pm$MP), "True", "False")
 
     if (!is.null(groups)) {
       if (is.factor(pm$pm)) {
@@ -102,7 +102,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     npm <- length(unique(pm$pm))
     g <- ggplot(pm, aes_string("pm", "mean", group = "group", colour = "MP")) +
       geom_ribbon(aes(ymin = min, ymax = max, fill = MP), alpha = 0.1, colour = NA) +
-      geom_line(alpha = 1, lwd = 0.85, mapping = aes_string(lty = "`Reference MP`")) +
+      geom_line(alpha = 1, lwd = 0.85, mapping = aes_string(lty = "`Reference`")) +
       coord_cartesian(expand = FALSE, ylim = c(min(pm$min), 1),
         xlim = c(1 - 0.2, npm + 0.2))
   }
