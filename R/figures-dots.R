@@ -82,6 +82,13 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
       panel.grid.minor.y = element_line(colour = "grey96")
     )
 
+  temp_dat <- pm
+  temp_dat$prob[temp_dat$Reference != "True"] <- NA
+  g <- g + geom_point(data = temp_dat,
+    position = position_dodge(width = dodge), size = pt_size, fill = "white",
+    pch = 21, na.rm = TRUE
+  )
+
   if (type == "facet") {
     g <- g + facet_wrap(~scenario)
   }
