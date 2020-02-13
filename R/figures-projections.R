@@ -65,30 +65,25 @@ plot_projection_ts <- function(object,
     lines$type_labels <- factor(lines$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
   }
 
-  g <- ggplot2::ggplot(d, ggplot2::aes_string("real_year", "value", group = "iter"))
+  g <- ggplot(d, aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
-    ggplot2::aes_string(x = "real_year", ymin = "ll", ymax = "uu"),
+    aes_string(x = "real_year", ymin = "ll", ymax = "uu"),
     colour = NA, fill = ribbon_colours[1], inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
-    ggplot2::aes_string(x = "real_year", ymin = "l", ymax = "u"),
+    aes_string(x = "real_year", ymin = "l", ymax = "u"),
     colour = NA, fill = ribbon_colours[2], inherit.aes = FALSE
   )
   g <- g + ggplot2::geom_line(
     data = quantiles,
-    ggplot2::aes_string(x = "real_year", y = "m"),
+    aes_string(x = "real_year", y = "m"),
     colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
   )
 
-  # if ("SSB" %in% type || "FM" %in% type) {
-  #   g <- g + ggplot2::geom_hline(yintercept = 1, alpha = 0.2, lty = 2, lwd = 0.5)
-  # }
   if ("SSB" %in% type || "F" %in% type) {
-    # g <- g + ggplot2::geom_hline(yintercept = 0.4, alpha = 0.2, lty = 2, lwd = 0.5)
-    # g <- g + ggplot2::geom_hline(yintercept = 0.8, alpha = 0.2, lty = 2, lwd = 0.5)
-    g <- g + ggplot2::geom_hline(data = lines, mapping = aes(yintercept = value), alpha = 0.2, lty = 2, lwd = 0.5)
+    g <- g + geom_hline(data = lines, mapping = aes(yintercept = value), alpha = 0.2, lty = 2, lwd = 0.5)
   }
 
   if ("Catch" %in% type) {
@@ -210,12 +205,12 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
   x %>%
     dplyr::group_by(.data$mp_name, .data$real_year, .data$Type) %>%
     dplyr::summarize(
-      median_value = median(.data$value),
-      u = quantile(.data$value, probs = 1 - probs[2] / 2),
-      l = quantile(.data$value, probs = probs[2] / 2),
-      m = quantile(.data$value, probs = 0.50),
-      uu = quantile(.data$value, probs = 1 - probs[1] / 2),
-      ll = quantile(.data$value, probs = probs[1] / 2)
+      median_value = median(.data$value, na.rm = TRUE),
+      u = quantile(.data$value, probs = 1 - probs[2] / 2, na.rm = TRUE),
+      l = quantile(.data$value, probs = probs[2] / 2, na.rm = TRUE),
+      m = quantile(.data$value, probs = 0.50, na.rm = TRUE),
+      uu = quantile(.data$value, probs = 1 - probs[1] / 2, na.rm = TRUE),
+      ll = quantile(.data$value, probs = probs[1] / 2, na.rm = TRUE)
     ) %>%
     ungroup()
 }
