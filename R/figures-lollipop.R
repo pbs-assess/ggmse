@@ -54,6 +54,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     geom_point(aes_string(shape = "`Reference MP`"),
       position = position_dodge(width = dodge), size = pt_size,
     ) +
+    ggplot2::scale_x_discrete(limits = rev(levels(df_long$pm))) +
     coord_flip(
       expand = FALSE, ylim = c(0, 1),
       xlim = c(1 - dodge / 2 - 0.2, npm + dodge / 2 + 0.2), clip = FALSE
@@ -81,7 +82,8 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
   ) +
     xlab("Performance metric") + ylab("Probability") +
     guides(
-      col = guide_legend(order = 1, override.aes = list(pch = 19))
+      col = guide_legend(order = 1, override.aes = list(pch = 19)),
+      shape = guide_legend(override.aes = list(colour = "grey50"))
     )
 
   g
