@@ -8,7 +8,7 @@
 #' @param dodge The amount to separate or "dodge" the lollipop lines.
 #' @param pt_size Point size.
 #' @return A ggplot2 object
-#' @importFrom ggplot2 geom_linerange coord_flip position_dodge
+#' @importFrom ggplot2 geom_linerange coord_flip position_dodge annotate
 #' @export
 #'
 #' @examples
@@ -19,7 +19,7 @@
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_lollipop(pm)
 #' plot_lollipop(pm[1]) + ggplot2::scale_colour_brewer(palette = "Set2")
-plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2) {
+plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25) {
   if (!is.data.frame(pm_df_list)) {
     df <- purrr::map_df(
       names(pm_df_list),
@@ -38,23 +38,39 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     variable.name = "pm"
   )
   df_long$`Reference MP` <- ifelse(grepl("ref", df_long$MP), "True", "False")
+  df_long$MP <- as.factor(df_long$MP)
 
   npm <- length(unique(df_long$pm))
-  g <- ggplot(df_long, aes_string("pm", "prob", colour = "MP")) +
-    geom_point(aes_string(shape = "`Reference MP`"),
-      position = position_dodge(width = dodge), size = pt_size
-    ) +
+  g <- ggplot(df_long, aes_string("pm", "prob", colour = "MP", group = "MP")) +
+    theme_pbs() + theme(panel.spacing.x = grid::unit(1.3, "lines")) +
+    theme(panel.border = element_blank()) +
+    annotate(geom = "segment", y = Inf, yend = Inf, x = -Inf, xend = Inf, colour = "grey70") +
+    annotate(geom = "segment", y = 0, yend = 0, x = -Inf, xend = Inf, colour = "grey70") +
+    annotate(geom = "segment", y = -Inf, yend = Inf, x = Inf, xend = Inf, colour = "grey70") +
+    annotate(geom = "segment", y = -Inf, yend = Inf, x = -Inf, xend = -Inf, colour = "grey70") +
     geom_linerange(aes_string(ymin = "0", ymax = "prob"),
       position = position_dodge(width = dodge), alpha = 0.8, lwd = 0.5
     ) +
+    geom_point(aes_string(shape = "`Reference MP`"),
+      position = position_dodge(width = dodge), size = pt_size,
+    ) +
     coord_flip(
-      expand = FALSE, ylim = c(0, 1.01),
-      xlim = c(1 - dodge / 2 - 0.2, npm + dodge / 2 + 0.2), clip = TRUE
+      expand = FALSE, ylim = c(0, 1),
+      xlim = c(1 - dodge / 2 - 0.2, npm + dodge / 2 + 0.2), clip = FALSE
     ) +
     facet_wrap(~scenario) +
     ggplot2::scale_shape_manual(values = c(19, 21))
 
-  g <- g + theme_pbs() + theme(panel.spacing.x = grid::unit(1.3, "lines"))
+  df_temp <- df_long
+  df_temp$prob[df_temp$`Reference MP` != "True"] <- NA
+
+  g <- g + geom_point(
+    data = df_temp,
+    position = position_dodge(width = dodge),
+    size = pt_size, pch = 21,
+    fill = "white", na.rm = TRUE
+  )
+  # g <- g
 
   if (!is.null(custom_pal)) {
     g <- g + scale_color_manual(values = custom_pal) +
@@ -65,7 +81,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
   ) +
     xlab("Performance metric") + ylab("Probability") +
     guides(
-      col = guide_legend(order = 1)
+      col = guide_legend(order = 1, override.aes = list(pch = 19))
     )
 
   g

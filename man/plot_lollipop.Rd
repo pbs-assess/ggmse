@@ -4,7 +4,7 @@
 \alias{plot_lollipop}
 \title{Make lollipop plot}
 \usage{
-plot_lollipop(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2)
+plot_lollipop(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25)
 }
 \arguments{
 \item{pm_df_list}{A named list of performance metric data frames from
