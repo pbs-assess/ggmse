@@ -156,7 +156,7 @@ plot_tigure <- function(probs_dat,
     ggplot2::scale_x_discrete(position = "top") +
     ggplot2::coord_cartesian(
       expand = FALSE,
-      xlim = range(as.numeric(df$type) + c(-padding, padding)),
+      xlim = range(as.numeric(df$type)) + c(-padding, padding),
       ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01)
     )
 
