@@ -8,7 +8,6 @@ plot_factory(
   mse_list,
   pm,
   scenario_df,
-  this_year,
   mp_sat,
   mp_not_sat,
   mp_not_sat_highlight,
@@ -31,8 +30,6 @@ metrics should exist in the current workspace or via an attached package such as
 \item{scenario_df}{A data frame with the columns \code{scenario},
 \code{scenario_human}, and \code{scenario_type}. \code{scenario_type} should contain
 \code{"Reference"} and \code{"Robustness"} entries.}
-
-\item{this_year}{The last year of historical data in the MSE.}
 
 \item{mp_sat}{A character vector of satisficed management procedures
 (MPs).}
@@ -105,7 +102,6 @@ plots <- plot_factory(
   mse,
   pm = pm,
   scenario_df = scenario_df,
-  this_year = 2019,
   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
   mp_not_sat = c("CC100"),
   mp_not_sat_highlight = c("CC100"),

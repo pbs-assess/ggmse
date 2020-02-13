@@ -20,7 +20,6 @@ test_that("plot_factory() runs", {
     mse,
     pm = pm,
     scenario_df = scenario_df,
-    this_year = 2019,
     mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
     mp_not_sat = c("CC100"),
     mp_not_sat_highlight = c("CC100"),

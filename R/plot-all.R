@@ -10,7 +10,6 @@
 #' @param scenario_df A data frame with the columns `scenario`,
 #'   `scenario_human`, and `scenario_type`. `scenario_type` should contain
 #'   `"Reference"` and `"Robustness"` entries.
-#' @param this_year The last year of historical data in the MSE.
 #' @param mp_sat A character vector of satisficed management procedures
 #'   (MPs).
 #' @param mp_not_sat MPs that were *not* satisfied (a projection plot will be
@@ -71,7 +70,6 @@
 #'   mse,
 #'   pm = pm,
 #'   scenario_df = scenario_df,
-#'   this_year = 2019,
 #'   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
 #'   mp_not_sat = c("CC100"),
 #'   mp_not_sat_highlight = c("CC100"),
@@ -97,7 +95,6 @@ plot_factory <- function(
                          mse_list,
                          pm,
                          scenario_df,
-                         this_year,
                          mp_sat,
                          mp_not_sat,
                          mp_not_sat_highlight,
@@ -417,14 +414,14 @@ plot_factory <- function(
 
   suppressMessages({
     g$worms_proj <-
-      d %>% plot_worms_grid(this_year = this_year, include_historical = FALSE) +
+      d %>% plot_worms_grid(include_historical = FALSE) +
       coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
       scale_x_continuous(breaks = c(0, 1, 2)) +
       scale_y_continuous(breaks = c(0, 1))
     # .ggsave("neon-worms-projection", 10, 8.5)
 
     g$worms_hist_proj <-
-      d %>% plot_worms_grid(this_year = this_year, include_historical = TRUE) +
+      d %>% plot_worms_grid(include_historical = TRUE) +
       coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
     # .ggsave("neon-worms-all", 10, 8.5)
   })

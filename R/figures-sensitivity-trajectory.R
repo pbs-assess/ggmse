@@ -13,7 +13,6 @@
 #'   order. Set `slots = "all"` to plot all available OM and observation slots.
 #' @param probs A numeric value corresponding to the tail probability for the ribbon.
 #'   E.g., 0.5 corresponds to a ribbon at 0.25 and 0.75 quantiles.
-#' @param this_year The last year of the historical timeseries.
 #'
 #' @return
 #' A ggplot object
@@ -23,7 +22,20 @@
 #' plot_sensitivity_trajectory(mse_example)
 plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp = object@MPs,
                                         slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
-                                        probs = 0.3, this_year = 2018) {
+                                        probs = 0.3) {
+
+  if (is.null(object@OM$CurrentYr[[1]])) {
+    warning(
+      "Missing `object@OM$CurrentYr`.\n",
+      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "or set `object@OM$CurrentYr` yourself.\n",
+      "Setting CurrentYr = 0 for now.", call. = FALSE
+    )
+    this_year <- 0
+  } else {
+    this_year <- object@OM$CurrentYr[[1]]
+  }
+
   type <- match.arg(type)
   if (class(object) != "MSE") {
     stop("`object` must be class 'MSE'", call. = FALSE)

@@ -2,7 +2,6 @@
 #'
 #' @param object_list A named list of MSE objects from DLMtool.
 #'   Names become scenario names.
-#' @param this_year This year as a numeric value.
 #' @param prob Tail probability for the quantiles. E.g., 0.5 refers to an
 #'   interquartile range.
 #' @param include_historical Logical: include the historical time?
@@ -17,9 +16,21 @@
 #' x[[1]] <- mse_example
 #' x[[2]] <- mse_example
 #' names(x) <- c("Scenario 1", "Scenario 2")
-#' plot_worms_grid(x, this_year = 2020)
-plot_worms_grid <- function(object_list, this_year, prob = 0.5,
+#' plot_worms_grid(x)
+plot_worms_grid <- function(object_list, prob = 0.5,
                        include_historical = TRUE) {
+
+  if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
+    warning(
+      "Missing `object@OM$CurrentYr`.\n",
+      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "or set `object@OM$CurrentYr` yourself.\n",
+      "Setting CurrentYr = 0 for now.", call. = FALSE
+    )
+    this_year <- 0
+  } else {
+    this_year <- object_list[[1]]@OM$CurrentYr[[1]]
+  }
 
   out <- purrr::map(object_list, ~{
     ts <- get_ts(.x, type = c("SSB", "FM"))

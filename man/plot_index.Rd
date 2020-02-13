@@ -4,15 +4,13 @@
 \alias{plot_index}
 \title{Plot sampled survey index projections}
 \usage{
-plot_index(object_list, n_samples = 5, this_year = 2018, seed = 42)
+plot_index(object_list, n_samples = 5, seed = 42)
 }
 \arguments{
 \item{object_list}{A list of DLMtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
 
 \item{n_samples}{The number of timeseries samples to illustrate.}
-
-\item{this_year}{The last year of the historical timeseries.}
 
 \item{seed}{The seed to set before drawing samples.}
 }

@@ -6,7 +6,6 @@
 #'   plot. Each of these "types" will be included as a column in the
 #'   final plot.
 #' @param n_samples The number of timeseries samples to illustrate.
-#' @param this_year The last year of the historical timeseries.
 #' @param probs A numeric vector of the quantiles to plot as ribbons. Must be of length 2.
 #' @param ribbon_colours A character vector of length three giving the colours for
 #'   the outer uncertainty ribbon, inner uncertainty ribbon, and median.
@@ -30,13 +29,24 @@
 plot_projection_ts <- function(object,
                                type = c("SSB", "FM"),
                                n_samples = 3,
-                               this_year = 2018,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
                                bbmsy_zones = c(0.4, 0.8),
                                catch_reference = 1,
                                clip_ylim = NULL,
                                seed = 42) {
+
+  if (is.null(object@OM$CurrentYr[[1]])) {
+    warning(
+      "Missing `object@OM$CurrentYr`.\n",
+      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "or set `object@OM$CurrentYr` yourself.\n",
+      "Setting CurrentYr = 0 for now.", call. = FALSE
+    )
+    this_year <- 0
+  } else {
+    this_year <- object@OM$CurrentYr[[1]]
+  }
   ts_data <- get_ts(object = object, type = type, this_year = this_year)
   quantiles <- get_ts_quantiles(ts_data, probs = probs)
 
@@ -110,7 +120,7 @@ plot_projection_ts <- function(object,
 
 get_ts <- function(object,
                    type = c("SSB", "FM"),
-                   this_year = 2018) {
+                   this_year = 0) {
   if (!class(object) != "mse") {
     stop(
       "`object` must be a DLMtool object of class `mse`",

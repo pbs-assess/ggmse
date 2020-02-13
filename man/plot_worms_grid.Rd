@@ -4,13 +4,11 @@
 \alias{plot_worms_grid}
 \title{Make a Kobe "worm" timeseries plot with uncertainty}
 \usage{
-plot_worms_grid(object_list, this_year, prob = 0.5, include_historical = TRUE)
+plot_worms_grid(object_list, prob = 0.5, include_historical = TRUE)
 }
 \arguments{
 \item{object_list}{A named list of MSE objects from DLMtool.
 Names become scenario names.}
-
-\item{this_year}{This year as a numeric value.}
 
 \item{prob}{Tail probability for the quantiles. E.g., 0.5 refers to an
 interquartile range.}
@@ -28,5 +26,5 @@ x <- list()
 x[[1]] <- mse_example
 x[[2]] <- mse_example
 names(x) <- c("Scenario 1", "Scenario 2")
-plot_worms_grid(x, this_year = 2020)
+plot_worms_grid(x)
 }
