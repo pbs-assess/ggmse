@@ -32,6 +32,7 @@
 #' @param dodge TODO
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
+#' @param skip_projections Logical: skip the projection and worm plots for speed?
 #'
 #' @return A named list object containing the ggplot objects.
 #' @importFrom purrr set_names
@@ -108,7 +109,8 @@ plot_factory <- function(
                          catch_breaks = NULL,
                          catch_labels = catch_breaks,
                          dodge = 0.7,
-                         satisficed_criteria = NULL) {
+                         satisficed_criteria = NULL,
+                         skip_projections = FALSE) {
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
   }
@@ -211,34 +213,38 @@ plot_factory <- function(
   # .ggsave("converge", 9, 10)
 
   # Projections -----------------------------------------------------------------
-  progress("projection")
+  if (!skip_projections) {
+    progress("projection")
 
-  g$projections <- map(names(mse_sat_with_ref), ~ {
-    g <- plot_main_projections(mse_sat_with_ref[[.x]],
-      catch_breaks = catch_breaks,
-      catch_labels = catch_labels
-    )
-    # .ggsave(paste0("projections-satisficed-", .x), 7.5, 7.5)
-  })
-  names(g$projections) <- names(mse_sat_with_ref)
+    g$projections <- map(names(mse_sat_with_ref), ~ {
+      g <- plot_main_projections(mse_sat_with_ref[[.x]],
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+      # .ggsave(paste0("projections-satisficed-", .x), 7.5, 7.5)
+    })
+    names(g$projections) <- names(mse_sat_with_ref)
 
-  # All not satisficed ones for "base":
-  g$projections_not_sat <-
-    DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
-    plot_main_projections(
-      catch_breaks = catch_breaks,
-      catch_labels = catch_labels
-    )
-  # .ggsave(paste0("projections-all-not-satisficed"), 7.5, 27)
+    # All not satisficed ones for "base":
+    g$projections_not_sat <-
+      DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
+      plot_main_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+    # .ggsave(paste0("projections-all-not-satisficed"), 7.5, 27)
 
-  mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
-  g$projections_not_sat2 <-
-    DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
-    plot_main_projections(
-      catch_breaks = catch_breaks,
-      catch_labels = catch_labels
-    )
-  # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
+    mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
+    g$projections_not_sat2 <-
+      DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
+      plot_main_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+    # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
+  } else {
+    progress(text = "", before = "Skipping the projection figures.", after = "")
+  }
 
   # Kobe ------------------------------------------------------------------------
   progress("Kobe")
@@ -295,7 +301,7 @@ plot_factory <- function(
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
 
-  g$dot_refset <- pm_df_list_rob %>%
+  g$dot_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
     gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
@@ -400,25 +406,30 @@ plot_factory <- function(
   # .ggsave("bivariate-trade-off-robustness", 6, 3)
 
   # Psychedelic pyramid worms ---------------------------------------------------
-  progress(paste("psychedelic worm", clisymbols::symbol$mustache))
+  if (!skip_projections) {
+    progress(paste("psychedelic worm", clisymbols::symbol$mustache))
 
-  MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
-  d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
-    set_names(scenarios_ref_human)
+    MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
+    d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+      set_names(scenarios_ref_human)
 
-  suppressMessages({
-    g$worms_proj <-
-      d %>% plot_worms_grid(include_historical = FALSE) +
-      coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
-      scale_x_continuous(breaks = c(0, 1, 2)) +
-      scale_y_continuous(breaks = c(0, 1))
-    # .ggsave("neon-worms-projection", 10, 8.5)
+    suppressMessages({
+      g$worms_proj <-
+        d %>% plot_worms_grid(include_historical = FALSE) +
+        coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
+        scale_x_continuous(breaks = c(0, 1, 2)) +
+        scale_y_continuous(breaks = c(0, 1))
+      # .ggsave("neon-worms-projection", 10, 8.5)
 
-    g$worms_hist_proj <-
-      d %>% plot_worms_grid(include_historical = TRUE) +
-      coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
-    # .ggsave("neon-worms-all", 10, 8.5)
-  })
+      g$worms_hist_proj <-
+        d %>% plot_worms_grid(include_historical = TRUE) +
+        coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
+      # .ggsave("neon-worms-all", 10, 8.5)
+    })
+  } else {
+    progress(text = "", before = paste0("Skipping the psychedelic worm ",
+      clisymbols::symbol$mustache, " figures."), after = "")
+  }
 
   # Sensitivity plots -----------------------------------------------------------
 

@@ -11,7 +11,7 @@
 #'   character vector
 #' @param dodge The amount to separate or "dodge" the dots.
 #' @param bar_alpha Background bar transparency. 0 will omit.
-#'
+#' @param pt_size Point size.
 #' @return A ggplot2 object
 #' @export
 #' @examples
@@ -23,7 +23,8 @@
 #' plot_dots(pm)
 #' plot_dots(pm, type = "facet")
 plot_dots <- function(pm_df_list, type = c("single", "facet"),
-                      custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2) {
+                      custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2,
+                      pt_size = 2.25) {
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {
@@ -36,8 +37,12 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
     pm_avg <- condense_func(df, mean, label = "prob")
     pm_min <- condense_func(df, min, label = "min")
     pm_max <- condense_func(df, max, label = "max")
+    pm_min2 <- condense_func(df, skater_min, label = "skater_min")
+    pm_max2 <- condense_func(df, skater_max, label = "skater_max")
     pm <- dplyr::left_join(pm_avg, pm_min, by = c("MP", "pm")) %>%
-      dplyr::left_join(pm_max, by = c("MP", "pm"))
+      dplyr::left_join(pm_max, by = c("MP", "pm")) %>%
+      dplyr::left_join(pm_min2, by = c("MP", "pm")) %>%
+      dplyr::left_join(pm_max2, by = c("MP", "pm"))
   } else {
     pm <- reshape2::melt(df,
       id.vars = c("MP", "scenario"),
@@ -57,12 +62,15 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
 
   if (type == "single") {
     g <- g + geom_linerange(aes_string(ymin = "min", ymax = "max"),
-      position = position_dodge(width = dodge), alpha = 0.8, lwd = 0.5
+      position = position_dodge(width = dodge), alpha = 0.8, lwd = 0.4
+    )
+    g <- g + geom_linerange(aes_string(ymin = "skater_min", ymax = "skater_max"),
+      position = position_dodge(width = dodge), alpha = 0.8, lwd = 0.85
     )
   }
 
   g <- g + geom_point(aes_string(shape = "`Reference`"),
-    position = position_dodge(width = dodge),
+    position = position_dodge(width = dodge), size = pt_size,
   ) +
     ggplot2::scale_shape_manual(values = c(19, 21)) +
     ylab("Probability") + xlab("Performance metric") +
@@ -95,4 +103,16 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
   }
 
   g
+}
+
+skater_min <- function(x, ...) {
+  x <- x[!is.na(x)]
+  x <- sort(x)[-1]
+  min(x)
+}
+
+skater_max <- function(x, ...) {
+  x <- x[!is.na(x)]
+  x <- rev(sort(x))[-1]
+  max(x)
 }

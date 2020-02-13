@@ -19,7 +19,6 @@
 #' plot_worms_grid(x)
 plot_worms_grid <- function(object_list, prob = 0.5,
                        include_historical = TRUE) {
-
   if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
@@ -33,7 +32,7 @@ plot_worms_grid <- function(object_list, prob = 0.5,
   }
 
   out <- purrr::map(object_list, ~{
-    ts <- get_ts(.x, type = c("SSB", "FM"))
+    ts <- get_ts(.x, type = c("SSB", "FM"), this_year = this_year)
     ts_quantiles <- get_ts_quantiles(ts, probs = c(prob, prob))
 
     if (!include_historical) {
@@ -43,7 +42,6 @@ plot_worms_grid <- function(object_list, prob = 0.5,
     }
 
     now <- filter(ts_quantiles, real_year == this_year)
-
     m <- reshape2::dcast(d, mp_name + real_year ~ Type, value.var = "m") %>%
       rename(b_m = B_BMSY, f_m = F_FMSY)
     l <- reshape2::dcast(d, mp_name + real_year ~ Type, value.var = "l") %>%

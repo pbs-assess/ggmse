@@ -9,7 +9,8 @@ plot_dots(
   type = c("single", "facet"),
   custom_pal = NULL,
   dodge = 0.6,
-  bar_alpha = 0.2
+  bar_alpha = 0.2,
+  pt_size = 2.25
 )
 }
 \arguments{
@@ -28,6 +29,8 @@ character vector}
 \item{dodge}{The amount to separate or "dodge" the dots.}
 
 \item{bar_alpha}{Background bar transparency. 0 will omit.}
+
+\item{pt_size}{Point size.}
 }
 \value{
 A ggplot2 object

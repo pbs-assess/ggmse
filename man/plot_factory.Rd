@@ -18,7 +18,8 @@ plot_factory(
   catch_breaks = NULL,
   catch_labels = catch_breaks,
   dodge = 0.7,
-  satisficed_criteria = NULL
+  satisficed_criteria = NULL,
+  skip_projections = FALSE
 )
 }
 \arguments{
@@ -64,6 +65,8 @@ to be in 1000 t insead of t.}
 
 \item{satisficed_criteria}{A named numeric vector designating the satisficed
 criteria for use in a 'tigure' plot. See \code{\link[=plot_tigure]{plot_tigure()}}.}
+
+\item{skip_projections}{Logical: skip the projection and worm plots for speed?}
 }
 \value{
 A named list object containing the ggplot objects.
@@ -118,6 +121,8 @@ names(plots)
 plots$tigure_minimum
 \donttest{
 plots$convergence
+plots$tigure_refset_avg
+plots$tigure_refset
 plots$worms_proj
 plots$parallel_refset
 plots$dot_refset
