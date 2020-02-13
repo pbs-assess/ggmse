@@ -84,6 +84,8 @@
 #' plots$tigure_minimum
 #' \donttest{
 #' plots$convergence
+#' plots$tigure_refset_avg
+#' plots$tigure_refset
 #' plots$worms_proj
 #' plots$parallel_refset
 #' plots$dot_refset
@@ -182,9 +184,9 @@ plot_factory <- function(
 
   g <- list()
 
-  g$tigure_all_scenarios_avg <- gfdlm::plot_tigure(pm_avg)
+  g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg)
   # .ggsave("pm-table-avg", 4.25, 6.5)
-  g$tigure_minimum <- gfdlm::plot_tigure(pm_min,
+  g$tigure_refset_min <- gfdlm::plot_tigure(pm_min,
     satisficed = satisficed_criteria,
   )
   # .ggsave("pm-table-min", 4.25, 6.5)
@@ -230,7 +232,7 @@ plot_factory <- function(
   # .ggsave(paste0("projections-all-not-satisficed"), 7.5, 27)
 
   mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
-  g$projections_not_sat_highlight <-
+  g$projections_not_sat2 <-
     DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
     plot_main_projections(
       catch_breaks = catch_breaks,
