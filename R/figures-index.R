@@ -37,15 +37,20 @@ plot_index <- function(object_list, n_samples = 5, seed = 42) {
     this_year = this_year,
     seed = seed, n_samples = n_samples, .id = "scenario"
   )
-  ggplot(d, aes_string("real_year", "value", colour = "as.factor(iter)")) +
+  g <- ggplot(d, aes_string("real_year", "value", colour = "as.factor(iter)")) +
     geom_line(alpha = 0.9) +
     facet_grid(mp_name ~ scenario) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
     theme_pbs() +
     ylab("Index value") +
     xlab("Year") +
-    scale_colour_brewer(palette = "Dark2") +
     guides(colour = FALSE)
+
+  if (n_samples <= 8) {
+    g <- g + scale_colour_brewer(palette = "Dark2")
+  }
+
+  g
 }
 
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5) {
