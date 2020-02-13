@@ -1,4 +1,3 @@
-
 #' Dot plot
 #'
 #' @param pm_df_list A named list of performance metric data frames from
@@ -10,7 +9,7 @@
 #'   mean.
 #' @param custom_pal An optional custom color palette. Should be a named
 #'   character vector
-#' @param dodge The amount to separate or "dodge" the lollipop lines.
+#' @param dodge The amount to separate or "dodge" the dots.
 #' @param bar_alpha Background bar transparency. 0 will omit.
 #'
 #' @return A ggplot2 object
@@ -24,8 +23,7 @@
 #' plot_dots(pm)
 #' plot_dots(pm, type = "facet")
 plot_dots <- function(pm_df_list, type = c("single", "facet"),
-  custom_pal = NULL, dodge = 0.6,
-  bar_alpha = 0.2) {
+                      custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2) {
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {
