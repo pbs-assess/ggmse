@@ -22,7 +22,7 @@ test_that("plot_factory() runs", {
     scenario_df = scenario_df,
     mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
     mp_not_sat = c("CC100"),
-    mp_not_sat_highlight = c("CC100"),
+    mp_not_sat2 = c("CC100"),
     mp_ref = c("FMSYref75"),
     custom_pal = custom_pal,
     eg_scenario = "sc1",

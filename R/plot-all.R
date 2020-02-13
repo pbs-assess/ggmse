@@ -6,21 +6,22 @@
 #' @param mse_list A list of DLMtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param pm A character vector of performance metrics. These performance
-#'   metrics should exist in the current workspace or via an attached package such as DLMtool.
+#'   metrics should exist in the current workspace or via an attached package
+#'   such as DLMtool.
 #' @param scenario_df A data frame with the columns `scenario`,
 #'   `scenario_human`, and `scenario_type`. `scenario_type` should contain
 #'   `"Reference"` and `"Robustness"` entries.
-#' @param mp_sat A character vector of satisficed management procedures
-#'   (MPs).
-#' @param mp_not_sat MPs that were *not* satisfied (a projection plot will be
-#'   made with these) for `eg_scenario` (see below).
-#' @param mp_not_sat_highlight MPs that were *not* satisfied to highlight
-#'   in a projection plot for `eg_scenario` (see below). I.e. probably some subset of the full not satisfied set.
 #' @param mp_ref Reference MPs.
-#' @param custom_pal A named character vector of colors for the MPs.
-#'   Names should correspond to the MP names. Should include all
-#'   satisficed and reference MPs.
-#' @param eg_scenario An example scenario (as character) which will be used for
+#' @param mp_sat A character vector of satisficed management procedures (MPs).
+#' @param mp_not_sat MPs that were *not* satisfied (a giant projection plot will
+#'   be made with these) for `eg_scenario` (see below).
+#' @param mp_not_sat2 MPs that were *not* satisfied to highlight in a projection
+#'   plot for `eg_scenario` (see below). I.e. probably some subset of the full
+#'   not satisfied set.
+#' @param custom_pal A named character vector of colors for the MPs. Names
+#'   should correspond to the MP names. Should include all satisficed and
+#'   reference MPs.
+#' @param eg_scenario An example scenario (as character) that will be used for
 #'   the projection plot of not-satisficed MPs.
 #' @param tradeoff Character vector of length 2 of tradeoff PMs.
 #' @param catch_breaks An optional numeric vector of y-axis breaks for the catch
@@ -28,6 +29,7 @@
 #' @param catch_labels An optional numeric vector of y-axis labels for the catch
 #'   projection panels. This can be useful, for example, if you want the labels
 #'   to be in 1000 t insead of t.
+#' @param dodge TODO
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
 #'
@@ -71,9 +73,8 @@
 #'   pm = pm,
 #'   scenario_df = scenario_df,
 #'   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
-#'   mp_not_sat = c("CC100"),
-#'   mp_not_sat_highlight = c("CC100"),
 #'   mp_ref = c("FMSYref75"),
+#'   mp_not_sat = c("CC100"),
 #'   custom_pal = custom_pal,
 #'   eg_scenario = "sc1",
 #'   tradeoff = c("LT LRP", "STC"),
@@ -95,15 +96,16 @@ plot_factory <- function(
                          mse_list,
                          pm,
                          scenario_df,
+                         mp_ref,
                          mp_sat,
                          mp_not_sat,
-                         mp_not_sat_highlight,
-                         mp_ref,
-                         custom_pal,
-                         eg_scenario,
-                         tradeoff,
+                         mp_not_sat2 = mp_not_sat,
+                         custom_pal = NULL,
+                         eg_scenario = scenario_df$scenario[1],
+                         tradeoff = pm[1:2],
                          catch_breaks = NULL,
                          catch_labels = catch_breaks,
+                         dodge = 0.7,
                          satisficed_criteria = NULL) {
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
@@ -120,8 +122,15 @@ plot_factory <- function(
       call. = FALSE
     )
   }
-  if (is.null(names(custom_pal))) {
-    stop("`custom_pal` must be a *named* character vector.", call. = FALSE)
+  if (!is.null(custom_pal)) {
+    if (is.null(names(custom_pal))) {
+      stop("`custom_pal` must be a *named* character vector.", call. = FALSE)
+    }
+    if (!all(mp_sat %in% names(custom_pal))) {
+      stop("`custom_pal` must have names that include all of the satisficed MPs (`mp_sat`).",
+        call. = FALSE
+      )
+    }
   }
   if (!is.null(satisficed_criteria)) {
     if (is.null(names(satisficed_criteria))) {
@@ -130,11 +139,6 @@ plot_factory <- function(
     if (!all(names(satisficed_criteria) %in% pm)) {
       stop("`names(satisficed_criteria)` not all in `pm`.", call. = FALSE)
     }
-  }
-  if (!all(mp_sat %in% names(custom_pal))) {
-    stop("`custom_pal` must have names that include all of the satisficed MPs (`mp_sat`).",
-      call. = FALSE
-    )
   }
   if (!eg_scenario %in% scenario_df$scenario) {
     stop("`eg_scenario` must be in `scenario_df$scenario`.", call. = FALSE)
@@ -225,19 +229,7 @@ plot_factory <- function(
     )
   # .ggsave(paste0("projections-all-not-satisficed"), 7.5, 27)
 
-  # Example not satisficed ones for "base":
-  # mp_eg_not_sat <- c(
-  #   "CC_hist",
-  #   "CC90",
-  #   ".GB_slope8_0.66",
-  #   ".Islope0.2_80",
-  #   ".ICI2",
-  #   ".IDX_smooth",
-  #   ".IT5_hist",
-  #   ".ITM_hist",
-  #   ".SP6040_prior"
-  # )
-  mp_eg_not_sat <- mp_not_sat_highlight[mp_not_sat_highlight %in% mp_not_sat]
+  mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
   g$projections_not_sat_highlight <-
     DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
     plot_main_projections(
@@ -299,16 +291,16 @@ plot_factory <- function(
   g$dot_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal)
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
 
   g$dot_refset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal)
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
 
   g$dot_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_dots(type = "single", custom_pal = custom_pal)
+    gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge)
 
   # Parallel coordinate plots -------------------------------------------------
   progress("parallel coordinate")
@@ -377,17 +369,17 @@ plot_factory <- function(
   g$lollipops_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = 0.65)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
   # .ggsave("lollipops-ref", 8, 7)
 
   g$lollipops_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
   # .ggsave("lollipops-ref-avg", 4.5, 5)
 
   g$lollipops_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = 0.65)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
 
   # Bivariate trade-off plots ---------------------------------------------------
   progress("bivariate trade-off")

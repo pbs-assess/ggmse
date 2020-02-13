@@ -8,15 +8,16 @@ plot_factory(
   mse_list,
   pm,
   scenario_df,
+  mp_ref,
   mp_sat,
   mp_not_sat,
-  mp_not_sat_highlight,
-  mp_ref,
-  custom_pal,
-  eg_scenario,
-  tradeoff,
+  mp_not_sat2 = mp_not_sat,
+  custom_pal = NULL,
+  eg_scenario = scenario_df$scenario[1],
+  tradeoff = pm[1:2],
   catch_breaks = NULL,
   catch_labels = catch_breaks,
+  dodge = 0.7,
   satisficed_criteria = NULL
 )
 }
@@ -25,28 +26,29 @@ plot_factory(
 scenarios. The list should be named with the scenario names.}
 
 \item{pm}{A character vector of performance metrics. These performance
-metrics should exist in the current workspace or via an attached package such as DLMtool.}
+metrics should exist in the current workspace or via an attached package
+such as DLMtool.}
 
 \item{scenario_df}{A data frame with the columns \code{scenario},
 \code{scenario_human}, and \code{scenario_type}. \code{scenario_type} should contain
 \code{"Reference"} and \code{"Robustness"} entries.}
 
-\item{mp_sat}{A character vector of satisficed management procedures
-(MPs).}
-
-\item{mp_not_sat}{MPs that were \emph{not} satisfied (a projection plot will be
-made with these) for \code{eg_scenario} (see below).}
-
-\item{mp_not_sat_highlight}{MPs that were \emph{not} satisfied to highlight
-in a projection plot for \code{eg_scenario} (see below). I.e. probably some subset of the full not satisfied set.}
-
 \item{mp_ref}{Reference MPs.}
 
-\item{custom_pal}{A named character vector of colors for the MPs.
-Names should correspond to the MP names. Should include all
-satisficed and reference MPs.}
+\item{mp_sat}{A character vector of satisficed management procedures (MPs).}
 
-\item{eg_scenario}{An example scenario (as character) which will be used for
+\item{mp_not_sat}{MPs that were \emph{not} satisfied (a giant projection plot will
+be made with these) for \code{eg_scenario} (see below).}
+
+\item{mp_not_sat2}{MPs that were \emph{not} satisfied to highlight in a projection
+plot for \code{eg_scenario} (see below). I.e. probably some subset of the full
+not satisfied set.}
+
+\item{custom_pal}{A named character vector of colors for the MPs. Names
+should correspond to the MP names. Should include all satisficed and
+reference MPs.}
+
+\item{eg_scenario}{An example scenario (as character) that will be used for
 the projection plot of not-satisficed MPs.}
 
 \item{tradeoff}{Character vector of length 2 of tradeoff PMs.}
@@ -57,6 +59,8 @@ projection panels.}
 \item{catch_labels}{An optional numeric vector of y-axis labels for the catch
 projection panels. This can be useful, for example, if you want the labels
 to be in 1000 t insead of t.}
+
+\item{dodge}{TODO}
 
 \item{satisficed_criteria}{A named numeric vector designating the satisficed
 criteria for use in a 'tigure' plot. See \code{\link[=plot_tigure]{plot_tigure()}}.}
@@ -103,9 +107,8 @@ plots <- plot_factory(
   pm = pm,
   scenario_df = scenario_df,
   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
-  mp_not_sat = c("CC100"),
-  mp_not_sat_highlight = c("CC100"),
   mp_ref = c("FMSYref75"),
+  mp_not_sat = c("CC100"),
   custom_pal = custom_pal,
   eg_scenario = "sc1",
   tradeoff = c("LT LRP", "STC"),
