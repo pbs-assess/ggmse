@@ -296,7 +296,23 @@ plot_factory <- function(
   #   )
   # .ggsave("spider-all-avg-reference", 10, 10)
 
-  # Parallel coordinate plots ---------------------------------------------------
+  # Dot plots -----------------------------------------------------------------
+  progress("dot")
+  g$dot_refset <- pm_df_list %>%
+    map(dplyr::filter, MP %in% MPs) %>%
+    set_names(scenarios_ref_human) %>%
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal)
+
+  g$dot_refset <- pm_df_list_rob %>%
+    map(dplyr::filter, MP %in% MPs) %>%
+    set_names(scenarios_rob_human) %>%
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal)
+
+  g$dot_refset_avg <- pm_df_list %>%
+    map(dplyr::filter, MP %in% MPs) %>%
+    gfdlm::plot_dots(type = "single", custom_pal = custom_pal)
+
+  # Parallel coordinate plots -------------------------------------------------
   progress("parallel coordinate")
 
   # pm_groups <- list(c("LT LRP", "LT USR", "FMSY"), c("STC", "LTC", "AAVC"))

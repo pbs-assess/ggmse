@@ -66,7 +66,6 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
   g <- g + geom_point(aes_string(shape = "`Reference`"),
     position = position_dodge(width = dodge),
   ) +
-    ggplot2::scale_x_discrete(limits = rev(levels(pm$pm))) +
     ggplot2::scale_shape_manual(values = c(19, 21)) +
     ylab("Probability") + xlab("Performance metric") +
     guides(
