@@ -4,7 +4,7 @@
 #'   [get_probs()]. The names will be used as the plot labels.
 #' @param type The type of plot. Multipanel `"facet"` vs. single panel
 #'   `"single"`. In the single panel version, a shaded ribbon represents the
-#'   upper and lower values across the scenarios on the line represents the
+#'   upper and lower values across the scenarios and the line represents the
 #'   mean.
 #' @param custom_pal An optional custom color palette. Should be a named
 #'   character vector
@@ -73,15 +73,6 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
       ) +
       facet_wrap(~scenario)
   } else {
-    condense_func <- function(dat, f, label = "prob") {
-      dplyr::group_by(dat, MP) %>%
-        dplyr::summarise_if(is.numeric, f, na.rm = TRUE) %>%
-        reshape2::melt(
-          id.vars = "MP",
-          value.name = label,
-          variable.name = "pm"
-        )
-    }
     pm_avg <- condense_func(df, mean, label = "mean")
     pm_min <- condense_func(df, min, label = "min")
     pm_max <- condense_func(df, max, label = "max")
@@ -129,4 +120,14 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     )
 
   g
+}
+
+condense_func <- function(dat, f, label = "prob") {
+  dplyr::group_by(dat, MP) %>%
+    dplyr::summarise_if(is.numeric, f, na.rm = TRUE) %>%
+    reshape2::melt(
+      id.vars = "MP",
+      value.name = label,
+      variable.name = "pm"
+    )
 }

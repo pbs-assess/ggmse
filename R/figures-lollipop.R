@@ -21,12 +21,7 @@
 #' plot_lollipop(pm[1]) + ggplot2::scale_colour_brewer(palette = "Set2")
 plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25) {
   if (!is.data.frame(pm_df_list)) {
-    df <- purrr::map_df(
-      names(pm_df_list),
-      ~ dplyr::bind_cols(pm_df_list[[.x]],
-        scenario = rep(.x, nrow(pm_df_list[[.x]]))
-      )
-    )
+    df <- bind_rows(pm_df_list, .id = "scenario")
   } else {
     df <- pm_df_list
     df$scenario <- ""
@@ -57,7 +52,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
     ggplot2::scale_x_discrete(limits = rev(levels(df_long$pm))) +
     coord_flip(
       expand = FALSE, ylim = c(0, 1),
-      xlim = c(1 - dodge / 2 - 0.2, npm + dodge / 2 + 0.2), clip = FALSE
+      xlim = c(1 - dodge / 2 - 0.2, npm + dodge / 2 + 0.2), clip = "off"
     ) +
     facet_wrap(~scenario) +
     ggplot2::scale_shape_manual(values = c(19, 21))

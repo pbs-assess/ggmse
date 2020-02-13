@@ -18,7 +18,7 @@ plot_parallel_coords(
 
 \item{type}{The type of plot. Multipanel \code{"facet"} vs. single panel
 \code{"single"}. In the single panel version, a shaded ribbon represents the
-upper and lower values across the scenarios on the line represents the
+upper and lower values across the scenarios and the line represents the
 mean.}
 
 \item{custom_pal}{An optional custom color palette. Should be a named
