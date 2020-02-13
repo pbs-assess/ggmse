@@ -121,6 +121,7 @@ plots$tigure_minimum
 plots$convergence
 plots$worms_proj
 plots$parallel_refset
+plots$dot_refset
 plots$radar_refset
 plots$lollipops_refset
 plots$projections$sc1

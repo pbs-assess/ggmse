@@ -25,7 +25,7 @@ mean.}
 \item{custom_pal}{An optional custom color palette. Should be a named
 character vector}
 
-\item{dodge}{The amount to separate or "dodge" the lollipop lines.}
+\item{dodge}{The amount to separate or "dodge" the dots.}
 
 \item{bar_alpha}{Background bar transparency. 0 will omit.}
 }
