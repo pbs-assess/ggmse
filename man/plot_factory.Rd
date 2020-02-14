@@ -17,7 +17,7 @@ plot_factory(
   tradeoff = pm[1:2],
   catch_breaks = NULL,
   catch_labels = catch_breaks,
-  dodge = 0.7,
+  dodge = 0.75,
   satisficed_criteria = NULL,
   skip_projections = FALSE
 )
@@ -61,7 +61,7 @@ projection panels.}
 projection panels. This can be useful, for example, if you want the labels
 to be in 1000 t insead of t.}
 
-\item{dodge}{TODO}
+\item{dodge}{The dodge width for \code{\link[=plot_dots]{plot_dots()}} etc.}
 
 \item{satisficed_criteria}{A named numeric vector designating the satisficed
 criteria for use in a 'tigure' plot. See \code{\link[=plot_tigure]{plot_tigure()}}.}
@@ -102,7 +102,7 @@ STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
 LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
 pm <- c("LT LRP", "LT USR", "STC", "LTC")
 
-custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
+custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")
 names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
 
 plots <- plot_factory(

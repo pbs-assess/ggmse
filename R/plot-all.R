@@ -29,7 +29,7 @@
 #' @param catch_labels An optional numeric vector of y-axis labels for the catch
 #'   projection panels. This can be useful, for example, if you want the labels
 #'   to be in 1000 t insead of t.
-#' @param dodge TODO
+#' @param dodge The dodge width for [plot_dots()] etc.
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
 #' @param skip_projections Logical: skip the projection and worm plots for speed?
@@ -66,7 +66,7 @@
 #' LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
 #' pm <- c("LT LRP", "LT USR", "STC", "LTC")
 #'
-#' custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
+#' custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")
 #' names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
 #'
 #' plots <- plot_factory(
@@ -108,7 +108,7 @@ plot_factory <- function(
                          tradeoff = pm[1:2],
                          catch_breaks = NULL,
                          catch_labels = catch_breaks,
-                         dodge = 0.7,
+                         dodge = 0.75,
                          satisficed_criteria = NULL,
                          skip_projections = FALSE) {
   if (!is.list(mse_list)) {
