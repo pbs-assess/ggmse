@@ -33,6 +33,7 @@
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
 #' @param skip_projections Logical: skip the projection and worm plots for speed?
+#' @param survey_type Which survey to plot. Passed to [plot_index()].
 #'
 #' @return A named list object containing the ggplot objects.
 #' @importFrom purrr set_names
@@ -110,7 +111,9 @@ plot_factory <- function(
                          catch_labels = catch_breaks,
                          dodge = 0.75,
                          satisficed_criteria = NULL,
-                         skip_projections = FALSE) {
+                         skip_projections = FALSE,
+                         survey_type = c("Ind", "AddInd")) {
+  survey_type <- match.arg(survey_type)
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
   }
@@ -253,6 +256,18 @@ plot_factory <- function(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels
       )
+
+    # Index projections -------------------------------------------------------
+
+    g$projections_index <- map(
+      scenarios, ~ {
+        temp <- mse_list[[.x]] # https://github.com/DLMtool/DLMtool/issues/295
+        temp@Misc$Data <- temp@Misc$Data[match(mp_sat_with_ref, temp@MPs)]
+        DLMtool::Sub(temp, MPs = mp_sat_with_ref)
+      }
+    ) %>%
+      set_names(scenarios_human) %>%
+      plot_index(type = survey_type)
   } else {
     progress(text = "", before = "Skipping the projection figures.", after = "")
   }

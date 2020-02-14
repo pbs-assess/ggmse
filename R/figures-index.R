@@ -4,6 +4,7 @@
 #'   scenarios. The list should be named with the scenario names.
 #' @param n_samples The number of timeseries samples to illustrate.
 #' @param seed The seed to set before drawing samples.
+#' @param type Which index to plot.
 #'
 #' @export
 #' @importFrom ggplot2 facet_grid scale_colour_brewer
@@ -15,12 +16,13 @@
 #' mse_list[[2]] <- mse_example
 #' names(mse_list) <- c("Sc 1", "Sc 2")
 #' plot_index(mse_list)
-plot_index <- function(object_list, n_samples = 5, seed = 42) {
+plot_index <- function(object_list, n_samples = 5, seed = 42, type = c("Ind", "AddInd")) {
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"
   }
 
+  type <- match.arg(type)
   if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
@@ -34,9 +36,10 @@ plot_index <- function(object_list, n_samples = 5, seed = 42) {
   }
 
   d <- purrr::map_dfr(object_list, get_index_ts,
-    this_year = this_year,
+    this_year = this_year, type = type,
     seed = seed, n_samples = n_samples, .id = "scenario"
   )
+
   g <- ggplot(d, aes_string("real_year", "value", colour = "as.factor(iter)")) +
     geom_line(alpha = 0.9) +
     facet_grid(mp_name ~ scenario) +
@@ -53,8 +56,11 @@ plot_index <- function(object_list, n_samples = 5, seed = 42) {
   g
 }
 
-get_index_ts <- function(object, this_year, seed = 42, n_samples = 5) {
-  x <- purrr::map(object@Misc$Data, "Ind")
+get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
+  type = c("Ind", "AddInd")) {
+
+  type <- match.arg(type)
+  x <- purrr::map(object@Misc$Data, type)
   x <- reshape2::melt(x) %>%
     dplyr::rename(iter = .data$Var1, year = .data$Var2, mp = .data$L1) %>%
     dplyr::mutate(type = "projection")
@@ -66,6 +72,7 @@ get_index_ts <- function(object, this_year, seed = 42, n_samples = 5) {
     mp = seq_along(object@MPs),
     mp_name = object@MPs, stringsAsFactors = FALSE
   )
+
   set.seed(seed)
   sampled_ids <- sample(unique(x$iter), size = n_samples)
   dplyr::filter(x, iter %in% sampled_ids) %>%

@@ -141,7 +141,6 @@ plot_tigure <- function(probs_dat,
   lab_cols <- ifelse(grepl("ref", levels(df$MP)), "grey65", "grey10")
   txt_col <- ifelse(grepl("ref", df$MP), "grey45", "grey4")
   padding <- 0.52
-  # browser()
   g <- ggplot(df, ggplot2::aes_string(x = "type", y = "MP")) +
     ggplot2::geom_tile(aes(fill = value), color = "white") +
     theme_pbs() +
