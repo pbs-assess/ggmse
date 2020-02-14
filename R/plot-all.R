@@ -171,7 +171,6 @@ plot_factory <- function(
   scenarios_rob <- get_filtered_scenario("Robustness", "scenario")
   scenarios_rob_human <- get_filtered_scenario("Robustness", "scenario_human")
 
-  # pm_list <- purrr::map(mse_list, ~ get_probs(.x, pm))
   pm_df_list <- purrr::map(mse_list[scenarios_ref], ~ get_probs(.x, pm))
   pm_df_list_rob <- purrr::map(mse_list[scenarios_rob], ~ get_probs(.x, pm))
 
@@ -187,35 +186,33 @@ plot_factory <- function(
   g <- list()
 
   g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg)
-  # .ggsave("pm-table-avg", 4.25, 6.5)
   g$tigure_refset_min <- gfdlm::plot_tigure(pm_min,
     satisficed = satisficed_criteria,
   )
-  # .ggsave("pm-table-min", 4.25, 6.5)
 
   g$tigure_refset <- map(pm_df_list, dplyr::filter, MP %in% mp_sat) %>%
     set_names(scenarios_ref_human) %>%
     plot_tigure_facet(ncol = 2)
-  # .ggsave("pm-tigures-ref-set", 7, 6.5)
 
   g$tigure_robset <- map(pm_df_list_rob, dplyr::filter, MP %in% mp_sat) %>%
     set_names(scenarios_rob_human) %>%
     plot_tigure_facet()
-  # .ggsave("pm-tigures-rob-set", 7, 2.25)
 
-  # Convergence -----------------------------------------------------------------
+  # Convergence ---------------------------------------------------------------
+
   progress("convergence")
 
   g$convergence <- scenarios %>%
     purrr::map(~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
     set_names(scenarios_human) %>%
     gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal)
-  # .ggsave("converge", 9, 10)
 
-  # Projections -----------------------------------------------------------------
+  # Projections ---------------------------------------------------------------
+
   if (!skip_projections) {
     progress("projection")
 
+    # All scenarios:
     xx <- map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
       set_names(scenarios_human)
     g$projections <- map(names(xx), ~ {
@@ -223,19 +220,18 @@ plot_factory <- function(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels
       )
-      # .ggsave(paste0("projections-satisficed-", .x), 7.5, 7.5)
     })
     names(g$projections) <- names(scenarios)
 
-    # All not satisficed ones for "base":
+    # All not satisficed ones for "example scenario":
     g$projections_not_sat <-
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels
       )
-    # .ggsave(paste0("projections-all-not-satisficed"), 7.5, 27)
 
+    # Highlighted not satisficed ones:
     mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
     g$projections_not_sat2 <-
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
@@ -243,10 +239,11 @@ plot_factory <- function(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels
       )
-    # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
 
-    # Scenario projections ------------------------------------------------------
+    # Scenario projections ----------------------------------------------------
+
     progress("combined-scenario projection")
+
     g$projections_scenarios <- map(
       scenarios,
       ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
@@ -260,55 +257,42 @@ plot_factory <- function(
     progress(text = "", before = "Skipping the projection figures.", after = "")
   }
   # Kobe ----------------------------------------------------------------------
+
   progress("Kobe")
 
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
 
   g$kobe <-
-    purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
-    set_names(scenarios_ref_human) %>%
+    purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    set_names(scenarios_human) %>%
     gfdlm::plot_kobe_grid()
-  # .ggsave("kobe-grid-satisficed", 9.5, 10.5)
 
   # Radar plots ---------------------------------------------------------------
+
   progress("radar")
 
   g$radar_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
     plot_radar_facet(custom_pal = custom_pal)
-  # .ggsave("spider-satisficed-panel-reference", 12, 11)
 
   g$radar_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
     plot_radar_facet(custom_pal = custom_pal)
-  # .ggsave("spider-satisficed-panel-robustness", 10, 5)
 
   g$radar_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
     plot_radar(custom_pal = custom_pal)
-  # .ggsave("spider-satisficed-avg-reference", 6, 6)
 
   g$radar_refset_min <- pm_min %>%
     dplyr::filter(MP %in% MPs) %>%
     plot_radar(custom_pal = custom_pal)
-  # .ggsave("spider-satisficed-min-reference", 6, 6)
-
-  # d <- pm_avg %>%
-  #   dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
-  #   split(.$type) %>%
-  #   purrr::map(dplyr::select, -type)
-  # g_temp <- d %>% purrr::map(plot_radar)
-  # g$radar_refset_mptypes_avg <-
-  #   cowplot::plot_grid(
-  #     plotlist = g_temp, ncol = 2, labels = names(d),
-  #     hjust = 0, label_size = 11, align = "hv"
-  #   )
-  # .ggsave("spider-all-avg-reference", 10, 10)
 
   # Dot plots -----------------------------------------------------------------
+
   progress("dot")
+
   g$dot_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
@@ -324,107 +308,63 @@ plot_factory <- function(
     gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge)
 
   # Parallel coordinate plots -------------------------------------------------
-  progress("parallel coordinate")
 
-  # pm_groups <- list(c("LT LRP", "LT USR", "FMSY"), c("STC", "LTC", "AAVC"))
+  progress("parallel coordinate")
 
   g$parallel_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal)
-  # .ggsave("parallel-coordinates", 8, 6.6)
-
-  # g <- pm_df_list %>% map(dplyr::filter, MP %in% MPs) %>%
-  #   set_names(scenarios_ref_human) %>%
-  #   gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal,
-  #     groups = pm_groups)
-  # # .ggsave("parallel-coordinates-grouped", 8, 6.6)
 
   g$parallel_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
     gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal)
-  # .ggsave("parallel-coordinates-rob", 7, 3)
 
   g$parallel_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     gfdlm::plot_parallel_coords(type = "single", custom_pal = custom_pal)
-  # .ggsave("parallel-coordinates-avg", 5.5, 3.5)
 
-  # g$parallel_coords_average_grouped <- pm_df_list %>% map(dplyr::filter, MP %in% MPs) %>%
-  #   gfdlm::plot_parallel_coords(type = "single", custom_pal = custom_pal,
-  #     groups = pm_groups)
-  # .ggsave("parallel-coordinates-avg-grouped", 5.5, 3.5)
+  # Lollipops -----------------------------------------------------------------
 
-  # FIXME: pull this into package:
-  # d <- pm_avg %>%
-  #   dplyr::inner_join(rename(mp, MP = mp), by = "MP") %>%
-  #   split(.$type) %>%
-  #   purrr::map(select, -type)
-  # suppressMessages({
-  #   g_temp <- names(d) %>% map(~ {
-  #     gfdlm::plot_parallel_coords(d[.x], type = "single", rotate_labels = TRUE) +
-  #       ggplot2::theme(strip.text = ggplot2::element_text(face = "bold", size = 11)) +
-  #       ggplot2::guides(lty = FALSE, fill = FALSE) +
-  #       ggplot2::scale_color_brewer(palette = "Set2") +
-  #       ggplot2::coord_cartesian(ylim = c(-0.01, 1.01), expand = FALSE) +
-  #       ggplot2::theme(plot.margin = grid::unit(c(1, .5, .5, .5), "lines")) +
-  #       ggplot2::theme(
-  #         panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
-  #         panel.grid.major.x = ggplot2::element_line(colour = "grey85"),
-  #         panel.grid.minor.y = ggplot2::element_line(colour = "grey96")
-  #       )
-  #   })
-  # })
-  # g$parallel_refset_mptypes_avg <-
-  #   cowplot::plot_grid(
-  #     plotlist = g_temp, ncol = 2, labels = names(d),
-  #     hjust = 0, label_size = 11, vjust = 1, align = "hv"
-  #   ) +
-  #   ggplot2::theme(plot.margin = grid::unit(c(1, 0, 1, 1), "lines"))
-  # .ggsave("parallel-coordinates-all-avg-reference", 8.5, 8.5)
-
-  # Lollipops -------------------------------------------------------------------
   progress("lollipop")
 
   g$lollipops_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
-  # .ggsave("lollipops-ref", 8, 7)
 
   g$lollipops_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
     gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
-  # .ggsave("lollipops-ref-avg", 4.5, 5)
 
   g$lollipops_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
 
-  # Bivariate trade-off plots ---------------------------------------------------
+  # Bivariate trade-off plots -------------------------------------------------
+
   progress("bivariate trade-off")
 
   g$tradeoff_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
-  # .ggsave("bivariate-trade-off-reference", 7.5, 6.5)
 
   g$tradeoff_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_rob_human) %>%
     gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal) +
     facet_wrap(~scenario, ncol = 2)
-  # .ggsave("bivariate-trade-off-robustness", 6, 3)
 
-  # Psychedelic pyramid worms ---------------------------------------------------
+  # Psychedelic pyramid worms -------------------------------------------------
+
   if (!skip_projections) {
     progress(paste("psychedelic worm", clisymbols::symbol$mustache))
 
     MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
-    d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
-      set_names(scenarios_ref_human)
+    d <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+      set_names(scenarios_human)
 
     suppressMessages({
       g$worms_proj <-
@@ -432,12 +372,10 @@ plot_factory <- function(
         coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
         scale_x_continuous(breaks = c(0, 1, 2)) +
         scale_y_continuous(breaks = c(0, 1))
-      # .ggsave("neon-worms-projection", 10, 8.5)
 
       g$worms_hist_proj <-
         d %>% plot_worms_grid(include_historical = TRUE) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
-      # .ggsave("neon-worms-all", 10, 8.5)
     })
   } else {
     progress(text = "", before = paste0(
@@ -445,30 +383,6 @@ plot_factory <- function(
       clisymbols::symbol$mustache, " figures."
     ), after = "")
   }
-
-  # Sensitivity plots -----------------------------------------------------------
-
-  # slots <- c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd")
-  #
-  # g$sensitivity_dots <- DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_sat) %>%
-  #   gfdlm::plot_sensitivity(`LT LRP`, slots = slots,
-  #     ylab = expression(Mean~B/B[MSY]~"in"~years~36-50))
-  # # .ggsave("sensitivity-bbmsy-base", 12.5, 5)
-  #
-  # g$sensitivity_ <- DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_sat) %>%
-  #   gfdlm::plot_sensitivity(`STY`, slots = slots,
-  #     ylab = "Mean catch/reference catch in years 6-20")
-  # # .ggsave("sensitivity-yield-base", 12.5, 5)
-  #
-  # g$sensitivity_ <- DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_sat) %>%
-  #   gfdlm::plot_sensitivity_trajectory("B_BMSY", slots = slots) +
-  #   coord_cartesian(ylim = c(0, 4))
-  # # .ggsave("sensitivity-traj-bbmsy-base", 12.5, 5)
-  #
-  # g$sensitivity_ <- DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_sat) %>%
-  #   gfdlm::plot_sensitivity_trajectory("F_FMSY", slots = slots) +
-  #   coord_cartesian(ylim = c(0, 4))
-  # # .ggsave("sensitivity-traj-ffmsy-base", 12.5, 5)
 
   g
 }
