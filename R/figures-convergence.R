@@ -13,15 +13,20 @@
 #'   character vector
 #' @param ylim Y limits. Defaults to the minimum observed performance metric
 #'   value (via lazy evaluation) and 1.
+#' @param satisficed An optional named numeric vector. The names correspond to
+#'   the performance metrics and the values correspond to the threshold.
+#'   This will add a horizontal line on the relevant panels.
 #'
 #' @return A ggplot2 plot.
 #' @export
 #'
 #' @examples
 #' plot_convergence(mse_example)
+#' plot_convergence(mse_example, satisficed = c("LTY" = 0.9))
 plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
                              label_gap = 1.15, custom_pal = NULL,
-                             ylim = c(min(df$value), 1)) {
+                             ylim = c(min(df$value), 1),
+                             satisficed = NULL) {
 
   if (!is.list(object_list)) {
     object_list <- list("Scenario 1" = object_list)
@@ -74,6 +79,13 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
 
   g <- g + ggplot2::scale_x_continuous(breaks = pretty(unique(df$iter))) +
     ggplot2::coord_cartesian(xlim = c(1, max(object_list[[1]]@nsim)), ylim = ylim, expand = FALSE)
-  # }
+
+  if (!is.null(satisficed)) {
+    temp <- as.data.frame(satisficed)
+    temp$pm_name <- row.names(temp)
+    g <- g + geom_hline(data = temp, mapping = aes_string(yintercept = "satisficed"),
+      lty = 2, alpha = 0.5)
+  }
+
   g
 }

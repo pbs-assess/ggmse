@@ -70,7 +70,7 @@ get_probs <- function(object,
 #' @param mp_order Optional hardcoded MP order
 #' @param digits How many decimal places to show in the tiles for the values
 #' @param satisficed An optional named numeric vector. The names correspond to
-#'   the performance metrics on the values correspond to the values above which
+#'   the performance metrics and the values correspond to the values above which
 #'   (`>`) the cells will be outlined as "satisficed".
 #' @param return_data Logical. If `TRUE` then the underlying data frame is
 #'   returned instead of the plot.
