@@ -216,14 +216,16 @@ plot_factory <- function(
   if (!skip_projections) {
     progress("projection")
 
-    g$projections <- map(names(mse_sat_with_ref), ~ {
-      g <- plot_main_projections(mse_sat_with_ref[[.x]],
+    xx <- map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
+      set_names(scenarios_human)
+    g$projections <- map(names(xx), ~ {
+      g <- plot_main_projections(xx[[.x]],
         catch_breaks = catch_breaks,
         catch_labels = catch_labels
       )
       # .ggsave(paste0("projections-satisficed-", .x), 7.5, 7.5)
     })
-    names(g$projections) <- names(mse_sat_with_ref)
+    names(g$projections) <- names(scenarios)
 
     # All not satisficed ones for "base":
     g$projections_not_sat <-
@@ -242,11 +244,22 @@ plot_factory <- function(
         catch_labels = catch_labels
       )
     # .ggsave(paste0("projections-eg-not-satisficed"), 8, 9.5)
+
+    # Scenario projections ------------------------------------------------------
+    progress("combined-scenario projection")
+    g$projections_scenarios <- map(
+      scenarios,
+      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+    ) %>%
+      set_names(scenarios_human) %>%
+      plot_scenario_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
   } else {
     progress(text = "", before = "Skipping the projection figures.", after = "")
   }
-
-  # Kobe ------------------------------------------------------------------------
+  # Kobe ----------------------------------------------------------------------
   progress("Kobe")
 
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
@@ -257,7 +270,7 @@ plot_factory <- function(
     gfdlm::plot_kobe_grid()
   # .ggsave("kobe-grid-satisficed", 9.5, 10.5)
 
-  # Radar plots -----------------------------------------------------------------
+  # Radar plots ---------------------------------------------------------------
   progress("radar")
 
   g$radar_refset <- pm_df_list %>%
@@ -427,8 +440,10 @@ plot_factory <- function(
       # .ggsave("neon-worms-all", 10, 8.5)
     })
   } else {
-    progress(text = "", before = paste0("Skipping the psychedelic worm ",
-      clisymbols::symbol$mustache, " figures."), after = "")
+    progress(text = "", before = paste0(
+      "Skipping the psychedelic worm ",
+      clisymbols::symbol$mustache, " figures."
+    ), after = "")
   }
 
   # Sensitivity plots -----------------------------------------------------------
