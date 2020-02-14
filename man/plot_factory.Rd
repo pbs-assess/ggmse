@@ -19,7 +19,8 @@ plot_factory(
   catch_labels = catch_breaks,
   dodge = 0.75,
   satisficed_criteria = NULL,
-  skip_projections = FALSE
+  skip_projections = FALSE,
+  survey_type = c("Ind", "AddInd")
 )
 }
 \arguments{
@@ -67,6 +68,8 @@ to be in 1000 t insead of t.}
 criteria for use in a 'tigure' plot. See \code{\link[=plot_tigure]{plot_tigure()}}.}
 
 \item{skip_projections}{Logical: skip the projection and worm plots for speed?}
+
+\item{survey_type}{Which survey to plot. Passed to \code{\link[=plot_index]{plot_index()}}.}
 }
 \value{
 A named list object containing the ggplot objects.

@@ -36,7 +36,7 @@ column are fully represented}
 \item{mp_order}{Optional hardcoded MP order}
 
 \item{satisficed}{An optional named numeric vector. The names correspond to
-the performance metrics on the values correspond to the values above which
+the performance metrics and the values correspond to the values above which
 (\code{>}) the cells will be outlined as "satisficed".}
 
 \item{return_data}{Logical. If \code{TRUE} then the underlying data frame is
