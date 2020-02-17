@@ -79,7 +79,8 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
       shape = guide_legend(override.aes = list(colour = "grey50"))
     ) + theme(
       panel.grid.major.y = element_line(colour = "grey85"),
-      panel.grid.minor.y = element_line(colour = "grey96")
+      panel.grid.minor.y = element_line(colour = "grey96"),
+      axis.ticks.x.bottom = element_blank()
     )
 
   temp_dat <- pm

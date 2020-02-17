@@ -2,6 +2,13 @@
 % Please edit documentation in R/mp.R
 \name{SP_gf}
 \alias{SP_gf}
+\alias{SP6040_gf}
+\alias{.SP6040_gf}
+\alias{SP8040_gf}
+\alias{.SP8040_gf}
+\alias{SP4010_gf}
+\alias{.SP4010_gf}
+\alias{add_SP_prior}
 \title{PBS groundfish surplus production wrapper function}
 \usage{
 SP_gf(
@@ -17,6 +24,28 @@ SP_gf(
   tac_max_decrease = 0.5,
   tac_floor = 0.1,
   tac_increase_buffer = 1.05
+)
+
+SP6040_gf(x, Data, reps = 1, ...)
+
+.SP6040_gf(x, Data, reps = 100, ...)
+
+SP8040_gf(x, Data, reps = 1, ...)
+
+.SP8040_gf(x, Data, reps = 100, ...)
+
+SP4010_gf(x, Data, reps = 1, ...)
+
+.SP4010_gf(x, Data, reps = 100, ...)
+
+add_SP_prior(
+  mp,
+  r_prior,
+  tac_max_increase = 1.2,
+  tac_max_decrease = 0.5,
+  tac_floor = 0.1,
+  tac_increase_buffer = 1.05,
+  ...
 )
 }
 \arguments{
@@ -43,7 +72,21 @@ SP_gf(
 \item{tac_floor}{Floor for TAC}
 
 \item{tac_increase_buffer}{Proportional buffer below which TAC won't change}
+
+\item{...}{Other args}
+
+\item{mp}{MP to wrap}
+
+\item{r_prior}{Mean and SD of r prior}
 }
 \description{
 PBS groundfish surplus production wrapper function
+}
+\examples{
+my_mp <- add_SP_prior(SP4010_gf, c(0.3, 0.05))
+library(DLMtool)
+om <- DLMtool::testOM
+om@nsim <- 5
+om@proyears <- 10
+mse <- runMSE(om, MPs = "my_mp")
 }

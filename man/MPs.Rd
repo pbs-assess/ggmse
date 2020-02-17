@@ -29,8 +29,6 @@
 \alias{.Islope2}
 \alias{.Islope3}
 \alias{.Islope4}
-\alias{.IT5}
-\alias{.IT10}
 \alias{.Itarget1}
 \alias{.Itarget2}
 \alias{.Itarget3}
@@ -45,17 +43,14 @@
 \alias{.IT5_hist}
 \alias{IT10_hist}
 \alias{.IT10_hist}
+\alias{CC1.0}
 \alias{CC100}
-\alias{CC90}
-\alias{CC80}
-\alias{CC70}
-\alias{CC60}
-\alias{SP6040_prior}
-\alias{.SP6040_prior}
-\alias{SP8040_prior}
-\alias{.SP8040_prior}
-\alias{SP4010_prior}
-\alias{.SP4010_prior}
+\alias{CC0.9}
+\alias{CC0.8}
+\alias{CC0.7}
+\alias{CC0.6}
+\alias{CC1.1}
+\alias{CC1.2}
 \title{Alternative versions of \pkg{DLMtool} and \pkg{MSEtool} MP functions}
 \usage{
 CC_hist20(x, Data, reps = 100, ...)
@@ -114,10 +109,6 @@ Islope0.2_80(x, Data, reps = 100, ...)
 
 .Islope4(x, Data, reps = 100, ...)
 
-.IT5(x, Data, reps = 100, ...)
-
-.IT10(x, Data, reps = 100, ...)
-
 .Itarget1(x, Data, reps = 100, ...)
 
 .Itarget2(x, Data, reps = 100, ...)
@@ -146,27 +137,21 @@ IT10_hist(x, Data, reps = 100, ...)
 
 .IT10_hist(x, Data, reps = 100, ...)
 
+CC1.0(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0)
+
 CC100(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0)
 
-CC90(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.1)
+CC0.9(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.1)
 
-CC80(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.2)
+CC0.8(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.2)
 
-CC70(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.3)
+CC0.7(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.3)
 
-CC60(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.4)
+CC0.6(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.4)
 
-SP6040_prior(x, Data, reps = 1)
+CC1.1(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = -0.1)
 
-.SP6040_prior(x, Data, reps = 100, ...)
-
-SP8040_prior(x, Data, reps = 1)
-
-.SP8040_prior(x, Data, reps = 100, ...)
-
-SP4010_prior(x, Data, reps = 1)
-
-.SP4010_prior(x, Data, reps = 100, ...)
+CC1.2(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = -0.1)
 }
 \arguments{
 \item{x}{A position in the data object. As per \pkg{DLMtool}.}

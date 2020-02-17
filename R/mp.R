@@ -28,6 +28,9 @@
 #' # mse <- runMSE(OM = om, MPs = "temp_mp")
 reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL", "ML"),
                           index = function(x) seq(1, x, by = 2)) {
+  force(mp)
+  force(slots)
+  force(index)
   f <- function(x, Data, reps = 100, ...) {
     for (slot_i in slots) {
       Data <- remove_years(Data, slot_i, index = index)
@@ -224,14 +227,6 @@ class(Islope0.2_80) <- "MP"
 #' @rdname MPs
 #' @export
 .Islope4 <- reduce_survey(DLMtool::Islope4)
-
-#' @rdname MPs
-#' @export
-.IT5 <- reduce_survey(DLMtool::IT5)
-
-#' @rdname MPs
-#' @export
-.IT10 <- reduce_survey(DLMtool::IT10)
 
 #' @rdname MPs
 #' @export
@@ -454,7 +449,8 @@ stepwise_NAs <- function(x) {
 #' @param delta_max Most positive increased proportion allowed in the index.
 #' @param lambda Smoothing parameter. 0 means always use the last TAC. 1 means
 #'   no smoothing. Can take any value in between.
-#' @param tac_floor TAC when `delta_min` is met or exceeded.
+#' @param tac_floor TAC when `delta_min` is met or exceeded. If left as `NULL`, the floor will be set to 20% of average catch from the last
+#' 5 years.
 #' @param year_ref Number of years before the present year for the comparison of
 #'   the index value. Default looks back one year. For a biennial survey this
 #'   should be changed to something larger such as 2 or the recommended TAC will
@@ -471,12 +467,19 @@ stepwise_NAs <- function(x) {
 #' IDX(1, DLMtool::SimulatedData)
 #' IDX(1, DLMtool::SimulatedData, lambda = 0.5)
 IDX <- function(x, Data, reps = 100, delta_min = -0.5,
-                delta_max = 0.25, lambda = 1, tac_floor = 0,
+                delta_max = 0.25, lambda = 1, tac_floor = NULL,
                 year_ref = 1) {
   dependencies <- "Data@Ind"
 
   if (lambda < 0) lambda <- 0
   if (lambda > 1) lambda <- 1
+
+  if (is.null(tac_floor)) {
+    yrlast <- match(Data@LHYear[1], Data@Year)
+    yrfirst <- yrlast - 5 + 1
+    C_dat <- Data@Cat[x, yrfirst:yrlast]
+    tac_floor <- 0.2 * mean(C_dat, na.rm = TRUE)
+  }
   if (tac_floor < 0) tac_floor <- 0
 
   this_year <- length(Data@Year)
@@ -575,23 +578,39 @@ class(IT10_hist) <- "MP"
 #'
 #' @rdname MPs
 #' @export
+CC1.0 <- DLMtool::CC1
+
+#' @rdname MPs
+#' @export
 CC100 <- DLMtool::CC1
 
 #' @rdname MPs
 #' @export
-CC90 <- DLMtool::CC2
+CC0.9 <- DLMtool::CC2
 
 #' @rdname MPs
 #' @export
-CC80 <- DLMtool::CC3
+CC0.8 <- DLMtool::CC3
 
 #' @rdname MPs
 #' @export
-CC70 <- DLMtool::CC4
+CC0.7 <- DLMtool::CC4
 
 #' @rdname MPs
 #' @export
-CC60 <- DLMtool::CC5
+CC0.6 <- DLMtool::CC5
+
+#' @rdname MPs
+#' @export
+CC1.1 <- DLMtool::CC1
+formals(CC1.1)$xx <- -0.1
+class(CC1.1) <- "MP"
+
+#' @rdname MPs
+#' @export
+CC1.2 <- DLMtool::CC1
+formals(CC1.2)$xx <- -0.1
+class(CC1.2) <- "MP"
 
 #' PBS groundfish surplus production wrapper function
 #'
@@ -646,35 +665,87 @@ SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY
   return(Rec)
 }
 
-#' @rdname MPs
+#' @param ... Other args
+#' @rdname SP_gf
 #' @export
-SP6040_prior <- function(x, Data, reps = 1) {
-  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY")
+SP6040_gf <- function(x, Data, reps = 1, ...) {
+  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY", ...)
 }
-class(SP6040_prior) <- "MP"
+class(SP6040_gf) <- "MP"
 
-#' @rdname MPs
+#' @rdname SP_gf
 #' @export
-.SP6040_prior <- reduce_survey(SP6040_prior)
+.SP6040_gf <- reduce_survey(SP6040_gf)
 
-#' @rdname MPs
+#' @rdname SP_gf
 #' @export
-SP8040_prior <- function(x, Data, reps = 1) {
-  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY")
+SP8040_gf <- function(x, Data, reps = 1, ...) {
+  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY", ...)
 }
-class(SP8040_prior) <- "MP"
+class(SP8040_gf) <- "MP"
 
-#' @rdname MPs
+#' @rdname SP_gf
 #' @export
-.SP8040_prior <- reduce_survey(SP8040_prior)
+.SP8040_gf <- reduce_survey(SP8040_gf)
 
-#' @rdname MPs
+#' @rdname SP_gf
 #' @export
-SP4010_prior <- function(x, Data, reps = 1) {
-  SP_gf(x, Data, reps = 1, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0")
+SP4010_gf <- function(x, Data, reps = 1, ...) {
+  SP_gf(x, Data, reps = 1, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0", ...)
 }
-class(SP4010_prior) <- "MP"
+class(SP4010_gf) <- "MP"
 
-#' @rdname MPs
+#' @rdname SP_gf
 #' @export
-.SP4010_prior <- reduce_survey(SP4010_prior)
+.SP4010_gf <- reduce_survey(SP4010_gf)
+
+#' @param mp MP to wrap
+#' @param r_prior Mean and SD of r prior
+#' @export
+#' @rdname SP_gf
+#' @examples
+#' my_mp <- add_SP_prior(SP4010_gf, c(0.3, 0.05))
+#' library(DLMtool)
+#' om <- DLMtool::testOM
+#' om@nsim <- 5
+#' om@proyears <- 10
+#' mse <- runMSE(om, MPs = "my_mp")
+add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
+                         tac_max_decrease = 0.5, tac_floor = 0.1,
+                         tac_increase_buffer = 1.05, ...) {
+  force(mp)
+  force(r_prior)
+  force(tac_max_increase)
+  force(tac_max_decrease)
+  force(tac_floor)
+  force(tac_increase_buffer)
+
+  f <- function(x, Data, reps = 1, ...) {
+    mp(x = x, Data = Data, reps = reps, start = list(r_prior = r_prior),
+       tac_max_increase = tac_max_increase, tac_max_decrease = tac_max_decrease,
+       tac_floor = tac_floor, tac_increase_buffer = tac_increase_buffer, ...)
+  }
+  `class<-`(f, "MP")
+}
+
+#' Use AddInd
+#'
+#' @param mp MP to use
+#'
+#' @export
+#' @examples
+#' my_mp <- use_AddInd(IDX)
+#' library(DLMtool)
+#' om <- DLMtool::testOM
+#' om@nsim <- 5
+#' om@proyears <- 10
+#' mse <- runMSE(om, MPs = "my_mp")
+use_AddInd <- function(mp) {
+  force(mp)
+  f <- function(x, Data, reps = 1) {
+    Data@Ind <- Data@AddInd[, 1, ]
+    Data@CV_Ind <- Data@CV_AddInd[, 1, ]
+    mp(x = x, Data = Data, reps = reps)
+  }
+  `class<-`(f, "MP")
+}
