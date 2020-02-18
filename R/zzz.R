@@ -48,5 +48,6 @@ globalVariables(c(
   ".",
   "PM",
   "mp",
-  "scenario_type"
+  "scenario_type",
+  "Index", "geo_mean", "survey"
 ))
