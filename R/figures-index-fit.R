@@ -23,14 +23,13 @@
 #' fits[[1]] <- m
 #' fits[[2]] <- m
 #' names(fits) <- c("Sc 1", "Sc 2")
-#' plot_index_fit(fits, survey_names = c("a"), alpha = 0.3)
-plot_index_fit <- function(sra_list, survey_names,
+#' plot_index_fits(fits, survey_names = c("a"), alpha = 0.3)
+plot_index_fits <- function(sra_list, survey_names,
                            sample_n = min(c(100, sra_list[[1]]@OM@nsim)), alpha = 0.05) {
   surv <- purrr::map2_dfr(sra_list, names(sra_list), get_sra_survey,
     survey_names = survey_names
   )
   x <- sra_list[[1]]
-  surv$scenario <- factor(surv$scenario, levels = names(sra_list))
   surv$year <- surv$year + x@OM@CurrentYr - x@OM@nyears
 
   surv_plot <- surv %>%
@@ -56,26 +55,31 @@ plot_index_fit <- function(sra_list, survey_names,
     names(out)[3] <- slot
     out
   }
-  index_sd <- extract_ts(x, "I_sd")
-  index <- extract_ts(x, "Index") %>%
-    left_join(index_sd, by = c("year", "survey_number", "real_year")) %>%
+
+  index_sd <- purrr::map_dfr(sra_list, extract_ts,
+    slot = "I_sd", .id = "scenario")
+  index <-  purrr::map_dfr(sra_list, extract_ts,
+    slot = "Index", .id = "scenario") %>%
+    left_join(index_sd, by = c("year", "survey_number", "real_year", "scenario")) %>%
     left_join(tibble(
       survey_number = seq_len(max(index_sd$survey_number)),
       survey = survey_names
     ), by = "survey_number") %>%
-    left_join(surv_plot_distinct, by = "survey") %>%
+    left_join(surv_plot_distinct, by = c("scenario", "survey")) %>%
     group_by(scenario, survey) %>%
     mutate(Index = Index / geo_mean)
 
   index$survey <- factor(index$survey, levels = survey_names)
+  index$scenario <- factor(index$scenario, levels = names(sra_list))
   surv_plot$survey <- factor(surv_plot$survey, levels = survey_names)
+  surv$scenario <- factor(surv$scenario, levels = names(sra_list))
 
   ggplot(surv_plot, aes_string("year", "value", group = "paste(iter, survey)")) +
     geom_line(alpha = alpha, colour = "grey40") +
     ggplot2::geom_linerange(
       data = index, mapping = aes_string(
         x = "real_year",
-        ymin = "Index - 2 * I_sd", ymax = "Index + 2 * I_sd"
+        ymin = "exp(log(Index) - 2 * I_sd)", ymax = "exp(log(Index) + 2 * I_sd)"
       ),
       inherit.aes = FALSE, na.rm = TRUE
     ) +
