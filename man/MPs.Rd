@@ -36,7 +36,6 @@
 \alias{.Itarget5}
 \alias{.ITM}
 \alias{.ITM_hist}
-\alias{.SBT1_log}
 \alias{.IDX}
 \alias{.IDX_smooth}
 \alias{IT5_hist}
@@ -122,8 +121,6 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .ITM(x, Data, reps = 100, ...)
 
 .ITM_hist(x, Data, reps = 100, ...)
-
-.SBT1_log(x, Data, reps = 100, ...)
 
 .IDX(x, Data, reps = 100, ...)
 

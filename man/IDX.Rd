@@ -32,7 +32,8 @@ IDX_smooth(x, Data, reps = 100, tac_floor = 1, ...)
 \item{lambda}{Smoothing parameter. 0 means always use the last TAC. 1 means
 no smoothing. Can take any value in between.}
 
-\item{tac_floor}{TAC when \code{delta_min} is met or exceeded. If left as \code{NULL}, the floor will be set to 20\% of average catch from the last
+\item{tac_floor}{TAC when \code{delta_min} is met or exceeded. If left as \code{NULL},
+the floor will be set to 20\% of average catch from the last
 5 years.}
 
 \item{year_ref}{Number of years before the present year for the comparison of

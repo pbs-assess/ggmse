@@ -16,9 +16,11 @@ per \pkg{DLMtool}.}
 
 \item{yrsmth}{Years over which the average index is calculated.}
 
-\item{xx}{Parameter controlling the fraction of mean catch to start using in first year.}
+\item{xx}{Parameter controlling the fraction of mean catch to start using
+in first year.}
 
-\item{Imulti}{Parameter controlling how much larger target CPUE / index is compared with recent levels.}
+\item{Imulti}{Parameter controlling how much larger target CPUE / index is
+compared with recent levels.}
 }
 \description{
 Itarget 5 MP

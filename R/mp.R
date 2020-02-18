@@ -251,8 +251,10 @@ class(Islope0.2_80) <- "MP"
 #' @param reps The number of stochastic samples of the MP recommendation(s). As
 #'   per \pkg{DLMtool}.
 #' @param yrsmth Years over which the average index is calculated.
-#' @param xx Parameter controlling the fraction of mean catch to start using in first year.
-#' @param Imulti Parameter controlling how much larger target CPUE / index is compared with recent levels.
+#' @param xx Parameter controlling the fraction of mean catch to start using
+#'   in first year.
+#' @param Imulti Parameter controlling how much larger target CPUE / index is
+#'   compared with recent levels.
 #'
 #' @export
 Itarget5 <- function(x, Data, reps = 1, yrsmth = 5, xx = 0,
@@ -324,7 +326,7 @@ ITM_hist <- function(x, Data, reps = 100, yrsmth_hist = 10, ...) {
   if (deltaI > (1 + mc)) {
     deltaI <- 1 + mc
   }
-  TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[ x, 1])
+  TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
   TAC <- DLMtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
@@ -335,101 +337,6 @@ class(ITM_hist) <- "MP"
 #' @rdname MPs
 #' @export
 .ITM_hist <- reduce_survey(ITM_hist)
-
-# #' @rdname MPs
-# #' @export
-# .LstepCC1 <- reduce_survey(DLMtool::LstepCC1)
-#
-# #' @rdname MPs
-# #' @export
-# .LstepCC2 <- reduce_survey(DLMtool::LstepCC2)
-#
-# #' @rdname MPs
-# #' @export
-# .LstepCC3 <- reduce_survey(DLMtool::LstepCC3)
-#
-# #' @rdname MPs
-# #' @export
-# .LstepCC4 <- reduce_survey(DLMtool::LstepCC4)
-#
-# #' @rdname MPs
-# #' @export
-# .Ltarget1 <- reduce_survey(DLMtool::Ltarget1)
-#
-# #' @rdname MPs
-# #' @export
-# .Ltarget2 <- reduce_survey(DLMtool::Ltarget2)
-#
-# #' @rdname MPs
-# #' @export
-# .Ltarget3 <- reduce_survey(DLMtool::Ltarget3)
-#
-# #' @rdname MPs
-# #' @export
-# .Ltarget4 <- reduce_survey(DLMtool::Ltarget4)
-#
-# #' @rdname MPs
-# #' @export
-# .Ltarget95 <- reduce_survey(DLMtool::Ltarget95)
-
-#' SBT simple MP in log space
-#'
-#' This MP is based on [DLMtool::SBT1()] but fits the linear regression in log space. SBT stands for "southern bluefin tuna".
-#'
-#' @param x A position in the data object. As per \pkg{DLMtool}.
-#' @param Data A data object. As per \pkg{DLMtool}.
-#' @param reps The number of stochastic samples of the MP recommendation(s). As
-#'   per \pkg{DLMtool}.
-#' @param plot Logical.
-#' @param yrsmth The number of years for evaluating trend in relative abundance indices.
-#' @param k1 Control parameter.
-#' @param k2 Control parameter.
-#' @param gamma Control parameter.
-#'
-#' @export
-SBT1_log <- function(x, Data, reps = 100, plot = FALSE, yrsmth = 10, k1 = 1.5,
-                     k2 = 3, gamma = 1) {
-  dependencies <- "Data@Cat, Data@Year, Data@Ind"
-  Cr <- length(Data@Cat[x, ])
-  cct <- DLMtool::trlnorm(reps, Data@Cat[x, Cr], Data@CV_Cat)
-  ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
-  I_hist <- Data@Ind[x, ind]
-  test <- summary(lm(log(I_hist) ~ ind))$coefficients[2, 1:2]
-  if (reps > 1) {
-    lambda <- rnorm(reps, test[1], test[2])
-  }
-  else {
-    lambda <- test[1]
-  }
-  TAC <- cct * (1 + k2 * lambda)
-  cond <- lambda < 0
-  TAC[cond] <- cct[cond] * (1 - k1 * -lambda[cond]^gamma)
-  TAC <- DLMtool::TACfilter(TAC)
-  if (plot) {
-    op <- par(no.readonly = TRUE)
-    on.exit(par(op))
-    par(mfrow = c(1, 2))
-    plot(Data@Year[ind], log(I_hist),
-      bty = "l", xlab = "Year",
-      ylab = "log(Index)", type = "l", lwd = 2
-    )
-    lines(Data@Year[ind], predict(lm(log(I_hist) ~ ind)), lty = 2)
-    ylim <- range(c(Data@Cat[x, ind], TAC))
-    plot(c(Data@Year[ind], max(Data@Year[ind]) + 1), c(Data@Cat[x, ind], NA),
-      bty = "l", xlab = "Year", ylab = paste0("Catch (", Data@Units, ")"),
-      type = "l", lwd = 2, ylim = ylim
-    )
-    points(max(Data@Year[ind]), Data@Cat[x, max(ind)], pch = 16, cex = 1.5)
-    boxplot(TAC, at = max(Data@Year[ind]) + 1, add = TRUE, axes = FALSE, col = "blue")
-  }
-  Rec <- new("Rec")
-  Rec@TAC <- TAC
-  Rec
-}
-
-#' @rdname MPs
-#' @export
-.SBT1_log <- reduce_survey(SBT1_log)
 
 stepwise_NAs <- function(x) {
   df <- data.frame(x = x)
@@ -449,7 +356,8 @@ stepwise_NAs <- function(x) {
 #' @param delta_max Most positive increased proportion allowed in the index.
 #' @param lambda Smoothing parameter. 0 means always use the last TAC. 1 means
 #'   no smoothing. Can take any value in between.
-#' @param tac_floor TAC when `delta_min` is met or exceeded. If left as `NULL`, the floor will be set to 20% of average catch from the last
+#' @param tac_floor TAC when `delta_min` is met or exceeded. If left as `NULL`,
+#'   the floor will be set to 20% of average catch from the last
 #' 5 years.
 #' @param year_ref Number of years before the present year for the comparison of
 #'   the index value. Default looks back one year. For a biennial survey this
@@ -630,7 +538,6 @@ class(CC1.2) <- "MP"
 #' @export
 SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
                   start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
-  dependencies <- "Data@Cat, Data@Ind"
   do_Assessment <- MSEtool::SP(
     x = x, Data = Data,
     control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
@@ -721,9 +628,11 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
   force(tac_increase_buffer)
 
   f <- function(x, Data, reps = 1, ...) {
-    mp(x = x, Data = Data, reps = reps, start = list(r_prior = r_prior),
-       tac_max_increase = tac_max_increase, tac_max_decrease = tac_max_decrease,
-       tac_floor = tac_floor, tac_increase_buffer = tac_increase_buffer, ...)
+    mp(
+      x = x, Data = Data, reps = reps, start = list(r_prior = r_prior),
+      tac_max_increase = tac_max_increase, tac_max_decrease = tac_max_decrease,
+      tac_floor = tac_floor, tac_increase_buffer = tac_increase_buffer, ...
+    )
   }
   `class<-`(f, "MP")
 }
