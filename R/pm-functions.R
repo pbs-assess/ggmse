@@ -69,9 +69,9 @@ eval_pm <- function(mse_obj,
 
 #' Function factory for creating DLMtool performace metric (class "PM") functions
 #'
-#' @param pm_type The type of performance metric
-#' @param ref Reference level to use in secondary part of probability
-#' @param yrs A vector of years to include. If NULL, all will be used.
+#' @param pm_type The type of performance metric.
+#' @param ref Reference level to use in secondary part of probability.
+#' @param yrs A vector of years to include. If `NULL`, all will be used.
 #'
 #' @return A DLMtool PM function
 #' @importFrom DLMtool calcProb calcMean ChkYrs
@@ -81,12 +81,13 @@ eval_pm <- function(mse_obj,
 #'
 #' @examples
 #' P10 <- pm_factory("SBMSY", 0.1)
-pm_factory <- function(pm_type,
+pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AADC"),
                        ref = 0.1,
                        yrs = NULL) {
   force(pm_type)
   force(ref)
   force(yrs)
+  pm_type <- match.arg(pm_type)
   pm_obj <- new("PMobj")
   pm_obj@Ref <- ref
   if (pm_type == "SBMSY") {
@@ -158,10 +159,27 @@ pm_factory <- function(pm_type,
       pm_obj@MPs <- mse_obj@MPs
       pm_obj
     }
+  } else if (pm_type == "AADC"){
+    created_by_pm_factory <- function(mse_obj) {
+      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      pm_obj@Name <- paste0("Average Absolute Difference in Catch (Years ", yrs[1], "-", yrs[2], ")")
+      pm_obj@Caption <- paste0("Prob. AADC < ", ref, " (Years ", yrs[1], "-", yrs[2], ")")
+      if (mse_obj@nMPs > 1) {
+        pm_obj@Stat <- apply(mse_obj@C[, , yrs], c(1, 2), get_aadc)
+      } else {
+        pm_obj@Stat <- apply(mse_obj@C[, 1, yrs], 1, get_aadc)
+      }
+      pm_obj@Prob <- DLMtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
+      pm_obj@Mean <- DLMtool::calcMean(pm_obj@Prob)
+      pm_obj@MPs <- mse_obj@MPs
+      pm_obj
+    }
   }
   class(created_by_pm_factory) <- "PM"
   created_by_pm_factory
 }
+
+get_aadc <- function(x) mean(abs(diff(x)))
 
 #' Various performance metrics
 #'
