@@ -8,7 +8,10 @@ plot_historical_ts(
   object,
   type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray",
     "RecDev"),
-  n_samples = 3,
+  n_samples = 50,
+  this_year = 2018,
+  observed_ts = NULL,
+  scale = if (!is.null(observed_ts)) TRUE else FALSE,
   legend_position = c(0.9, 0.85)
 )
 }
@@ -20,6 +23,12 @@ running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} with \code{Hist = TRUE}.
 plot.}
 
 \item{n_samples}{The number of timeseries samples to illustrate.}
+
+\item{this_year}{The last year of the historical timeseries.}
+
+\item{observed_ts}{An optional observed timeseries to add is a comparison.}
+
+\item{scale}{Should the timeseries be scaled by their geometric mean?}
 
 \item{legend_position}{The x and y coordinates of the legend.}
 }
@@ -39,5 +48,4 @@ plot_historical_ts(historical_mse,
   n_samples = 2,
   observed_ts = rlnorm(50, 1, 0.3)
 )
-
 }

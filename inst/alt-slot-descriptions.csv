@@ -1,3 +1,4 @@
+slot_type,slot,slot_order,show_slot,use_custom_description,custom_description
 Stock,Name,1,TRUE,TRUE,The name of the Stock object.
 Stock,Common_Name,2,TRUE,TRUE,Common name of the species.
 Stock,Species,3,TRUE,TRUE,Scientific name of the species.
