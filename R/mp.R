@@ -355,6 +355,10 @@ class(Itarget_d0.8) <- "MP"
 #' @export
 .Itarget_d0.8 <- reduce_survey(Itarget_d0.8)
 
+#' @rdname MPs
+#' @export
+.Itarget1 <- reduce_survey(DLMtool::Itarget1)
+
 #' Historical Index Target based on natural mortality rate
 #'
 #' This MP is based on [DLMtool::ITM()] but since the reference index level to

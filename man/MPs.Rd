@@ -35,6 +35,7 @@
 \alias{.Itarget_x0.8}
 \alias{.Itarget_d1.2}
 \alias{.Itarget_d0.8}
+\alias{.Itarget1}
 \alias{.ITM_hist}
 \alias{.IDX}
 \alias{.IDX_smooth}
@@ -119,6 +120,8 @@ Islope0.2_80(x, Data, reps = 100, ...)
 .Itarget_d1.2(x, Data, reps = 100, ...)
 
 .Itarget_d0.8(x, Data, reps = 100, ...)
+
+.Itarget1(x, Data, reps = 100, ...)
 
 .ITM_hist(x, Data, reps = 100, ...)
 
