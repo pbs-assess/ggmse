@@ -29,12 +29,12 @@
 \alias{.Islope2}
 \alias{.Islope3}
 \alias{.Islope4}
-\alias{.Itarget1}
-\alias{.Itarget2}
-\alias{.Itarget3}
-\alias{.Itarget4}
-\alias{.Itarget5}
-\alias{.ITM}
+\alias{.Itarget_base}
+\alias{.Itarget_w0.8}
+\alias{.Itarget_x0.2}
+\alias{.Itarget_x0.8}
+\alias{.Itarget_d1.2}
+\alias{.Itarget_d0.8}
 \alias{.ITM_hist}
 \alias{.IDX}
 \alias{.IDX_smooth}
@@ -108,17 +108,17 @@ Islope0.2_80(x, Data, reps = 100, ...)
 
 .Islope4(x, Data, reps = 100, ...)
 
-.Itarget1(x, Data, reps = 100, ...)
+.Itarget_base(x, Data, reps = 100, ...)
 
-.Itarget2(x, Data, reps = 100, ...)
+.Itarget_w0.8(x, Data, reps = 100, ...)
 
-.Itarget3(x, Data, reps = 100, ...)
+.Itarget_x0.2(x, Data, reps = 100, ...)
 
-.Itarget4(x, Data, reps = 100, ...)
+.Itarget_x0.8(x, Data, reps = 100, ...)
 
-.Itarget5(x, Data, reps = 100, ...)
+.Itarget_d1.2(x, Data, reps = 100, ...)
 
-.ITM(x, Data, reps = 100, ...)
+.Itarget_d0.8(x, Data, reps = 100, ...)
 
 .ITM_hist(x, Data, reps = 100, ...)
 

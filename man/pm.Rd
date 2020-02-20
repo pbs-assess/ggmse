@@ -10,7 +10,11 @@
 \alias{AAVY}
 \title{Function factory for creating DLMtool performace metric (class "PM") functions}
 \usage{
-pm_factory(pm_type, ref = 0.1, yrs = NULL)
+pm_factory(
+  pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AADC"),
+  ref = 0.1,
+  yrs = NULL
+)
 
 P10(mse_obj)
 
@@ -25,11 +29,11 @@ LTY(mse_obj)
 AAVY(mse_obj)
 }
 \arguments{
-\item{pm_type}{The type of performance metric}
+\item{pm_type}{The type of performance metric.}
 
-\item{ref}{Reference level to use in secondary part of probability}
+\item{ref}{Reference level to use in secondary part of probability.}
 
-\item{yrs}{A vector of years to include. If NULL, all will be used.}
+\item{yrs}{A vector of years to include. If \code{NULL}, all will be used.}
 
 \item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}
 }
