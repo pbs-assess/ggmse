@@ -228,70 +228,132 @@ class(Islope0.2_80) <- "MP"
 #' @export
 .Islope4 <- reduce_survey(DLMtool::Islope4)
 
-#' @rdname MPs
-#' @export
-.Itarget1 <- reduce_survey(DLMtool::Itarget1)
-
-#' @rdname MPs
-#' @export
-.Itarget2 <- reduce_survey(DLMtool::Itarget2)
-
-#' @rdname MPs
-#' @export
-.Itarget3 <- reduce_survey(DLMtool::Itarget3)
-
-#' @rdname MPs
-#' @export
-.Itarget4 <- reduce_survey(DLMtool::Itarget4)
-
-#' Itarget 5 MP
+#' Itarget MP
 #'
 #' @param x A position in the data object. As per \pkg{DLMtool}.
 #' @param Data A data object. As per \pkg{DLMtool}.
 #' @param reps The number of stochastic samples of the MP recommendation(s). As
 #'   per \pkg{DLMtool}.
-#' @param yrsmth Years over which the average index is calculated.
-#' @param xx Parameter controlling the fraction of mean catch to start using
-#'   in first year.
-#' @param Imulti Parameter controlling how much larger target CPUE / index is
-#'   compared with recent levels.
+#' @param w A smoothing parameter that defines the "steepness" of the adjustment
+#'   slope.
+#' @param lambda Fraction of the average index over the 10 years prior to the
+#'   projection period below which future TACs are reduced quadratically.
+#' @param delta `I_{target}` is `(1 + \delta) I_{ave}`; the target index value.
+#' @param xx Catch target defined as `(1 - xx)C_{ave}`, where `xx` is the
+#'   proportional difference between the future catch and the average historical
+#'   catch over the last 5 years of the historical period.
+#' @param index_target_window Index target window in years.
+#' @param index_current_window Index current window in years. Years over
+#'   which the average index is calculated.
+#' @param catch_target_window Catch target window in years.
 #'
 #' @export
-Itarget5 <- function(x, Data, reps = 1, yrsmth = 5, xx = 0,
-                     Imulti = 2) {
-  ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
-  ylast <- (Data@LHYear[1] - Data@Year[1]) + 1
-  ind2 <- ((ylast - (yrsmth - 1)):ylast)
-  ind3 <- ((ylast - (yrsmth * 2 - 1)):ylast)
-  C_dat <- Data@Cat[x, ind2]
-  TACstar <- (1 - xx) * DLMtool::trlnorm(
-    reps, mean(C_dat, na.rm = TRUE),
-    Data@CV_Cat[x, 1] / (yrsmth^0.5)
-  )
-  Irecent <- mean(Data@Ind[x, ind], na.rm = TRUE)
-  Iave <- mean(Data@Ind[x, ind3], na.rm = TRUE)
-  Itarget <- Iave * Imulti
-  I0 <- 1 * Iave
-  if (Irecent > I0) {
-    TAC <- TACstar * (1 + ((Irecent - I0) / (Itarget -
-      I0)))
+#' @examples
+#' Itarget(1, DLMtool::SimulatedData)
+Itarget <- function(
+  x,
+  Data,
+  reps = 1,
+  w = 0,
+  lambda = 0.2,
+  delta = 1,
+  xx = 1,
+  index_target_window = 10,
+  index_current_window = 5,
+  catch_target_window = 5) {
+
+  ind_index_proj <- (length(Data@Year) - (index_current_window - 1)):length(Data@Year)
+  ylast_hist <- (Data@LHYear[1] - Data@Year[1]) + 1
+  ind_catch_hist <- ((ylast_hist - (catch_target_window - 1)):ylast_hist)
+  ind_index_hist <- ((ylast_hist - (index_target_window - 1)):ylast_hist)
+  C_dat <- Data@Cat[x, ind_catch_hist]
+
+  Irecent <- mean(Data@Ind[x, ind_index_proj], na.rm = TRUE)
+  Iave <- mean(Data@Ind[x, ind_index_hist], na.rm = TRUE)
+  TACtarg <- xx * mean(C_dat, na.rm = TRUE)
+  .Itarget <- delta * Iave
+  I0 <- lambda * Iave
+
+  if (Irecent >= I0) {
+    TAC <- TACtarg * ((w + (1 - w) * ((Irecent - I0) / (.Itarget - I0))))
+  } else {
+    TAC <- w * TACtarg * (Irecent / I0)^2
   }
-  else {
-    TAC <- TACstar * (Irecent / I0)^2
-  }
+  if (TAC < 0) TAC <- 0
+
+  # browser()
   TAC <- DLMtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
 }
+class(Itarget) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_base <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 1, w = 0.5, xx = 1)
+}
+class(Itarget_base) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_w0.8 <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 1, w = 0.8, xx = 1)
+}
+class(Itarget_w0.8) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_x0.2 <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 1, w = 0.5, xx = 1.2)
+}
+class(Itarget_x0.2) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_x0.8 <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 1, w = 0.8, xx = 0.8)
+}
+class(Itarget_x0.8) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_d1.2 <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 1.2, w = 0.5, xx = 1)
+}
+class(Itarget_d1.2) <- "MP"
+
+#' @rdname Itarget
+#' @export
+Itarget_d0.8 <- function(x, Data, reps = 1) {
+  Itarget(x = x, Data = Data, reps = reps, lambda = 0.2, delta = 0.8, w = 0.5, xx = 1)
+}
+class(Itarget_d0.8) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Itarget5 <- reduce_survey(Itarget5)
+.Itarget_base <- reduce_survey(Itarget_base)
 
 #' @rdname MPs
 #' @export
-.ITM <- reduce_survey(DLMtool::ITM)
+.Itarget_w0.8 <- reduce_survey(Itarget_w0.8)
+
+#' @rdname MPs
+#' @export
+.Itarget_x0.2 <- reduce_survey(Itarget_x0.2)
+
+#' @rdname MPs
+#' @export
+.Itarget_x0.8 <- reduce_survey(Itarget_x0.8)
+
+#' @rdname MPs
+#' @export
+.Itarget_d1.2 <- reduce_survey(Itarget_d1.2)
+
+#' @rdname MPs
+#' @export
+.Itarget_d0.8 <- reduce_survey(Itarget_d0.8)
 
 #' Historical Index Target based on natural mortality rate
 #'
