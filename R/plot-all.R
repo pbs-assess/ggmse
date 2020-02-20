@@ -262,7 +262,7 @@ plot_factory <- function(
     g$projections_index <- map(
       scenarios, ~ {
         temp <- mse_list[[.x]] # https://github.com/DLMtool/DLMtool/issues/295
-        temp@Misc$Data <- temp@Misc$Data[match(mp_sat_with_ref, temp@MPs)]
+        # temp@Misc$Data <- temp@Misc$Data[match(mp_sat_with_ref, temp@MPs)]
         DLMtool::Sub(temp, MPs = mp_sat_with_ref)
       }
     ) %>%
