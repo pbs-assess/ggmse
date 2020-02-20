@@ -1,4 +1,3 @@
-slot_type,slot,slot_order,show_slot,use_custom_description,custom_description
 Stock,Name,1,TRUE,TRUE,The name of the Stock object.
 Stock,Common_Name,2,TRUE,TRUE,Common name of the species.
 Stock,Species,3,TRUE,TRUE,Scientific name of the species.
@@ -10,7 +9,7 @@ Stock,Mexp,8,FALSE,TRUE,Exponent of the Lorenzen function assuming an inverse re
 Stock,Msd,9,FALSE,TRUE,Inter-annual variability in natural mortality rate expressed as a CV. Uniform distribution lower and upper bounds.
 Stock,Mgrad,10,FALSE,TRUE,"No longer used. Previously mean temporal trend in natural mortality rate, expressed as a percentage change in M per year."
 Stock,h,11,TRUE,TRUE,Steepness of the stock-recruit relationship. Uniform distribution lower and upper bounds with values from 1/5 to 1.
-Stock,SRrel,12,TRUE,TRUE,"Type of stock-recruit relationship. Single integer value, switch (1) Beverton-Holt (2) Ricker."
+Stock,SRrel,12,FALSE,TRUE,"Type of stock-recruit relationship. Single integer value, switch (1) Beverton-Holt (2) Ricker."
 Stock,Perr,13,TRUE,TRUE,"Process error, the CV of lognormal recruitment deviations. Uniform distribution lower and upper bounds."
 Stock,AC,14,TRUE,TRUE,Autocorrelation in recruitment deviations. Uniform distribution lower and upper bounds.
 Stock,Period,15,FALSE,TRUE,(Optional) Period for cyclical recruitment pattern in years. Uniform distribution lower and upper bounds.
@@ -18,7 +17,7 @@ Stock,Amplitude,16,FALSE,TRUE,"(Optional) Amplitude in deviation from long-term 
 Stock,Linf,17,TRUE,TRUE,Maximum length. Uniform distribution lower and upper bounds.
 Stock,K,18,TRUE,TRUE,von Bertalanffy growth parameter k. Uniform distribution lower and upper bounds.
 Stock,t0,19,TRUE,TRUE,von Bertalanffy theoretical age at length zero. Uniform distribution lower and upper bounds.
-Stock,LenCV,20,TRUE,TRUE,CV of length-at-age (assumed constant for all age classes). Uniform distribution lower and upper bounds.
+Stock,LenCV,20,FALSE,TRUE,CV of length-at-age (assumed constant for all age classes). Uniform distribution lower and upper bounds.
 Stock,Ksd,21,FALSE,TRUE,Inter-annual variability in growth parameter k expressed as a CV. Uniform distribution lower and upper bounds.
 Stock,Kgrad,22,FALSE,TRUE,"No longer used. Previously mean temporal trend in growth parameter k, expressed as a percentage change in k per year."
 Stock,Linfsd,23,FALSE,TRUE,Inter-annual variability in maximum length expressed as a CV. Uniform distribution lower and upper bounds.
@@ -31,7 +30,7 @@ Stock,b,29,TRUE,TRUE,Length-weight parameter beta. Positive real number.
 Stock,Size_area_1,30,FALSE,TRUE,The default OM has two areas. `size_area_1` is the geographical size of the area relative to the total area. Set to 0.5 to approximate a single area model.
 Stock,Frac_area_1,31,FALSE,TRUE,"`Frac_area_1` is the amount of unfished habitat in that area, expressed as a fraction of the total habitat. Set to 0.5 to approximate single area model."
 Stock,Prob_staying,32,FALSE,TRUE,The probability of inviduals in area 1 remaining in area 1 over the course of one year. Uniform distribution lower and upper bounds. Positive fraction.
-Stock,Fdisc,33,TRUE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
+Stock,Fdisc,33,FALSE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
 Stock,Source,34,FALSE,TRUE,A reference to a website or article from which parameters were taken to define the stock object.
 Fleet,Name,1,TRUE,TRUE,Name of the Fleet object.
 Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool-up simulation.
@@ -49,7 +48,7 @@ Fleet,isRel,13,TRUE,TRUE,"Are the selectivity parameters in units of size-of-mat
 Fleet,LR5,14,TRUE,TRUE,Shortest length corresponding ot 5% retention. Uniform distribution lower and upper bounds.
 Fleet,LFR,15,TRUE,TRUE,Shortest length that is fully retained. Uniform distribution lower and upper bounds.
 Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform distribution lower and upper bounds.
-Fleet,DR,17,TRUE,TRUE,Discard rate: the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction.
+Fleet,DR,17,FALSE,TRUE,Discard rate: the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction.
 Fleet,SelYears,18,FALSE,TRUE,(Optional) Years representing vertices at which historical selectivity pattern changes. Vector.
 Fleet,AbsSelYears,19,FALSE,TRUE,"(Optional) Calendar years corresponding with `SelYears` (e.g., 1951, rather than 1); used for plotting only. Vector of same length as `SelYears`)."
 Fleet,L5Lower,20,FALSE,TRUE,(Optional) Lower bound of L5 (use ChooseSelect function to set these). Vector.
