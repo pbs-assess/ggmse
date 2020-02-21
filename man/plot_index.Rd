@@ -4,7 +4,13 @@
 \alias{plot_index}
 \title{Plot sampled survey index projections}
 \usage{
-plot_index(object_list, n_samples = 5, seed = 42, type = c("Ind", "AddInd"))
+plot_index(
+  object_list,
+  n_samples = 4,
+  seed = 42,
+  type = c("Ind", "AddInd"),
+  quantiles = c(0.025, 0.975)
+)
 }
 \arguments{
 \item{object_list}{A list of DLMtool MSE objects representing different
@@ -15,6 +21,8 @@ scenarios. The list should be named with the scenario names.}
 \item{seed}{The seed to set before drawing samples.}
 
 \item{type}{Which index to plot.}
+
+\item{quantiles}{Probability quantiles to show.}
 }
 \value{
 A ggplot object

@@ -72,7 +72,7 @@ plot_index_fits <- function(sra_list, survey_names,
   index$survey <- factor(index$survey, levels = survey_names)
   index$scenario <- factor(index$scenario, levels = names(sra_list))
   surv_plot$survey <- factor(surv_plot$survey, levels = survey_names)
-  surv$scenario <- factor(surv$scenario, levels = names(sra_list))
+  surv_plot$scenario <- factor(surv_plot$scenario, levels = names(sra_list))
 
   ggplot(surv_plot, aes_string("year", "value", group = "paste(iter, survey)")) +
     geom_line(alpha = alpha, colour = "grey40") +

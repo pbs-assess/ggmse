@@ -260,15 +260,15 @@ plot_main_projections <- function(object,
     g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
       ggplot2::theme(
-        strip.text.y = ggplot2::element_blank(),
-        axis.title.y = ggplot2::element_blank()
+        strip.text.y = ggplot2::element_blank()
+      #  axis.title.y = ggplot2::element_blank()
       )
   })
 
   g2 <- gfdlm::plot_projection_ts(object,
     type = "C",
     catch_reference = 1
-  ) + ggplot2::theme(axis.title.y = ggplot2::element_blank())
+  ) #+ ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
   if (!is.null(catch_ylim)) {
     suppressMessages({

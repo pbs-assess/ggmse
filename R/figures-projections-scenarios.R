@@ -77,7 +77,7 @@ plot_scenario_projections <- function(
       colour = NA, alpha = 0.07, na.rm = TRUE
     ) +
     theme_pbs() +
-    coord_cartesian(expand = FALSE, ylim = catch_ylim) +
+    coord_cartesian(expand = FALSE, ylim = msy_ylim) +
     scale_colour_brewer(palette = palette) +
     scale_fill_brewer(palette = palette) + ylab("Value") + xlab("Year") +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
