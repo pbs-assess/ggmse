@@ -11,7 +11,9 @@
 #' @param slots The slots for which you want to reduce observations.
 #' @param index A function that takes the number of years of observations and
 #'   returns a vector indexing the years that should be turned into `NA` values.
-#'   The default anonymous function discards observations for odd years.
+#'   The default anonymous function discards observations for even years
+#'   starting in the second projection year. To start in the first projection
+#'   year, switch to `function(x) seq(1, x, by = 2)`.
 #'
 #' @return A management procedure function of class `"MP"` for use with
 #'   \pkg{DLMtool}.
@@ -26,8 +28,9 @@
 #' om@nsim <- 3
 #' temp_mp <- reduce_survey(Islope1)
 #' # mse <- runMSE(OM = om, MPs = "temp_mp")
-reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL", "ML"),
-                          index = function(x) seq(1, x, by = 2)) {
+reduce_survey <- function(mp,
+                          slots = c("Ind", "VInd", "SpInd", "AddInd", "CAA", "CAL", "ML"),
+                          index = function(x) seq(2, x, by = 2)) {
   force(mp)
   force(slots)
   force(index)
@@ -41,16 +44,30 @@ reduce_survey <- function(mp, slots = c("Ind", "CAA", "CAL", "ML"),
 }
 
 remove_years <- function(dat, slot, index) {
-  .ncol <- ncol(slot(dat, slot))
-  .dims <- length(dim(slot(dat, slot)))
-  if (.dims == 1L) {
-    slot(dat, slot)[index(.ncol)] <- NA
-  } else if (.dims == 2L) {
-    slot(dat, slot)[, index(.ncol)] <- NA
-  } else if (.dims == 3L) {
-    slot(dat, slot)[, index(.ncol), ] <- NA
+  if (slot != "AddInd") {
+    .ncol <- ncol(slot(dat, slot))
   } else {
-    stop("The dimensions of the data slot must be 1, 2, or 3.")
+    .ncol <- dim(slot(dat, slot))[3]
+  }
+  .dims <- length(dim(slot(dat, slot)))
+  to_remove <- index(.ncol)
+  if (max(to_remove) > dat@LHYear) {
+    to_remove <- to_remove[to_remove > dat@LHYear]
+  } else {
+    to_remove <- NULL
+  }
+  if (!is.null(to_remove)) {
+    if (.dims == 1L) {
+      slot(dat, slot)[to_remove] <- NA
+    } else if (.dims == 2L) {
+      slot(dat, slot)[, to_remove] <- NA
+    } else if (.dims == 3L && slot %in% c("CAA", "CAL")) {
+      slot(dat, slot)[, to_remove, ] <- NA
+    } else if (.dims == 3L && slot %in% "AddInd") {
+      slot(dat, slot)[, , to_remove] <- NA
+    } else {
+      stop("The dimensions of the data slot must be 1, 2, or 3.", call. = FALSE)
+    }
   }
   dat
 }
@@ -74,22 +91,35 @@ CC_hist20 <- function(x, Data, reps = 100, ...) {
 }
 class(CC_hist20) <- "MP"
 
-#' @rdname MPs
-#' @export
-CC_hist <- DLMtool::AvC
+GB_slope_base <- function (x, Data, reps = 100, plot = FALSE, yrsmth = 5, lambda = 1)
+{
+  Catrec <- Data@Cat[x, length(Data@Cat[x, ])]
+  ind <- (length(Data@Year) - (yrsmth - 1)):length(Data@Year)
+  I_hist <- Data@Ind[x, ind]
+  yind <- 1:yrsmth
+  slppar <- summary(stats::lm(log(I_hist) ~ yind))$coefficients[2, 1:2]
+  if (reps > 1) {
+    Islp <- stats::rnorm(reps, slppar[1], slppar[2])
+  }
+  else {
+    Islp <- slppar[1]
+  }
+  MuC <- Data@Cat[x, length(Data@Cat[x, ])]
+  Cc <- trlnorm(reps, MuC, Data@CV_Cat[x, 1])
+  TAC <- Cc * (1 + lambda * Islp)
+  TAC[TAC > (1.2 * Catrec)] <- 1.2 * Catrec
+  TAC[TAC < (0.8 * Catrec)] <- 0.8 * Catrec
+  TAC <- TACfilter(TAC)
+  Rec <- new("Rec")
+  Rec@TAC <- TAC
+  Rec
+}
 
-#' @rdname MPs
-#' @export
-.DDSS_MSY <- reduce_survey(MSEtool::DDSS_MSY)
-
-#' @rdname MPs
-#' @export
-.DDSS_4010 <- reduce_survey(MSEtool::DDSS_4010)
 
 #' @rdname MPs
 #' @export
 GB_slope6_0.66 <- function(x, Data, reps = 100, ...) {
-  DLMtool::GB_slope(x, Data, reps, yrsmth = 6, lambda = 0.66, ...)
+  GB_slope_base(x, Data, reps, yrsmth = 6, lambda = 0.66, ...)
 }
 class(GB_slope6_0.66) <- "MP"
 
@@ -141,7 +171,7 @@ GB_slope8_1
 #' @rdname MPs
 #' @export
 Iratio2 <- function(x, Data, reps = 100, ...) {
-  ind <- which(!is.na(Data@Ind[x, , drop = TRUE]))
+  ind <- which(!is.na(Data@Ind[x, drop = TRUE]))
   numerator_yrs <- rev(which(!is.na(ind)))[1:2]
   denominator_yrs <- rev(which(!is.na(ind)))[3:5]
   yrs1 <- length(ind) - min(numerator_yrs) + 1
@@ -281,7 +311,6 @@ Itarget <- function(
   }
   if (TAC < 0) TAC <- 0
 
-  # browser()
   TAC <- DLMtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
@@ -443,8 +472,6 @@ stepwise_NAs <- function(x) {
 IDX <- function(x, Data, reps = 100, delta_min = -0.5,
                 delta_max = 0.25, lambda = 1, tac_floor = NULL,
                 year_ref = 1) {
-  dependencies <- "Data@Ind"
-
   if (lambda < 0) lambda <- 0
   if (lambda > 1) lambda <- 1
 
@@ -459,7 +486,7 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   this_year <- length(Data@Year)
 
   # Stepwise fill in NAs with last available value:
-  temp_Ind <- stepwise_NAs(Data@Ind[x, , drop = TRUE])
+  temp_Ind <- stepwise_NAs(Data@Ind[x, drop = TRUE])
   delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - year_ref] - 1
   catch_rec <- Data@MPrec[x]
 
@@ -506,7 +533,6 @@ formals(IDX_smooth2)$tac_floor <- 2
 
 IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 10) {
   # Based on DLMtool::IT_
-  dependencies <- "Data@Ind, Data@MPrec, Data@CV_Ind"
   ind <- max(1, (length(Data@Year) - yrsmth + 1)):length(Data@Year)
   # get mean index over last 10 historical years:
   yrlast <- match(Data@LHYear[1], Data@Year)
@@ -703,9 +729,13 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
   `class<-`(f, "MP")
 }
 
-#' Use AddInd
+#' Use the AddInd slot
 #'
-#' @param mp MP to use
+#' This function factory modifies an MP to use the `AddInd` (and `CV_AddInd`)
+#' slots from the first "real" survey instead of `Ind`. This means that the
+#' first survey in your SRA must be the survey that you want to mimic.
+#'
+#' @param mp MP to use.
 #'
 #' @export
 #' @examples
@@ -717,10 +747,11 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 #' mse <- runMSE(om, MPs = "my_mp")
 use_AddInd <- function(mp) {
   force(mp)
-  f <- function(x, Data, reps = 1) {
-    Data@Ind <- Data@AddInd[, 1, ]
-    Data@CV_Ind <- Data@CV_AddInd[, 1, ]
+  f <- function(x, Data, reps = 1L) {
+    Data@Ind <- Data@AddInd[, 1L, , drop = TRUE]
+    Data@CV_Ind <- Data@CV_AddInd[, 1L, , drop = TRUE]
     mp(x = x, Data = Data, reps = reps)
   }
+  `class<-`(f, "MP")
   `class<-`(f, "MP")
 }

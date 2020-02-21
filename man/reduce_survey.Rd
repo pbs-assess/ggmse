@@ -6,8 +6,8 @@
 \usage{
 reduce_survey(
   mp,
-  slots = c("Ind", "CAA", "CAL", "ML"),
-  index = function(x) seq(1, x, by = 2)
+  slots = c("Ind", "VInd", "SpInd", "AddInd", "CAA", "CAL", "ML"),
+  index = function(x) seq(2, x, by = 2)
 )
 }
 \arguments{
@@ -18,7 +18,9 @@ work with \pkg{DLMtool}.}
 
 \item{index}{A function that takes the number of years of observations and
 returns a vector indexing the years that should be turned into \code{NA} values.
-The default anonymous function discards observations for odd years.}
+The default anonymous function discards observations for even years
+starting in the second projection year. To start in the first projection
+year, switch to \code{function(x) seq(1, x, by = 2)}.}
 }
 \value{
 A management procedure function of class \code{"MP"} for use with

@@ -9,6 +9,7 @@ plot_index(
   n_samples = 4,
   seed = 42,
   type = c("Ind", "AddInd"),
+  omit_index_fn = function(x) NULL,
   quantiles = c(0.025, 0.975)
 )
 }
@@ -21,6 +22,11 @@ scenarios. The list should be named with the scenario names.}
 \item{seed}{The seed to set before drawing samples.}
 
 \item{type}{Which index to plot.}
+
+\item{omit_index_fn}{A function that indexes years in the projection period
+to omit from the plot. E.g., for a biennial survey omitting even years
+starting in year 2: \verb{function(x) seq(2, x, 2))}. \code{x} represents the total
+number of years.}
 
 \item{quantiles}{Probability quantiles to show.}
 }

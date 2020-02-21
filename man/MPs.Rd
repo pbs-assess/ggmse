@@ -2,9 +2,6 @@
 % Please edit documentation in R/mp.R
 \name{CC_hist20}
 \alias{CC_hist20}
-\alias{CC_hist}
-\alias{.DDSS_MSY}
-\alias{.DDSS_4010}
 \alias{GB_slope6_0.66}
 \alias{.GB_slope6_0.66}
 \alias{GB_slope6_1}
@@ -54,12 +51,6 @@
 \title{Alternative versions of \pkg{DLMtool} and \pkg{MSEtool} MP functions}
 \usage{
 CC_hist20(x, Data, reps = 100, ...)
-
-CC_hist(x, Data, reps = 100, plot = FALSE)
-
-.DDSS_MSY(x, Data, reps = 100, ...)
-
-.DDSS_4010(x, Data, reps = 100, ...)
 
 GB_slope6_0.66(x, Data, reps = 100, ...)
 

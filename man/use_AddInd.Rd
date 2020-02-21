@@ -2,15 +2,17 @@
 % Please edit documentation in R/mp.R
 \name{use_AddInd}
 \alias{use_AddInd}
-\title{Use AddInd}
+\title{Use the AddInd slot}
 \usage{
 use_AddInd(mp)
 }
 \arguments{
-\item{mp}{MP to use}
+\item{mp}{MP to use.}
 }
 \description{
-Use AddInd
+This function factory modifies an MP to use the \code{AddInd} (and \code{CV_AddInd})
+slots from the first "real" survey instead of \code{Ind}. This means that the
+first survey in your SRA must be the survey that you want to mimic.
 }
 \examples{
 my_mp <- use_AddInd(IDX)

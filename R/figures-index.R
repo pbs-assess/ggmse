@@ -5,6 +5,10 @@
 #' @param n_samples The number of timeseries samples to illustrate.
 #' @param seed The seed to set before drawing samples.
 #' @param type Which index to plot.
+#' @param omit_index_fn A function that indexes years in the projection period
+#'   to omit from the plot. E.g., for a biennial survey omitting even years
+#'   starting in year 2: `function(x) seq(2, x, 2))`. `x` represents the total
+#'   number of years.
 #' @param quantiles Probability quantiles to show.
 #'
 #' @export
@@ -17,7 +21,9 @@
 #' mse_list[[2]] <- mse_example
 #' names(mse_list) <- c("Sc 1", "Sc 2")
 #' plot_index(mse_list)
-plot_index <- function(object_list, n_samples = 4, seed = 42, type = c("Ind", "AddInd"),
+plot_index <- function(object_list, n_samples = 4, seed = 42,
+  type = c("Ind", "AddInd"),
+  omit_index_fn = function(x) NULL,
   quantiles = c(0.025, 0.975)) {
   if (!is.list(object_list)) {
     object_list <- list(object_list)
@@ -38,22 +44,24 @@ plot_index <- function(object_list, n_samples = 4, seed = 42, type = c("Ind", "A
   }
 
   d <- purrr::map_dfr(object_list, get_index_ts,
-    this_year = this_year, type = type,
+    this_year = this_year, type = type, omit_index_fn = omit_index_fn,
     seed = seed, n_samples = n_samples, .id = "scenario"
   )
   d_all <- purrr::map_dfr(object_list, get_index_ts,
-    this_year = this_year, type = type,
+    this_year = this_year, type = type, omit_index_fn = omit_index_fn,
     seed = seed, n_samples = object_list[[1]]@nsim, .id = "scenario"
   )
   d_all <- group_by(d_all, scenario, real_year, mp_name) %>%
-    summarise(lwr = quantile(value, probs = quantiles[[1]]),
-      upr = quantile(value, probs = quantiles[[2]]))
+    summarise(lwr = quantile(value, probs = quantiles[[1]], na.rm = TRUE),
+      upr = quantile(value, probs = quantiles[[2]], na.rm = TRUE))
 
-  g <- ggplot(d, aes_string("real_year", "value", group = "as.factor(iter)")) +
-    geom_ribbon(data = d_all,
+  g <- ggplot(d[!is.na(d$value),,drop=FALSE],
+    aes_string("real_year", "value", group = "as.factor(iter)")) +
+    geom_ribbon(data = d_all[!is.na(d_all$lwr),,drop=FALSE],
       aes_string(x = "real_year", ymin = "lwr", ymax = "upr"),
       alpha = 0.2, inherit.aes = FALSE) +
-    geom_line(alpha = 0.9) +
+    # geom_point(alpha = 0.9) +
+    geom_path(alpha = 0.9) +
     facet_grid(mp_name ~ scenario) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
     theme_pbs() +
@@ -61,18 +69,25 @@ plot_index <- function(object_list, n_samples = 4, seed = 42, type = c("Ind", "A
     xlab("Year") +
     guides(colour = FALSE)
 
-  if (n_samples <= 8) {
-    g <- g + scale_colour_brewer(palette = "Dark2")
-  }
-
   g
 }
 
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
-  type = c("Ind", "AddInd")) {
+  type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {
 
   type <- match.arg(type)
   x <- purrr::map(object@Misc$Data, type)
+  if (type == "AddInd") {
+    x <- purrr::map(x, ~.x[,1L,,drop=TRUE])
+  }
+  ind <- omit_index_fn(ncol(x[[1]]))
+  if (!is.null(ind)) {
+    ind_proj_nas <- ind[ind > object@nyears]
+    x <- purrr::map(x, ~ {
+      .x[,ind_proj_nas] <- NA
+      .x
+    })
+  }
   x <- reshape2::melt(x) %>%
     dplyr::rename(iter = .data$Var1, year = .data$Var2, mp = .data$L1) %>%
     dplyr::mutate(type = "projection")
@@ -84,7 +99,6 @@ get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
     mp = seq_along(object@MPs),
     mp_name = object@MPs, stringsAsFactors = FALSE
   )
-
   set.seed(seed)
   sampled_ids <- sample(unique(x$iter), size = n_samples)
   dplyr::filter(x, iter %in% sampled_ids) %>%
