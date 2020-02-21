@@ -186,20 +186,42 @@ get_ts <- function(object,
     replicate(length(mps$mp), hist_data, simplify = FALSE)
   )
   hist_data2[["mp_name"]] <- rep(mps$mp_name, each = nrow(hist_data))
+  hist_data2[["mp"]] <- rep(mps$mp, each = nrow(hist_data))
 
   ts_data <- bind_rows(ts_data, hist_data2)
 
+  # static ref pts:
   # dim(object@Misc$MSYRefs$ByYear$SSBMSY)
-  ref_ssb <- data.frame(
+  all_mps <- tibble(mp = unique(ts_data$mp)[!is.na(unique(ts_data$mp))])
+  all_mp_yrs <- expand.grid(mp = all_mps$mp, real_year = sort(unique(hist_data2$real_year)))
+  # object@Misc$MSYRefs$Refs
+  ref_ssb_hist <- data.frame(
     ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters),
     Type = "SSB", stringsAsFactors = FALSE
-  )
-  ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE)
-  ref_f <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE)
-  refs <- bind_rows(ref_ssb, ref_msy) %>%
-    bind_rows(ref_f)
+  ) %>% left_join(bind_cols(all_mp_yrs, tibble(Type = rep("SSB", nrow(all_mp_yrs)))), by = "Type")
+  ref_f_hist <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE) %>%
+    left_join(bind_cols(all_mp_yrs, tibble(Type = rep("FM", nrow(all_mp_yrs)))), by = "Type")
+  all_mp_yrs <- expand.grid(mp = seq_along(mp$mp), real_year = sort(unique(ts_data$real_year)))
+  ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE) %>%
+    left_join(bind_cols(all_mp_yrs, tibble(Type = rep("C", nrow(all_mp_yrs)))), by = "Type")
 
-  ts_data <- left_join(ts_data, refs, by = c("iter", "Type")) %>%
+  # dynamic ref pts for projections:
+  ref_ssb <- object@Misc$MSYRefs$ByYear$SSBMSY %>%
+    reshape2::melt() %>%
+    transmute(iter = .data$Var1,
+      real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2,
+      ref = .data$value, Type = "SSB")
+  ref_f <- object@Misc$MSYRefs$ByYear$FMSY %>%
+    reshape2::melt() %>%
+    transmute(iter = .data$Var1,
+      real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2, ref = .data$value, Type = "FM")
+
+  refs <- ref_ssb %>% bind_rows(ref_f) %>%
+    bind_rows(ref_msy) %>%
+    bind_rows(ref_ssb_hist) %>%
+    bind_rows(ref_f_hist)
+
+  ts_data <- left_join(ts_data, refs, by = c("iter", "mp", "Type", "real_year")) %>%
     mutate(value = value / ref)
 
   type[type == "SSB"] <- "B_BMSY"
