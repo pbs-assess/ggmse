@@ -2,13 +2,13 @@ parameter\_symbols,slot\_type,slot,slot\_order,show\_slot,use\_custom\_descripti
 ,Stock,Name,1,TRUE,TRUE,The name of the Stock object.
 ,Stock,Common\_Name,2,TRUE,TRUE,Common name of the species.
 ,Stock,Species,3,TRUE,TRUE,Scientific name of the species.
-$A$,Stock,maxage,4,TRUE,TRUE,The maximum age of individuals that is simulated. Positive integer.
+$n_{a}$,Stock,maxage,4,TRUE,TRUE,The maximum age of individuals that is simulated. Positive integer.
 $R_0$,Stock,R0,5,TRUE,TRUE,The magnitude of unfished recruitment. An arbitrary value that scales all results. Set to 1000.
 $M$,Stock,M,6,TRUE,TRUE,Natural mortality rate. Uniform distribution lower and upper bounds.
 ,Stock,M2,7,FALSE,TRUE,(Optional) Natural mortality rate at age. Vector of length `maxage`.
-,Stock,Mexp,8,FALSE,TRUE,Exponent of the Lorenzen function assuming an inverse relationship between M and weight. Uniform distribution lower and upper bounds. Real numbers <= 0.
-,Stock,Msd,9,FALSE,TRUE,Inter-annual variability in natural mortality rate expressed as a CV. Uniform distribution lower and upper bounds.
-,Stock,Mgrad,10,FALSE,TRUE,"No longer used. Previously mean temporal trend in natural mortality rate, expressed as a percentage change in M per year."
+$\theta_{MW}$,Stock,Mexp,8,FALSE,TRUE,Exponent of the Lorenzen function assuming an inverse relationship between M and weight. Uniform distribution lower and upper bounds. Real numbers <= 0.
+"$\varepsilon_{M,y}$",Stock,Msd,9,FALSE,TRUE,Inter-annual variability in natural mortality rate expressed as a CV. Uniform distribution lower and upper bounds.
+$\theta_{M}$,Stock,Mgrad,10,FALSE,TRUE,"No longer used. Previously mean temporal trend in natural mortality rate, expressed as a percentage change in M per year."
 $h$,Stock,h,11,TRUE,TRUE,Steepness of the stock-recruit relationship. Uniform distribution lower and upper bounds with values from 1/5 to 1.
 ,Stock,SRrel,12,FALSE,TRUE,"Type of stock-recruit relationship. Single integer value, switch (1) Beverton-Holt (2) Ricker."
 "$\varepsilon_{R,y-1}$",Stock,Perr,13,TRUE,TRUE,"Process error, the CV of lognormal recruitment deviations. Uniform distribution lower and upper bounds."
@@ -19,19 +19,19 @@ $L_{\infty}$,Stock,Linf,17,TRUE,TRUE,Maximum length. Uniform distribution lower 
 $\kappa$,Stock,K,18,TRUE,TRUE,von Bertalanffy growth parameter k. Uniform distribution lower and upper bounds.
 $a_0$,Stock,t0,19,TRUE,TRUE,von Bertalanffy theoretical age at length zero. Uniform distribution lower and upper bounds.
 ,Stock,LenCV,20,FALSE,TRUE,CV of length-at-age (assumed constant for all age classes). Uniform distribution lower and upper bounds.
-,Stock,Ksd,21,FALSE,TRUE,Inter-annual variability in growth parameter k expressed as a CV. Uniform distribution lower and upper bounds.
-,Stock,Kgrad,22,FALSE,TRUE,"No longer used. Previously mean temporal trend in growth parameter k, expressed as a percentage change in k per year."
-,Stock,Linfsd,23,FALSE,TRUE,Inter-annual variability in maximum length expressed as a CV. Uniform distribution lower and upper bounds.
-,Stock,Linfgrad,24,FALSE,TRUE,"No longer used. Previously mean temporal trend in maximum length, expressed as a percentage change in Linf per year."
+"$\varepsilon_{L,y}$",Stock,Ksd,21,FALSE,TRUE,Inter-annual variability in growth parameter k expressed as a CV. Uniform distribution lower and upper bounds.
+$\theta_{K}$,Stock,Kgrad,22,FALSE,TRUE,"No longer used. Previously mean temporal trend in growth parameter k, expressed as a percentage change in k per year."
+"$\varepsilon_{K,y}$",Stock,Linfsd,23,FALSE,TRUE,Inter-annual variability in maximum length expressed as a CV. Uniform distribution lower and upper bounds.
+$\theta_{L}$,Stock,Linfgrad,24,FALSE,TRUE,"No longer used. Previously mean temporal trend in maximum length, expressed as a percentage change in Linf per year."
 $\theta_{l50}$,Stock,L50,25,TRUE,TRUE,Length at 50\% maturity. Uniform distribution lower and upper bounds.
 $\theta_{l50-95}$,Stock,L50\_95,26,TRUE,TRUE,Length increment from 50\% to 95\% maturity. Uniform distribution lower and upper bounds.
 $D$,Stock,D,27,TRUE,TRUE,Current level of stock depletion SSB~current~/SSB~unfished~. Uniform distribution lower and upper bounds representing a fraction.
 $\alpha_{W}$,Stock,a,28,TRUE,TRUE,Length-weight parameter alpha. Positive real number.
 $\beta_{W}$,Stock,b,29,TRUE,TRUE,Length-weight parameter beta. Positive real number.
-,Stock,Size\_area\_1,30,FALSE,TRUE,The default OM has two areas. `size\_area\_1` is the geographical size of the area relative to the total area. Set to 0.5 to approximate a single area model.
-,Stock,Frac\_area\_1,31,FALSE,TRUE,"`Frac\_area\_1` is the amount of unfished habitat in that area, expressed as a fraction of the total habitat. Set to 0.5 to approximate single area model."
-,Stock,Prob\_staying,32,FALSE,TRUE,The probability of inviduals in area 1 remaining in area 1 over the course of one year. Uniform distribution lower and upper bounds. Positive fraction.
-,Stock,Fdisc,33,FALSE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
+${\widetilde{\theta}}_{A}$,Stock,Size\_area\_1,30,FALSE,TRUE,The default OM has two areas. `size\_area\_1` is the geographical size of the area relative to the total area. Set to 0.5 to approximate a single area model.
+${\widetilde{\theta}}_{d}$,Stock,Frac\_area\_1,31,FALSE,TRUE,"`Frac\_area\_1` is the amount of unfished habitat in that area, expressed as a fraction of the total habitat. Set to 0.5 to approximate single area model."
+${\widetilde{\theta}}_{v}$,Stock,Prob\_staying,32,FALSE,TRUE,The probability of inviduals in area 1 remaining in area 1 over the course of one year. Uniform distribution lower and upper bounds. Positive fraction.
+${\widetilde{\theta}}_{Mdisc}$,Stock,Fdisc,33,FALSE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
 ,Stock,Source,34,FALSE,TRUE,A reference to a website or article from which parameters were taken to define the stock object.
 ,Fleet,Name,1,TRUE,TRUE,Name of the Fleet object.
 $n~years~$,Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool-up simulation.
@@ -90,7 +90,7 @@ $\beta$,Obs,beta,12,TRUE,TRUE,A parameter controlling hyperstability/hyperdeplet
 ,Obs,hbiascv,28,FALSE,TRUE,Log-normal CV for sampling persistent bias in steepness. Uniform distribution lower and upper bounds.
 ,Obs,Recbiascv,29,FALSE,TRUE,Log-normal CV for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds.
 ,Imp,Name,1,TRUE,TRUE,The name of the Implementation error object.
-${\widetilde{b}}_{\text{TAC}}$,Imp,TACFrac,2,TRUE,TRUE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds.
+$b_{\text{TAC}}$,Imp,TACFrac,2,TRUE,TRUE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds.
 $(\varepsilon_{\text{bTAC}})$,Imp,TACSD,3,TRUE,TRUE,Log-normal CV in the fraction of TAC taken. Uniform distribution lower and upper bounds.
 ,Imp,TAEFrac,4,FALSE,TRUE,Mean fraction of TAE taken. Uniform distribution lower and upper bounds.
 ,Imp,TAESD,5,FALSE,TRUE,Log-normal CV in the fraction of Total Allowable Effort (TAE) taken. Uniform distribution lower and upper bounds.
