@@ -634,7 +634,7 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
   `class<-`(f, "MP")
 }
 
-#' Use the AddInd slot
+#' Use the first AddInd slot
 #'
 #' This function factory modifies an MP to use the `AddInd` (and `CV_AddInd`)
 #' slots from the first "real" survey instead of `Ind`. This means that the
@@ -655,8 +655,8 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 use_AddInd <- function(mp) {
   force(mp)
   f <- function(x, Data, reps = 1L) {
-    Data@Ind <- Data@AddInd[, 1L, , ]
-    Data@CV_Ind <- Data@CV_AddInd[, 1L, , ]
+    Data@Ind <- Data@AddInd[, 1L, ]
+    Data@CV_Ind <- Data@CV_AddInd[, 1L, ]
     mp(x = x, Data = Data, reps = reps)
   }
   `class<-`(f, "MP")

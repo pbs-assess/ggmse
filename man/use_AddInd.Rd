@@ -2,7 +2,7 @@
 % Please edit documentation in R/mp.R
 \name{use_AddInd}
 \alias{use_AddInd}
-\title{Use the AddInd slot}
+\title{Use the first AddInd slot}
 \usage{
 use_AddInd(mp)
 }
