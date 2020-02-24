@@ -46,6 +46,7 @@
 #' # mse <- lapply(om_list, runMSE, MPs = mps)
 #' # or
 #' # mse <- purrr::map(om_list, runMSE, MPs = mps)
+#' library(DLMtool)
 #' # Instead, let's use the same example thrice:
 #' mse <- list()
 #' mse[[1]] <- mse_example
@@ -68,15 +69,15 @@
 #' pm <- c("LT LRP", "LT USR", "STC", "LTC")
 #'
 #' custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")
-#' names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
+#' names(custom_pal) <- c("CC1.0", "Itarget1", "Iratio2", "FMSYref75")
 #'
 #' plots <- plot_factory(
 #'   mse,
 #'   pm = pm,
 #'   scenario_df = scenario_df,
-#'   mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
+#'   mp_sat = c("Itarget1", "Iratio2", "FMSYref75"),
 #'   mp_ref = c("FMSYref75"),
-#'   mp_not_sat = c("CC100"),
+#'   mp_not_sat = c("CC1.0"),
 #'   custom_pal = custom_pal,
 #'   eg_scenario = "sc1",
 #'   tradeoff = c("LT LRP", "STC"),

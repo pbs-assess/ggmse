@@ -15,10 +15,12 @@ slots from the first "real" survey instead of \code{Ind}. This means that the
 first survey in your SRA must be the survey that you want to mimic.
 }
 \examples{
-my_mp <- use_AddInd(IDX)
-library(DLMtool)
+library(MSEtool)
 om <- DLMtool::testOM
-om@nsim <- 5
-om@proyears <- 10
-mse <- runMSE(om, MPs = "my_mp")
+om@nsim <- 10
+set.seed(1)
+sra <- SRA_scope(om,
+  data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
+my_mp <- use_AddInd(Itarget_base)
+mse <- runMSE(sra@OM, MPs = "Itarget_base")
 }

@@ -13,16 +13,16 @@ scenario_df <- tibble::tribble(
 )
 pm <- c("P40", "LTY")
 custom_pal <- c(RColorBrewer::brewer.pal(3, "Set2"), "grey60")
-names(custom_pal) <- c("CC100", ".Itarget1", ".Iratio2", "FMSYref75")
+names(custom_pal) <- c("CC1.0", "Itarget1", "Iratio2", "FMSYref75")
 
 test_that("plot_factory() runs", {
   plots <- plot_factory(
     mse,
     pm = pm,
     scenario_df = scenario_df,
-    mp_sat = c(".Itarget1", ".Iratio2", "FMSYref75"),
-    mp_not_sat = c("CC100"),
-    mp_not_sat2 = c("CC100"),
+    mp_sat = c("Itarget1", "Iratio2", "FMSYref75"),
+    mp_not_sat = c("CC1.0"),
+    mp_not_sat2 = c("CC1.0"),
     mp_ref = c("FMSYref75"),
     custom_pal = custom_pal,
     eg_scenario = "sc1",

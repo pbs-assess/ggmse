@@ -3,11 +3,8 @@
 \name{SP_gf}
 \alias{SP_gf}
 \alias{SP6040_gf}
-\alias{.SP6040_gf}
 \alias{SP8040_gf}
-\alias{.SP8040_gf}
 \alias{SP4010_gf}
-\alias{.SP4010_gf}
 \alias{add_SP_prior}
 \title{PBS groundfish surplus production wrapper function}
 \usage{
@@ -28,15 +25,9 @@ SP_gf(
 
 SP6040_gf(x, Data, reps = 1, ...)
 
-.SP6040_gf(x, Data, reps = 100, ...)
-
 SP8040_gf(x, Data, reps = 1, ...)
 
-.SP8040_gf(x, Data, reps = 100, ...)
-
 SP4010_gf(x, Data, reps = 1, ...)
-
-.SP4010_gf(x, Data, reps = 100, ...)
 
 add_SP_prior(
   mp,

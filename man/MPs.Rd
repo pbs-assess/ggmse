@@ -15,33 +15,12 @@
 \alias{Iratio2}
 \alias{.Iratio2}
 \alias{Islope0.4_100}
-\alias{.Islope0.4_100}
 \alias{Islope0.4_80}
-\alias{.Islope0.4_80}
 \alias{Islope0.2_100}
-\alias{.Islope0.2_100}
 \alias{Islope0.2_80}
-\alias{.Islope0.2_80}
-\alias{.Islope1}
-\alias{.Islope2}
-\alias{.Islope3}
-\alias{.Islope4}
-\alias{.Itarget_base}
-\alias{.Itarget_w0.8}
-\alias{.Itarget_x0.2}
-\alias{.Itarget_x0.8}
-\alias{.Itarget_d1.2}
-\alias{.Itarget_d0.8}
-\alias{.Itarget1}
-\alias{.ITM_hist}
-\alias{.IDX}
-\alias{.IDX_smooth}
 \alias{IT5_hist}
-\alias{.IT5_hist}
 \alias{IT10_hist}
-\alias{.IT10_hist}
 \alias{CC1.0}
-\alias{CC100}
 \alias{CC0.9}
 \alias{CC0.8}
 \alias{CC0.7}
@@ -78,59 +57,17 @@ Iratio2(x, Data, reps = 100, ...)
 
 Islope0.4_100(x, Data, reps = 100, ...)
 
-.Islope0.4_100(x, Data, reps = 100, ...)
-
 Islope0.4_80(x, Data, reps = 100, ...)
-
-.Islope0.4_80(x, Data, reps = 100, ...)
 
 Islope0.2_100(x, Data, reps = 100, ...)
 
-.Islope0.2_100(x, Data, reps = 100, ...)
-
 Islope0.2_80(x, Data, reps = 100, ...)
-
-.Islope0.2_80(x, Data, reps = 100, ...)
-
-.Islope1(x, Data, reps = 100, ...)
-
-.Islope2(x, Data, reps = 100, ...)
-
-.Islope3(x, Data, reps = 100, ...)
-
-.Islope4(x, Data, reps = 100, ...)
-
-.Itarget_base(x, Data, reps = 100, ...)
-
-.Itarget_w0.8(x, Data, reps = 100, ...)
-
-.Itarget_x0.2(x, Data, reps = 100, ...)
-
-.Itarget_x0.8(x, Data, reps = 100, ...)
-
-.Itarget_d1.2(x, Data, reps = 100, ...)
-
-.Itarget_d0.8(x, Data, reps = 100, ...)
-
-.Itarget1(x, Data, reps = 100, ...)
-
-.ITM_hist(x, Data, reps = 100, ...)
-
-.IDX(x, Data, reps = 100, ...)
-
-.IDX_smooth(x, Data, reps = 100, ...)
 
 IT5_hist(x, Data, reps = 100, ...)
 
-.IT5_hist(x, Data, reps = 100, ...)
-
 IT10_hist(x, Data, reps = 100, ...)
 
-.IT10_hist(x, Data, reps = 100, ...)
-
 CC1.0(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0)
-
-CC100(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0)
 
 CC0.9(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = 0.1)
 

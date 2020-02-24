@@ -21,6 +21,7 @@
 #'
 #' @return ggplot object
 #' @importFrom rlang .data
+#' @importFrom dplyr bind_cols summarise
 #' @export
 #' @seealso [plot_main_projections()]
 #' @examples
@@ -201,17 +202,29 @@ get_ts <- function(object,
   ) %>% left_join(bind_cols(all_mp_yrs, tibble(Type = rep("SSB", nrow(all_mp_yrs)))), by = "Type")
   ref_f_hist <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE) %>%
     left_join(bind_cols(all_mp_yrs, tibble(Type = rep("FM", nrow(all_mp_yrs)))), by = "Type")
-  all_mp_yrs <- expand.grid(mp = seq_along(mp$mp), real_year = sort(unique(ts_data$real_year)))
+
+  all_mp_yrs <- expand.grid(mp = seq_along(mps$mp), real_year = sort(unique(ts_data$real_year)))
   ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE) %>%
     left_join(bind_cols(all_mp_yrs, tibble(Type = rep("C", nrow(all_mp_yrs)))), by = "Type")
 
   # dynamic ref pts for projections:
-  ref_ssb <- object@Misc$MSYRefs$ByYear$SSBMSY %>%
+  x1 <- object@Misc$MSYRefs$ByYear$SSBMSY
+  x2 <- object@Misc$MSYRefs$ByYear$FMSY
+  if (length(dim(x1)) < 3) {
+    .x1 <- array(NA, dim = c(dim(x1)[1], 1, dim(x1)[2]))
+    .x1[,1,] <- x1
+    .x2 <- array(NA, dim = c(dim(x2)[1], 1, dim(x2)[2]))
+    .x2[,1,] <- x2
+  } else {
+    .x1 <- x1
+    .x2 <- x2
+  }
+  ref_ssb <- .x1 %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
       real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2,
       ref = .data$value, Type = "SSB")
-  ref_f <- object@Misc$MSYRefs$ByYear$FMSY %>%
+  ref_f <- .x2 %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
       real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2, ref = .data$value, Type = "FM")

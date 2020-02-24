@@ -11,9 +11,9 @@
 #' @param slots The slots for which you want to reduce observations.
 #' @param index A function that takes the number of years of observations and
 #'   returns a vector indexing the years that should be turned into `NA` values.
-#'   The default anonymous function discards observations for even years
-#'   starting in the second projection year. To start in the first projection
-#'   year, switch to `function(x) seq(1, x, by = 2)`.
+#'   The default anonymous function discards observations for odd years
+#'   starting in the first projection year. To start in the second projection
+#'   year, switch to `function(x) seq(2, x, by = 2)`.
 #'
 #' @return A management procedure function of class `"MP"` for use with
 #'   \pkg{DLMtool}.
@@ -30,7 +30,7 @@
 #' # mse <- runMSE(OM = om, MPs = "temp_mp")
 reduce_survey <- function(mp,
                           slots = c("Ind", "VInd", "SpInd", "AddInd", "CAA", "CAL", "ML"),
-                          index = function(x) seq(2, x, by = 2)) {
+                          index = function(x) seq(1, x, by = 2)) {
   force(mp)
   force(slots)
   force(index)
@@ -105,11 +105,11 @@ GB_slope_base <- function (x, Data, reps = 100, plot = FALSE, yrsmth = 5, lambda
     Islp <- slppar[1]
   }
   MuC <- Data@Cat[x, length(Data@Cat[x, ])]
-  Cc <- trlnorm(reps, MuC, Data@CV_Cat[x, 1])
+  Cc <- DLMtool::trlnorm(reps, MuC, Data@CV_Cat[x, 1])
   TAC <- Cc * (1 + lambda * Islp)
   TAC[TAC > (1.2 * Catrec)] <- 1.2 * Catrec
   TAC[TAC < (0.8 * Catrec)] <- 0.8 * Catrec
-  TAC <- TACfilter(TAC)
+  TAC <- DLMtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
@@ -171,7 +171,7 @@ GB_slope8_1
 #' @rdname MPs
 #' @export
 Iratio2 <- function(x, Data, reps = 100, ...) {
-  ind <- which(!is.na(Data@Ind[x, drop = TRUE]))
+  ind <- which(!is.na(Data@Ind[x, ]))
   numerator_yrs <- rev(which(!is.na(ind)))[1:2]
   denominator_yrs <- rev(which(!is.na(ind)))[3:5]
   yrs1 <- length(ind) - min(numerator_yrs) + 1
@@ -207,18 +207,10 @@ class(Islope0.4_100) <- "MP"
 
 #' @rdname MPs
 #' @export
-.Islope0.4_100 <- reduce_survey(Islope0.4_100)
-
-#' @rdname MPs
-#' @export
 Islope0.4_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.4, xx = 0.2, ...)
 }
 class(Islope0.4_80) <- "MP"
-
-#' @rdname MPs
-#' @export
-.Islope0.4_80 <- reduce_survey(Islope0.4_80)
 
 #' @rdname MPs
 #' @export
@@ -227,9 +219,6 @@ Islope0.2_100 <- function(x, Data, reps = 100, ...) {
 }
 class(Islope0.2_100) <- "MP"
 
-#' @rdname MPs
-#' @export
-.Islope0.2_100 <- reduce_survey(Islope0.2_100)
 
 #' @rdname MPs
 #' @export
@@ -237,26 +226,6 @@ Islope0.2_80 <- function(x, Data, reps = 100, ...) {
   Islope_mod_(x, Data, reps = reps, lambda = 0.2, xx = 0.2, ...)
 }
 class(Islope0.2_80) <- "MP"
-
-#' @rdname MPs
-#' @export
-.Islope0.2_80 <- reduce_survey(Islope0.2_80)
-
-#' @rdname MPs
-#' @export
-.Islope1 <- reduce_survey(DLMtool::Islope1)
-
-#' @rdname MPs
-#' @export
-.Islope2 <- reduce_survey(DLMtool::Islope2)
-
-#' @rdname MPs
-#' @export
-.Islope3 <- reduce_survey(DLMtool::Islope3)
-
-#' @rdname MPs
-#' @export
-.Islope4 <- reduce_survey(DLMtool::Islope4)
 
 #' Itarget MP
 #'
@@ -360,34 +329,6 @@ Itarget_d0.8 <- function(x, Data, reps = 1) {
 }
 class(Itarget_d0.8) <- "MP"
 
-#' @rdname MPs
-#' @export
-.Itarget_base <- reduce_survey(Itarget_base)
-
-#' @rdname MPs
-#' @export
-.Itarget_w0.8 <- reduce_survey(Itarget_w0.8)
-
-#' @rdname MPs
-#' @export
-.Itarget_x0.2 <- reduce_survey(Itarget_x0.2)
-
-#' @rdname MPs
-#' @export
-.Itarget_x0.8 <- reduce_survey(Itarget_x0.8)
-
-#' @rdname MPs
-#' @export
-.Itarget_d1.2 <- reduce_survey(Itarget_d1.2)
-
-#' @rdname MPs
-#' @export
-.Itarget_d0.8 <- reduce_survey(Itarget_d0.8)
-
-#' @rdname MPs
-#' @export
-.Itarget1 <- reduce_survey(DLMtool::Itarget1)
-
 #' Historical Index Target based on natural mortality rate
 #'
 #' This MP is based on [DLMtool::ITM()] but since the reference index level to
@@ -428,10 +369,6 @@ ITM_hist <- function(x, Data, reps = 100, yrsmth_hist = 10, ...) {
   Rec
 }
 class(ITM_hist) <- "MP"
-
-#' @rdname MPs
-#' @export
-.ITM_hist <- reduce_survey(ITM_hist)
 
 stepwise_NAs <- function(x) {
   df <- data.frame(x = x)
@@ -486,7 +423,7 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   this_year <- length(Data@Year)
 
   # Stepwise fill in NAs with last available value:
-  temp_Ind <- stepwise_NAs(Data@Ind[x, drop = TRUE])
+  temp_Ind <- stepwise_NAs(Data@Ind[x, ])
   delta_ind_y <- temp_Ind[this_year] / temp_Ind[this_year - year_ref] - 1
   catch_rec <- Data@MPrec[x]
 
@@ -512,10 +449,6 @@ class(IDX) <- "MP"
 IDX2 <- IDX
 formals(IDX2)$tac_floor <- 2
 
-#' @rdname MPs
-#' @export
-.IDX <- reduce_survey(IDX2)
-
 #' @param ... Other arguments to pass to [IDX].
 #' @rdname IDX
 #' @export
@@ -526,10 +459,6 @@ class(IDX_smooth) <- "MP"
 
 IDX_smooth2 <- IDX_smooth
 formals(IDX_smooth2)$tac_floor <- 2
-
-#' @rdname MPs
-#' @export
-.IDX_smooth <- reduce_survey(IDX_smooth2)
 
 IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 10) {
   # Based on DLMtool::IT_
@@ -559,18 +488,10 @@ class(IT5_hist) <- "MP"
 
 #' @rdname MPs
 #' @export
-.IT5_hist <- reduce_survey(IT5_hist)
-
-#' @rdname MPs
-#' @export
 IT10_hist <- function(x, Data, reps = 100, ...) {
   IT_hist_(x, Data, reps, yrsmth = 5, mc = 0.10, yrsmth_hist = 10)
 }
 class(IT10_hist) <- "MP"
-
-#' @rdname MPs
-#' @export
-.IT10_hist <- reduce_survey(IT10_hist)
 
 #' @param plot Logical. Show the plot?
 #' @param yrsmth Years over which to calculate mean catches.
@@ -579,10 +500,6 @@ class(IT10_hist) <- "MP"
 #' @rdname MPs
 #' @export
 CC1.0 <- DLMtool::CC1
-
-#' @rdname MPs
-#' @export
-CC100 <- DLMtool::CC1
 
 #' @rdname MPs
 #' @export
@@ -674,10 +591,6 @@ class(SP6040_gf) <- "MP"
 
 #' @rdname SP_gf
 #' @export
-.SP6040_gf <- reduce_survey(SP6040_gf)
-
-#' @rdname SP_gf
-#' @export
 SP8040_gf <- function(x, Data, reps = 1, ...) {
   SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY", ...)
 }
@@ -685,18 +598,10 @@ class(SP8040_gf) <- "MP"
 
 #' @rdname SP_gf
 #' @export
-.SP8040_gf <- reduce_survey(SP8040_gf)
-
-#' @rdname SP_gf
-#' @export
 SP4010_gf <- function(x, Data, reps = 1, ...) {
   SP_gf(x, Data, reps = 1, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0", ...)
 }
 class(SP4010_gf) <- "MP"
-
-#' @rdname SP_gf
-#' @export
-.SP4010_gf <- reduce_survey(SP4010_gf)
 
 #' @param mp MP to wrap
 #' @param r_prior Mean and SD of r prior
@@ -739,19 +644,20 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 #'
 #' @export
 #' @examples
-#' my_mp <- use_AddInd(IDX)
-#' library(DLMtool)
+#' library(MSEtool)
 #' om <- DLMtool::testOM
-#' om@nsim <- 5
-#' om@proyears <- 10
-#' mse <- runMSE(om, MPs = "my_mp")
+#' om@nsim <- 10
+#' set.seed(1)
+#' sra <- SRA_scope(om,
+#'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
+#' my_mp <- use_AddInd(Itarget_base)
+#' mse <- runMSE(sra@OM, MPs = "Itarget_base")
 use_AddInd <- function(mp) {
   force(mp)
   f <- function(x, Data, reps = 1L) {
-    Data@Ind <- Data@AddInd[, 1L, , drop = TRUE]
-    Data@CV_Ind <- Data@CV_AddInd[, 1L, , drop = TRUE]
+    Data@Ind <- Data@AddInd[, 1L, , ]
+    Data@CV_Ind <- Data@CV_AddInd[, 1L, , ]
     mp(x = x, Data = Data, reps = reps)
   }
-  `class<-`(f, "MP")
   `class<-`(f, "MP")
 }
