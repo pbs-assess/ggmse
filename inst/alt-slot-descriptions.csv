@@ -34,8 +34,8 @@ ${\widetilde{\theta}}_{v}$,Stock,Prob\_staying,32,FALSE,TRUE,The probability of 
 ${\widetilde{\theta}}_{Mdisc}$,Stock,Fdisc,33,FALSE,TRUE,Fraction of discarded fish that die. Uniform distribution lower and upper bounds.
 ,Stock,Source,34,FALSE,TRUE,A reference to a website or article from which parameters were taken to define the stock object.
 ,Fleet,Name,1,TRUE,TRUE,Name of the Fleet object.
-$n~years~$,Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool-up simulation.
-"$V_{y,a}$",Fleet,Spat\_targ,3,TRUE,TRUE,Distribution of fishing in relation to spatial biomass: fishing distribution is proportional to B\^`Spat\_targ`\^. Uniform distribution lower and upper bounds.
+$c$,Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool-up simulation.
+$\theta_{T}$,Fleet,Spat\_targ,3,TRUE,TRUE,Distribution of fishing in relation to spatial biomass: fishing distribution is proportional to B\^`Spat\_targ`\^. Uniform distribution lower and upper bounds.
 ,Fleet,EffYears,4,FALSE,TRUE,Years representing vertices of time-varying effort. Vector.
 ,Fleet,EffLower,5,FALSE,TRUE,Lower bound on relative effort corresponding to `EffYears`. Vector.
 ,Fleet,EffUpper,6,FALSE,TRUE,Upper bound on relative effort corresponding to `EffYears`. Vector.
@@ -44,11 +44,11 @@ $n~years~$,Fleet,nyears,2,TRUE,TRUE,The number of years for the historical spool
 ,Fleet,qcv,9,FALSE,TRUE,Inter-annual variability in fishing efficiency (applicable only to forward projection and input controls). Uniform distribution lower and upper bounds.
 ${L}_{5}$,Fleet,L5,10,TRUE,TRUE,Shortest length corresponding to 5\% vulnerability. Uniform distribution lower and upper bounds.
 ${L}_{smax}$,Fleet,LFS,11,TRUE,TRUE,Shortest length that is fully vulnerable to fishing. Uniform distribution lower and upper bounds.
-${V}_{\overline{L}}$,Fleet,Vmaxlen,12,TRUE,TRUE,The vulnerability of fish at `Linf`. Uniform distribution lower and upper bounds. Fraction.
+${V}_{L}$,Fleet,Vmaxlen,12,TRUE,TRUE,The vulnerability of fish at `Linf`. Uniform distribution lower and upper bounds. Fraction.
 ,Fleet,isRel,13,TRUE,TRUE,"Are the selectivity parameters in units of size-of-maturity (`TRUE`) (or absolute units, for example, cm) (`FALSE`)."
 ${r}_{5}$,Fleet,LR5,14,TRUE,TRUE,Shortest length corresponding to 5\% retention. Uniform distribution lower and upper bounds.
 ${L}_{\textrm{rmax}}$,Fleet,LFR,15,TRUE,TRUE,Shortest length that is fully retained. Uniform distribution lower and upper bounds.
-${r}_{\overline{L}}$,Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform distribution lower and upper bounds.
+${r}_{L}$,Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform distribution lower and upper bounds.
 ,Fleet,DR,17,FALSE,TRUE,Discard rate: the fraction of caught fish that are discarded. Uniform distribution lower and upper bounds. Fraction.
 ,Fleet,SelYears,18,FALSE,TRUE,(Optional) Years representing vertices at which historical selectivity pattern changes. Vector.
 ,Fleet,AbsSelYears,19,FALSE,TRUE,"(Optional) Calendar years corresponding with `SelYears` (e.g., 1951, rather than 1); used for plotting only. Vector of same length as `SelYears`)."
