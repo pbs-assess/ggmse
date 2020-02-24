@@ -1,0 +1,11 @@
+---
+title: "slots_param_table"
+author: "EK"
+date: "February 17, 2020"
+output: pdf_document
+---
+
+```{r, echo = FALSE}
+params <- readr::read_csv("../inst/alt-slot-descriptions.csv")
+csasdown::csas_table(params, booktabs = TRUE, format = 'latex', escape = FALSE)
+```
