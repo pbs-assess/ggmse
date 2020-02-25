@@ -170,7 +170,9 @@ create_rmd <- function(file_name,
   }
 
   cust_desc <- readr::read_csv(cust_desc_file_name)
-  cust_desc[, c(1, 2)] <- apply(cust_desc[, c(1, 2)], c(1, 2), tolower)
+  .temp <- which(names(cust_desc) %in% c("slot_type", "slot"))
+  cust_desc$slot_type <- tolower(cust_desc$slot_type)
+  cust_desc$slot <- tolower(cust_desc$slot)
 
   slot_type_order <- readr::read_csv(slot_type_order_file_name)
 
