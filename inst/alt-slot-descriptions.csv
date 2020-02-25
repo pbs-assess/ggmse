@@ -61,34 +61,34 @@ ${r}_{L}$,Fleet,Rmaxlen,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform di
 ,Fleet,CurrentYr,26,TRUE,TRUE,"The current calendar year (final year) of the historical simulations (e.g., 2019)."
 ,Fleet,MPA,27,FALSE,TRUE,(Optional) Matrix specifying spatial closures for historical years.
 ,Obs,Name,1,TRUE,TRUE,The name of the observation model object.
-"$C_{y,a}^{\text{obs}}$",Obs,Cobs,2,TRUE,TRUE,Log-normal catch observation error expressed as a CV. Uniform distribution lower and upper bounds.
-,Obs,Cbiascv,3,TRUE,TRUE,Log-normal CV controlling the sampling of bias in catch observations for each simulation. Uniform distribution lower and upper bounds.
+$\sigma_{C}$,Obs,Cobs,2,TRUE,TRUE,Log-normal catch observation error expressed as a CV. Uniform distribution lower and upper bounds.
+$b_{C}$,Obs,Cbiascv,3,TRUE,TRUE,Log-normal CV controlling the sampling of bias in catch observations for each simulation. Uniform distribution lower and upper bounds.
 $n~CAA~$,Obs,CAA\_nsamp,4,TRUE,TRUE,Number of catch-at-age observation per time step. Uniform distribution lower and upper bounds.
 $ESS_{CAA}$,Obs,CAA\_ESS,5,TRUE,TRUE,Effective sample size (independent age draws) of the multinomial catch-at-age observation error model. Uniform distribution lower and upper bounds.
 $n~CAL~$,Obs,CAL\_nsamp,6,TRUE,TRUE,Number of catch-at-length observation per time step. Uniform distribution lower and upper bounds.
 $ESS_{CAL}$,Obs,CAL\_ESS,7,TRUE,TRUE,Effective sample size (independent length draws) of the multinomial catch-at-length observation error model. Uniform distribution lower and upper bounds.
-$I_{y}^{\text{obs}}$,Obs,Iobs,8,TRUE,TRUE,Observation error in the relative abundance indices expressed as a CV. Uniform distribution lower and upper bounds.
-,Obs,Ibiascv,9,TRUE,TRUE,No longer used. Log-normal CV controlling error in observations of relative abundance index. Uniform distribution lower and upper bounds.
-,Obs,Btobs,10,FALSE,TRUE,Log-normal CV controlling error in observations of current stock biomass among years. Uniform distribution lower and upper bounds.
-,Obs,Btbiascv,11,FALSE,TRUE,Uniform log bounds for persistent sampling bias in current stock biomass. Uniform log distribution lower and upper bounds.
+$\sigma_{I}$,Obs,Iobs,8,TRUE,TRUE,Observation error in the relative abundance indices expressed as a CV. Uniform distribution lower and upper bounds.
+$b_{I}$,Obs,Ibiascv,9,TRUE,TRUE,No longer used. Log-normal CV controlling error in observations of relative abundance index. Uniform distribution lower and upper bounds.
+$\sigma_{B}$,Obs,Btobs,10,FALSE,TRUE,Log-normal CV controlling error in observations of current stock biomass among years. Uniform distribution lower and upper bounds.
+$b_{B}$,Obs,Btbiascv,11,FALSE,TRUE,Uniform log bounds for persistent sampling bias in current stock biomass. Uniform log distribution lower and upper bounds.
 $\beta$,Obs,beta,12,TRUE,TRUE,A parameter controlling hyperstability/hyperdepletion where values below 1 lead to hyperstability (an index that decreases more slowly than true abundance) and values above 1 lead to hyperdepletion (an index that decreases more rapidly than true abundance). Uniform distribution lower and upper bounds.
-,Obs,LenMbiascv,13,FALSE,TRUE,Log-normal CV for sampling persistent bias in length at 50 percent maturity. Uniform distribution lower and upper bounds.
-,Obs,Mbiascv,14,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed natural mortality rate. Uniform distribution lower and upper bounds.
-,Obs,Kbiascv,15,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed growth parameter K. Uniform distribution lower and upper bounds.
-,Obs,t0biascv,16,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed t0. Uniform distribution lower and upper bounds.
-,Obs,Linfbiascv,17,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed maximum length. Uniform distribution lower and upper bounds.
-,Obs,LFCbiascv,18,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed length at first capture. Uniform distribution lower and upper bounds.
-,Obs,LFSbiascv,19,FALSE,TRUE,Log-normal CV for sampling persistent bias in length-at-full selection. Uniform distribution lower and upper bounds.
-,Obs,FMSYbiascv,20,FALSE,TRUE,Log-normal CV for sampling persistent bias in FMSY. Uniform distribution lower and upper bounds.
-,Obs,FMSY\_Mbiascv,21,FALSE,TRUE,Log-normal CV for sampling persistent bias in FMSY/M. Uniform distribution lower and upper bounds.
-,Obs,BMSY\_B0biascv,22,FALSE,TRUE,Log-normal CV for sampling persistent bias in BMSY relative to unfished. Uniform distribution lower and upper bounds.
-,Obs,Irefbiascv,23,TRUE,TRUE,Log-normal CV for sampling persistent bias in relative abundance index at BMSY. Uniform distribution lower and upper bounds.
-,Obs,Brefbiascv,24,FALSE,TRUE,Log-normal CV for sampling persistent bias in BMSY. Uniform distribution lower and upper bounds.
-,Obs,Crefbiascv,25,TRUE,TRUE,Log-normal CV for sampling persistent bias in MSY. Uniform distribution lower and upper bounds.
-,Obs,Dbiascv,26,FALSE,TRUE,Log-normal CV for sampling persistent bias in stock depletion. Uniform distribution lower and upper bounds.
-,Obs,Dobs,27,FALSE,FALSE,Log-normal CV controlling error in observations of stock depletion among years. Uniform distribution lower and upper bounds.
-,Obs,hbiascv,28,FALSE,TRUE,Log-normal CV for sampling persistent bias in steepness. Uniform distribution lower and upper bounds.
-,Obs,Recbiascv,29,FALSE,TRUE,Log-normal CV for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds.
+$b_{l50}$,Obs,LenMbiascv,13,FALSE,TRUE,Log-normal CV for sampling persistent bias in length at 50 percent maturity. Uniform distribution lower and upper bounds.
+$b_{M}$,Obs,Mbiascv,14,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed natural mortality rate. Uniform distribution lower and upper bounds.
+$b_{K}$,Obs,Kbiascv,15,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed growth parameter K. Uniform distribution lower and upper bounds.
+$b_{t0}$,Obs,t0biascv,16,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed t0. Uniform distribution lower and upper bounds.
+$b_{L\infty}$,Obs,Linfbiascv,17,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed maximum length. Uniform distribution lower and upper bounds.
+$b_{L5}$,Obs,LFCbiascv,18,FALSE,TRUE,Log-normal CV for sampling persistent bias in observed length at first capture. Uniform distribution lower and upper bounds.
+$b_{Lsmax}$,Obs,LFSbiascv,19,FALSE,TRUE,Log-normal CV for sampling persistent bias in length-at-full selection. Uniform distribution lower and upper bounds.
+$b_{FMSY}$,Obs,FMSYbiascv,20,FALSE,TRUE,Log-normal CV for sampling persistent bias in FMSY. Uniform distribution lower and upper bounds.
+$b_{FMSY_M}$,Obs,FMSY\_Mbiascv,21,FALSE,TRUE,Log-normal CV for sampling persistent bias in FMSY/M. Uniform distribution lower and upper bounds.
+$b_{FMSY_B0}$,Obs,BMSY\_B0biascv,22,FALSE,TRUE,Log-normal CV for sampling persistent bias in BMSY relative to unfished. Uniform distribution lower and upper bounds.
+$b_{lref}$,Obs,Irefbiascv,23,TRUE,TRUE,Log-normal CV for sampling persistent bias in relative abundance index at BMSY. Uniform distribution lower and upper bounds.
+$b_{Bref}$,Obs,Brefbiascv,24,FALSE,TRUE,Log-normal CV for sampling persistent bias in BMSY. Uniform distribution lower and upper bounds.
+$b_{Cref}$,Obs,Crefbiascv,25,TRUE,TRUE,Log-normal CV for sampling persistent bias in MSY. Uniform distribution lower and upper bounds.
+$b_{D}$,Obs,Dbiascv,26,FALSE,TRUE,Log-normal CV for sampling persistent bias in stock depletion. Uniform distribution lower and upper bounds.
+$\sigma_{D}$,Obs,Dobs,27,FALSE,FALSE,Log-normal CV controlling error in observations of stock depletion among years. Uniform distribution lower and upper bounds.
+$b_{h}$,Obs,hbiascv,28,FALSE,TRUE,Log-normal CV for sampling persistent bias in steepness. Uniform distribution lower and upper bounds.
+$b_{rec}$,Obs,Recbiascv,29,FALSE,TRUE,Log-normal CV for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds.
 ,Imp,Name,1,TRUE,TRUE,The name of the Implementation error object.
 $b_{\text{TAC}}$,Imp,TACFrac,2,TRUE,TRUE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds.
 $(\varepsilon_{\text{bTAC}})$,Imp,TACSD,3,TRUE,TRUE,Log-normal CV in the fraction of TAC taken. Uniform distribution lower and upper bounds.
