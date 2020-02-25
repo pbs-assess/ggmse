@@ -61,7 +61,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
       aes_string(x = "real_year", ymin = "lwr", ymax = "upr"),
       alpha = 0.2, inherit.aes = FALSE) +
     # geom_point(alpha = 0.9) +
-    geom_path(alpha = 0.9) +
+    geom_path(alpha = 0.8) +
     facet_grid(mp_name ~ scenario) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
     theme_pbs() +

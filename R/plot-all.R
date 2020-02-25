@@ -33,6 +33,8 @@
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
 #' @param skip_projections Logical: skip the projection and worm plots for speed?
+#' @param omit_index_fn A function that indexes years in the projection period to
+#'   omit from the plot. See [plot_index()].
 #' @param survey_type Which survey to plot. Passed to [plot_index()].
 #'
 #' @return A named list object containing the ggplot objects.
@@ -110,9 +112,10 @@ plot_factory <- function(
                          tradeoff = pm[1:2],
                          catch_breaks = NULL,
                          catch_labels = catch_breaks,
-                         dodge = 0.75,
+                         dodge = 0.8,
                          satisficed_criteria = NULL,
                          skip_projections = FALSE,
+                         omit_index_fn = function(x) NULL,
                          survey_type = c("Ind", "AddInd")) {
   survey_type <- match.arg(survey_type)
   if (!is.list(mse_list)) {
@@ -268,7 +271,7 @@ plot_factory <- function(
       }
     ) %>%
       set_names(scenarios_human) %>%
-      plot_index(type = survey_type)
+      plot_index(type = survey_type, omit_index_fn = omit_index_fn)
   } else {
     progress(text = "", before = "Skipping the projection figures.", after = "")
   }
