@@ -20,7 +20,8 @@ SP_gf(
   tac_max_increase = 1.2,
   tac_max_decrease = 0.5,
   tac_floor = 0.1,
-  tac_increase_buffer = 1.05
+  tac_increase_buffer = 1.05,
+  initial_tac = NULL
 )
 
 SP6040_gf(x, Data, reps = 1, ...)
@@ -33,9 +34,11 @@ add_SP_prior(
   mp,
   r_prior,
   tac_max_increase = 1.2,
+  other_start = NULL,
   tac_max_decrease = 0.5,
   tac_floor = 0.1,
   tac_increase_buffer = 1.05,
+  initial_tac = NULL,
   ...
 )
 }
@@ -64,11 +67,16 @@ add_SP_prior(
 
 \item{tac_increase_buffer}{Proportional buffer below which TAC won't change}
 
+\item{initial_tac}{An initial-year TAC to compare the HCR "meta" rules to
+instead of using the last year's catch.}
+
 \item{...}{Other args}
 
 \item{mp}{MP to wrap}
 
 \item{r_prior}{Mean and SD of r prior}
+
+\item{other_start}{A named list of other elements to pass to \code{\link[MSEtool:SP]{MSEtool::SP()}}.}
 }
 \description{
 PBS groundfish surplus production wrapper function

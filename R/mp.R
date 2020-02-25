@@ -543,10 +543,16 @@ class(CC1.2) <- "MP"
 #' @param tac_max_decrease Maximum proportional decrease in TAC
 #' @param tac_floor Floor for TAC
 #' @param tac_increase_buffer Proportional buffer below which TAC won't change
+#' @param initial_tac An initial-year TAC to compare the HCR "meta" rules to
+#'   instead of using the last year's catch.
 #'
 #' @export
 SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY",
-                  start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE, tac_max_increase = 1.2, tac_max_decrease = 0.5, tac_floor = 0.1, tac_increase_buffer = 1.05) {
+                  start = list(r_prior = c(0.3, 0.1)), use_r_prior = TRUE,
+                  tac_max_increase = 1.2, tac_max_decrease = 0.5,
+                  tac_floor = 0.1, tac_increase_buffer = 1.05,
+                  initial_tac = NULL) {
+
   do_Assessment <- MSEtool::SP(
     x = x, Data = Data,
     control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
@@ -556,24 +562,31 @@ SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY
     Assessment = do_Assessment, reps = reps, LRP = LRP,
     TRP = TRP, RP_type = RP_type
   )
+
+  if (Data@LHYear == max(Data@Year) && !is.null(initial_tac)) {
+    last_tac <- initial_tac
+  } else {
+    last_tac <- Data@MPrec[x]
+  }
+
   if (!is.na(Rec@TAC)) {
     if (as.list(do_Assessment@SD, "Std. Error")$log_FMSY > 1) {
-      warning("Std. Error too large; using last TAC")
-      Rec@TAC <- Data@MPrec[x]
+      # warning("Std. Error too large; using last TAC")
+      Rec@TAC <- last_tac
     }
-    if (Rec@TAC > Data@MPrec[x] && Rec@TAC < tac_increase_buffer * Data@MPrec[x]) {
-      Rec@TAC <- Data@MPrec[x]
+    if (Rec@TAC > last_tac && Rec@TAC < tac_increase_buffer * last_tac) {
+      Rec@TAC <- last_tac
     }
-    if (Rec@TAC > tac_max_increase * Data@MPrec[x]) {
-      warning("TAC > tac_max_increase; using tac_max_increase")
-      Rec@TAC <- tac_max_increase * Data@MPrec[x]
+    if (Rec@TAC > tac_max_increase * last_tac) {
+      # warning("TAC > tac_max_increase; using tac_max_increase")
+      Rec@TAC <- tac_max_increase * last_tac
     }
-    if (Rec@TAC < tac_max_decrease * Data@MPrec[x]) {
-      warning("TAC < tac_max_decrease last TAC; using tac_max_decrease")
-      Rec@TAC <- tac_max_decrease * Data@MPrec[x]
+    if (Rec@TAC < tac_max_decrease * last_tac) {
+      # warning("TAC < tac_max_decrease last TAC; using tac_max_decrease")
+      Rec@TAC <- tac_max_decrease * last_tac
     }
     if (Rec@TAC < tac_floor * Data@Cat[x, Data@LHYear]) {
-      warning("TAC < tac_floor; using tac_floor")
+      # warning("TAC < tac_floor; using tac_floor")
       Rec@TAC <- tac_floor * Data@Cat[x, Data@LHYear]
     }
   }
@@ -585,26 +598,27 @@ SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY
 #' @rdname SP_gf
 #' @export
 SP6040_gf <- function(x, Data, reps = 1, ...) {
-  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY", ...)
+  SP_gf(x, Data, reps = reps, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY", ...)
 }
 class(SP6040_gf) <- "MP"
 
 #' @rdname SP_gf
 #' @export
 SP8040_gf <- function(x, Data, reps = 1, ...) {
-  SP_gf(x, Data, reps = 1, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY", ...)
+  SP_gf(x, Data, reps = reps, LRP = 0.4, TRP = 0.8, RP_type = "SSB_SSBMSY", ...)
 }
 class(SP8040_gf) <- "MP"
 
 #' @rdname SP_gf
 #' @export
 SP4010_gf <- function(x, Data, reps = 1, ...) {
-  SP_gf(x, Data, reps = 1, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0", ...)
+  SP_gf(x, Data, reps = reps, LRP = 0.1, TRP = 0.4, RP_type = "SSB_SSB0", ...)
 }
 class(SP4010_gf) <- "MP"
 
 #' @param mp MP to wrap
 #' @param r_prior Mean and SD of r prior
+#' @param other_start A named list of other elements to pass to [MSEtool::SP()].
 #' @export
 #' @rdname SP_gf
 #' @examples
@@ -615,20 +629,30 @@ class(SP4010_gf) <- "MP"
 #' om@proyears <- 10
 #' mse <- runMSE(om, MPs = "my_mp")
 add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
+                         other_start = NULL,
                          tac_max_decrease = 0.5, tac_floor = 0.1,
-                         tac_increase_buffer = 1.05, ...) {
+                         tac_increase_buffer = 1.05,
+                         initial_tac = NULL, ...) {
   force(mp)
+  force(other_start)
   force(r_prior)
   force(tac_max_increase)
   force(tac_max_decrease)
   force(tac_floor)
   force(tac_increase_buffer)
 
+  if (!is.null(other_start)) {
+    start <- c(other_start, list(r_prior = r_prior))
+  } else {
+    start <- list(r_prior = r_prior)
+  }
+
   f <- function(x, Data, reps = 1, ...) {
     mp(
-      x = x, Data = Data, reps = reps, start = list(r_prior = r_prior),
+      x = x, Data = Data, reps = reps, start = start,
       tac_max_increase = tac_max_increase, tac_max_decrease = tac_max_decrease,
-      tac_floor = tac_floor, tac_increase_buffer = tac_increase_buffer, ...
+      tac_floor = tac_floor, tac_increase_buffer = tac_increase_buffer,
+      initial_tac = initial_tac, ...
     )
   }
   `class<-`(f, "MP")
