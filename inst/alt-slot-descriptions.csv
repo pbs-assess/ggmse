@@ -91,8 +91,8 @@ $b_{h}$,Obs,hbiascv,28,FALSE,TRUE,Log-normal CV for sampling persistent bias in 
 $b_{rec}$,Obs,Recbiascv,29,FALSE,TRUE,Log-normal CV for sampling persistent bias in recent recruitment strength. Uniform distribution lower and upper bounds.
 ,Imp,Name,1,TRUE,TRUE,The name of the Implementation error object.
 $b_{\text{TAC}}$,Imp,TACFrac,2,TRUE,TRUE,Mean fraction of TAC taken. Uniform distribution lower and upper bounds.
-$(\varepsilon_{\text{bTAC}})$,Imp,TACSD,3,TRUE,TRUE,Log-normal CV in the fraction of TAC taken. Uniform distribution lower and upper bounds.
-,Imp,TAEFrac,4,FALSE,TRUE,Mean fraction of TAE taken. Uniform distribution lower and upper bounds.
-,Imp,TAESD,5,FALSE,TRUE,Log-normal CV in the fraction of Total Allowable Effort (TAE) taken. Uniform distribution lower and upper bounds.
-,Imp,SizeLimFrac,6,FALSE,TRUE,The real minimum size that is retained expressed as a fraction of the size. Uniform distribution lower and upper bounds.
-,Imp,SizeLimSD,7,FALSE,TRUE,Log-normal CV controlling mismatch between a minimum size limit and the real minimum size retained. Uniform distribution lower and upper bounds.
+$\sigma_{\text{bTAC}}$,Imp,TACSD,3,TRUE,TRUE,Log-normal CV in the fraction of TAC taken. Uniform distribution lower and upper bounds.
+$b_{\text{TAE}}$,Imp,TAEFrac,4,FALSE,TRUE,Mean fraction of TAE taken. Uniform distribution lower and upper bounds.
+$\sigma_{\text{bTAE}}$,Imp,TAESD,5,FALSE,TRUE,Log-normal CV in the fraction of Total Allowable Effort (TAE) taken. Uniform distribution lower and upper bounds.
+$b_{\text{SL}}$,Imp,SizeLimFrac,6,FALSE,TRUE,The real minimum size that is retained expressed as a fraction of the size. Uniform distribution lower and upper bounds.
+$\sigma_{\text{SL}}$,Imp,SizeLimSD,7,FALSE,TRUE,Log-normal CV controlling mismatch between a minimum size limit and the real minimum size retained. Uniform distribution lower and upper bounds.
