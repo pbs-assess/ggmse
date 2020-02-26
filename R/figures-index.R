@@ -22,9 +22,9 @@
 #' names(mse_list) <- c("Sc 1", "Sc 2")
 #' plot_index(mse_list)
 plot_index <- function(object_list, n_samples = 4, seed = 42,
-  type = c("Ind", "AddInd"),
-  omit_index_fn = function(x) NULL,
-  quantiles = c(0.025, 0.975)) {
+                       type = c("Ind", "AddInd"),
+                       omit_index_fn = function(x) NULL,
+                       quantiles = c(0.025, 0.975)) {
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"
@@ -36,7 +36,8 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
       "Missing `object@OM$CurrentYr`.\n",
       "Please run the MSE with a newer GitHub DLMtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
-      "Setting CurrentYr = 0 for now.", call. = FALSE
+      "Setting CurrentYr = 0 for now.",
+      call. = FALSE
     )
     this_year <- 0
   } else {
@@ -52,14 +53,20 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
     seed = seed, n_samples = object_list[[1]]@nsim, .id = "scenario"
   )
   d_all <- group_by(d_all, scenario, real_year, mp_name) %>%
-    summarise(lwr = quantile(value, probs = quantiles[[1]], na.rm = TRUE),
-      upr = quantile(value, probs = quantiles[[2]], na.rm = TRUE))
+    summarise(
+      lwr = quantile(value, probs = quantiles[[1]], na.rm = TRUE),
+      upr = quantile(value, probs = quantiles[[2]], na.rm = TRUE)
+    )
 
-  g <- ggplot(d[!is.na(d$value),,drop=FALSE],
-    aes_string("real_year", "value", group = "as.factor(iter)")) +
-    geom_ribbon(data = d_all[!is.na(d_all$lwr),,drop=FALSE],
+  g <- ggplot(
+    d[!is.na(d$value), , drop = FALSE],
+    aes_string("real_year", "value", group = "as.factor(iter)")
+  ) +
+    geom_ribbon(
+      data = d_all[!is.na(d_all$lwr), , drop = FALSE],
       aes_string(x = "real_year", ymin = "lwr", ymax = "upr"),
-      alpha = 0.2, inherit.aes = FALSE) +
+      alpha = 0.2, inherit.aes = FALSE
+    ) +
     # geom_point(alpha = 0.9) +
     geom_path(alpha = 0.8) +
     facet_grid(mp_name ~ scenario) +
@@ -73,21 +80,21 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
 }
 
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
-  type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {
-
+                         type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {
   type <- match.arg(type)
   x <- purrr::map(object@Misc$Data, type)
   if (type == "AddInd") {
-    x <- purrr::map(x, ~.x[,1L,,drop=TRUE])
+    x <- purrr::map(x, ~ .x[, 1L, , drop = TRUE])
   }
   ind <- omit_index_fn(ncol(x[[1]]))
   if (!is.null(ind)) {
     ind_proj_nas <- ind[ind > object@nyears]
     x <- purrr::map(x, ~ {
-      .x[,ind_proj_nas] <- NA
+      .x[, ind_proj_nas] <- NA
       .x
     })
   }
+
   x <- reshape2::melt(x) %>%
     dplyr::rename(iter = .data$Var1, year = .data$Var2, mp = .data$L1) %>%
     dplyr::mutate(type = "projection")
