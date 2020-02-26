@@ -45,7 +45,7 @@ Fleet,qcv,NA,9,FALSE,TRUE,Inter-annual variability in fishing efficiency (applic
 Fleet,L5,${L}_{5}$,10,TRUE,TRUE,Shortest length corresponding to 5\% vulnerability. Uniform distribution lower and upper bounds.
 Fleet,LFS,${L}_{smax}$,11,TRUE,TRUE,Shortest length that is fully vulnerable to fishing. Uniform distribution lower and upper bounds.
 Fleet,Vmaxlen,${V}_{L}$,12,TRUE,TRUE,The vulnerability of fish at `Linf`. Uniform distribution lower and upper bounds. Fraction.
-Fleet,isRel,NA,13,TRUE,TRUE,"Are the selectivity parameters in units of size-of-maturity (`TRUE`) (or absolute units, for example, cm) (`FALSE`)."
+Fleet,isRel,NA,13,FALSE,TRUE,"Are the selectivity parameters in units of size-of-maturity (`TRUE`) (or absolute units, for example, cm) (`FALSE`)."
 Fleet,LR5,${r}_{5}$,14,TRUE,TRUE,Shortest length corresponding to 5\% retention. Uniform distribution lower and upper bounds.
 Fleet,LFR,${L}_{\textrm{rmax}}$,15,TRUE,TRUE,Shortest length that is fully retained. Uniform distribution lower and upper bounds.
 Fleet,Rmaxlen,${r}_{L}$,16,TRUE,TRUE,The retention of fish at `Linf`. Uniform distribution lower and upper bounds.
@@ -58,7 +58,7 @@ Fleet,LFSLower,NA,22,FALSE,TRUE,(Optional) Lower bound of LFS (use ChooseSelect 
 Fleet,LFSUpper,NA,23,FALSE,TRUE,(Optional) Upper bound of LFS (use ChooseSelect function to set these). Vector.
 Fleet,VmaxLower,NA,24,FALSE,TRUE,(Optional) Lower bound of Vmaxlen (use ChooseSelect function to set these). Vector. Fraction
 Fleet,VmaxUpper,NA,25,FALSE,TRUE,(Optional) Upper bound of Vmaxlen (use ChooseSelect function to set these). Vector. Fraction
-Fleet,CurrentYr,NA,26,TRUE,TRUE,"The current calendar year (final year) of the historical simulations (e.g., 2019)."
+Fleet,CurrentYr,NA,26,TRUE,TRUE,"The current calendar year (final year) of the historical simulations."
 Fleet,MPA,NA,27,FALSE,TRUE,(Optional) Matrix specifying spatial closures for historical years.
 Obs,Name,NA,1,TRUE,TRUE,The name of the observation model object.
 Obs,Cobs,$\sigma_{C}$,2,TRUE,TRUE,Log-normal catch observation error expressed as a CV. Uniform distribution lower and upper bounds.
