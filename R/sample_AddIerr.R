@@ -1,16 +1,13 @@
 #' Sample additional index error
 #'
 #' This function adds log-normally distributed error to `OM@cpars$AddIerr`. It
-#' also sets the survey hyperdepletion/hyperstability parameter to a specified
-#' value (default 1).
-#'
-#' This is useful if you want to override the default of estimating
+#' also sets the survey hyperdepletion/hyperstability parameter based on
+#' `OM@beta`. This is useful if you want to override the default of estimating
 #' hyperdepletion/hyperstability, observation error, and autocorrelation in the
 #' additional "real" indices as is done in DLMtool.
 #'
 #' @param om A DLMtool operating model that has been run through
 #'   [MSEtool::SRA_scope()].
-#' @param beta The hyperdepletion/hyperstability parameter. 1 indicates none.
 #'
 #' @return A DLMtool operating model.
 #' @export
@@ -29,15 +26,25 @@
 sample_AddIerr <- function(om, beta = 1) {
   nsim_cpars <- length(om@cpars$R0)
   n.ind <- dim(om@cpars$Data@AddInd)[2]
-  om@cpars$AddIbeta <- matrix(beta, nrow = nsim_cpars, ncol = n.ind)
+
   set.seed(om@seed)
-  .cv <- stats::runif(nsim_cpars, min = min(om@Iobs), max = max(om@Iobs))
+  if (!"beta" %in% names(om@cpars)) {
+    om@cpars$AddIbeta <- matrix(stats::runif(nsim_cpars * n.ind,
+      om@beta[1], om@beta[2]), nrow = nsim_cpars, ncol = n.ind)
+  } else {
+    om@cpars$AddIbeta <- matrix(rep(om@cpars$beta, n.ind), nrow = nsim_cpars, ncol = n.ind)
+  }
+  if (!"Iobs" %in% names(om@cpars)) {
+    .sd <- stats::runif(nsim_cpars, min = min(om@Iobs), max = max(om@Iobs))
+  } else {
+    .sd <- om@cpars$Iobs
+  }
   .n <- om@nyears + om@proyears
   om@cpars$AddIerr <- array(NA, dim = c(nsim_cpars, n.ind, .n))
   set.seed(om@seed)
   for (i in seq_len(n.ind)) {
     for (j in seq_len(nsim_cpars)) {
-      om@cpars$AddIerr[j,i,] <- DLMtool::trlnorm(.n, mu = 1, cv = .cv[j])
+        om@cpars$AddIerr[j,i,] <- exp(stats::rnorm(.n, mean = -0.5 * .sd[j]^2, sd = .sd[j]))
     }
   }
   om
