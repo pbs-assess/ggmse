@@ -322,7 +322,6 @@ plot_factory <- function(
     set_names(scenarios_rob_human) %>%
     gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
 
-  browser()
   g$dot_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge)
