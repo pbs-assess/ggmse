@@ -307,7 +307,7 @@ plot_main_projections <- function(object,
 
   if (!is.null(catch_ylim)) {
     suppressMessages({
-      g2 <- ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
+      g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
     })
   }
 
