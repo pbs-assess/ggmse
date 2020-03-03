@@ -111,7 +111,7 @@ plot_factory <- function(
                          eg_scenario = scenario_df$scenario[1],
                          tradeoff = pm[1:2],
                          catch_breaks = NULL,
-                         catch_labels = catch_breaks,
+                         catch_labels = catch_breaks, catch_ylim = NULL,
                          dodge = 0.8,
                          satisficed_criteria = NULL,
                          skip_projections = FALSE,
@@ -225,7 +225,7 @@ plot_factory <- function(
     g$projections <- map(names(xx), ~ {
       g <- plot_main_projections(xx[[.x]],
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
     })
     names(g$projections) <- names(scenarios)
@@ -235,7 +235,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     # Highlighted not satisficed ones:
@@ -244,7 +244,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     # Scenario projections ----------------------------------------------------
@@ -258,7 +258,7 @@ plot_factory <- function(
       set_names(scenarios_human) %>%
       plot_scenario_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     # Index projections -------------------------------------------------------
