@@ -253,6 +253,16 @@ plot_factory <- function(
 
     progress("combined-scenario projection")
 
+    g$projections_scenarios <- map(
+      scenarios,
+      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+    ) %>%
+      set_names(scenarios_human) %>%
+      plot_scenario_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+
     g$projections_scenarios_ref <- map(
       scenarios_ref,
       ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
