@@ -291,7 +291,7 @@ plot_factory <- function(
 
   progress("Kobe")
 
-  MPs <- union(mp_sat, mp_ref)
+  MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
 
   g$kobe_ref <-
     purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
@@ -312,6 +312,8 @@ plot_factory <- function(
   # Radar plots ---------------------------------------------------------------
 
   progress("radar")
+
+  MPs <- union(mp_sat, mp_ref)
 
   g$radar_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
