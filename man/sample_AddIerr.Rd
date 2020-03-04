@@ -4,7 +4,7 @@
 \alias{sample_AddIerr}
 \title{Sample additional index error}
 \usage{
-sample_AddIerr(om, beta = 1)
+sample_AddIerr(om)
 }
 \arguments{
 \item{om}{A DLMtool operating model that has been run through
