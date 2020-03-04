@@ -87,7 +87,7 @@ plot_worms_grid <- function(object_list, prob = 0.5,
     scale_color_viridis_c(option = "C", direction = -1) +
     scale_fill_viridis_c(option = "C", direction = -1) +
     theme_pbs() +
-    ggplot2::facet_grid(scenario ~ mp_name) +
+    ggplot2::facet_grid(mp_name ~ scenario) +
     coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE) +
     geom_vline(xintercept = c(0.4, 0.8), lty = 2, alpha = 0.2, lwd = 0.5) +
     geom_hline(yintercept = 1, lty = 2, alpha = 0.2, lwd = 0.5) +
