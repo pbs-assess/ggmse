@@ -4,24 +4,19 @@
 \alias{sample_AddIerr}
 \title{Sample additional index error}
 \usage{
-sample_AddIerr(om, beta = 1)
+sample_AddIerr(om)
 }
 \arguments{
 \item{om}{A DLMtool operating model that has been run through
 \code{\link[MSEtool:SRA_scope]{MSEtool::SRA_scope()}}.}
-
-\item{beta}{The hyperdepletion/hyperstability parameter. 1 indicates none.}
 }
 \value{
 A DLMtool operating model.
 }
 \description{
 This function adds log-normally distributed error to \code{OM@cpars$AddIerr}. It
-also sets the survey hyperdepletion/hyperstability parameter to a specified
-value (default 1).
-}
-\details{
-This is useful if you want to override the default of estimating
+also sets the survey hyperdepletion/hyperstability parameter based on
+\code{OM@beta}. This is useful if you want to override the default of estimating
 hyperdepletion/hyperstability, observation error, and autocorrelation in the
 additional "real" indices as is done in DLMtool.
 }

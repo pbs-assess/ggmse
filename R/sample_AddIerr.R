@@ -23,7 +23,7 @@
 #' om2 <- sample_AddIerr(om@OM)
 #' matplot(t(om2@cpars$AddIerr[,1,]), type = "l", lty = 1)
 
-sample_AddIerr <- function(om, beta = 1) {
+sample_AddIerr <- function(om) {
   nsim_cpars <- length(om@cpars$R0)
   n.ind <- dim(om@cpars$Data@AddInd)[2]
 

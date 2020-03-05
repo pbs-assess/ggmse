@@ -67,7 +67,7 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
       color = "MP"
     )
   if (length(object_list) > 1) {
-    g <- g + ggplot2::facet_grid(scenario ~ pm_name)
+    g <- g + ggplot2::facet_grid(pm_name ~ scenario)
   } else {
     g <- g + ggplot2::facet_wrap(~ pm_name)
   }

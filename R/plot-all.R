@@ -192,7 +192,9 @@ plot_factory <- function(
 
   g <- list()
 
-  g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg)
+  g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg,
+    satisficed = satisficed_criteria,
+  )
   g$tigure_refset_min <- gfdlm::plot_tigure(pm_min,
     satisficed = satisficed_criteria,
   )
@@ -261,6 +263,26 @@ plot_factory <- function(
         catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
+    g$projections_scenarios_ref <- map(
+      scenarios_ref,
+      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+    ) %>%
+      set_names(scenarios_ref_human) %>%
+      plot_scenario_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+
+    g$projections_scenarios_rob <- map(
+      scenarios_rob,
+      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+    ) %>%
+      set_names(scenarios_rob_human) %>%
+      plot_scenario_projections(
+        catch_breaks = catch_breaks,
+        catch_labels = catch_labels
+      )
+
     # Index projections -------------------------------------------------------
 
     g$projections_index <- map(
@@ -279,16 +301,29 @@ plot_factory <- function(
 
   progress("Kobe")
 
-  MPs <- union(mp_sat, mp_ref)
+  MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
+
+  g$kobe_ref <-
+    purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    set_names(scenarios_ref_human) %>%
+    gfdlm::plot_kobe_grid()
+
+  g$kobe_rob <-
+    purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    set_names(scenarios_rob_human) %>%
+    gfdlm::plot_kobe_grid()
 
   g$kobe <-
     purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_human) %>%
     gfdlm::plot_kobe_grid()
 
+
   # Radar plots ---------------------------------------------------------------
 
   progress("radar")
+
+  MPs <- union(mp_sat, mp_ref)
 
   g$radar_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
@@ -382,19 +417,41 @@ plot_factory <- function(
     progress(paste("psychedelic worm", clisymbols::symbol$mustache))
 
     MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
-    d <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
-      set_names(scenarios_human)
 
     suppressMessages({
+      d <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+        set_names(scenarios_human)
       g$worms_proj <-
         d %>% plot_worms_grid(include_historical = FALSE) +
         coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
         scale_x_continuous(breaks = c(0, 1, 2)) +
         scale_y_continuous(breaks = c(0, 1))
-
       g$worms_hist_proj <-
         d %>% plot_worms_grid(include_historical = TRUE) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
+
+      d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+        set_names(scenarios_ref_human)
+      g$worms_proj_ref <-
+        d %>% plot_worms_grid(include_historical = FALSE) +
+        coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
+        scale_x_continuous(breaks = c(0, 1, 2)) +
+        scale_y_continuous(breaks = c(0, 1))
+      g$worms_hist_proj_ref <-
+        d %>% plot_worms_grid(include_historical = TRUE) +
+        coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
+
+      d <- purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+        set_names(scenarios_rob_human)
+      g$worms_proj_rob <-
+        d %>% plot_worms_grid(include_historical = FALSE) +
+        coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
+        scale_x_continuous(breaks = c(0, 1, 2)) +
+        scale_y_continuous(breaks = c(0, 1))
+      g$worms_hist_proj_rob <-
+        d %>% plot_worms_grid(include_historical = TRUE) +
+        coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
+
     })
   } else {
     progress(text = "", before = paste0(
