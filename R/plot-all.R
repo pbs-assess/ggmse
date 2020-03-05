@@ -29,6 +29,7 @@
 #' @param catch_labels An optional numeric vector of y-axis labels for the catch
 #'   projection panels. This can be useful, for example, if you want the labels
 #'   to be in 1000 t insead of t.
+#' @param catch_ylim Optional y-axis limits for catch, e.g. c(0, 100)
 #' @param dodge The dodge width for [plot_dots()] etc.
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].

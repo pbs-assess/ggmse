@@ -17,6 +17,7 @@ plot_factory(
   tradeoff = pm[1:2],
   catch_breaks = NULL,
   catch_labels = catch_breaks,
+  catch_ylim = NULL,
   dodge = 0.8,
   satisficed_criteria = NULL,
   skip_projections = FALSE,
@@ -62,6 +63,8 @@ projection panels.}
 \item{catch_labels}{An optional numeric vector of y-axis labels for the catch
 projection panels. This can be useful, for example, if you want the labels
 to be in 1000 t insead of t.}
+
+\item{catch_ylim}{Optional y-axis limits for catch, e.g. c(0, 100)}
 
 \item{dodge}{The dodge width for \code{\link[=plot_dots]{plot_dots()}} etc.}
 
