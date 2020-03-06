@@ -29,6 +29,7 @@
 #' @param catch_labels An optional numeric vector of y-axis labels for the catch
 #'   projection panels. This can be useful, for example, if you want the labels
 #'   to be in 1000 t insead of t.
+#' @param catch_ylim Optional y-axis limits for catch, e.g. c(0, 100)
 #' @param dodge The dodge width for [plot_dots()] etc.
 #' @param satisficed_criteria A named numeric vector designating the satisficed
 #'   criteria for use in a 'tigure' plot. See [plot_tigure()].
@@ -111,7 +112,7 @@ plot_factory <- function(
                          eg_scenario = scenario_df$scenario[1],
                          tradeoff = pm[1:2],
                          catch_breaks = NULL,
-                         catch_labels = catch_breaks,
+                         catch_labels = catch_breaks, catch_ylim = NULL,
                          dodge = 0.8,
                          satisficed_criteria = NULL,
                          skip_projections = FALSE,
@@ -227,7 +228,7 @@ plot_factory <- function(
     g$projections <- map(names(xx), ~ {
       g <- plot_main_projections(xx[[.x]],
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
     })
     names(g$projections) <- names(scenarios)
@@ -237,7 +238,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     # Highlighted not satisficed ones:
@@ -246,7 +247,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     # Scenario projections ----------------------------------------------------
@@ -260,7 +261,7 @@ plot_factory <- function(
       set_names(scenarios_human) %>%
       plot_scenario_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, catch_ylim = catch_ylim
       )
 
     g$projections_scenarios_ref <- map(
