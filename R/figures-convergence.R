@@ -63,7 +63,7 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
     ggplot2::geom_line() +
     theme_pbs() +
     ggplot2::labs(
-      x = "Cumulative iteration", y = "Performance metric probability",
+      x = "Cumulative replicate", y = "Performance metric probability",
       color = "MP"
     )
   if (length(object_list) > 1) {
