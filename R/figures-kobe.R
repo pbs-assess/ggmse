@@ -95,12 +95,24 @@ plot_kobe <- function(object,
                       y_ref_lines = 1,
                       show_contours = TRUE,
                       return_data = FALSE) {
-  ffmsy <- object@F_FMSY[, , yend] %>%
-    reshape2::melt() %>%
-    rename(iter = Var1, mp = Var2, ffmsy = value)
-  bbmsy <- object@B_BMSY[, , yend] %>%
-    reshape2::melt() %>%
-    rename(iter = Var1, mp = Var2, bbmsy = value)
+
+  if (length(object@MPs) > 1) {
+    ffmsy <- object@F_FMSY[, , yend] %>%
+      reshape2::melt() %>%
+      rename(iter = Var1, mp = Var2, ffmsy = value)
+    bbmsy <- object@B_BMSY[, , yend] %>%
+      reshape2::melt() %>%
+      rename(iter = Var1, mp = Var2, bbmsy = value)
+  } else {
+    ffmsy <- object@F_FMSY[, , yend] %>%
+      reshape2::melt() %>%
+      rename(ffmsy = value) %>%
+      mutate(iter = seq_along(ffmsy), mp = 1L)
+    bbmsy <- object@B_BMSY[, , yend] %>%
+      reshape2::melt() %>%
+      rename(bbmsy = value) %>%
+      mutate(iter = seq_along(bbmsy), mp = 1L)
+  }
   dl <- inner_join(ffmsy, bbmsy, by = c("iter", "mp"))
   dr <- data.frame(mp = seq_along(object@MPs), mp_name = object@MPs)
   d <- left_join(dl, dr, by = "mp") %>%
@@ -116,8 +128,8 @@ plot_kobe <- function(object,
   d$outside <- FALSE
   d$outside[d$x >= xlim[2]] <- TRUE
   d$outside[d$y >= ylim[2]] <- TRUE
-  d$x[d$x >= xlim[2] - 0.05] <- xlim[2] - 0.05
-  d$y[d$y >= ylim[2] - 0.05] <- ylim[2] - 0.05
+  d$x[d$x >= xlim[2] - 0.02] <- xlim[2] - 0.02
+  d$y[d$y >= ylim[2] - 0.02] <- ylim[2] - 0.02
 
   g <- ggplot(d, ggplot2::aes_string("x", "y")) +
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
@@ -142,8 +154,8 @@ plot_kobe <- function(object,
       y = expression(F / F[MSY])
     ) +
     ggplot2::coord_equal(
-      xlim = xlim + c(-0.05, 0.05),
-      ylim = ylim + c(-0.05, 0.05), expand = FALSE
+      xlim = xlim + c(-0.01, 0.01),
+      ylim = ylim + c(-0.01, 0.01), expand = FALSE
     )
 
   if (show_ref_pt_lines) {
@@ -181,6 +193,7 @@ plot_kobe_grid <- function(object_list, ...) {
   x_ref_lines <- purrr::map_dfr(gdat, "x_ref_lines", .id = "scenario")
   y_ref_lines <- purrr::map_dfr(gdat, "y_ref_lines", .id = "scenario")
 
+
   g <- ggplot(df, ggplot2::aes_string("x", "y")) +
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
     ggplot2::guides(shape = FALSE)
@@ -199,8 +212,8 @@ plot_kobe_grid <- function(object_list, ...) {
       y = expression(F / F[MSY])
     ) +
     ggplot2::coord_equal(
-      xlim = gdat[[1]]$xlim + c(-0.05, 0.05),
-      ylim = gdat[[1]]$ylim + c(-0.05, 0.05), expand = FALSE
+      xlim = gdat[[1]]$xlim,
+      ylim = gdat[[1]]$ylim, expand = FALSE
     )
 
   if (gdat[[1]]$show_ref_pt_lines) {
