@@ -406,6 +406,16 @@ plot_factory <- function(
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
 
+  g$tradeoff_avg <- list(pm_avg) %>%
+    map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
+    set_names("Average performance") %>%
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
+
+  g$tradeoff_min <- list(pm_min) %>%
+    map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
+    set_names("Minimum performance") %>%
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
+
   g$tradeoff_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_rob_human) %>%
