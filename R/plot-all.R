@@ -37,6 +37,7 @@
 #' @param omit_index_fn A function that indexes years in the projection period to
 #'   omit from the plot. See [plot_index()].
 #' @param survey_type Which survey to plot. Passed to [plot_index()].
+#' @param skip_worms Skip the worms plot?
 #'
 #' @return A named list object containing the ggplot objects.
 #' @importFrom purrr set_names
@@ -117,7 +118,8 @@ plot_factory <- function(
                          satisficed_criteria = NULL,
                          skip_projections = FALSE,
                          omit_index_fn = function(x) NULL,
-                         survey_type = c("Ind", "AddInd")) {
+                         survey_type = c("Ind", "AddInd"),
+                         skip_worms = FALSE) {
   survey_type <- match.arg(survey_type)
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
@@ -424,7 +426,7 @@ plot_factory <- function(
 
   # Psychedelic pyramid worms -------------------------------------------------
 
-  if (!skip_projections) {
+  if (!skip_projections && !skip_worms) {
     progress(paste("psychedelic worm", clisymbols::symbol$mustache))
 
     MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
