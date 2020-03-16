@@ -340,11 +340,21 @@ plot_factory <- function(
 
   g$radar_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
-    plot_radar(custom_pal = custom_pal)
+    list() %>%
+    plot_radar_facet(custom_pal = custom_pal) +
+    ggplot2::theme(
+      strip.background = ggplot2::element_blank(),
+      strip.text.x = ggplot2::element_blank()
+    )
 
   g$radar_refset_min <- pm_min %>%
     dplyr::filter(MP %in% MPs) %>%
-    plot_radar(custom_pal = custom_pal)
+    list() %>%
+    plot_radar_facet(custom_pal = custom_pal) +
+    ggplot2::theme(
+      strip.background = ggplot2::element_blank(),
+      strip.text.x = ggplot2::element_blank()
+    )
 
   # Dot plots -----------------------------------------------------------------
 

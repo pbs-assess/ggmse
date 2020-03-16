@@ -90,7 +90,7 @@ plot_projection_ts <- function(object,
   g <- g + ggplot2::geom_line(
     data = quantiles,
     aes_string(x = "real_year", y = "m"),
-    colour = ribbon_colours[3], lwd = 1.1, inherit.aes = FALSE
+    colour = ribbon_colours[3], lwd = 1, inherit.aes = FALSE
   )
 
   if ("SSB" %in% type || "F" %in% type) {
