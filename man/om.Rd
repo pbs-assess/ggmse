@@ -4,7 +4,9 @@
 \name{om}
 \alias{om}
 \title{Example simple operating model}
-\format{An object of class \code{OM} of length 1.}
+\format{
+An object of class \code{OM} of length 1.
+}
 \usage{
 om
 }

@@ -4,7 +4,9 @@
 \name{mse_example}
 \alias{mse_example}
 \title{Example simple MSE}
-\format{An object of class \code{MSE} of length 1.}
+\format{
+An object of class \code{MSE} of length 1.
+}
 \usage{
 mse_example
 }
