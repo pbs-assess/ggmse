@@ -52,7 +52,13 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
   }
   pm$`Reference` <- ifelse(grepl("ref", pm$MP), "True", "False")
 
-  g <- ggplot(pm, aes_string("pm", "prob", colour = "MP", group = "MP")) +
+  n_mp <- length(unique(pm$MP))
+  ref_or_not <- dplyr::select(pm, MP, Reference) %>% dplyr::distinct()
+  mp_shapes <- vector(mode = "numeric", length = n_mp)
+  mp_shapes <- ifelse(ref_or_not$Reference == "True", 21, 19)
+  names(mp_shapes) <- ref_or_not$MP
+
+  g <- ggplot(pm, aes_string("pm", "prob", group = "MP", colour = "MP")) +
     theme_pbs() +
     theme(panel.border = element_blank()) +
     annotate(geom = "segment", y = Inf, yend = Inf, x = -Inf, xend = Inf, colour = "grey70") +
@@ -69,26 +75,23 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
     )
   }
 
-  g <- g + geom_point(aes_string(shape = "`Reference`"),
+  g <- g + geom_point(aes_string(shape = "MP"),
     position = position_dodge(width = dodge), size = pt_size,
   ) +
-    ggplot2::scale_shape_manual(values = c(19, 21)) +
+    ggplot2::scale_shape_manual(values = mp_shapes) +
     ylab("Probability") + xlab("Performance metric") +
-    guides(
-      col = guide_legend(order = 1, override.aes = list(pch = 19)),
-      shape = guide_legend(override.aes = list(colour = "grey50"))
-    ) + theme(
+    theme(
       panel.grid.major.y = element_line(colour = "grey85"),
       panel.grid.minor.y = element_line(colour = "grey96"),
       axis.ticks.x.bottom = element_blank()
     )
 
-  temp_dat <- pm
-  temp_dat$prob[temp_dat$Reference != "True"] <- NA
-  g <- g + geom_point(data = temp_dat,
-    position = position_dodge(width = dodge), size = pt_size, fill = "white",
-    pch = 21, na.rm = TRUE
-  )
+  # temp_dat <- pm
+  # temp_dat$prob[temp_dat$Reference != "True"] <- NA
+  # g <- g + geom_point(data = temp_dat,
+  #   position = position_dodge(width = dodge), size = pt_size, fill = "white",
+  #   pch = 21, na.rm = TRUE
+  # )
 
   if (type == "facet") {
     g <- g + facet_wrap(~scenario)
