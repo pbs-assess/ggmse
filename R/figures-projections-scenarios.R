@@ -69,6 +69,14 @@ plot_scenario_projections <- function(
   bbmsy_ffmsy$Type <- gsub("_", "/", bbmsy_ffmsy$Type)
   bbmsy_ffmsy$Type <- gsub("MSY", "[MSY]", bbmsy_ffmsy$Type)
 
+  mp_names <- sort(unique(bbmsy_ffmsy$mp_name))
+  ref_grep <- grepl("ref", mp_names)
+  if (any(ref_grep)) { # move ref MPs to end
+    mp_names <- c(mp_names[!ref_grep], mp_names[ref_grep])
+  }
+  bbmsy_ffmsy$mp_name <- factor(bbmsy_ffmsy$mp_name, levels = mp_names)
+  catch$mp_name <- factor(catch$mp_name, levels = mp_names)
+
   g1 <- bbmsy_ffmsy %>%
     ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
     geom_line(na.rm = TRUE) +
