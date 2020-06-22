@@ -44,19 +44,24 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   xvar <- paste0("`", xvar, "`")
   yvar <- paste0("`", yvar, "`")
 
+  n_mp <- length(unique(df_wide$MP))
+  ref_or_not <- dplyr::select(df_wide, MP, Reference) %>% dplyr::distinct()
+  mp_shapes <- vector(mode = "numeric", length = n_mp)
+  mp_shapes <- ifelse(ref_or_not$Reference == "True", 21, 19)
+  names(mp_shapes) <- ref_or_not$MP
+
   g <- ggplot2::ggplot(
     df_wide,
-    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "`Reference`")
+    ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "MP")
   ) +
     ggplot2::geom_point() +
+    ggplot2::scale_shape_manual(values = mp_shapes) +
     ggplot2::facet_wrap(~scenario, nrow = 2) +
     theme_pbs() +
     ggplot2::coord_equal(
       xlim = c(xmin * 0.99, 1.005),
       ylim = c(ymin * 0.99, 1.005), expand = FALSE
-    ) +
-    ggplot2::scale_shape_manual(values = c(19, 21)) +
-    ggplot2::guides(col = ggplot2::guide_legend(order = 1))
+    )
 
   if (!is.null(custom_pal)) {
     g <- g + ggplot2::scale_color_manual(values = custom_pal)
@@ -65,10 +70,6 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   g <- g + ggplot2::theme(
     panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
     panel.grid.major.x = ggplot2::element_line(colour = "grey85")
-  ) + guides(
-      col = guide_legend(order = 1, override.aes = list(pch = 19)),
-      shape = guide_legend(override.aes = list(colour = "grey50"))
-    )
-
+  )
   g
 }
