@@ -77,6 +77,12 @@ plot_scenario_projections <- function(
   bbmsy_ffmsy$mp_name <- factor(bbmsy_ffmsy$mp_name, levels = mp_names)
   catch$mp_name <- factor(catch$mp_name, levels = mp_names)
 
+  bbmsy_zones <- c(0.4, 0.8)
+  lines <- data.frame(value = bbmsy_zones, Type = "B/B[MSY]",
+    stringsAsFactors = FALSE)
+  lines <- dplyr::bind_rows(lines, data.frame(value = 1,
+    Type = "F/F[MSY]", stringsAsFactors = FALSE))
+
   g1 <- bbmsy_ffmsy %>%
     ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
     geom_line(na.rm = TRUE) +
@@ -89,7 +95,9 @@ plot_scenario_projections <- function(
     scale_colour_brewer(palette = palette) +
     scale_fill_brewer(palette = palette) + ylab("Value") + xlab("Year") +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
-    ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines"))
+    ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
+    ggplot2::geom_hline(data = lines, mapping = aes_string(yintercept = "value"),
+      alpha = 0.2, lty = 2, lwd = 0.5)
 
   g2 <- catch %>%
     ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
