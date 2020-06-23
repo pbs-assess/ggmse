@@ -29,7 +29,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' library(gfplot)
 #' species <- "pacific cod"
 #' d <- list()
@@ -214,7 +214,7 @@ tidy_cal <- function(dat, yrs, unsorted_only = TRUE, interval = 1,
 #'
 #' @return A catch at age or catch at length matrix as an array.
 #'   1 x nyears x nage/nlength
-#' \donttest{
+#' \dontrun{
 #' d_commercial <- gfdata::get_commercial_samples(222)
 #' cal <- tidy_cal(d_commercial, yrs = 2005:2010, interval = 5)
 #' cal[1, , ]

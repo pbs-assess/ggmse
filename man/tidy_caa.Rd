@@ -31,7 +31,7 @@ A catch at age or catch at length matrix as an array.
 Generate length-at-age or catch-at-age data
 }
 \examples{
-\donttest{
+\dontrun{
 d_commercial <- gfdata::get_commercial_samples(222)
 cal <- tidy_cal(d_commercial, yrs = 2005:2010, interval = 5)
 

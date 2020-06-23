@@ -45,7 +45,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   yvar <- paste0("`", yvar, "`")
 
   n_mp <- length(unique(df_wide$MP))
-  ref_or_not <- dplyr::select(df_wide, MP, Reference) %>% dplyr::distinct()
+  ref_or_not <- dplyr::select(df_wide, .data$MP, .data$Reference) %>% dplyr::distinct()
   mp_shapes <- vector(mode = "numeric", length = n_mp)
   mp_shapes <- ifelse(ref_or_not$Reference == "True", 21, 19)
   names(mp_shapes) <- ref_or_not$MP
