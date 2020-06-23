@@ -67,8 +67,17 @@ plot_projection_ts <- function(object,
     type_df$type_labels <- factor(type_df$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
   }
 
+  mp_names <- sort(unique(d$mp_name))
+  ref_grep <- grepl("ref", mp_names)
+  if (any(ref_grep)) { # move ref MPs to end
+    mp_names <- c(mp_names[!ref_grep], mp_names[ref_grep])
+  }
+
   d <- dplyr::left_join(d, type_df, by = "Type")
   quantiles <- dplyr::left_join(quantiles, type_df, by = "Type")
+
+  d$mp_name <- factor(d$mp_name, levels = mp_names)
+  quantiles$mp_name <- factor(quantiles$mp_name, levels = mp_names)
 
   lines <- data.frame(value = bbmsy_zones, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
   lines <- dplyr::bind_rows(lines, data.frame(value = 1, type_labels = "F/F[MSY]", stringsAsFactors = FALSE))
