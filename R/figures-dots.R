@@ -12,6 +12,7 @@
 #' @param dodge The amount to separate or "dodge" the dots.
 #' @param bar_alpha Background bar transparency. 0 will omit.
 #' @param pt_size Point size.
+#' @param french French?
 #' @return A ggplot2 object
 #' @export
 #' @examples
@@ -23,8 +24,8 @@
 #' plot_dots(pm)
 #' plot_dots(pm, type = "facet")
 plot_dots <- function(pm_df_list, type = c("single", "facet"),
-                      custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2,
-                      pt_size = 2.25) {
+  custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2,
+  pt_size = 2.25, french = FALSE) {
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {
@@ -75,29 +76,26 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
     )
   }
 
-  g <- g + geom_point(aes_string(shape = "MP"),
-    position = position_dodge(width = dodge), size = pt_size,
-  ) +
+  g <- g +
     ggplot2::scale_shape_manual(values = mp_shapes) +
-    ylab("Probability") + xlab("Performance metric") +
+    ylab(en2fr("Probability", french, allow_missing = TRUE)) +
+    xlab(en2fr("Performance metric", french, allow_missing = TRUE)) +
     theme(
       panel.grid.major.y = element_line(colour = "grey85"),
       panel.grid.minor.y = element_line(colour = "grey96"),
       axis.ticks.x.bottom = element_blank()
     )
 
-  # temp_dat <- pm
-  # temp_dat$prob[temp_dat$Reference != "True"] <- NA
-  # g <- g + geom_point(data = temp_dat,
-  #   position = position_dodge(width = dodge), size = pt_size, fill = "white",
-  #   pch = 21, na.rm = TRUE
-  # )
-
   if (type == "facet") {
     g <- g + facet_wrap(~scenario)
   }
 
+  g <- g + geom_point(aes_string(x = "pm", y = "prob", shape = "MP"),
+    position = position_dodge(width = dodge), size = pt_size,
+  )
+
   d <- ggplot2::ggplot_build(g)$data[[5]] %>% dplyr::filter(.data$PANEL == 1)
+
   a <- abs(sort(unique(round(diff(d$x), 9))))
   g <- g + annotate(
     geom = "rect", xmin = d$x - a[[1]] / 2, xmax = d$x + a[[1]] / 2,

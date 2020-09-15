@@ -45,6 +45,7 @@ plot_radar <- function(pm_df,
 #'   [get_probs()]. The names will be used as the plot labels.
 #' @param ncol An optional number of columns in the grid.
 #' @param nrow An optional number of rows in the grid.
+#' @param french French?
 #'
 #' @export
 #' @rdname plot_radar
@@ -57,7 +58,7 @@ plot_radar <- function(pm_df,
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_radar_facet(pm)
 plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
-                             ncol = NULL, nrow = NULL, ...) {
+                             ncol = NULL, nrow = NULL, french = FALSE, ...) {
   if (!is.list(pm_df_list)) {
     stop("`pm_df_list` must be a list of data frames from `get_probs()`.",
       call. = FALSE
@@ -133,7 +134,7 @@ plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
     )
   }
 
-  g <- g + ggplot2::labs(colour = "MP", lty = "Reference")
+  g <- g + ggplot2::labs(colour = en2fr("MP", french), lty = en2fr("Reference", french, allow_missing = TRUE))
   g <- g + ggplot2::theme(strip.text = element_text(size = 11, face = "bold"))
 
   if (!is.null(custom_pal)) {

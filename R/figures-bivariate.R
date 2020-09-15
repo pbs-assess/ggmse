@@ -8,7 +8,7 @@
 #' @param xvar The performance metric for the x axis (as character).
 #' @param yvar The performance metric for the y axis (as character).
 #' @param custom_pal An optional custom color palette. Should be a named
-#'   character victor.
+#'   character vector.
 #' @param mp An optional character vector of MPs to include. By default includes
 #'   all.
 #'

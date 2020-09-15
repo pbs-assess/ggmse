@@ -10,6 +10,7 @@
 #'   starting in year 2: `function(x) seq(2, x, 2))`. `x` represents the total
 #'   number of years.
 #' @param quantiles Probability quantiles to show.
+#' @param french French?
 #'
 #' @export
 #' @importFrom ggplot2 facet_grid scale_colour_brewer
@@ -24,7 +25,8 @@
 plot_index <- function(object_list, n_samples = 4, seed = 42,
                        type = c("Ind", "AddInd"),
                        omit_index_fn = function(x) NULL,
-                       quantiles = c(0.025, 0.975)) {
+                       quantiles = c(0.025, 0.975),
+                       french = FALSE) {
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"
@@ -72,8 +74,8 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
     facet_grid(mp_name ~ scenario) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
     theme_pbs() +
-    ylab("Index value") +
-    xlab("Year") +
+    ylab(en2fr("Index value", french, allow_missing = TRUE)) +
+    xlab(en2fr("Year", french, allow_missing = TRUE)) +
     guides(colour = FALSE)
 
   g

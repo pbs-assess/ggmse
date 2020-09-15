@@ -5,6 +5,7 @@
 #'   ordered by the order of the survey names.
 #' @param sample_n The number of SRA samples to plot.
 #' @param alpha Transparency
+#' @param french French?
 #'
 #' @return A ggplot2 object.
 #' @export
@@ -25,7 +26,8 @@
 #' names(fits) <- c("Sc 1", "Sc 2")
 #' plot_index_fits(fits, survey_names = c("a"), alpha = 0.3)
 plot_index_fits <- function(sra_list, survey_names,
-                           sample_n = min(c(100, sra_list[[1]]@OM@nsim)), alpha = 0.05) {
+                           sample_n = min(c(100, sra_list[[1]]@OM@nsim)), alpha = 0.05,
+                           french = FALSE) {
   surv <- purrr::map2_dfr(sra_list, names(sra_list), get_sra_survey,
     survey_names = survey_names
   )
@@ -89,7 +91,8 @@ plot_index_fits <- function(sra_list, survey_names,
     ) +
     facet_grid(vars(scenario), vars(survey)) +
     theme_pbs() +
-    ylab("Scaled index value") + xlab("Year")
+    ylab(en2fr("Scaled index value", french, allow_missing = TRUE)) +
+    xlab(en2fr("Year", french, allow_missing = TRUE))
 }
 
 get_sra_survey <- function(sra, sc_name, survey_names) {

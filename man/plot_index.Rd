@@ -10,7 +10,8 @@ plot_index(
   seed = 42,
   type = c("Ind", "AddInd"),
   omit_index_fn = function(x) NULL,
-  quantiles = c(0.025, 0.975)
+  quantiles = c(0.025, 0.975),
+  french = FALSE
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ starting in year 2: \verb{function(x) seq(2, x, 2))}. \code{x} represents the to
 number of years.}
 
 \item{quantiles}{Probability quantiles to show.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot object

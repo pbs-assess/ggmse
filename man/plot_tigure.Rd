@@ -21,7 +21,7 @@ plot_tigure(
 plot_tigure_facet(pm_df_list, ncol = NULL, ...)
 }
 \arguments{
-\item{probs_dat}{A data frame as returned from \code{\link[gfdlm:get_probs]{gfdlm::get_probs()}}.}
+\item{probs_dat}{A data frame as returned from \code{\link[=get_probs]{get_probs()}}.}
 
 \item{digits}{How many decimal places to show in the tiles for the values}
 

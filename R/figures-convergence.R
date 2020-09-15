@@ -16,6 +16,7 @@
 #' @param satisficed An optional named numeric vector. The names correspond to
 #'   the performance metrics and the values correspond to the threshold.
 #'   This will add a horizontal line on the relevant panels.
+#' @param french French?
 #'
 #' @return A ggplot2 plot.
 #' @export
@@ -26,7 +27,7 @@
 plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
                              label_gap = 1.15, custom_pal = NULL,
                              ylim = c(min(df$value), 1),
-                             satisficed = NULL) {
+                             satisficed = NULL, french = FALSE) {
 
   if (!is.list(object_list)) {
     object_list <- list("Scenario 1" = object_list)
@@ -63,8 +64,9 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
     ggplot2::geom_line() +
     theme_pbs() +
     ggplot2::labs(
-      x = "Cumulative replicate", y = "Performance metric probability",
-      color = "MP"
+      x = en2fr("Cumulative replicate", french, allow_missing = TRUE),
+      y = en2fr("Performance metric probability", french, allow_missing = TRUE),
+      color = en2fr("MP", french, allow_missing = TRUE)
     )
   if (length(object_list) > 1) {
     g <- g + ggplot2::facet_grid(pm_name ~ scenario)

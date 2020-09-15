@@ -10,7 +10,8 @@ plot_dots(
   custom_pal = NULL,
   dodge = 0.6,
   bar_alpha = 0.2,
-  pt_size = 2.25
+  pt_size = 2.25,
+  french = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ character vector}
 \item{bar_alpha}{Background bar transparency. 0 will omit.}
 
 \item{pt_size}{Point size.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot2 object

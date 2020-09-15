@@ -10,7 +10,8 @@ plot_convergence(
   label_gap = 1.15,
   custom_pal = NULL,
   ylim = c(min(df$value), 1),
-  satisficed = NULL
+  satisficed = NULL,
+  french = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ value (via lazy evaluation) and 1.}
 \item{satisficed}{An optional named numeric vector. The names correspond to
 the performance metrics and the values correspond to the threshold.
 This will add a horizontal line on the relevant panels.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot2 plot.

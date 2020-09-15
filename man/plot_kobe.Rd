@@ -17,7 +17,8 @@ plot_kobe(
   x_ref_lines = c(0.4, 0.8),
   y_ref_lines = 1,
   show_contours = TRUE,
-  return_data = FALSE
+  return_data = FALSE,
+  french = TRUE
 )
 
 plot_kobe_grid(object_list, ...)
@@ -35,9 +36,9 @@ plot_kobe_grid(object_list, ...)
 
 \item{n}{As defined in \code{\link[MASS:kde2d]{MASS::kde2d()}}.}
 
-\item{xlim}{The \code{\link[ggplot2:xlim]{ggplot2::xlim()}} values for x-axis limits.}
+\item{xlim}{The \code{\link[ggplot2:lims]{ggplot2::xlim()}} values for x-axis limits.}
 
-\item{ylim}{The \code{\link[ggplot2:ylim]{ggplot2::ylim()}} values for y-axis limits.}
+\item{ylim}{The \code{\link[ggplot2:lims]{ggplot2::ylim()}} values for y-axis limits.}
 
 \item{x_ref_lines}{A vector of vertical lines to draw as reference point lines.}
 
@@ -46,6 +47,8 @@ plot_kobe_grid(object_list, ...)
 \item{show_contours}{Logical: show contour lines?}
 
 \item{return_data}{Logical: return the data instead of the plot?}
+
+\item{french}{French?}
 
 \item{object_list}{A list of DLMtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}

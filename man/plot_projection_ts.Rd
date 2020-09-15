@@ -13,7 +13,8 @@ plot_projection_ts(
   bbmsy_zones = c(0.4, 0.8),
   catch_reference = 1,
   clip_ylim = NULL,
-  seed = 42
+  seed = 42,
+  french = FALSE
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ across the panels. Useful if there are outlying timeseries that distort
 the y axis limits.}
 
 \item{seed}{The seed to set before drawing samples.}
+
+\item{french}{French?}
 }
 \value{
 ggplot object

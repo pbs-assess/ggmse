@@ -15,7 +15,7 @@ plot_tradeoff(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL)
 \item{yvar}{The performance metric for the y axis (as character).}
 
 \item{custom_pal}{An optional custom color palette. Should be a named
-character victor.}
+character vector.}
 
 \item{mp}{An optional character vector of MPs to include. By default includes
 all.}

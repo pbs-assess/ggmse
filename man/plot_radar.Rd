@@ -7,15 +7,22 @@
 \usage{
 plot_radar(pm_df, palette = "Set2", custom_pal = NULL, ...)
 
-plot_radar_facet(pm_df_list, custom_pal = NULL, ncol = NULL, nrow = NULL, ...)
+plot_radar_facet(
+  pm_df_list,
+  custom_pal = NULL,
+  ncol = NULL,
+  nrow = NULL,
+  french = FALSE,
+  ...
+)
 }
 \arguments{
 \item{pm_df}{A performance metric data frame from \code{\link[=get_probs]{get_probs()}}.}
 
-\item{palette}{A palette color as recognized by \code{\link[ggplot2:scale_color_brewer]{ggplot2::scale_color_brewer()}}}
+\item{palette}{A palette color as recognized by \code{\link[ggplot2:scale_brewer]{ggplot2::scale_color_brewer()}}}
 
 \item{custom_pal}{A named character vector of custom colors to pass to
-\code{\link[ggplot2:scale_color_manual]{ggplot2::scale_color_manual()}}. This argument is used in favour of
+\code{\link[ggplot2:scale_manual]{ggplot2::scale_color_manual()}}. This argument is used in favour of
 \code{palette} if specified.}
 
 \item{...}{Other arguments to pass to \code{\link[ggspider:spider_web]{ggspider::spider_web()}} or \code{\link[=plot_radar]{plot_radar()}}.}
@@ -26,6 +33,8 @@ plot_radar_facet(pm_df_list, custom_pal = NULL, ncol = NULL, nrow = NULL, ...)
 \item{ncol}{An optional number of columns in the grid.}
 
 \item{nrow}{An optional number of rows in the grid.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot object

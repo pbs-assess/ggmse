@@ -18,6 +18,7 @@
 #'   across the panels. Useful if there are outlying timeseries that distort
 #'   the y axis limits.
 #' @param seed The seed to set before drawing samples.
+#' @param french French?
 #'
 #' @return ggplot object
 #' @importFrom rlang .data
@@ -35,7 +36,7 @@ plot_projection_ts <- function(object,
                                bbmsy_zones = c(0.4, 0.8),
                                catch_reference = 1,
                                clip_ylim = NULL,
-                               seed = 42) {
+                               seed = 42, french = FALSE) {
 
   if (is.null(object@OM$CurrentYr[[1]])) {
     warning(
@@ -114,8 +115,8 @@ plot_projection_ts <- function(object,
     g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
   }
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
-    ggplot2::ylab("Value") +
-    ggplot2::xlab("Year") +
+    ggplot2::ylab(en2fr("Value", french)) +
+    ggplot2::xlab(en2fr("Year", french)) +
     theme_pbs() +
     ggplot2::facet_grid(mp_name ~ type_labels, labeller = ggplot2::label_parsed) +
     ggplot2::coord_cartesian(

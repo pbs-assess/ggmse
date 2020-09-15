@@ -17,6 +17,8 @@
 #' @param catch_ylim An optional numeric factor of length two that represents
 #'   the y axis limits for the catch panels.
 #' @param msy_ylim SSB and F column y limits.
+#' @param french French?
+#'
 #' @return A ggplot object
 #' @importFrom ggplot2 scale_fill_brewer scale_colour_brewer
 #' @export
@@ -36,7 +38,8 @@ plot_scenario_projections <- function(
                                       catch_breaks = NULL,
                                       catch_labels = NULL,
                                       catch_ylim = NULL,
-                                      msy_ylim = c(0, 4.5)) {
+                                      msy_ylim = c(0, 4.5),
+                                      french = FALSE) {
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"
@@ -108,7 +111,7 @@ plot_scenario_projections <- function(
     ) +
     theme_pbs() +
     scale_colour_brewer(palette = palette) +
-    scale_fill_brewer(palette = palette) + ylab("Catch") + xlab("Year") +
+    scale_fill_brewer(palette = palette) + ylab(en2fr("Catch", french)) + xlab(en2fr("Year", french)) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
     coord_cartesian(expand = FALSE)
@@ -142,7 +145,7 @@ plot_scenario_projections <- function(
       legend.box.margin = ggplot2::margin(0.2, 0.2, 12, .2),
       legend.position = "bottom"
     ) +
-      labs(colour = "Scenario", fill = "Scenario")
+      labs(colour = en2fr("Scenario", french), fill = en2fr("Scenario", french))
   )
 
   cowplot::plot_grid(g3, legend, rel_heights = c(4, .2), nrow = 2)

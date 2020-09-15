@@ -71,6 +71,7 @@ calc_contour_lines <- function(d,
 #' @param y_ref_lines A vector of horizontal lines to draw as reference point lines.
 #' @param show_contours Logical: show contour lines?
 #' @param return_data Logical: return the data instead of the plot?
+#' @param french French?
 #'
 #' @return A ggplot object
 #' @importFrom reshape2 melt
@@ -94,7 +95,8 @@ plot_kobe <- function(object,
                       x_ref_lines = c(0.4, 0.8),
                       y_ref_lines = 1,
                       show_contours = TRUE,
-                      return_data = FALSE) {
+                      return_data = FALSE,
+                      french = TRUE) {
 
   if (length(object@MPs) > 1) {
     ffmsy <- object@F_FMSY[, , yend] %>%
@@ -150,7 +152,8 @@ plot_kobe <- function(object,
   g <- g + theme_pbs() +
     ggplot2::facet_wrap(~mp_name) +
     labs(
-      colour = "Prob.\ndensity", x = expression(B / B[MSY]),
+      colour = if (!french) "Prob.\ndensity" else "densité\nde\nprobabilité",
+      x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
     ggplot2::coord_equal(

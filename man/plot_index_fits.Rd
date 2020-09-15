@@ -8,7 +8,8 @@ plot_index_fits(
   sra_list,
   survey_names,
   sample_n = min(c(100, sra_list[[1]]@OM@nsim)),
-  alpha = 0.05
+  alpha = 0.05,
+  french = FALSE
 )
 }
 \arguments{
@@ -20,6 +21,8 @@ ordered by the order of the survey names.}
 \item{sample_n}{The number of SRA samples to plot.}
 
 \item{alpha}{Transparency}
+
+\item{french}{French?}
 }
 \value{
 A ggplot2 object.

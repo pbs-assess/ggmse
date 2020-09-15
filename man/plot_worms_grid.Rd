@@ -4,7 +4,12 @@
 \alias{plot_worms_grid}
 \title{Make a Kobe "worm" timeseries plot with uncertainty}
 \usage{
-plot_worms_grid(object_list, prob = 0.5, include_historical = TRUE)
+plot_worms_grid(
+  object_list,
+  prob = 0.5,
+  include_historical = TRUE,
+  french = FALSE
+)
 }
 \arguments{
 \item{object_list}{A named list of MSE objects from DLMtool.
@@ -14,6 +19,8 @@ Names become scenario names.}
 interquartile range.}
 
 \item{include_historical}{Logical: include the historical time?}
+
+\item{french}{French?}
 }
 \value{
 A ggplot object

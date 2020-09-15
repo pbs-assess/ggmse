@@ -12,7 +12,8 @@ plot_scenario_projections(
   catch_breaks = NULL,
   catch_labels = NULL,
   catch_ylim = NULL,
-  msy_ylim = c(0, 4.5)
+  msy_ylim = c(0, 4.5),
+  french = FALSE
 )
 }
 \arguments{
@@ -40,6 +41,8 @@ for dealing with large numbers.}
 the y axis limits for the catch panels.}
 
 \item{msy_ylim}{SSB and F column y limits.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot object

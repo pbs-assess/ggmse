@@ -5,10 +5,12 @@
 #' @param prob Tail probability for the quantiles. E.g., 0.5 refers to an
 #'   interquartile range.
 #' @param include_historical Logical: include the historical time?
+#' @param french French?
 #'
 #' @return A ggplot object
 #' @importFrom ggplot2 geom_polygon scale_fill_viridis_c scale_colour_viridis_c
 #'   coord_fixed scale_shape_manual
+#' @importFrom rosettafish en2fr
 #' @export
 #'
 #' @examples
@@ -18,7 +20,7 @@
 #' names(x) <- c("Scenario 1", "Scenario 2")
 #' plot_worms_grid(x)
 plot_worms_grid <- function(object_list, prob = 0.5,
-                       include_historical = TRUE) {
+                       include_historical = TRUE, french = FALSE) {
   if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
@@ -92,8 +94,8 @@ plot_worms_grid <- function(object_list, prob = 0.5,
     geom_vline(xintercept = c(0.4, 0.8), lty = 2, alpha = 0.2, lwd = 0.5) +
     geom_hline(yintercept = 1, lty = 2, alpha = 0.2, lwd = 0.5) +
     labs(
-      fill = "Year", colour = "Year", x = expression(B / B[MSY]),
-      y = expression(F / F[MSY]), pch = "Year"
+      fill = en2fr("Year", french), colour = en2fr("Year", french), x = expression(B / B[MSY]),
+      y = expression(F / F[MSY]), pch = en2fr("Year", french)
     ) +
     geom_point(data = other, mapping = aes(
       x = b_m, y = f_m,

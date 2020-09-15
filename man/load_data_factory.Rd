@@ -7,7 +7,7 @@
 load_data_factory(species_name, file)
 }
 \arguments{
-\item{species_name}{The species name as can be used in extraction with \link[gfdata:get_commercial_samples]{gfdata::get_commercial_samples}
+\item{species_name}{The species name as can be used in extraction with \link[gfdata:get_data]{gfdata::get_commercial_samples}
 and similar functions}
 
 \item{file}{The filename to load from}
