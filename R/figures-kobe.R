@@ -152,7 +152,7 @@ plot_kobe <- function(object,
   g <- g + theme_pbs() +
     ggplot2::facet_wrap(~mp_name) +
     labs(
-      colour = if (!french) "Prob.\ndensity" else "densité\nde\nprobabilité",
+      colour = if (!french) "Prob.\ndensity" else sub(" ", "\n", en2fr("Prob. density")),
       x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
