@@ -21,7 +21,7 @@ plot_kobe(
   french = TRUE
 )
 
-plot_kobe_grid(object_list, ...)
+plot_kobe_grid(object_list, french = FALSE, ...)
 }
 \arguments{
 \item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}

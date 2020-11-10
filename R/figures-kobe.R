@@ -189,7 +189,7 @@ plot_kobe <- function(object,
 #' x[[2]] <- mse_example
 #' names(x) <- c("Scenario 1", "Scenario 2")
 #' plot_kobe_grid(x)
-plot_kobe_grid <- function(object_list, ...) {
+plot_kobe_grid <- function(object_list, french = FALSE, ...) {
   gdat <- purrr::map(object_list, plot_kobe, return_data = TRUE, ...)
   df <- purrr::map_dfr(gdat, "df", .id = "scenario")
   contour_lines <- purrr::map_dfr(gdat, "contour_lines", .id = "scenario")
