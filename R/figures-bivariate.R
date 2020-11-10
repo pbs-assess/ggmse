@@ -11,6 +11,7 @@
 #'   character vector.
 #' @param mp An optional character vector of MPs to include. By default includes
 #'   all.
+#' @param french French
 #'
 #' @return A ggplot2 object
 #' @export
@@ -19,7 +20,8 @@
 #' probs <- list(get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY"))
 #' names(probs) <- "Scenario 1"
 #' plot_tradeoff(probs, "P40", "LTY")
-plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) {
+plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
+                          french = FALSE) {
   df <- purrr::map_df(
     names(pm_df_list),
     ~ dplyr::bind_cols(pm_df_list[[.x]],
@@ -70,6 +72,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL) 
   g <- g + ggplot2::theme(
     panel.grid.major.y = ggplot2::element_line(colour = "grey85"),
     panel.grid.major.x = ggplot2::element_line(colour = "grey85")
-  )
+  ) +
+    labs(shape = en2fr("MP", french), colour = en2fr("MP", french), fill = en2fr("MP", french))
   g
 }

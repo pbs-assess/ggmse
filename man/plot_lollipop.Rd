@@ -4,7 +4,13 @@
 \alias{plot_lollipop}
 \title{Make lollipop plot}
 \usage{
-plot_lollipop(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25)
+plot_lollipop(
+  pm_df_list,
+  custom_pal = NULL,
+  dodge = 0.6,
+  pt_size = 2.25,
+  french = FALSE
+)
 }
 \arguments{
 \item{pm_df_list}{A named list of performance metric data frames from
@@ -16,7 +22,9 @@ character vector}
 
 \item{dodge}{The amount to separate or "dodge" the lollipop lines.}
 
-\item{pt_size}{Point size.}
+\item{pt_size}{Point size}
+
+\item{french}{French}
 }
 \value{
 A ggplot2 object

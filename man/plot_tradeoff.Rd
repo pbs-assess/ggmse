@@ -4,7 +4,14 @@
 \alias{plot_tradeoff}
 \title{Make a trade-off scatterplot}
 \usage{
-plot_tradeoff(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL)
+plot_tradeoff(
+  pm_df_list,
+  xvar,
+  yvar,
+  custom_pal = NULL,
+  mp = NULL,
+  french = FALSE
+)
 }
 \arguments{
 \item{pm_df_list}{A named list of performance metric data frames from
@@ -19,6 +26,8 @@ character vector.}
 
 \item{mp}{An optional character vector of MPs to include. By default includes
 all.}
+
+\item{french}{French}
 }
 \value{
 A ggplot2 object

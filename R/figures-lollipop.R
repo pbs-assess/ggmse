@@ -6,7 +6,8 @@
 #' @param custom_pal An optional custom color palette. Should be a named
 #'   character vector
 #' @param dodge The amount to separate or "dodge" the lollipop lines.
-#' @param pt_size Point size.
+#' @param pt_size Point size
+#' @param french French
 #' @return A ggplot2 object
 #' @importFrom ggplot2 geom_linerange coord_flip position_dodge annotate
 #' @export
@@ -19,7 +20,8 @@
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_lollipop(pm)
 #' plot_lollipop(pm[1]) + ggplot2::scale_colour_brewer(palette = "Set2")
-plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25) {
+plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25,
+                          french = FALSE) {
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {
@@ -75,7 +77,7 @@ plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 
   g <- g + theme(
     panel.grid.major.x = element_line(colour = "grey85")
   ) +
-    xlab("Performance metric") + ylab("Probability") +
+    xlab(en2fr("Performance metric", french)) + ylab(en2fr("Probability", french)) +
     guides(
       col = guide_legend(order = 1, override.aes = list(pch = 19)),
       shape = guide_legend(override.aes = list(colour = "grey50"))
