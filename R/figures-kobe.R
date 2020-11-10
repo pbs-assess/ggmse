@@ -211,7 +211,7 @@ plot_kobe_grid <- function(object_list, ...) {
   g <- g + theme_pbs() +
     ggplot2::facet_grid(mp_name ~ scenario) +
     labs(
-      colour = "Prob.\ndensity", x = expression(B / B[MSY]),
+      colour = sub(" ", "\n", en2fr("Prob. density", french)), x = expression(B / B[MSY]),
       y = expression(F / F[MSY])
     ) +
     ggplot2::coord_equal(
