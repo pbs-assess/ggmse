@@ -64,9 +64,9 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
     ggplot2::geom_line() +
     theme_pbs() +
     ggplot2::labs(
-      x = en2fr("Cumulative replicate", french, allow_missing = TRUE),
-      y = en2fr("Performance metric probability", french, allow_missing = TRUE),
-      color = en2fr("MP", french, allow_missing = TRUE)
+      x = en2fr("Cumulative replicate", french),
+      y = en2fr("Performance metric probability", french),
+      color = en2fr("MP", french)
     )
   if (length(object_list) > 1) {
     g <- g + ggplot2::facet_grid(pm_name ~ scenario)

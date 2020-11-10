@@ -94,13 +94,15 @@ plot_dots <- function(pm_df_list, type = c("single", "facet"),
     position = position_dodge(width = dodge), size = pt_size,
   )
 
-  d <- ggplot2::ggplot_build(g)$data[[5]] %>% dplyr::filter(.data$PANEL == 1)
+  temp <- ggplot2::ggplot_build(g)$data
+  d <- temp[[length(temp)]] %>% dplyr::filter(.data$PANEL == 1)
 
-  a <- abs(sort(unique(round(diff(d$x), 9))))
+  a <- sort(abs(sort(unique(round(diff(d$x), 9))))) # minimum gap
   g <- g + annotate(
     geom = "rect", xmin = d$x - a[[1]] / 2, xmax = d$x + a[[1]] / 2,
     ymin = -Inf, ymax = Inf, fill = "grey75", alpha = bar_alpha
-  )
+  ) + labs(colour = en2fr("MP", french), shape = en2fr("MP", french),
+    fill = en2fr("MP", french))
 
   g <- g + coord_cartesian(
     expand = FALSE, ylim = c(0, 1),

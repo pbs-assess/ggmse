@@ -422,12 +422,12 @@ plot_factory <- function(
 
   g$tradeoff_avg <- list(pm_avg) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
-    set_names("Average performance") %>%
+    set_names(en2fr("Average performance", french)) %>%
     gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_min <- list(pm_min) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
-    set_names("Minimum performance") %>%
+    set_names(en2fr("Minimum performance", french)) %>%
     gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_robset <- pm_df_list_rob %>%
