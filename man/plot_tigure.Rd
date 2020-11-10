@@ -15,7 +15,8 @@ plot_tigure(
   mp_order = NULL,
   satisficed = NULL,
   return_data = FALSE,
-  alpha = 0.6
+  alpha = 0.6,
+  french = FALSE
 )
 
 plot_tigure_facet(pm_df_list, ncol = NULL, ...)
@@ -43,6 +44,8 @@ the performance metrics and the values correspond to the values above which
 returned instead of the plot.}
 
 \item{alpha}{Transparency of underlying colour.}
+
+\item{french}{French?}
 
 \item{pm_df_list}{A named list of performance metric data frames from
 \code{\link[=get_probs]{get_probs()}}. The names will be used as the plot labels.}

@@ -38,6 +38,7 @@
 #'   omit from the plot. See [plot_index()].
 #' @param survey_type Which survey to plot. Passed to [plot_index()].
 #' @param skip_worms Skip the worms plot?
+#' @param french French?
 #'
 #' @return A named list object containing the ggplot objects.
 #' @importFrom purrr set_names
@@ -119,7 +120,8 @@ plot_factory <- function(
                          skip_projections = FALSE,
                          omit_index_fn = function(x) NULL,
                          survey_type = c("Ind", "AddInd"),
-                         skip_worms = FALSE) {
+                         skip_worms = FALSE,
+                         french = FALSE) {
   survey_type <- match.arg(survey_type)
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
@@ -196,19 +198,19 @@ plot_factory <- function(
   g <- list()
 
   g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg,
-    satisficed = satisficed_criteria,
+    satisficed = satisficed_criteria, french = french
   )
   g$tigure_refset_min <- gfdlm::plot_tigure(pm_min,
-    satisficed = satisficed_criteria,
+    satisficed = satisficed_criteria, french = french
   )
 
   g$tigure_refset <- map(pm_df_list, dplyr::filter, MP %in% mp_sat) %>%
     set_names(scenarios_ref_human) %>%
-    plot_tigure_facet(ncol = 2)
+    plot_tigure_facet(ncol = 2, french = french)
 
   g$tigure_robset <- map(pm_df_list_rob, dplyr::filter, MP %in% mp_sat) %>%
     set_names(scenarios_rob_human) %>%
-    plot_tigure_facet()
+    plot_tigure_facet(french = french)
 
   # Convergence ---------------------------------------------------------------
 
@@ -217,7 +219,7 @@ plot_factory <- function(
   g$convergence <- scenarios %>%
     purrr::map(~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
     set_names(scenarios_human) %>%
-    gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal)
+    gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal, french = french)
 
   # Projections ---------------------------------------------------------------
 
@@ -230,7 +232,7 @@ plot_factory <- function(
     g$projections <- map(names(xx), ~ {
       g <- plot_main_projections(xx[[.x]],
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels, catch_ylim = catch_ylim
+        catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
       )
     })
     names(g$projections) <- names(scenarios)
@@ -240,7 +242,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels, catch_ylim = catch_ylim
+        catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
       )
 
     # Highlighted not satisficed ones:
@@ -249,7 +251,7 @@ plot_factory <- function(
       DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels, catch_ylim = catch_ylim
+        catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
       )
 
     # Scenario projections ----------------------------------------------------
@@ -263,7 +265,7 @@ plot_factory <- function(
       set_names(scenarios_human) %>%
       plot_scenario_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels, catch_ylim = catch_ylim
+        catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
       )
 
     g$projections_scenarios_ref <- map(
@@ -273,7 +275,7 @@ plot_factory <- function(
       set_names(scenarios_ref_human) %>%
       plot_scenario_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, french = french
       )
 
     g$projections_scenarios_rob <- map(
@@ -283,7 +285,7 @@ plot_factory <- function(
       set_names(scenarios_rob_human) %>%
       plot_scenario_projections(
         catch_breaks = catch_breaks,
-        catch_labels = catch_labels
+        catch_labels = catch_labels, french = french
       )
 
     # Index projections -------------------------------------------------------
@@ -296,7 +298,7 @@ plot_factory <- function(
       }
     ) %>%
       set_names(scenarios_human) %>%
-      plot_index(type = survey_type, omit_index_fn = omit_index_fn)
+      plot_index(type = survey_type, omit_index_fn = omit_index_fn, french = french)
   } else {
     progress(text = "", before = "Skipping the projection figures.", after = "")
   }
@@ -309,17 +311,17 @@ plot_factory <- function(
   g$kobe_ref <-
     purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_kobe_grid()
+    gfdlm::plot_kobe_grid(french = french)
 
   g$kobe_rob <-
     purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_kobe_grid()
+    gfdlm::plot_kobe_grid(french = french)
 
   g$kobe <-
     purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_human) %>%
-    gfdlm::plot_kobe_grid()
+    gfdlm::plot_kobe_grid(french = french)
 
 
   # Radar plots ---------------------------------------------------------------
@@ -331,17 +333,17 @@ plot_factory <- function(
   g$radar_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    plot_radar_facet(custom_pal = custom_pal)
+    plot_radar_facet(custom_pal = custom_pal, french = french)
 
   g$radar_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    plot_radar_facet(custom_pal = custom_pal)
+    plot_radar_facet(custom_pal = custom_pal, french = french)
 
   g$radar_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
     list() %>%
-    plot_radar_facet(custom_pal = custom_pal) +
+    plot_radar_facet(custom_pal = custom_pal, french = french) +
     ggplot2::theme(
       strip.background = ggplot2::element_blank(),
       strip.text.x = ggplot2::element_blank()
@@ -350,7 +352,7 @@ plot_factory <- function(
   g$radar_refset_min <- pm_min %>%
     dplyr::filter(MP %in% MPs) %>%
     list() %>%
-    plot_radar_facet(custom_pal = custom_pal) +
+    plot_radar_facet(custom_pal = custom_pal, french = french) +
     ggplot2::theme(
       strip.background = ggplot2::element_blank(),
       strip.text.x = ggplot2::element_blank()
@@ -363,16 +365,16 @@ plot_factory <- function(
   g$dot_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$dot_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$dot_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge, french = french)
 
   # Parallel coordinate plots -------------------------------------------------
 
@@ -381,16 +383,16 @@ plot_factory <- function(
   g$parallel_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal)
+    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
 
   g$parallel_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal)
+    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
 
   g$parallel_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_parallel_coords(type = "single", custom_pal = custom_pal)
+    gfdlm::plot_parallel_coords(type = "single", custom_pal = custom_pal, french = french)
 
   # Lollipops -----------------------------------------------------------------
 
@@ -399,15 +401,15 @@ plot_factory <- function(
   g$lollipops_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$lollipops_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$lollipops_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge)
+    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   # Bivariate trade-off plots -------------------------------------------------
 
@@ -416,22 +418,22 @@ plot_factory <- function(
   g$tradeoff_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_avg <- list(pm_avg) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names("Average performance") %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_min <- list(pm_min) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names("Minimum performance") %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal)
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal) +
+    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french) +
     facet_wrap(~scenario, ncol = 2)
 
   # Psychedelic pyramid worms -------------------------------------------------
@@ -445,34 +447,34 @@ plot_factory <- function(
       d <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_human)
       g$worms_proj <-
-        d %>% plot_worms_grid(include_historical = FALSE) +
+        d %>% plot_worms_grid(include_historical = FALSE, french = french) +
         coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
         scale_x_continuous(breaks = c(0, 1, 2)) +
         scale_y_continuous(breaks = c(0, 1))
       g$worms_hist_proj <-
-        d %>% plot_worms_grid(include_historical = TRUE) +
+        d %>% plot_worms_grid(include_historical = TRUE, french = french) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
 
       d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_ref_human)
       g$worms_proj_ref <-
-        d %>% plot_worms_grid(include_historical = FALSE) +
+        d %>% plot_worms_grid(include_historical = FALSE, french = french) +
         coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
         scale_x_continuous(breaks = c(0, 1, 2)) +
         scale_y_continuous(breaks = c(0, 1))
       g$worms_hist_proj_ref <-
-        d %>% plot_worms_grid(include_historical = TRUE) +
+        d %>% plot_worms_grid(include_historical = TRUE, french = french) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
 
       d <- purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_rob_human)
       g$worms_proj_rob <-
-        d %>% plot_worms_grid(include_historical = FALSE) +
+        d %>% plot_worms_grid(include_historical = FALSE, french = french) +
         coord_fixed(xlim = c(0, 2.5), ylim = c(0, 2), expand = FALSE) +
         scale_x_continuous(breaks = c(0, 1, 2)) +
         scale_y_continuous(breaks = c(0, 1))
       g$worms_hist_proj_rob <-
-        d %>% plot_worms_grid(include_historical = TRUE) +
+        d %>% plot_worms_grid(include_historical = TRUE, french = french) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
 
     })

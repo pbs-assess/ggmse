@@ -75,6 +75,7 @@ get_probs <- function(object,
 #' @param return_data Logical. If `TRUE` then the underlying data frame is
 #'   returned instead of the plot.
 #' @param alpha Transparency of underlying colour.
+#' @param french French?
 #'
 #' @importFrom reshape2 melt
 #' @importFrom gfutilities f
@@ -96,7 +97,8 @@ plot_tigure <- function(probs_dat,
                         mp_order = NULL,
                         satisficed = NULL,
                         return_data = FALSE,
-                        alpha = 0.6) {
+                        alpha = 0.6,
+                        french = FALSE) {
   df <- probs_dat
 
   if (is.null(mp_order)) {

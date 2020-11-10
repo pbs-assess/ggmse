@@ -23,7 +23,8 @@ plot_factory(
   skip_projections = FALSE,
   omit_index_fn = function(x) NULL,
   survey_type = c("Ind", "AddInd"),
-  skip_worms = FALSE
+  skip_worms = FALSE,
+  french = FALSE
 )
 }
 \arguments{
@@ -80,6 +81,8 @@ omit from the plot. See \code{\link[=plot_index]{plot_index()}}.}
 \item{survey_type}{Which survey to plot. Passed to \code{\link[=plot_index]{plot_index()}}.}
 
 \item{skip_worms}{Skip the worms plot?}
+
+\item{french}{French?}
 }
 \value{
 A named list object containing the ggplot objects.

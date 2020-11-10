@@ -10,7 +10,8 @@ plot_main_projections(
   catch_labels = NULL,
   rel_widths = c(2, 1.18),
   msy_ylim = c(0, 4.5),
-  catch_ylim = NULL
+  catch_ylim = NULL,
+  french = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ same width. Figured it out by trial and error.}
 \item{msy_ylim}{SSB and F column y limits.}
 
 \item{catch_ylim}{Catch column y limits.}
+
+\item{french}{French?}
 }
 \value{
 A ggplot2 object

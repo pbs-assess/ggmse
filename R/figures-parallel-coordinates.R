@@ -14,6 +14,7 @@
 #'   grouped. See the example below.
 #' @param rotate_labels Logical: rotate the performance metric labels 90
 #'   degrees?
+#' @param french French?
 #' @importFrom ggplot2 coord_cartesian geom_ribbon guide_legend xlab ylab
 #'   element_line scale_color_manual scale_colour_manual scale_fill_manual theme
 #'   element_text aes_string guide_legend guides
@@ -32,7 +33,8 @@
 plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
                                  custom_pal = NULL,
                                  groups = NULL,
-                                 rotate_labels = type == "facet") {
+                                 rotate_labels = type == "facet",
+                                 french = FALSE) {
   type <- match.arg(type)
 
   df <- purrr::map_df(
@@ -113,7 +115,7 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
     panel.grid.major.x = element_line(colour = "grey85"),
     panel.grid.minor.y = element_line(colour = "grey96")
   ) +
-    xlab("Performance metric") + ylab("Probability") +
+    xlab(en2fr("Performance metric", french)) + ylab(en2fr("Probability", french)) +
     guides(
       col = guide_legend(order = 1),
       fill = guide_legend(order = 1)

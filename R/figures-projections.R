@@ -58,6 +58,9 @@ plot_projection_ts <- function(object,
 
   .type_labels <- gsub("_", "/", unique(d$Type))
   .type_labels <- gsub("MSY", "[MSY]", .type_labels)
+  if (french) {
+    .type_labels <- gsub("Catch", "Prise", .type_labels)
+  }
   # .type_labels <- gsub("B/B\\[MSY\\]", "SSB/SSB[MSY]", .type_labels)
 
   type_df <- data.frame(
@@ -114,6 +117,7 @@ plot_projection_ts <- function(object,
       pull(average_catch)
     g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
   }
+
   g <- g + ggplot2::geom_line(alpha = 0.3, lwd = 0.4) + # sampled lines
     ggplot2::ylab(en2fr("Value", french)) +
     ggplot2::xlab(en2fr("Year", french)) +
@@ -287,6 +291,7 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #'   same width. Figured it out by trial and error.
 #' @param msy_ylim SSB and F column y limits.
 #' @param catch_ylim Catch column y limits.
+#' @param french French?
 #'
 #' @return A ggplot2 object
 #' @export
@@ -300,9 +305,9 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #' )
 plot_main_projections <- function(object,
                                   catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
-                                  msy_ylim = c(0, 4.5), catch_ylim = NULL) {
+                                  msy_ylim = c(0, 4.5), catch_ylim = NULL, french = FALSE) {
   suppressMessages({
-    g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM")) +
+    g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
       ggplot2::theme(
         strip.text.y = ggplot2::element_blank()
@@ -312,7 +317,7 @@ plot_main_projections <- function(object,
 
   g2 <- gfdlm::plot_projection_ts(object,
     type = "C",
-    catch_reference = 1
+    catch_reference = 1, french = french
   ) #+ ggplot2::theme(axis.title.y = ggplot2::element_blank())
 
   if (!is.null(catch_ylim)) {

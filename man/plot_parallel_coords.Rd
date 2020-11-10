@@ -9,7 +9,8 @@ plot_parallel_coords(
   type = c("facet", "single"),
   custom_pal = NULL,
   groups = NULL,
-  rotate_labels = type == "facet"
+  rotate_labels = type == "facet",
+  french = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ grouped. See the example below.}
 
 \item{rotate_labels}{Logical: rotate the performance metric labels 90
 degrees?}
+
+\item{french}{French?}
 }
 \value{
 A ggplot2 object
