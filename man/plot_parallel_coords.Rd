@@ -10,7 +10,7 @@ plot_parallel_coords(
   custom_pal = NULL,
   groups = NULL,
   rotate_labels = type == "facet",
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

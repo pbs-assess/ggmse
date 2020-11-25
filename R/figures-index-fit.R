@@ -27,7 +27,8 @@
 #' plot_index_fits(fits, survey_names = c("a"), alpha = 0.3)
 plot_index_fits <- function(sra_list, survey_names,
                            sample_n = min(c(100, sra_list[[1]]@OM@nsim)), alpha = 0.05,
-                           french = FALSE) {
+                           french = isTRUE(getOption("french"))) {
+
   surv <- purrr::map2_dfr(sra_list, names(sra_list), get_sra_survey,
     survey_names = survey_names
   )

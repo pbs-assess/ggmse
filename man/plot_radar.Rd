@@ -12,7 +12,7 @@ plot_radar_facet(
   custom_pal = NULL,
   ncol = NULL,
   nrow = NULL,
-  french = FALSE,
+  french = isTRUE(getOption("french")),
   ...
 )
 }

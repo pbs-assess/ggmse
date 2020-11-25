@@ -18,10 +18,10 @@ plot_kobe(
   y_ref_lines = 1,
   show_contours = TRUE,
   return_data = FALSE,
-  french = TRUE
+  french = isTRUE(getOption("french"))
 )
 
-plot_kobe_grid(object_list, french = FALSE, ...)
+plot_kobe_grid(object_list, french = isTRUE(getOption("french")), ...)
 }
 \arguments{
 \item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}

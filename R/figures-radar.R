@@ -58,7 +58,8 @@ plot_radar <- function(pm_df,
 #' names(pm) <- c("Scenario 1", "Scenario 2")
 #' plot_radar_facet(pm)
 plot_radar_facet <- function(pm_df_list, custom_pal = NULL,
-                             ncol = NULL, nrow = NULL, french = FALSE, ...) {
+                             ncol = NULL, nrow = NULL,
+                             french = isTRUE(getOption("french")), ...) {
   if (!is.list(pm_df_list)) {
     stop("`pm_df_list` must be a list of data frames from `get_probs()`.",
       call. = FALSE

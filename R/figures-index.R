@@ -26,7 +26,8 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
                        type = c("Ind", "AddInd"),
                        omit_index_fn = function(x) NULL,
                        quantiles = c(0.025, 0.975),
-                       french = FALSE) {
+                       french = isTRUE(getOption("french"))) {
+
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"

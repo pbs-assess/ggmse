@@ -8,7 +8,7 @@ plot_worms_grid(
   object_list,
   prob = 0.5,
   include_historical = TRUE,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

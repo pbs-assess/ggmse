@@ -24,7 +24,7 @@ plot_factory(
   omit_index_fn = function(x) NULL,
   survey_type = c("Ind", "AddInd"),
   skip_worms = FALSE,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

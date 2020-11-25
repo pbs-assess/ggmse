@@ -11,7 +11,7 @@ plot_main_projections(
   rel_widths = c(2, 1.18),
   msy_ylim = c(0, 4.5),
   catch_ylim = NULL,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

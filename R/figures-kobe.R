@@ -96,7 +96,7 @@ plot_kobe <- function(object,
                       y_ref_lines = 1,
                       show_contours = TRUE,
                       return_data = FALSE,
-                      french = TRUE) {
+                      french = isTRUE(getOption("french"))) {
 
   if (length(object@MPs) > 1) {
     ffmsy <- object@F_FMSY[, , yend] %>%
@@ -193,7 +193,7 @@ plot_kobe <- function(object,
 #' x[[2]] <- mse_example
 #' names(x) <- c("Scenario 1", "Scenario 2")
 #' plot_kobe_grid(x)
-plot_kobe_grid <- function(object_list, french = FALSE, ...) {
+plot_kobe_grid <- function(object_list, french = isTRUE(getOption("french")), ...) {
   gdat <- purrr::map(object_list, plot_kobe, return_data = TRUE, ...)
   df <- purrr::map_dfr(gdat, "df", .id = "scenario")
   contour_lines <- purrr::map_dfr(gdat, "contour_lines", .id = "scenario")

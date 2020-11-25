@@ -11,7 +11,7 @@ plot_convergence(
   custom_pal = NULL,
   ylim = c(min(df$value), 1),
   satisficed = NULL,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

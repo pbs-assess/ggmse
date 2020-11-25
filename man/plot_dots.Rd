@@ -11,7 +11,7 @@ plot_dots(
   dodge = 0.6,
   bar_alpha = 0.2,
   pt_size = 2.25,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

@@ -9,7 +9,7 @@ plot_index_fits(
   survey_names,
   sample_n = min(c(100, sra_list[[1]]@OM@nsim)),
   alpha = 0.05,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

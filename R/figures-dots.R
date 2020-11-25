@@ -25,7 +25,9 @@
 #' plot_dots(pm, type = "facet")
 plot_dots <- function(pm_df_list, type = c("single", "facet"),
   custom_pal = NULL, dodge = 0.6, bar_alpha = 0.2,
-  pt_size = 2.25, french = FALSE) {
+  pt_size = 2.25,
+  french = isTRUE(getOption("french"))) {
+
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {

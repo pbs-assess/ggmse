@@ -98,7 +98,8 @@ plot_tigure <- function(probs_dat,
                         satisficed = NULL,
                         return_data = FALSE,
                         alpha = 0.6,
-                        french = FALSE) {
+                        french = isTRUE(getOption("french"))) {
+
   df <- probs_dat
 
   if (is.null(mp_order)) {

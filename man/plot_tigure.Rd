@@ -16,7 +16,7 @@ plot_tigure(
   satisficed = NULL,
   return_data = FALSE,
   alpha = 0.6,
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 
 plot_tigure_facet(pm_df_list, ncol = NULL, ...)

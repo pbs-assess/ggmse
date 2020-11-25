@@ -11,7 +11,7 @@ plot_index(
   type = c("Ind", "AddInd"),
   omit_index_fn = function(x) NULL,
   quantiles = c(0.025, 0.975),
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

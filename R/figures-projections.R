@@ -314,7 +314,9 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #' )
 plot_main_projections <- function(object,
                                   catch_breaks = NULL, catch_labels = NULL, rel_widths = c(2, 1.18),
-                                  msy_ylim = c(0, 4.5), catch_ylim = NULL, french = FALSE) {
+                                  msy_ylim = c(0, 4.5), catch_ylim = NULL,
+                                  french = isTRUE(getOption("french"))) {
+
   suppressMessages({
     g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +

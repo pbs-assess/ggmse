@@ -39,7 +39,8 @@ plot_scenario_projections <- function(
                                       catch_labels = NULL,
                                       catch_ylim = NULL,
                                       msy_ylim = c(0, 4.5),
-                                      french = FALSE) {
+                                      french = isTRUE(getOption("french"))) {
+
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"

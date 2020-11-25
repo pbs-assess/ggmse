@@ -13,7 +13,7 @@ plot_scenario_projections(
   catch_labels = NULL,
   catch_ylim = NULL,
   msy_ylim = c(0, 4.5),
-  french = FALSE
+  french = isTRUE(getOption("french"))
 )
 }
 \arguments{

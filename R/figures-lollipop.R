@@ -21,7 +21,8 @@
 #' plot_lollipop(pm)
 #' plot_lollipop(pm[1]) + ggplot2::scale_colour_brewer(palette = "Set2")
 plot_lollipop <- function(pm_df_list, custom_pal = NULL, dodge = 0.6, pt_size = 2.25,
-                          french = FALSE) {
+                          french = isTRUE(getOption("french"))) {
+
   if (!is.data.frame(pm_df_list)) {
     df <- bind_rows(pm_df_list, .id = "scenario")
   } else {

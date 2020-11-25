@@ -34,7 +34,8 @@ plot_parallel_coords <- function(pm_df_list, type = c("facet", "single"),
                                  custom_pal = NULL,
                                  groups = NULL,
                                  rotate_labels = type == "facet",
-                                 french = FALSE) {
+                                 french = isTRUE(getOption("french"))) {
+
   type <- match.arg(type)
 
   df <- purrr::map_df(

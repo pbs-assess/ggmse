@@ -27,7 +27,8 @@
 plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
                              label_gap = 1.15, custom_pal = NULL,
                              ylim = c(min(df$value), 1),
-                             satisficed = NULL, french = FALSE) {
+                             satisficed = NULL,
+                             french = isTRUE(getOption("french"))) {
 
   if (!is.list(object_list)) {
     object_list <- list("Scenario 1" = object_list)

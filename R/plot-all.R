@@ -121,8 +121,9 @@ plot_factory <- function(
                          omit_index_fn = function(x) NULL,
                          survey_type = c("Ind", "AddInd"),
                          skip_worms = FALSE,
-                         french = FALSE) {
-  survey_type <- match.arg(survey_type)
+                         french = isTRUE(getOption("french"))) {
+
+    survey_type <- match.arg(survey_type)
   if (!is.list(mse_list)) {
     stop("`mse_list` must be a list.", call. = FALSE)
   }
