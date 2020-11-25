@@ -86,6 +86,11 @@ plot_scenario_projections <- function(
   lines <- dplyr::bind_rows(lines, data.frame(value = 1,
     Type = "F/F[MSY]", stringsAsFactors = FALSE))
 
+  if (french) {
+    bbmsy_ffmsy$Type <- gsub("MSY", en2fr("MSY"), bbmsy_ffmsy$Type)
+    lines$Type <- gsub("MSY", en2fr("MSY"), lines$Type)
+    catch$Type <- gsub("Catch", en2fr("Catch"), catch$Type)
+  }
   g1 <- bbmsy_ffmsy %>%
     ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
     geom_line(na.rm = TRUE) +
@@ -100,7 +105,8 @@ plot_scenario_projections <- function(
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
     ggplot2::geom_hline(data = lines, mapping = aes_string(yintercept = "value"),
-      alpha = 0.2, lty = 2, lwd = 0.5)
+      alpha = 0.2, lty = 2, lwd = 0.5) +
+    ylab(en2fr("Value", french)) + xlab(en2fr("Year", french))
 
   g2 <- catch %>%
     ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
@@ -111,7 +117,7 @@ plot_scenario_projections <- function(
     ) +
     theme_pbs() +
     scale_colour_brewer(palette = palette) +
-    scale_fill_brewer(palette = palette) + ylab(en2fr("Catch", french)) + xlab(en2fr("Year", french)) +
+    scale_fill_brewer(palette = palette) + ylab(en2fr("Value", french)) + xlab(en2fr("Year", french)) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
     coord_cartesian(expand = FALSE)

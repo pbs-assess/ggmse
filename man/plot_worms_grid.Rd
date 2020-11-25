@@ -28,6 +28,14 @@ A ggplot object
 \description{
 Make a Kobe "worm" timeseries plot with uncertainty
 }
+\details{
+Note that if you receive an error such as
+\verb{Error: vector memory exhausted (limit reached?)},
+consider starting a fresh R session of removing
+any large objects from memory. Also,
+try adding \verb{R_MAX_VSIZE=64Gb} (or pick some reasonable large value)
+to your .Renviron file. \code{usethis::edit_r_environ()}
+}
 \examples{
 x <- list()
 x[[1]] <- mse_example

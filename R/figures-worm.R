@@ -13,6 +13,14 @@
 #' @importFrom rosettafish en2fr
 #' @export
 #'
+#' @details
+#' Note that if you receive an error such as
+#' `Error: vector memory exhausted (limit reached?)`,
+#' consider starting a fresh R session of removing
+#' any large objects from memory. Also,
+#' try adding `R_MAX_VSIZE=64Gb` (or pick some reasonable large value)
+#' to your .Renviron file. `usethis::edit_r_environ()`
+#'
 #' @examples
 #' x <- list()
 #' x[[1]] <- mse_example
@@ -79,6 +87,9 @@ plot_worms_grid <- function(object_list, prob = 0.5,
   poly_df <- purrr::map_dfr(out, "poly_df", .id = "scenario")
   if (!include_historical) other <- filter(other, real_year >= this_year)
 
+  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[FRMS])
+  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[FRMS])
+
   g <- dd %>%
     ggplot(aes(b_m, f_m, colour = real_year)) +
     geom_polygon(aes(x = x, y = y, fill = real_year, group = real_year),
@@ -94,8 +105,8 @@ plot_worms_grid <- function(object_list, prob = 0.5,
     geom_vline(xintercept = c(0.4, 0.8), lty = 2, alpha = 0.2, lwd = 0.5) +
     geom_hline(yintercept = 1, lty = 2, alpha = 0.2, lwd = 0.5) +
     labs(
-      fill = en2fr("Year", french), colour = en2fr("Year", french), x = expression(B / B[MSY]),
-      y = expression(F / F[MSY]), pch = en2fr("Year", french)
+      fill = en2fr("Year", french), colour = en2fr("Year", french), x = .xlab,
+      y = .ylab, pch = en2fr("Year", french)
     ) +
     geom_point(data = other, mapping = aes(
       x = b_m, y = f_m,

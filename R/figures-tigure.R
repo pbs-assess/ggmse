@@ -161,7 +161,7 @@ plot_tigure <- function(probs_dat,
       ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01)
     )
 
-  suppressWarnings({g <- g + ggplot2::theme(axis.text.y = element_text(color = lab_cols))})
+  g <- g + ggplot2::theme(axis.text.y = element_text(color = lab_cols))
   g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
 
   if (!is.null(satisficed)) {
