@@ -89,6 +89,15 @@ plot_projection_ts <- function(object,
     lines$type_labels <- factor(lines$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
   }
 
+  if (french && all(type == c("SSB", "FM"))) {
+    d$type_labels <- gsub("MSY", en2fr("MSY"), d$type_labels)
+    d$type_labels <- factor(d$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+    lines$type_labels <- gsub("MSY", en2fr("MSY"), lines$type_labels)
+    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+    quantiles$type_labels <- gsub("MSY", en2fr("MSY"), quantiles$type_labels)
+    quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+  }
+
   g <- ggplot(d, aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
@@ -315,7 +324,7 @@ plot_main_projections <- function(object,
       )
   })
 
-  g2 <- gfdlm::plot_projection_ts(object,
+  g2 <- plot_projection_ts(object,
     type = "C",
     catch_reference = 1, french = french
   ) #+ ggplot2::theme(axis.title.y = ggplot2::element_blank())

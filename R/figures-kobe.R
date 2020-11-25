@@ -149,12 +149,16 @@ plot_kobe <- function(object,
       aes_string(color = "alpha", group = "as.factor(alpha)"), alpha = 0.65, lwd = 0.75
     ) + scale
   }
+
+  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[RMS])
+  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[RMS])
+
   g <- g + theme_pbs() +
     ggplot2::facet_wrap(~mp_name) +
     labs(
       colour = if (!french) "Prob.\ndensity" else sub(" ", "\n", en2fr("Prob. density")),
-      x = expression(B / B[MSY]),
-      y = expression(F / F[MSY])
+      x = .xlab,
+      y = .ylab
     ) +
     ggplot2::coord_equal(
       xlim = xlim + c(-0.01, 0.01),
