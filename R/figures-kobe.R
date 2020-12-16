@@ -200,7 +200,6 @@ plot_kobe_grid <- function(object_list, french = isTRUE(getOption("french")), ..
   x_ref_lines <- purrr::map_dfr(gdat, "x_ref_lines", .id = "scenario")
   y_ref_lines <- purrr::map_dfr(gdat, "y_ref_lines", .id = "scenario")
 
-
   g <- ggplot(df, ggplot2::aes_string("x", "y")) +
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
     ggplot2::guides(shape = FALSE)
@@ -222,6 +221,9 @@ plot_kobe_grid <- function(object_list, french = isTRUE(getOption("french")), ..
       xlim = gdat[[1]]$xlim,
       ylim = gdat[[1]]$ylim, expand = FALSE
     )
+  if (french) {
+    g <- g + labs(x = expression(B/B[RMS]), y = expression(F/F[RMS]))
+  }
 
   if (gdat[[1]]$show_ref_pt_lines) {
     g <- g +

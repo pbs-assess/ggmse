@@ -5,7 +5,13 @@
 \alias{plot_radar_facet}
 \title{Create a radar plot}
 \usage{
-plot_radar(pm_df, palette = "Set2", custom_pal = NULL, ...)
+plot_radar(
+  pm_df,
+  palette = "Set2",
+  custom_pal = NULL,
+  french = isTRUE(getOption("french")),
+  ...
+)
 
 plot_radar_facet(
   pm_df_list,
@@ -25,6 +31,8 @@ plot_radar_facet(
 \code{\link[ggplot2:scale_manual]{ggplot2::scale_color_manual()}}. This argument is used in favour of
 \code{palette} if specified.}
 
+\item{french}{French?}
+
 \item{...}{Other arguments to pass to \code{\link[ggspider:spider_web]{ggspider::spider_web()}} or \code{\link[=plot_radar]{plot_radar()}}.}
 
 \item{pm_df_list}{A named list of performance metric data frames from
@@ -33,8 +41,6 @@ plot_radar_facet(
 \item{ncol}{An optional number of columns in the grid.}
 
 \item{nrow}{An optional number of rows in the grid.}
-
-\item{french}{French?}
 }
 \value{
 A ggplot object

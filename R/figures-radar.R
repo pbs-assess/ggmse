@@ -5,6 +5,7 @@
 #' @param custom_pal A named character vector of custom colors to pass to
 #'   [ggplot2::scale_color_manual()]. This argument is used in favour of
 #'   `palette` if specified.
+#' @param french French?
 #' @param ... Other arguments to pass to [ggspider::spider_web()] or [plot_radar()].
 #'
 #' @return A ggplot object
@@ -15,7 +16,8 @@
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 #' plot_radar(probs)
 plot_radar <- function(pm_df,
-                       palette = "Set2", custom_pal = NULL, ...) {
+                       palette = "Set2", custom_pal = NULL,
+                       french = isTRUE(getOption("french")), ...) {
   x <- reshape2::melt(pm_df,
     id.vars = "MP",
     value.name = "prob",
@@ -25,13 +27,13 @@ plot_radar <- function(pm_df,
     "MP",
     "pm",
     "prob",
-    leg_main_title = "MP",
-    leg_lty_title = "MP type",
+    leg_main_title = en2fr("MP", french),
+    leg_lty_title = if (french) "Type de PG" else "MP type",
     palette = palette,
     ...
   )
   if ("ggplot" %in% class(g)) {
-    g <- g + ggplot2::labs(color = "MP")
+    g <- g + ggplot2::labs(color = en2fr("MP", french))
   }
   if (!is.null(custom_pal)) {
     suppressMessages({
