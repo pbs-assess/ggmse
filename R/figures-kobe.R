@@ -150,8 +150,8 @@ plot_kobe <- function(object,
     ) + scale
   }
 
-  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[RMS])
-  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[RMS])
+  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[RMD])
+  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[RMD])
 
   g <- g + theme_pbs() +
     ggplot2::facet_wrap(~mp_name) +
@@ -222,7 +222,7 @@ plot_kobe_grid <- function(object_list, french = isTRUE(getOption("french")), ..
       ylim = gdat[[1]]$ylim, expand = FALSE
     )
   if (french) {
-    g <- g + labs(x = expression(B/B[RMS]), y = expression(F/F[RMS]))
+    g <- g + labs(x = expression(B/B[RMD]), y = expression(F/F[RMD]))
   }
 
   if (gdat[[1]]$show_ref_pt_lines) {

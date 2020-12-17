@@ -89,8 +89,8 @@ plot_worms_grid <- function(object_list, prob = 0.5,
   poly_df <- purrr::map_dfr(out, "poly_df", .id = "scenario")
   if (!include_historical) other <- filter(other, real_year >= this_year)
 
-  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[RMS])
-  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[RMS])
+  .xlab <- if (!french) expression(B/B[MSY]) else expression(B/B[RMD])
+  .ylab <- if (!french) expression(F/F[MSY]) else expression(F/F[RMD])
 
   g <- dd %>%
     ggplot(aes(b_m, f_m, colour = real_year)) +

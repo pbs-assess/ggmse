@@ -91,11 +91,11 @@ plot_projection_ts <- function(object,
 
   if (french && all(type == c("SSB", "FM"))) {
     d$type_labels <- gsub("MSY", en2fr("MSY"), d$type_labels)
-    d$type_labels <- factor(d$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+    d$type_labels <- factor(d$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
     lines$type_labels <- gsub("MSY", en2fr("MSY"), lines$type_labels)
-    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMD]", "F/F[RMS]"))
     quantiles$type_labels <- gsub("MSY", en2fr("MSY"), quantiles$type_labels)
-    quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMS]", "F/F[RMS]"))
+    quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
   }
 
   g <- ggplot(d, aes_string("real_year", "value", group = "iter"))
