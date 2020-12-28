@@ -46,6 +46,7 @@
 #'
 #' @export
 #' @examples
+#' \donttest{
 #' # Fake but fast example follows:
 #' # In reality, you might get here with something like:
 #' # mse <- lapply(om_list, runMSE, MPs = mps)
@@ -90,7 +91,6 @@
 #' )
 #' names(plots)
 #' plots$tigure_minimum
-#' \donttest{
 #' plots$convergence
 #' plots$tigure_refset_avg
 #' plots$tigure_refset

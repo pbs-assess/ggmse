@@ -1,5 +1,5 @@
 Package: gfdlm
-Title: Tools for Working With 'DLMtool' and 'MSEtool'
+Title: Tools for Working with 'DLMtool' and 'MSEtool'
 Version: 0.0.1.9001
 Authors@R:
     c(person(given = c("Sean", "C."),
@@ -12,7 +12,7 @@ Authors@R:
       person(given = c("Robyn", "E."),
              family = "Forrest",
              role = "aut"))
-Description: 'gfdlm' provides tools for using 'DLMtool' and
+Description: Provides tools for using 'DLMtool' and
     'MSEtool' with British Columbia groundfish stocks. The package
     includes a number of plotting functions, custom management procedures,
     and templates for populating operating models.
@@ -55,4 +55,4 @@ Remotes:
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1.9000
+RoxygenNote: 7.1.1

@@ -92,6 +92,7 @@ This function returns a large set of typical plots in a list object. These
 can then be printed to a file or included in an R Markdown document.
 }
 \examples{
+\donttest{
 # Fake but fast example follows:
 # In reality, you might get here with something like:
 # mse <- lapply(om_list, runMSE, MPs = mps)
@@ -136,7 +137,6 @@ plots <- plot_factory(
 )
 names(plots)
 plots$tigure_minimum
-\donttest{
 plots$convergence
 plots$tigure_refset_avg
 plots$tigure_refset
