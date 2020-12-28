@@ -13,7 +13,7 @@
 #' @export
 #'
 #' @examples
-#' \donttest{
+#' \dontrun{
 #' download_om("pop", "Pacific_Ocean_Perch_QC_BC_DFO/OM.rdata")
 #' }
 download_om <- function(file = "default-download-om.rds",
