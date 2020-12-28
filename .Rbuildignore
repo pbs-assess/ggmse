@@ -1,7 +1,7 @@
 ^gfdlm\.Rproj$
 ^\.Rproj\.user$
 data-raw
-^\.travis\.yml$
 ^codecov\.yml$
 pop\.rds$
 test\.Rmd$
+^\.github$

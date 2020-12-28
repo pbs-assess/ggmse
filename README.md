@@ -1,7 +1,7 @@
 # gfdlm
 
 <!-- badges: start -->
-[![Travis build status](https://travis-ci.org/pbs-assess/gfdlm.svg?branch=master)](https://travis-ci.org/pbs-assess/gfdlm)
+[![R-CMD-check](https://github.com/pbs-assess/gfdlm/workflows/R-CMD-check/badge.svg)](https://github.com/pbs-assess/gfdlm/actions)
 [![Codecov test coverage](https://codecov.io/gh/pbs-assess/gfdlm/branch/master/graph/badge.svg)](https://codecov.io/gh/pbs-assess/gfdlm?branch=master)
 <!-- badges: end -->
 
