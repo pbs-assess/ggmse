@@ -7,12 +7,12 @@
 ITM_hist(x, Data, reps = 100, yrsmth_hist = 10, ...)
 }
 \arguments{
-\item{x}{A position in the data object. As per \pkg{DLMtool}.}
+\item{x}{A position in the data object. As per \pkg{MSEtool}.}
 
-\item{Data}{A data object. As per \pkg{DLMtool}.}
+\item{Data}{A data object. As per \pkg{MSEtool}.}
 
 \item{reps}{The number of stochastic samples of the MP recommendation(s). As
-per \pkg{DLMtool}.}
+per \pkg{MSEtool}.}
 
 \item{yrsmth_hist}{Number of historical years to consider for reference index
 level.}

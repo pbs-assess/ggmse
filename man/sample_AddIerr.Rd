@@ -7,25 +7,25 @@
 sample_AddIerr(om)
 }
 \arguments{
-\item{om}{A DLMtool operating model that has been run through
-\code{\link[MSEtool:SRA_scope]{MSEtool::SRA_scope()}}.}
+\item{om}{A MSEtool operating model that has been run through
+\code{\link[SAMtool:RCM]{SAMtool::RCM()}}.}
 }
 \value{
-A DLMtool operating model.
+A MSEtool operating model.
 }
 \description{
 This function adds log-normally distributed error to \code{OM@cpars$AddIerr}. It
 also sets the survey hyperdepletion/hyperstability parameter based on
 \code{OM@beta}. This is useful if you want to override the default of estimating
 hyperdepletion/hyperstability, observation error, and autocorrelation in the
-additional "real" indices as is done in DLMtool.
+additional "real" indices as is done in MSEtool.
 }
 \examples{
-library(MSEtool)
-om <- DLMtool::testOM
+library(SAMtool)
+om <- MSEtool::testOM
 om@nsim <- 5
 set.seed(1)
-om <- SRA_scope(om,
+om <- RCM(om,
   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10))
 )
 om2 <- sample_AddIerr(om@OM)

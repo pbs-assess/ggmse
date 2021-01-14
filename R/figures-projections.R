@@ -1,7 +1,7 @@
 #' Plot projection time series
 #'
-#' @param object A DLMtool object of class `mse` that was created by
-#'  running [DLMtool::runMSE()].
+#' @param object A MSEtool object of class `mse` that was created by
+#'  running [MSEtool::runMSE()].
 #' @param type A character vector describing the element of `mse@` to
 #'   plot. Each of these "types" will be included as a column in the
 #'   final plot.
@@ -41,7 +41,7 @@ plot_projection_ts <- function(object,
   if (is.null(object@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
-      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
       "Setting CurrentYr = 0 for now.", call. = FALSE
     )
@@ -147,8 +147,8 @@ get_ts <- function(object,
                    this_year = 0) {
   if (!class(object) != "mse") {
     stop(
-      "`object` must be a DLMtool object of class `mse`",
-      "that was created by running `DLMtool::runMSE()`."
+      "`object` must be a MSEtool object of class `mse`",
+      "that was created by running `MSEtool::runMSE()`."
     )
   }
   .proj_years <- seq(this_year + 1, this_year + object@proyears)
@@ -288,7 +288,7 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #' This is a wrapper for [plot_projection_ts()] that includes columns for SSB,
 #' F, and catch.
 #'
-#' @param object An MSE object from DLMtool.
+#' @param object An MSE object from MSEtool.
 #' @param catch_breaks Optional y-axis tick locations for the catch column.
 #' @param catch_labels Optional y-axis tick labels for the catch column. Helpful
 #'   for dealing with large numbers.
@@ -318,7 +318,7 @@ plot_main_projections <- function(object,
                                   french = isTRUE(getOption("french"))) {
 
   suppressMessages({
-    g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
+    g1 <- gfMSE::plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
       ggplot2::theme(
         strip.text.y = ggplot2::element_blank()

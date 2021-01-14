@@ -36,12 +36,12 @@ Itarget_d1.2(x, Data, reps = 1)
 Itarget_d0.8(x, Data, reps = 1)
 }
 \arguments{
-\item{x}{A position in the data object. As per \pkg{DLMtool}.}
+\item{x}{A position in the data object. As per \pkg{MSEtool}.}
 
-\item{Data}{A data object. As per \pkg{DLMtool}.}
+\item{Data}{A data object. As per \pkg{MSEtool}.}
 
 \item{reps}{The number of stochastic samples of the MP recommendation(s). As
-per \pkg{DLMtool}.}
+per \pkg{MSEtool}.}
 
 \item{w}{A smoothing parameter that defines the "steepness" of the adjustment
 slope.}
@@ -66,5 +66,5 @@ which the average index is calculated.}
 Itarget MP
 }
 \examples{
-Itarget(1, DLMtool::SimulatedData)
+Itarget(1, MSEtool::SimulatedData)
 }

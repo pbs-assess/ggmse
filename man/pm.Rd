@@ -8,7 +8,7 @@
 \alias{PNOF}
 \alias{LTY}
 \alias{AAVY}
-\title{Function factory for creating DLMtool performace metric (class "PM") functions}
+\title{Function factory for creating MSEtool performace metric (class "PM") functions}
 \usage{
 pm_factory(
   pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AADC"),
@@ -35,15 +35,15 @@ AAVY(mse_obj)
 
 \item{yrs}{A vector of years to include. If \code{NULL}, all will be used.}
 
-\item{mse_obj}{An object of class \linkS4class{MSE} from the \link{DLMtool} package}
+\item{mse_obj}{An object of class \linkS4class{MSE} from the \link{MSEtool} package}
 }
 \value{
-A DLMtool PM function
+A MSEtool PM function
 
-An object of class \linkS4class{PMobj} from the \link{DLMtool} package
+An object of class \linkS4class{PMobj} from the \link{MSEtool} package
 }
 \description{
-Function factory for creating DLMtool performace metric (class "PM") functions
+Function factory for creating MSEtool performace metric (class "PM") functions
 
 Various performance metrics
 }

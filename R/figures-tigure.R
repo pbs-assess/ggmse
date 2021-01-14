@@ -1,16 +1,16 @@
 #' Summary of probabilities of performance metrics from the MSE object
 #'
-#' @param object MSE object, output of the [DLMtool::runMSE()] function
+#' @param object MSE object, output of the [MSEtool::runMSE()] function
 #' @param ... List of performace metrics
 #' @param refs List containing the reference limits for each metric
 #'
 #' @return A tibble of the output
 #' @importFrom tibble as_tibble
-#' @importFrom DLMtool avail
+#' @importFrom MSEtool avail
 #' @export
 #'
 #' @examples
-#' library(DLMtool)
+#' library(MSEtool)
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,

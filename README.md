@@ -5,4 +5,4 @@
 [![Codecov test coverage](https://codecov.io/gh/pbs-assess/gfdlm/branch/master/graph/badge.svg)](https://codecov.io/gh/pbs-assess/gfdlm?branch=master)
 <!-- badges: end -->
 
-Tools for creating, modifying, and plotting DLMtool inputs and outputs from PBS groundfish data
+Tools for creating, modifying, and plotting MSEtool inputs and outputs from PBS groundfish data

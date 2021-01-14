@@ -15,7 +15,7 @@ plot_main_projections(
 )
 }
 \arguments{
-\item{object}{An MSE object from DLMtool.}
+\item{object}{An MSE object from MSEtool.}
 
 \item{catch_breaks}{Optional y-axis tick locations for the catch column.}
 

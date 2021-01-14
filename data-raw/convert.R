@@ -1,7 +1,7 @@
-#' Convert groundfish PBS data to a DLMtool Data object
+#' Convert groundfish PBS data to a MSEtool Data object
 #'
 #' Takes the output from \pkg{gfdata} data fetching functions and converts them to a
-#' DLMtool data object.
+#' MSEtool data object.
 #'
 #' @param dat A list object output from [gfdata::cache_pbs_data()] or a list
 #'   object containing the elements `commercial_samples`, `survey_samples`,
@@ -18,14 +18,14 @@
 #' @param length_bin_interval An interval for the length bins.
 #' @param unsorted_only Include unsorted commercial samples only
 #'
-#' @importClassesFrom DLMtool Data
+#' @importClassesFrom MSEtool Data
 #' @importFrom gfplot tidy_catch tidy_survey_index bind_samples fit_mat_ogive
 #' @importFrom gfplot fit_vb fit_length_weight
 #' @importFrom dplyr filter mutate summarise select group_by n arrange ungroup
 #' @importFrom dplyr inner_join left_join right_join anti_join full_join
 #' @importFrom dplyr tibble rename
 #' @importFrom rlang .data
-#' @return An S4 object of class DLMtool Data.
+#' @return An S4 object of class MSEtool \linkS4class{Data}.
 #' @export
 #'
 #' @examples

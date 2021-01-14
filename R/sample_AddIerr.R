@@ -4,20 +4,20 @@
 #' also sets the survey hyperdepletion/hyperstability parameter based on
 #' `OM@beta`. This is useful if you want to override the default of estimating
 #' hyperdepletion/hyperstability, observation error, and autocorrelation in the
-#' additional "real" indices as is done in DLMtool.
+#' additional "real" indices as is done in MSEtool.
 #'
-#' @param om A DLMtool operating model that has been run through
-#'   [MSEtool::SRA_scope()].
+#' @param om A MSEtool operating model that has been run through
+#'   [SAMtool::RCM()].
 #'
-#' @return A DLMtool operating model.
+#' @return A MSEtool operating model.
 #' @export
 #'
 #' @examples
-#' library(MSEtool)
-#' om <- DLMtool::testOM
-#' om@nsim <- 5
+#' library(SAMtool)
+#' om <- MSEtool::testOM
+#' om@@nsim <- 5
 #' set.seed(1)
-#' om <- SRA_scope(om,
+#' om <- RCM(om,
 #'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10))
 #' )
 #' om2 <- sample_AddIerr(om@OM)

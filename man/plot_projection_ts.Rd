@@ -18,8 +18,8 @@ plot_projection_ts(
 )
 }
 \arguments{
-\item{object}{A DLMtool object of class \code{mse} that was created by
-running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
+\item{object}{A MSEtool object of class \code{mse} that was created by
+running \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}}.}
 
 \item{type}{A character vector describing the element of \verb{mse@} to
 plot. Each of these "types" will be included as a column in the

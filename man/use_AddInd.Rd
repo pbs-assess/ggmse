@@ -16,10 +16,10 @@ first survey in your SRA must be the survey that you want to mimic.
 }
 \examples{
 library(MSEtool)
-om <- DLMtool::testOM
+om <- MSEtool::testOM
 om@nsim <- 10
 set.seed(1)
-sra <- SRA_scope(om,
+sra <- RCM(om,
   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
 my_mp <- use_AddInd(Itarget_base)
 mse <- runMSE(sra@OM, MPs = "Itarget_base")

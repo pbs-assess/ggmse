@@ -28,12 +28,12 @@ plot_factory(
 )
 }
 \arguments{
-\item{mse_list}{A list of DLMtool MSE objects representing different
+\item{mse_list}{A list of MSEtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
 
 \item{pm}{A character vector of performance metrics. These performance
 metrics should exist in the current workspace or via an attached package
-such as DLMtool.}
+such as MSEtool.}
 
 \item{scenario_df}{A data frame with the columns \code{scenario},
 \code{scenario_human}, and \code{scenario_type}. \code{scenario_type} should contain

@@ -1,6 +1,6 @@
 #' Plot index fits from a stock reduction analysis
 #'
-#' @param sra_list A named a list of objects from [MSEtool::SRA_scope()].
+#' @param sra_list A named a list of objects from [SAMtool::RCM()].
 #' @param survey_names A character vector of real index names. Columns will be
 #'   ordered by the order of the survey names.
 #' @param sample_n The number of SRA samples to plot.
@@ -13,11 +13,11 @@
 #' @importFrom ggplot2 vars
 #'
 #' @examples
-#' library(MSEtool)
-#' om <- DLMtool::testOM
-#' om@nsim <- 10
+#' library(SAMtool)
+#' om <- MSEtool::testOM
+#' om@@nsim <- 10
 #' set.seed(1)
-#' m <- SRA_scope(om,
+#' m <- RCM(om,
 #'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10))
 #' )
 #' fits <- list()

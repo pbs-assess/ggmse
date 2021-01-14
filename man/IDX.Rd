@@ -49,8 +49,8 @@ Index-based MP used in the most recent outside Yelloweye Rockfish assessment
 in BC.
 }
 \examples{
-IDX(1, DLMtool::SimulatedData)
-IDX(1, DLMtool::SimulatedData, lambda = 0.5)
+IDX(1, MSEtool::SimulatedData)
+IDX(1, MSEtool::SimulatedData, lambda = 0.5)
 }
 \references{
 Sean P Cox, Beau Doherty, Ashleen J Benson, Samuel DN Johnson, and Dana

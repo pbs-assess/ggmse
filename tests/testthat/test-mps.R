@@ -1,7 +1,7 @@
 # context("Check that custom MPs are working.")
 #
 # library(DLMtool)
-# om <- DLMtool::testOM
+# om <- MSEtool::testOM
 # om@nsim <- 2
 # .mse <- runMSE(OM = om, MPs = "AvC", Hist = TRUE)
 

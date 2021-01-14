@@ -3,11 +3,11 @@
 #' This function returns a large set of typical plots in a list object. These
 #' can then be printed to a file or included in an R Markdown document.
 #'
-#' @param mse_list A list of DLMtool MSE objects representing different
+#' @param mse_list A list of MSEtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param pm A character vector of performance metrics. These performance
 #'   metrics should exist in the current workspace or via an attached package
-#'   such as DLMtool.
+#'   such as MSEtool.
 #' @param scenario_df A data frame with the columns `scenario`,
 #'   `scenario_human`, and `scenario_type`. `scenario_type` should contain
 #'   `"Reference"` and `"Robustness"` entries.
@@ -128,7 +128,7 @@ plot_factory <- function(
     stop("`mse_list` must be a list.", call. = FALSE)
   }
   if (!all(vapply(mse_list, class, FUN.VALUE = character(1L)) == "MSE")) {
-    stop("`mse_list` must contain DLMtool MSE objects.", call. = FALSE)
+    stop("`mse_list` must contain MSEtool MSE objects.", call. = FALSE)
   }
   if (!is.data.frame(scenario_df)) {
     stop("`scenario_df` must be a data frame.", call. = FALSE)
@@ -191,10 +191,10 @@ plot_factory <- function(
   pm_avg <- dplyr::group_by(pm_df, MP) %>% dplyr::summarise_if(is.numeric, mean)
   pm_min <- dplyr::group_by(pm_df, MP) %>% dplyr::summarise_if(is.numeric, min)
 
-  mse_sat <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat))
+  mse_sat <- purrr::map(scenarios, ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat))
   mp_sat_with_ref <- union(mp_sat, mp_ref)
   mse_sat_with_ref <-
-    purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref))
+    purrr::map(scenarios_ref, ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref))
 
   g <- list()
 
@@ -218,7 +218,7 @@ plot_factory <- function(
   progress("convergence")
 
   g$convergence <- scenarios %>%
-    purrr::map(~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
+    purrr::map(~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
     set_names(scenarios_human) %>%
     gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal, french = french)
 
@@ -228,7 +228,7 @@ plot_factory <- function(
     progress("projection")
 
     # All scenarios:
-    xx <- map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
+    xx <- map(scenarios, ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
       set_names(scenarios_human)
     g$projections <- map(names(xx), ~ {
       g <- plot_main_projections(xx[[.x]],
@@ -240,7 +240,7 @@ plot_factory <- function(
 
     # All not satisficed ones for "example scenario":
     g$projections_not_sat <-
-      DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
+      MSEtool::Sub(mse_list[[eg_scenario]], MPs = mp_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
@@ -249,7 +249,7 @@ plot_factory <- function(
     # Highlighted not satisficed ones:
     mp_eg_not_sat <- mp_not_sat2[mp_not_sat2 %in% mp_not_sat]
     g$projections_not_sat2 <-
-      DLMtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
+      MSEtool::Sub(mse_list[[eg_scenario]], MPs = mp_eg_not_sat) %>%
       plot_main_projections(
         catch_breaks = catch_breaks,
         catch_labels = catch_labels, catch_ylim = catch_ylim, french = french
@@ -261,7 +261,7 @@ plot_factory <- function(
 
     g$projections_scenarios <- map(
       scenarios,
-      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+      ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
     ) %>%
       set_names(scenarios_human) %>%
       plot_scenario_projections(
@@ -271,7 +271,7 @@ plot_factory <- function(
 
     g$projections_scenarios_ref <- map(
       scenarios_ref,
-      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+      ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
     ) %>%
       set_names(scenarios_ref_human) %>%
       plot_scenario_projections(
@@ -281,7 +281,7 @@ plot_factory <- function(
 
     g$projections_scenarios_rob <- map(
       scenarios_rob,
-      ~ DLMtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
+      ~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)
     ) %>%
       set_names(scenarios_rob_human) %>%
       plot_scenario_projections(
@@ -295,7 +295,7 @@ plot_factory <- function(
       scenarios, ~ {
         temp <- mse_list[[.x]] # https://github.com/DLMtool/DLMtool/issues/295
         # temp@Misc$Data <- temp@Misc$Data[match(mp_sat_with_ref, temp@MPs)]
-        DLMtool::Sub(temp, MPs = mp_sat_with_ref)
+        MSEtool::Sub(temp, MPs = mp_sat_with_ref)
       }
     ) %>%
       set_names(scenarios_human) %>%
@@ -310,17 +310,17 @@ plot_factory <- function(
   MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
 
   g$kobe_ref <-
-    purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    purrr::map(scenarios_ref, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_ref_human) %>%
     gfdlm::plot_kobe_grid(french = french)
 
   g$kobe_rob <-
-    purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    purrr::map(scenarios_rob, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_rob_human) %>%
     gfdlm::plot_kobe_grid(french = french)
 
   g$kobe <-
-    purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+    purrr::map(scenarios, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_human) %>%
     gfdlm::plot_kobe_grid(french = french)
 
@@ -445,7 +445,7 @@ plot_factory <- function(
     MPs <- union(mp_sat, mp_ref[mp_ref != "NFref"])
 
     suppressMessages({
-      d <- purrr::map(scenarios, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+      d <- purrr::map(scenarios, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_human)
       g$worms_proj <-
         d %>% plot_worms_grid(include_historical = FALSE, french = french) +
@@ -456,7 +456,7 @@ plot_factory <- function(
         d %>% plot_worms_grid(include_historical = TRUE, french = french) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
 
-      d <- purrr::map(scenarios_ref, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+      d <- purrr::map(scenarios_ref, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_ref_human)
       g$worms_proj_ref <-
         d %>% plot_worms_grid(include_historical = FALSE, french = french) +
@@ -467,7 +467,7 @@ plot_factory <- function(
         d %>% plot_worms_grid(include_historical = TRUE, french = french) +
         coord_fixed(xlim = c(0, 3), ylim = c(0, 3), expand = FALSE)
 
-      d <- purrr::map(scenarios_rob, ~ DLMtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
+      d <- purrr::map(scenarios_rob, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
         set_names(scenarios_rob_human)
       g$worms_proj_rob <-
         d %>% plot_worms_grid(include_historical = FALSE, french = french) +
