@@ -95,7 +95,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
       yrs <- MSEtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- "Spawning Biomass relative to SBMSY"
       pm_obj@Caption <- paste0("Prob. SB > ", ifelse(ref == 1, "", ref), " SBMSY (Years ", yrs[1], " - ", yrs[2], ")")
-      pm_obj@Stat <- mse_obj@B_BMSY[, , yrs[1]:yrs[2]]
+      pm_obj@Stat <- mse_obj@SB_SBMSY[, , yrs[1]:yrs[2]]
       pm_obj@Prob <- MSEtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
       pm_obj@Mean <- MSEtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
@@ -110,14 +110,14 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
       y2 <- (yrs[1] + 1):yrs[2]
       if (mse_obj@nMPs > 1) {
         pm_obj@Stat <- apply(
-          ((((mse_obj@C[, , y1] - mse_obj@C[, , y2]) /
-            mse_obj@C[, , y2])^2)^0.5),
+          ((((mse_obj@Catch[, , y1] - mse_obj@Catch[, , y2]) /
+               mse_obj@Catch[, , y2])^2)^0.5),
           c(1, 2),
           mean
         )
       } else {
-        pm_obj@Stat <- array(apply(((((mse_obj@C[, 1, y1] - mse_obj@C[, 1, y2]) /
-          mse_obj@C[, 1, y2])^2)^0.5), c(1), mean))
+        pm_obj@Stat <- array(apply(((((mse_obj@Catch[, 1, y1] - mse_obj@Catch[, 1, y2]) /
+                                        mse_obj@Catch[, 1, y2])^2)^0.5), c(1), mean))
       }
       pm_obj@Prob <- MSEtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
       pm_obj@Mean <- MSEtool::calcMean(pm_obj@Prob)
@@ -140,8 +140,8 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
       yrs <- MSEtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
-      ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
-      pm_obj@Stat <- mse_obj@C[, , yrs[1]:yrs[2]] / ref_yield
+      ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@Catch[, , yrs[1]:yrs[2]]))
+      pm_obj@Stat <- mse_obj@Catch[, , yrs[1]:yrs[2]] / ref_yield
       pm_obj@Prob <- MSEtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
       pm_obj@Mean <- MSEtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
@@ -152,8 +152,8 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
       yrs <- MSEtool::ChkYrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
-      ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
-      pm_obj@Stat <- mse_obj@C[, , yrs[1]:yrs[2]] / ref_yield
+      ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@Catch[, , yrs[1]:yrs[2]]))
+      pm_obj@Stat <- mse_obj@Catch[, , yrs[1]:yrs[2]] / ref_yield
       pm_obj@Prob <- MSEtool::calcProb(pm_obj@Stat > pm_obj@Ref, mse_obj)
       pm_obj@Mean <- MSEtool::calcMean(pm_obj@Prob)
       pm_obj@MPs <- mse_obj@MPs
@@ -165,9 +165,9 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
       pm_obj@Name <- paste0("Average Absolute Difference in Catch (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. AADC < ", ref, " (Years ", yrs[1], "-", yrs[2], ")")
       if (mse_obj@nMPs > 1) {
-        pm_obj@Stat <- apply(mse_obj@C[, , yrs], c(1, 2), get_aadc)
+        pm_obj@Stat <- apply(mse_obj@Catch[, , yrs], c(1, 2), get_aadc)
       } else {
-        pm_obj@Stat <- apply(mse_obj@C[, 1, yrs], 1, get_aadc)
+        pm_obj@Stat <- apply(mse_obj@Catch[, 1, yrs], 1, get_aadc)
       }
       pm_obj@Prob <- MSEtool::calcProb(pm_obj@Stat < pm_obj@Ref, mse_obj)
       pm_obj@Mean <- MSEtool::calcMean(pm_obj@Prob)

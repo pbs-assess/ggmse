@@ -1,5 +1,5 @@
 Package: gfdlm
-Title: Tools for Working with 'DLMtool' and 'MSEtool'
+Title: Tools for Working with openMSE (including DLMtool, MSEtool, and SAMtool)
 Version: 0.0.1.9001
 Authors@R:
     c(person(given = c("Sean", "C."),
