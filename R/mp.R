@@ -658,13 +658,14 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
   `class<-`(f, "MP")
 }
 
-#' Use the first AddInd slot
+#' Use AddInd slot
 #'
-#' This function factory modifies an MP to use the `AddInd` (and `CV_AddInd`)
-#' slots from the first "real" survey instead of `Ind`. This means that the
-#' first survey in your SRA must be the survey that you want to mimic.
+#' This function factory modifies an MP to use an index from `AddInd` (and `CV_AddInd`)
+#' slots instead of `Ind` by generating a wrapper function that assigns AddInd to Ind before
+#' calling the MP function.
 #'
 #' @param mp MP to use.
+#' @param i The i-th index in AddInd to assign to the Ind slot.
 #'
 #' @export
 #' @examples
@@ -676,11 +677,12 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 #'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
 #' my_mp <- use_AddInd(Itarget_base)
 #' mse <- runMSE(sra@@OM, MPs = "Itarget_base")
-use_AddInd <- function(mp) {
+use_AddInd <- function(mp, i) {
   force(mp)
+  force(i)
   f <- function(x, Data, reps = 1L) {
-    Data@Ind <- Data@AddInd[, 1L, ]
-    Data@CV_Ind <- Data@CV_AddInd[, 1L, ]
+    Data@Ind <- Data@AddInd[, i, ]
+    Data@CV_Ind <- Data@CV_AddInd[, i, ]
     mp(x = x, Data = Data, reps = reps)
   }
   `class<-`(f, "MP")

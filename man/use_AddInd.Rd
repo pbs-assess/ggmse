@@ -2,17 +2,19 @@
 % Please edit documentation in R/mp.R
 \name{use_AddInd}
 \alias{use_AddInd}
-\title{Use the first AddInd slot}
+\title{Use AddInd slot}
 \usage{
-use_AddInd(mp)
+use_AddInd(mp, i)
 }
 \arguments{
 \item{mp}{MP to use.}
+
+\item{i}{The i-th index in AddInd to assign to the Ind slot.}
 }
 \description{
-This function factory modifies an MP to use the \code{AddInd} (and \code{CV_AddInd})
-slots from the first "real" survey instead of \code{Ind}. This means that the
-first survey in your SRA must be the survey that you want to mimic.
+This function factory modifies an MP to use an index from \code{AddInd} (and \code{CV_AddInd})
+slots instead of \code{Ind} by generating a wrapper function that assigns AddInd to Ind before
+calling the MP function.
 }
 \examples{
 library(MSEtool)
