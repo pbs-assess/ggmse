@@ -6,7 +6,7 @@
 \usage{
 plot_projection_ts(
   object,
-  type = c("SSB", "FM"),
+  type = c("SSB", "FM", "Catch"),
   n_samples = 3,
   probs = c(0.1, 0.5),
   ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
