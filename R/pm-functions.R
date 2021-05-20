@@ -74,7 +74,7 @@ eval_pm <- function(mse_obj,
 #' @param yrs A vector of years to include. If `NULL`, all will be used.
 #'
 #' @return A DLMtool PM function
-#' @importFrom DLMtool calcProb calcMean ChkYrs
+#' @importFrom DLMtool calcProb calcMean
 #' @importFrom methods new
 #' @export
 #' @rdname pm
