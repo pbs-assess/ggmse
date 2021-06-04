@@ -85,15 +85,26 @@ plot_projection_ts <- function(object,
 
   lines <- data.frame(value = bbmsy_zones, type_labels = "B/B[MSY]", stringsAsFactors = FALSE)
   lines <- dplyr::bind_rows(lines, data.frame(value = 1, type_labels = "F/F[MSY]", stringsAsFactors = FALSE))
-  if (all(type == c("SSB", "FM"))) {
-    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
+
+  if (french) {
+    lines$type_labels <- gsub("MSY", "RMD", lines$type_labels)
+  }
+
+  if (!french) {
+    if (all(type == c("SSB", "FM"))) {
+      lines$type_labels <- factor(lines$type_labels, levels = c("B/B[MSY]", "F/F[MSY]"))
+    }
+  } else {
+    if (all(type == c("SSB", "FM"))) {
+      lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
+    }
   }
 
   if (french && all(type == c("SSB", "FM"))) {
     d$type_labels <- gsub("MSY", en2fr("MSY"), d$type_labels)
     d$type_labels <- factor(d$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
     lines$type_labels <- gsub("MSY", en2fr("MSY"), lines$type_labels)
-    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMD]", "F/F[RMS]"))
+    lines$type_labels <- factor(lines$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
     quantiles$type_labels <- gsub("MSY", en2fr("MSY"), quantiles$type_labels)
     quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
   }

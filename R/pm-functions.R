@@ -74,7 +74,7 @@ eval_pm <- function(mse_obj,
 #' @param yrs A vector of years to include. If `NULL`, all will be used.
 #'
 #' @return A DLMtool PM function
-#' @importFrom DLMtool calcProb calcMean ChkYrs
+#' @importFrom DLMtool calcProb calcMean
 #' @importFrom methods new
 #' @export
 #' @rdname pm
@@ -92,7 +92,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
   pm_obj@Ref <- ref
   if (pm_type == "SBMSY") {
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- "Spawning Biomass relative to SBMSY"
       pm_obj@Caption <- paste0("Prob. SB > ", ifelse(ref == 1, "", ref), " SBMSY (Years ", yrs[1], " - ", yrs[2], ")")
       pm_obj@Stat <- mse_obj@B_BMSY[, , yrs[1]:yrs[2]]
@@ -103,7 +103,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
     }
   } else if (pm_type == "AAVY") {
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Annual Variability in Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. AAVY < ", ref * 100, "% (Years ", yrs[1], "-", yrs[2], ")")
       y1 <- yrs[1]:(yrs[2] - 1)
@@ -126,7 +126,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
     }
   } else if (pm_type == "PNOF") {
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- "Probability of not overfishing (F<FMSY)"
       pm_obj@Caption <- paste0("Prob. F < ", ifelse(ref == 1, "", ref), " FMSY (Years ", yrs[1], " - ", yrs[2], ")")
       pm_obj@Stat <- mse_obj@F_FMSY[, , yrs[1]:yrs[2]]
@@ -137,7 +137,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
     }
   } else if (pm_type == "LTY") {
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
       ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
@@ -149,7 +149,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
     }
   } else if (pm_type == "Yield") {
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Yield relative to Reference Yield (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1], " - ", yrs[2], ")")
       ref_yield <- array(mse_obj@OM$RefY, dim = dim(mse_obj@C[, , yrs[1]:yrs[2]]))
@@ -161,7 +161,7 @@ pm_factory <- function(pm_type = c("SBMSY", "AAVY", "PNOF", "LTY", "Yield", "AAD
     }
   } else if (pm_type == "AADC"){
     created_by_pm_factory <- function(mse_obj) {
-      yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+      yrs <- chk_yrs(yrs, mse_obj)
       pm_obj@Name <- paste0("Average Absolute Difference in Catch (Years ", yrs[1], "-", yrs[2], ")")
       pm_obj@Caption <- paste0("Prob. AADC < ", ref, " (Years ", yrs[1], "-", yrs[2], ")")
       if (mse_obj@nMPs > 1) {
@@ -285,7 +285,7 @@ AAVY <- pm_factory("AAVY", 0.2)
 # LTY_MSY <- function(mse_obj, ref = 0.5, yrs = c(36, 50)) {
 #   pm_obj <- new("PMobj")
 #   pm_obj@Ref <- ref
-#   yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+#   yrs <- chk_yrs(yrs, mse_obj)
 #   pm_obj@Name <- paste0("Average Yield relative to Yield from FMSYref (Years ", yrs[1], "-", yrs[2], # ")")
 #   pm_obj@Caption <- paste0("Prob. Yield > ", ifelse(ref == 1, "", ref), " Ref. Yield (Years ", yrs[1]# , " - ", yrs[2], ")")
 #
@@ -316,7 +316,7 @@ AAVY <- pm_factory("AAVY", 0.2)
 # Decline <- function(mse_obj, ref = 0, yrs = c(6, 20)) {
 #   pm_obj <- new("PMobj")
 #   pm_obj@Ref <- ref
-#   yrs <- DLMtool::ChkYrs(yrs, mse_obj)
+#   yrs <- chk_yrs(yrs, mse_obj)
 #   pm_obj@Name <- paste0(
 #     "Probability of decline (Years ",
 #     yrs[1], "-", yrs[2], ")"
