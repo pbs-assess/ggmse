@@ -35,12 +35,12 @@ AAVY(mse_obj)
 
 \item{yrs}{A vector of years to include. If \code{NULL}, all will be used.}
 
-\item{mse_obj}{An object of class \linkS4class{MSE} from the \link{MSEtool} package}
+\item{mse_obj}{An object of class \linkS4class{MSE} from the MSEtool package}
 }
 \value{
 A MSEtool PM function
 
-An object of class \linkS4class{PMobj} from the \link{MSEtool} package
+An object of class \linkS4class{PMobj} from the MSEtool package
 }
 \description{
 Function factory for creating MSEtool performace metric (class "PM") functions

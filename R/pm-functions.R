@@ -183,9 +183,9 @@ get_aadc <- function(x) mean(abs(diff(x)))
 
 #' Various performance metrics
 #'
-#' @param mse_obj An object of class [MSE-class] from the [MSEtool] package
+#' @param mse_obj An object of class [MSE-class] from the MSEtool package
 #'
-#' @return An object of class [PMobj-class] from the [MSEtool] package
+#' @return An object of class [PMobj-class] from the MSEtool package
 #' @export
 #' @rdname pm
 #' @examples
