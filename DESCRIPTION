@@ -51,7 +51,8 @@ Imports:
 Suggests:
     covr,
     stringi,
-    testthat
+    testthat,
+    openMSE
 Remotes: 
     github::pbs-assess/gfdata,
     github::pbs-assess/gfutilities,
