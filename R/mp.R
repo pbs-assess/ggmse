@@ -553,12 +553,12 @@ SP_gf <- function(x, Data, reps = 1, LRP = 0.4, TRP = 0.6, RP_type = "SSB_SSBMSY
                   tac_floor = 0.1, tac_increase_buffer = 1.05,
                   initial_tac = NULL) {
 
-  do_Assessment <- MSEtool::SP(
+  do_Assessment <- SAMtool::SP(
     x = x, Data = Data,
     control = list(iter.max = 10000, eval.max = 20000), n_seas = 1,
     use_r_prior = use_r_prior, start = start
   )
-  Rec <- MSEtool::HCR_ramp(
+  Rec <- SAMtool::HCR_ramp(
     Assessment = do_Assessment, reps = reps, LRP = LRP,
     TRP = TRP, RP_type = RP_type
   )
