@@ -46,6 +46,8 @@ plot_historical_ts <- function(object,
   }
   all_years <- seq(this_year - object@Data@LHYear + 1, this_year)
 
+  # used to be called Catch:
+  type <- gsub("Catch", "Removals", type)
   x <- object@TSdata[[type[[1]]]] %>%
     reshape2::melt() %>%
     dplyr::transmute(
