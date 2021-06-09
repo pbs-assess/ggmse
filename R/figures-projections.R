@@ -178,6 +178,7 @@ get_ts <- function(object,
 
   ts_data <- list()
   for (i in seq_along(type)) {
+    if (type[i] == "C") type[i] <- "Catch" # changed in openMSE
     ts_data[[i]] <- slot(object, type[i]) %>%
       reshape2::melt() %>%
       dplyr::rename(
