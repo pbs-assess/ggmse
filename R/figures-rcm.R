@@ -12,7 +12,7 @@ NULL
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE,
+plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                          scales = "fixed", ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "SSB")
 
@@ -23,7 +23,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENC
 
 #' @describeIn plot_rcm Plot historical spawning depletion
 #' @export
-plot_rcm_depletion <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE,
+plot_rcm_depletion <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                                scales = "fixed") {
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "depletion")
   make_plot_wrap(dat, scenario, FRENCH, scales, ylab = "Spawning depletion", ylim = c(0, 1.1 * max(dat$value)))
@@ -31,7 +31,7 @@ plot_rcm_depletion <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 
 #' @describeIn plot_rcm Plot historical apical F
 #' @export
-plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE, scales = "fixed",
+plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE, scales = "fixed",
                        ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_F)
 
@@ -44,7 +44,7 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH 
 #' @param proj Logical, whether to plot the recruitment deviates in the projection period
 #' @param logspace Logical, whether to plot the recruitment deviates in logspace or normal space
 #' @export
-plot_rcm_recdev <- function(rcm, scenario, FRENCH = FALSE, proj = FALSE, logspace = FALSE,
+plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspace = FALSE,
                             scales = "fixed", ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_recdev, proj = proj, logspace = logspace)
   g <- make_plot_wrap(dat, scenario, FRENCH,
@@ -61,7 +61,7 @@ plot_rcm_recdev <- function(rcm, scenario, FRENCH = FALSE, proj = FALSE, logspac
 #' @param sel_i The index of the fleet or index for the selectivity
 #' @param sel_name The name for the selectivity
 #' @export
-plot_rcm_bio_sel <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE,
+plot_rcm_bio_sel <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                              bio_type = c("LAA", "mat"), sel_type = c("fleet", "index"),
                              sel_i = 1, sel_name) {
   bio_type <- match.arg(bio_type, several.ok = TRUE)

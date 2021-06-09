@@ -12,7 +12,7 @@
 plot_rcm_SSB(
   rcm,
   scenario = paste("Scenario", 1:length(rcm)),
-  FRENCH = FALSE,
+  french = FALSE,
   scales = "fixed",
   ylim = NULL
 )
@@ -20,14 +20,14 @@ plot_rcm_SSB(
 plot_rcm_depletion(
   rcm,
   scenario = paste("Scenario", 1:length(rcm)),
-  FRENCH = FALSE,
+  french = FALSE,
   scales = "fixed"
 )
 
 plot_rcm_F(
   rcm,
   scenario = paste("Scenario", 1:length(rcm)),
-  FRENCH = FALSE,
+  french = FALSE,
   scales = "fixed",
   ylim = NULL
 )
@@ -35,7 +35,7 @@ plot_rcm_F(
 plot_rcm_recdev(
   rcm,
   scenario,
-  FRENCH = FALSE,
+  french = FALSE,
   proj = FALSE,
   logspace = FALSE,
   scales = "fixed",
@@ -45,7 +45,7 @@ plot_rcm_recdev(
 plot_rcm_bio_sel(
   rcm,
   scenario = paste("Scenario", 1:length(rcm)),
-  FRENCH = FALSE,
+  french = FALSE,
   bio_type = c("LAA", "mat"),
   sel_type = c("fleet", "index"),
   sel_i = 1,
@@ -56,8 +56,6 @@ plot_rcm_bio_sel(
 \item{rcm}{A list containing \linkS4class{RCModel} objects.}
 
 \item{scenario}{A character vector of names corresponding to \code{rcm}.}
-
-\item{FRENCH}{Logical, whether the axes are in French or not.}
 
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
 
@@ -74,6 +72,8 @@ plot_rcm_bio_sel(
 \item{sel_i}{The index of the fleet or index for the selectivity}
 
 \item{sel_name}{The name for the selectivity}
+
+\item{FRENCH}{Logical, whether the axes are in French or not.}
 }
 \description{
 A set of functions that plots output from a list of RCModel objects used to condition a set

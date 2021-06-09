@@ -15,7 +15,10 @@ NULL
 #' @param color Character vector of colors used for plotting.
 #' @param xlim Optional, x-axis limits for the figure.
 #' @export
-plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE, i, index_names,
+#' @importFrom stats weighted.mean
+#' @importFrom ggplot2 ggtitle geom_label geom_col geom_pointrange
+#' @importFrom purrr map2_dfr map_dfc
+plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE, i, index_names,
                            color, xlim) {
   if (missing(i)) i <- 1:dim(rcm@Misc[[1]]$Ipred)[2]
   if (missing(index_names)) index_names <- paste("Index", i)
@@ -72,7 +75,7 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRE
 #' @describeIn plot_rcm_data Plot age comps from a fleet or index (single RCM only)
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
-plot_rcm_age_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
+plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
@@ -205,7 +208,7 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
 #' @describeIn plot_rcm_data Plot length comps from a fleet or index (single RCM only)
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
-plot_rcm_length_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
+plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
