@@ -1,7 +1,7 @@
 #' Plot historical time series
 #'
-#' @param object A DLMtool object of class `Hist` that was created by
-#'  running [DLMtool::runMSE()] with `Hist = TRUE`.
+#' @param object A MSEtool object of class `Hist` that was created by
+#'  running [MSEtool::runMSE()] with `Hist = TRUE`.
 #' @param type A character object describing the element of `object@TSdata` to
 #'   plot.
 #' @param n_samples The number of timeseries samples to illustrate.
@@ -21,7 +21,7 @@
 #' @return ggplot object
 #' @export
 #' @examples
-#' library(DLMtool)
+#' library(MSEtool)
 #' historical_mse <- runMSE(om, Hist = TRUE)
 #' plot_historical_ts(historical_mse, n_samples = 2)
 #' plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
@@ -39,8 +39,8 @@ plot_historical_ts <- function(object,
                                legend_position = c(0.9, 0.85)) {
   if (!.hasSlot(object, "Data") || class(object) != "Hist") {
     stop(
-      "`object` must be a DLMtool object of class `Hist`",
-      "that was created by running `DLMtool::runMSE()` with",
+      "`object` must be a MSEtool object of class `Hist`",
+      "that was created by running `MSEtool::runMSE()` with",
       "`Hist = TRUE`."
     )
   }

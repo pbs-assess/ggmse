@@ -7,7 +7,7 @@
 get_probs(object, ..., refs = NULL)
 }
 \arguments{
-\item{object}{MSE object, output of the \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} function}
+\item{object}{MSE object, output of the \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}} function}
 
 \item{...}{List of performace metrics}
 
@@ -20,6 +20,6 @@ A tibble of the output
 Summary of probabilities of performance metrics from the MSE object
 }
 \examples{
-library(DLMtool)
+library(MSEtool)
 probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 }

@@ -15,7 +15,7 @@ plot_index(
 )
 }
 \arguments{
-\item{object_list}{A list of DLMtool MSE objects representing different
+\item{object_list}{A list of MSEtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
 
 \item{n_samples}{The number of timeseries samples to illustrate.}

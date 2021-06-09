@@ -1,13 +1,13 @@
 #' Eliminate survey data for selected years
 #'
-#' This function factory creates a \pkg{DLMtool} management procedure (MP)
+#' This function factory creates a \pkg{MSEtool} management procedure (MP)
 #' function that only sees survey data from selected years. For example, this
 #' could change the data that an MP sees from an annual survey into a biennial
 #' or triennial survey. It could also be used to eliminate commercial
 #' observations from some years if the default slots affected were changed.
 #'
 #' @param mp An existing management procedure function of class `"MP"` that will
-#'   work with \pkg{DLMtool}.
+#'   work with \pkg{MSEtool}.
 #' @param slots The slots for which you want to reduce observations.
 #' @param index A function that takes the number of years of observations and
 #'   returns a vector indexing the years that should be turned into `NA` values.
@@ -16,7 +16,7 @@
 #'   year, switch to `function(x) seq(2, x, by = 2)`.
 #'
 #' @return A management procedure function of class `"MP"` for use with
-#'   \pkg{DLMtool}.
+#'   \pkg{MSEtool}.
 #' @export
 #' @importFrom methods slot slot<-
 #' @importFrom graphics boxplot lines par points
@@ -24,8 +24,8 @@
 #'
 #' @examples
 #' library(DLMtool)
-#' om <- DLMtool::testOM
-#' om@nsim <- 3
+#' om <- MSEtool::testOM
+#' om@@nsim <- 3
 #' temp_mp <- reduce_survey(Islope1)
 #' # mse <- runMSE(OM = om, MPs = "temp_mp")
 reduce_survey <- function(mp,
@@ -78,10 +78,10 @@ remove_years <- function(dat, slot, index) {
 #' [reduce_survey()] to eliminate odd years of survey observations to reflect
 #' the biennial nature of most groundfish surveys in British Columbia.
 #'
-#' @param x A position in the data object. As per \pkg{DLMtool}.
-#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param x A position in the data object. As per \pkg{MSEtool}.
+#' @param Data A data object. As per \pkg{MSEtool}.
 #' @param reps The number of stochastic samples of the MP recommendation(s). As
-#'   per \pkg{DLMtool}.
+#'   per \pkg{MSEtool}.
 #' @param ... Other arguments to pass to the MP function.
 #'
 #' @rdname MPs
@@ -105,11 +105,11 @@ GB_slope_base <- function (x, Data, reps = 100, plot = FALSE, yrsmth = 5, lambda
     Islp <- slppar[1]
   }
   MuC <- Data@Cat[x, length(Data@Cat[x, ])]
-  Cc <- DLMtool::trlnorm(reps, MuC, Data@CV_Cat[x, 1])
+  Cc <- MSEtool::trlnorm(reps, MuC, Data@CV_Cat[x, 1])
   TAC <- Cc * (1 + lambda * Islp)
   TAC[TAC > (1.2 * Catrec)] <- 1.2 * Catrec
   TAC[TAC < (0.8 * Catrec)] <- 0.8 * Catrec
-  TAC <- DLMtool::TACfilter(TAC)
+  TAC <- MSEtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
@@ -192,7 +192,7 @@ Islope_mod_ <- function(x, Data, reps = 100, yrsmth = 6, lambda, xx,
   )$TAC
   last_catch_rec <- Data@MPrec[x]
   tac[tac > (increase_cap * last_catch_rec)] <- increase_cap * last_catch_rec
-  tac <- DLMtool::TACfilter(tac)
+  tac <- MSEtool::TACfilter(tac)
   Rec <- new("Rec")
   Rec@TAC <- tac
   Rec
@@ -229,10 +229,10 @@ class(Islope0.2_80) <- "MP"
 
 #' Itarget MP
 #'
-#' @param x A position in the data object. As per \pkg{DLMtool}.
-#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param x A position in the data object. As per \pkg{MSEtool}.
+#' @param Data A data object. As per \pkg{MSEtool}.
 #' @param reps The number of stochastic samples of the MP recommendation(s). As
-#'   per \pkg{DLMtool}.
+#'   per \pkg{MSEtool}.
 #' @param w A smoothing parameter that defines the "steepness" of the adjustment
 #'   slope.
 #' @param lambda Fraction of the average index over the 10 years prior to the
@@ -248,7 +248,7 @@ class(Islope0.2_80) <- "MP"
 #'
 #' @export
 #' @examples
-#' Itarget(1, DLMtool::SimulatedData)
+#' Itarget(1, MSEtool::SimulatedData)
 Itarget <- function(
   x,
   Data,
@@ -280,7 +280,7 @@ Itarget <- function(
   }
   if (TAC < 0) TAC <- 0
 
-  TAC <- DLMtool::TACfilter(TAC)
+  TAC <- MSEtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
@@ -334,10 +334,10 @@ class(Itarget_d0.8) <- "MP"
 #' This MP is based on [DLMtool::ITM()] but since the reference index level to
 #' the index over some historical time period.
 #'
-#' @param x A position in the data object. As per \pkg{DLMtool}.
-#' @param Data A data object. As per \pkg{DLMtool}.
+#' @param x A position in the data object. As per \pkg{MSEtool}.
+#' @param Data A data object. As per \pkg{MSEtool}.
 #' @param reps The number of stochastic samples of the MP recommendation(s). As
-#'   per \pkg{DLMtool}.
+#'   per \pkg{MSEtool}.
 #' @param yrsmth_hist Number of historical years to consider for reference index
 #'   level.
 #' @param ... Other arguments to pass to the MP function.
@@ -362,8 +362,8 @@ ITM_hist <- function(x, Data, reps = 100, yrsmth_hist = 10, ...) {
   if (deltaI > (1 + mc)) {
     deltaI <- 1 + mc
   }
-  TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
-  TAC <- DLMtool::TACfilter(TAC)
+  TAC <- Data@MPrec[x] * deltaI * MSEtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
+  TAC <- MSEtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
@@ -404,8 +404,8 @@ stepwise_NAs <- function(x) {
 #' Rockfish in British Columbia. Working Paper 2017GRF02.
 #'
 #' @examples
-#' IDX(1, DLMtool::SimulatedData)
-#' IDX(1, DLMtool::SimulatedData, lambda = 0.5)
+#' IDX(1, MSEtool::SimulatedData)
+#' IDX(1, MSEtool::SimulatedData, lambda = 0.5)
 IDX <- function(x, Data, reps = 100, delta_min = -0.5,
                 delta_max = 0.25, lambda = 1, tac_floor = NULL,
                 year_ref = 1) {
@@ -438,7 +438,7 @@ IDX <- function(x, Data, reps = 100, delta_min = -0.5,
   }
 
   TAC <- lambda * TAC + (1 - lambda) * catch_rec
-  TAC <- DLMtool::TACfilter(TAC)
+  TAC <- MSEtool::TACfilter(TAC)
 
   Rec <- new("Rec")
   Rec@TAC <- TAC
@@ -472,8 +472,8 @@ IT_hist_ <- function(x, Data, reps = 100, yrsmth = 5, mc = 0.05, yrsmth_hist = 1
   deltaI <- mean(Data@Ind[x, ind], na.rm = TRUE) / I_ref
   if (deltaI < (1 - mc)) deltaI <- 1 - mc
   if (deltaI > (1 + mc)) deltaI <- 1 + mc
-  TAC <- Data@MPrec[x] * deltaI * DLMtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
-  TAC <- DLMtool::TACfilter(TAC)
+  TAC <- Data@MPrec[x] * deltaI * MSEtool::trlnorm(reps, 1, Data@CV_Ind[x, 1])
+  TAC <- MSEtool::TACfilter(TAC)
   Rec <- new("Rec")
   Rec@TAC <- TAC
   Rec
@@ -618,15 +618,15 @@ class(SP4010_gf) <- "MP"
 
 #' @param mp MP to wrap
 #' @param r_prior Mean and SD of r prior
-#' @param other_start A named list of other elements to pass to [MSEtool::SP()].
+#' @param other_start A named list of other elements to pass to [SAMtool::SP()].
 #' @export
 #' @rdname SP_gf
 #' @examples
+#' library(SAMtool)
 #' my_mp <- add_SP_prior(SP4010_gf, c(0.3, 0.05))
-#' library(DLMtool)
-#' om <- DLMtool::testOM
-#' om@nsim <- 5
-#' om@proyears <- 10
+#' om <- MSEtool::testOM
+#' om@@nsim <- 5
+#' om@@proyears <- 10
 #' mse <- runMSE(om, MPs = "my_mp")
 add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
                          other_start = NULL,
@@ -658,29 +658,31 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
   `class<-`(f, "MP")
 }
 
-#' Use the first AddInd slot
+#' Use AddInd slot
 #'
-#' This function factory modifies an MP to use the `AddInd` (and `CV_AddInd`)
-#' slots from the first "real" survey instead of `Ind`. This means that the
-#' first survey in your SRA must be the survey that you want to mimic.
+#' This function factory modifies an MP to use an index from `AddInd` (and `CV_AddInd`)
+#' slots instead of `Ind` by generating a wrapper function that assigns AddInd to Ind before
+#' calling the MP function.
 #'
 #' @param mp MP to use.
+#' @param i The i-th index in AddInd to assign to the Ind slot.
 #'
 #' @export
 #' @examples
 #' library(MSEtool)
-#' om <- DLMtool::testOM
-#' om@nsim <- 10
+#' om <- MSEtool::testOM
+#' om@@nsim <- 10
 #' set.seed(1)
-#' sra <- SRA_scope(om,
+#' sra <- RCM(om,
 #'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
 #' my_mp <- use_AddInd(Itarget_base)
-#' mse <- runMSE(sra@OM, MPs = "Itarget_base")
-use_AddInd <- function(mp) {
+#' mse <- runMSE(sra@@OM, MPs = "Itarget_base")
+use_AddInd <- function(mp, i) {
   force(mp)
+  force(i)
   f <- function(x, Data, reps = 1L) {
-    Data@Ind <- Data@AddInd[, 1L, ]
-    Data@CV_Ind <- Data@CV_AddInd[, 1L, ]
+    Data@Ind <- Data@AddInd[, i, ]
+    Data@CV_Ind <- Data@CV_AddInd[, i, ]
     mp(x = x, Data = Data, reps = reps)
   }
   `class<-`(f, "MP")

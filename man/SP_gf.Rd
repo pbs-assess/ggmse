@@ -76,15 +76,15 @@ instead of using the last year's catch.}
 
 \item{r_prior}{Mean and SD of r prior}
 
-\item{other_start}{A named list of other elements to pass to \code{\link[MSEtool:SP]{MSEtool::SP()}}.}
+\item{other_start}{A named list of other elements to pass to \code{\link[SAMtool:SP]{SAMtool::SP()}}.}
 }
 \description{
 PBS groundfish surplus production wrapper function
 }
 \examples{
+library(SAMtool)
 my_mp <- add_SP_prior(SP4010_gf, c(0.3, 0.05))
-library(DLMtool)
-om <- DLMtool::testOM
+om <- MSEtool::testOM
 om@nsim <- 5
 om@proyears <- 10
 mse <- runMSE(om, MPs = "my_mp")

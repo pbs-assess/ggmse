@@ -2,7 +2,7 @@
 % Please edit documentation in R/make-rmd.R
 \name{create_rmd}
 \alias{create_rmd}
-\title{Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it}
+\title{Create .Rmd file describing MSEtool Objects and Slots and inject custom descriptions into it}
 \usage{
 create_rmd(
   file_name,
@@ -26,7 +26,7 @@ Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it
 Nothing
 }
 \description{
-Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it
+Create .Rmd file describing MSEtool Objects and Slots and inject custom descriptions into it
 }
 \examples{
 create_rmd("test.Rmd")

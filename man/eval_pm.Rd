@@ -7,7 +7,7 @@
 eval_pm(mse_obj, pm_list = NULL, refs = NULL, yrs = NULL)
 }
 \arguments{
-\item{mse_obj}{MSE object. Output of the DLMtool \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} function.}
+\item{mse_obj}{MSE object. Output of the MSEtool \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}} function.}
 
 \item{pm_list}{List of performace metric names}
 

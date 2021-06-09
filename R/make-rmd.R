@@ -69,19 +69,19 @@ change_chunk_suffix <- function(file_name,
     ## types such as 'stock' and 'fleet' which may have a previously added suffix
     if (length(k) == 2) {
       if (k[1] == "stock") {
-        if (!any(k[2] == tolower(DLMtool::StockDescription$Slot))) {
+        if (!any(k[2] == tolower(MSEtool::StockDescription$Slot))) {
           k <- k[-2]
         }
       } else if (k[1] == "fleet") {
-        if (!any(k[2] == tolower(DLMtool::FleetDescription$Slot))) {
+        if (!any(k[2] == tolower(MSEtool::FleetDescription$Slot))) {
           k <- k[-2]
         }
       } else if (k[1] == "obs") {
-        if (!any(k[2] == tolower(DLMtool::ObsDescription$Slot))) {
+        if (!any(k[2] == tolower(MSEtool::ObsDescription$Slot))) {
           k <- k[-2]
         }
       } else if (k[1] == "imp") {
-        if (!any(k[2] == tolower(DLMtool::ImpDescription$Slot))) {
+        if (!any(k[2] == tolower(MSEtool::ImpDescription$Slot))) {
           k <- k[-2]
         }
       } else {
@@ -144,7 +144,7 @@ check_tags <- function(rmd) {
   }
 }
 
-#' Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it
+#' Create .Rmd file describing MSEtool Objects and Slots and inject custom descriptions into it
 #'
 #' @param file_name Filename of the .rmd file to create/modify. If it does not exist,
 #'  it will be created using [create_default_rmd()]
@@ -355,7 +355,7 @@ create_rmd <- function(file_name,
             paste0("## FLEET SLOT DESCRIPTIONS {#app:desc-fleet", chunk_suffix, "}"),
             "",
             "```{r warnings = FALSE}",
-            paste0(fleet_obj_name, " <- DLMtool::Generic_Fleet"),
+            paste0(fleet_obj_name, " <- MSEtool::Generic_Fleet"),
             "```",
             "",
             ifelse(!is.na(cust_chunks[[2]]), cust_chunks[[2]], ""),
@@ -373,7 +373,7 @@ create_rmd <- function(file_name,
             paste0("## OBS SLOT DESCRIPTIONS {#app:desc-obs", chunk_suffix, "}"),
             "",
             "```{r warnings = FALSE}",
-            paste0(obs_obj_name, " <- DLMtool::Precise_Unbiased"),
+            paste0(obs_obj_name, " <- MSEtool::Precise_Unbiased"),
             "```",
             "",
             ifelse(!is.na(cust_chunks[[3]]), cust_chunks[[3]], ""),
@@ -391,7 +391,7 @@ create_rmd <- function(file_name,
             paste0("## IMP SLOT DESCRIPTIONS {#app:desc-imp", chunk_suffix, "}"),
             "",
             "```{r warnings = FALSE}",
-            paste0(imp_obj_name, " <- DLMtool::Perfect_Imp"),
+            paste0(imp_obj_name, " <- MSEtool::Perfect_Imp"),
             "```",
             "",
             ifelse(!is.na(cust_chunks[[4]]), cust_chunks[[4]], ""),
@@ -429,7 +429,7 @@ create_rmd <- function(file_name,
   close(conn)
 }
 
-#' Create template Rmd file describing DLMtool Objects and Slots
+#' Create template Rmd file describing MSEtool Objects and Slots
 #'
 #' @param file_name Filename/path of where to save the .Rmd file.
 #' @param overwrite Overwrite?
@@ -452,16 +452,16 @@ create_default_rmd <- function(file_name, overwrite = FALSE,
   }
 
   rmd <- c(
-    "```{r message = FALSE}\nlibrary(DLMtool)",
+    "```{r message = FALSE}\nlibrary(MSEtool)",
     paste0("knitr_results <- ", as.character(eval(knitr_results))),
     paste0("knitr_echo <- ", as.character(eval(knitr_echo))),
     "```\n",
-    # format_desc(DLMtool::DataDescription, "Data"),
-    format_desc(DLMtool::StockDescription, "Stock"),
-    format_desc(DLMtool::FleetDescription, "Fleet"),
-    format_desc(DLMtool::ObsDescription, "Obs"),
-    format_desc(DLMtool::ImpDescription, "Imp")
-    # format_desc(DLMtool::OMDescription, "OM")
+    # format_desc(MSEtool::DataDescription, "Data"),
+    format_desc(MSEtool::StockDescription, "Stock"),
+    format_desc(MSEtool::FleetDescription, "Fleet"),
+    format_desc(MSEtool::ObsDescription, "Obs"),
+    format_desc(MSEtool::ImpDescription, "Imp")
+    # format_desc(MSEtool::OMDescription, "OM")
   )
 
   conn <- file(file_name)
@@ -469,10 +469,10 @@ create_default_rmd <- function(file_name, overwrite = FALSE,
   close(conn)
 }
 
-#' Format a DLMtool description dataframe into Rmarkdown format and produce a
+#' Format a MSEtool description dataframe into Rmarkdown format and produce a
 #'   string combining all of them together with a section name
 #'
-#' @param df DLMtool Description data frame
+#' @param df MSEtool Description data frame
 #' @param obj_name Name to use for the section
 #' @param inst_obj_name The name to use for the instance of the object
 #'
@@ -481,7 +481,7 @@ create_default_rmd <- function(file_name, overwrite = FALSE,
 #' @noRd
 #'
 #' @examples
-#' format_desc(DLMtool::DataDescription, "Data")
+#' format_desc(MSEtool::DataDescription, "Data")
 format_desc <- function(df,
                         obj_name = "Data",
                         inst_obj_name = tolower(obj_name)) {

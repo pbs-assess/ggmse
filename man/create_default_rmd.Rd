@@ -2,7 +2,7 @@
 % Please edit documentation in R/make-rmd.R
 \name{create_default_rmd}
 \alias{create_default_rmd}
-\title{Create template Rmd file describing DLMtool Objects and Slots}
+\title{Create template Rmd file describing MSEtool Objects and Slots}
 \usage{
 create_default_rmd(
   file_name,
@@ -24,7 +24,7 @@ create_default_rmd(
 Nothing
 }
 \description{
-Create template Rmd file describing DLMtool Objects and Slots
+Create template Rmd file describing MSEtool Objects and Slots
 }
 \examples{
 unlink("test.Rmd")

@@ -5,7 +5,7 @@
 #' thirds of the respective OM slot values. Then ribbon plots are made within
 #' those groups across iterations through time.
 #'
-#' @param object A DLMtool MSE object.
+#' @param object A MSEtool MSE object.
 #' @param type Whether to make a B/Bmsy or F/Fmsy projection plot.
 #' @param mp A character vector of MPs to plot (must be included in the MSE
 #'   object). Defaults to all.
@@ -27,7 +27,7 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
   if (is.null(object@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
-      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
       "Setting CurrentYr = 0 for now.", call. = FALSE
     )

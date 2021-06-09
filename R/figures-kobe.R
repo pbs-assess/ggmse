@@ -59,7 +59,7 @@ calc_contour_lines <- function(d,
 
 #' Make Kobe contour plots by management procedure for B/BMSY by F/FMSY
 #'
-#' @param object An MSE object as returned by [DLMtool::runMSE()].
+#' @param object An MSE object as returned by [MSEtool::runMSE()].
 #' @param yend The end year
 #' @param dontshow_mp A vector of MPs to leave out of the plot.
 #' @param show_ref_pt_lines Show the reference point lines at the values in *_ref_lines arguments
@@ -182,7 +182,7 @@ plot_kobe <- function(object,
   }
 }
 
-#' @param object_list A list of DLMtool MSE objects representing different
+#' @param object_list A list of MSEtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param ... Other arguments to pass to [plot_kobe()].
 #' @rdname plot_kobe

@@ -13,7 +13,7 @@ plot_sensitivity_trajectory(
 )
 }
 \arguments{
-\item{object}{A DLMtool MSE object.}
+\item{object}{A MSEtool MSE object.}
 
 \item{type}{Whether to make a B/Bmsy or F/Fmsy projection plot.}
 

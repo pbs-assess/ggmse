@@ -1,5 +1,5 @@
 Package: gfdlm
-Title: Tools for Working with 'DLMtool' and 'MSEtool'
+Title: Tools for Working with openMSE (including DLMtool, MSEtool, and SAMtool)
 Version: 0.0.1.9001
 Authors@R:
     c(person(given = c("Sean", "C."),
@@ -12,8 +12,8 @@ Authors@R:
       person(given = c("Robyn", "E."),
              family = "Forrest",
              role = "aut"))
-Description: Provides tools for using 'DLMtool' and
-    'MSEtool' with British Columbia groundfish stocks. The package
+Description: Provides tools for using DLMtool, 
+    MSEtool, and SAMtool with British Columbia groundfish stocks. The package
     includes a number of plotting functions, custom management procedures,
     and templates for populating operating models.
 License: GPL-2
@@ -25,7 +25,7 @@ Imports:
     clisymbols,
     cowplot,
     crayon,
-    DLMtool (<= 5.4.5),
+    DLMtool (>= 6.0.0),
     dplyr,
     gfdata,
     gfutilities,
@@ -34,7 +34,8 @@ Imports:
     magrittr,
     MASS,
     methods,
-    MSEtool (<= 2.0.1),
+    MSEtool (>= 3.0.0),
+    SAMtool (>= 1.2.0),
     purrr,
     RColorBrewer,
     readr,
@@ -46,6 +47,7 @@ Imports:
     tidyr
 Suggests:
     covr,
+    stringi,
     testthat
 Remotes: 
     github::pbs-assess/gfdata,
