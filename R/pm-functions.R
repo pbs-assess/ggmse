@@ -13,7 +13,7 @@
 #' @importFrom tibble as_tibble
 #' @export
 #' @examples
-#' library(DLMtool)
+#' library(openMSE)
 #' eval_pm(mse_example, list("PNOF", "P100", "P10", "LTY", "AAVY"))
 eval_pm <- function(mse_obj,
                     pm_list = NULL,

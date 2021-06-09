@@ -25,6 +25,6 @@ management procedure.
 Evaluate performance petrics
 }
 \examples{
-library(DLMtool)
+library(openMSE)
 eval_pm(mse_example, list("PNOF", "P100", "P10", "LTY", "AAVY"))
 }
