@@ -68,10 +68,10 @@
 #'   "sc3", "Scenario 3", "Robustness"
 #' )
 #'
-#' `LT LRP` <- gfdlm::pm_factory("SBMSY", 0.4, c(36, 50))
-#' `LT USR` <- gfdlm::pm_factory("SBMSY", 0.8, c(36, 50))
-#' STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
-#' LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
+#' `LT LRP` <- ggmse::pm_factory("SBMSY", 0.4, c(36, 50))
+#' `LT USR` <- ggmse::pm_factory("SBMSY", 0.8, c(36, 50))
+#' STC <- ggmse::pm_factory("LTY", 0.5, c(1, 10))
+#' LTC <- ggmse::pm_factory("LTY", 0.5, c(36, 50))
 #' pm <- c("LT LRP", "LT USR", "STC", "LTC")
 #'
 #' custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")
@@ -198,10 +198,10 @@ plot_factory <- function(
 
   g <- list()
 
-  g$tigure_refset_avg <- gfdlm::plot_tigure(pm_avg,
+  g$tigure_refset_avg <- plot_tigure(pm_avg,
     satisficed = satisficed_criteria, french = french
   )
-  g$tigure_refset_min <- gfdlm::plot_tigure(pm_min,
+  g$tigure_refset_min <- plot_tigure(pm_min,
     satisficed = satisficed_criteria, french = french
   )
 
@@ -312,17 +312,17 @@ plot_factory <- function(
   g$kobe_ref <-
     purrr::map(scenarios_ref, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_kobe_grid(french = french)
+    plot_kobe_grid(french = french)
 
   g$kobe_rob <-
     purrr::map(scenarios_rob, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_kobe_grid(french = french)
+    plot_kobe_grid(french = french)
 
   g$kobe <-
     purrr::map(scenarios, ~ MSEtool::Sub(mse_list[[.x]], MPs = MPs)) %>%
     set_names(scenarios_human) %>%
-    gfdlm::plot_kobe_grid(french = french)
+    plot_kobe_grid(french = french)
 
 
   # Radar plots ---------------------------------------------------------------

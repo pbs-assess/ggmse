@@ -61,7 +61,7 @@ get_probs <- function(object,
 #' Summary of performance metrics from MSE objects in a coloured tile table
 #' format
 #'
-#' @param probs_dat A data frame as returned from [gfdlm::get_probs()].
+#' @param probs_dat A data frame as returned from [get_probs()].
 #' @param relative_max Make the plot have each column use a reletive maximum. If
 #'   `scale_0_1` is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each

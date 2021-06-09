@@ -151,7 +151,7 @@ check_tags <- function(rmd) {
 #' @param cust_desc_file_name Filename of the .csv file containing the custom descriptions.
 #'  Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it.
 #' @param slot_type_order_file_name Filename of the .csv file containing the slot orders.
-#' @param ... Arguments to be passed to [gfdlm::create_default_rmd()]
+#' @param ... Arguments to be passed to [create_default_rmd()]
 #'
 #' @return Nothing
 #' @importFrom readr read_csv
@@ -162,8 +162,8 @@ check_tags <- function(rmd) {
 #' @examples
 #' create_rmd("test.Rmd")
 create_rmd <- function(file_name,
-                       cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
-                       slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
+                       cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "ggmse"),
+                       slot_type_order_file_name = system.file("slot-type-order.csv", package = "ggmse"),
                        ...) {
   if (!file.exists(file_name)) {
     create_default_rmd(file_name, ...)

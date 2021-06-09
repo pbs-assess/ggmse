@@ -1,6 +1,6 @@
 #' Calculate a set of x-y coordinates for a contour line
 #' Density values are sorted and standardized, and the critical value is
-#' calculated from the alpha cutoff value and sent to [gfdlm::calc_contour_lines()]
+#' calculated from the alpha cutoff value and sent to [calc_contour_lines()]
 #' as an argument.
 #'
 #' @param x Output from the function [MASS::kde2d()]
