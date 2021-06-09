@@ -8,7 +8,7 @@ NULL
 #' @describeIn plot_rcm_data Plot fits to index
 #' @param rcm A list containing \linkS4class{RCModel} objects.
 #' @param scenario A character vector of names corresponding to \code{rcm}.
-#' @param FRENCH Logical, whether the axes are in French or not.
+#' @param french Logical, whether the axes are in French or not.
 #' @param type Whether the output is from a fishing fleet or index.
 #' @param i The corresponding index from the fleet or index of abundance.
 #' @param index_names Character vector of names for the indices of abundance.
@@ -60,9 +60,9 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fre
     theme_pbs() +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color) +
-    ylab(en2fr("Index value", FRENCH)) +
-    xlab(en2fr("Year", FRENCH)) +
-    labs(colour = en2fr("Index", FRENCH), fill = en2fr("Index", FRENCH))
+    ylab(en2fr("Index value", french)) +
+    xlab(en2fr("Year", french)) +
+    labs(colour = en2fr("Index", french), fill = en2fr("Index", french))
   if (length(i) > 1) {
     g <- g + facet_grid(index_names ~ scenario, scales = "free_y")
   } else {
@@ -116,8 +116,8 @@ plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("flee
     ) +
     theme_pbs() +
     ggtitle(scenario) +
-    xlab(en2fr("Age", FRENCH)) +
-    ylab(en2fr("Frequency", FRENCH))
+    xlab(en2fr("Age", french)) +
+    ylab(en2fr("Frequency", french))
   g
 }
 
@@ -248,8 +248,8 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
     ) +
     theme_pbs() +
     ggtitle(scenario) +
-    xlab(en2fr("Length", FRENCH)) +
-    ylab(en2fr("Frequency", FRENCH))
+    xlab(en2fr("Length", french)) +
+    ylab(en2fr("Frequency", french))
   g
 }
 
@@ -321,7 +321,7 @@ plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), 
     geom_point() +
     theme_pbs() +
     ggtitle(scenario) +
-    xlab(en2fr("Age", FRENCH)) +
-    ylab(en2fr("Proportion biomass", FRENCH))
+    xlab(en2fr("Age", french)) +
+    ylab(en2fr("Proportion biomass", french))
   g
 }

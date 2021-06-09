@@ -1,11 +1,11 @@
 
-make_plot_wrap <- function(dat, .scenario, FRENCH, scales = "fixed", ylim = NULL, ylab) {
+make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL, ylab) {
   g <- mutate(dat, scenario = factor(scenario, levels = .scenario)) %>%
     ggplot(aes(year, value, group = iteration)) +
     geom_line(alpha = 0.05) +
     facet_wrap(vars(scenario), scales = scales) +
     theme_pbs() +
-    labs(x = en2fr("Year", FRENCH), y = en2fr(ylab, FRENCH))
+    labs(x = en2fr("Year", french), y = en2fr(ylab, french))
   if (!is.null(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }

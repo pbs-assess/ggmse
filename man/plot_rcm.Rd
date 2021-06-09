@@ -57,6 +57,8 @@ plot_rcm_bio_sel(
 
 \item{scenario}{A character vector of names corresponding to \code{rcm}.}
 
+\item{french}{Logical, whether the axes are in French or not.}
+
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
 
 \item{ylim}{Optional y-axes limits to figures.}
@@ -72,8 +74,6 @@ plot_rcm_bio_sel(
 \item{sel_i}{The index of the fleet or index for the selectivity}
 
 \item{sel_name}{The name for the selectivity}
-
-\item{FRENCH}{Logical, whether the axes are in French or not.}
 }
 \description{
 A set of functions that plots output from a list of RCModel objects used to condition a set

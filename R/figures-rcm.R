@@ -8,7 +8,7 @@ NULL
 #' @describeIn plot_rcm Plot historical SSB
 #' @param rcm A list containing \linkS4class{RCModel} objects.
 #' @param scenario A character vector of names corresponding to \code{rcm}.
-#' @param FRENCH Logical, whether the axes are in French or not.
+#' @param french Logical, whether the axes are in French or not.
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
@@ -17,7 +17,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "SSB")
 
   if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
-  make_plot_wrap(dat, scenario, FRENCH, scales, ylim = ylim, ylab = "Spawning biomass")
+  make_plot_wrap(dat, scenario, french, scales, ylim = ylim, ylab = "Spawning biomass")
 }
 
 
@@ -26,7 +26,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
 plot_rcm_depletion <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                                scales = "fixed") {
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "depletion")
-  make_plot_wrap(dat, scenario, FRENCH, scales, ylab = "Spawning depletion", ylim = c(0, 1.1 * max(dat$value)))
+  make_plot_wrap(dat, scenario, french, scales, ylab = "Spawning depletion", ylim = c(0, 1.1 * max(dat$value)))
 }
 
 #' @describeIn plot_rcm Plot historical apical F
@@ -36,7 +36,7 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french 
   dat <- purrr::map2_df(rcm, scenario, .rcm_F)
 
   if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
-  make_plot_wrap(dat, scenario, FRENCH, scales, ylim = ylim, ylab = "Apical fishing mortality")
+  make_plot_wrap(dat, scenario, french, scales, ylim = ylim, ylab = "Apical fishing mortality")
 }
 
 
@@ -47,7 +47,7 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french 
 plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspace = FALSE,
                             scales = "fixed", ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_recdev, proj = proj, logspace = logspace)
-  g <- make_plot_wrap(dat, scenario, FRENCH,
+  g <- make_plot_wrap(dat, scenario, french,
     scales = scales, ylim = ylim,
     ylab = paste0("Recruitment deviations", ifelse(logspace, " log space", ""))
   ) +
@@ -85,7 +85,7 @@ plot_rcm_bio_sel <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), f
     geom_point(aes(shape = Type)) +
     facet_wrap(~scenario) +
     theme_pbs() +
-    labs(x = en2fr("Age", FRENCH), y = en2fr("Value", FRENCH)) +
+    labs(x = en2fr("Age", french), y = en2fr("Value", french)) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.01))
   g
 }

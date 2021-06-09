@@ -85,6 +85,8 @@ plot_rcm_biomass_age(
 
 \item{scenario}{A character vector of names corresponding to \code{rcm}.}
 
+\item{french}{Logical, whether the axes are in French or not.}
+
 \item{i}{The corresponding index from the fleet or index of abundance.}
 
 \item{index_names}{Character vector for the names of the indices}
@@ -108,8 +110,6 @@ plot_rcm_biomass_age(
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
 
 \item{ylim}{Optional y-axes limits to figures.}
-
-\item{FRENCH}{Logical, whether the axes are in French or not.}
 }
 \description{
 A set of functions that plots fits to data from a list of RCModel objects.
