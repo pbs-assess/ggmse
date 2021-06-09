@@ -6,8 +6,8 @@
 \usage{
 plot_historical_ts(
   object,
-  type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray",
-    "RecDev"),
+  type = c("Catch", "Number", "Biomass", "VBiomass", "SBiomass", "Removals",
+    "Landings", "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
   n_samples = 50,
   this_year = 2018,
   observed_ts = NULL,

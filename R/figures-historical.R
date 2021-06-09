@@ -31,7 +31,10 @@
 #'   observed_ts = rlnorm(50, 1, 0.3)
 #' )
 plot_historical_ts <- function(object,
-                               type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray", "RecDev"),
+                               type = c("Catch", "Number", "Biomass",
+                                 "VBiomass", "SBiomass",
+                                 "Removals", "Landings",
+                                 "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
                                n_samples = 50,
                                this_year = 2018,
                                observed_ts = NULL,
@@ -54,8 +57,9 @@ plot_historical_ts <- function(object,
       sample_id = Var1, year = Var2 + min(all_years) - 1,
       value = value, type = "Simulated"
     )
-
   x <- x %>%
+    group_by(sample_id, year, type) %>%
+    summarize(value = sum(value)) %>% # over areas
     filter(!is.na(value))
 
   if (scale) x <- mutate(x, value = value / exp(mean(log(value))))
