@@ -6,15 +6,15 @@
 # .mse <- runMSE(OM = om, MPs = "AvC", Hist = TRUE)
 
 # oddify <- function(x) seq(1, x, 2)
-# out <- gfdlm:::remove_years(.mse@Data, "Ind", oddify)
+# out <- ggmse:::remove_years(.mse@Data, "Ind", oddify)
 # expect_true(all(is.na(out@Ind[, seq(1, ncol(out@Ind), 2)])))
 # expect_true(all(!is.na(out@Ind[, seq(2, ncol(out@Ind), 2)])))
 #
-# out <- gfdlm:::remove_years(.mse@Data, "CAL", oddify)
+# out <- ggmse:::remove_years(.mse@Data, "CAL", oddify)
 # expect_true(all(is.na(out@CAL[, seq(1, ncol(out@CAL), 2), ])))
 # expect_true(all(!is.na(out@CAL[, seq(2, ncol(out@CAL), 2), ])))
 #
-# out <- gfdlm:::remove_years(.mse@Data, "CAA", oddify)
+# out <- ggmse:::remove_years(.mse@Data, "CAA", oddify)
 # expect_true(all(is.na(out@CAA[, seq(1, ncol(out@CAA), 2), ])))
 # expect_true(all(!is.na(out@CAA[, seq(2, ncol(out@CAA), 2), ])))
 

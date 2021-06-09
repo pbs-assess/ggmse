@@ -6,8 +6,8 @@
 \usage{
 create_rmd(
   file_name,
-  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
-  slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
+  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "ggmse"),
+  slot_type_order_file_name = system.file("slot-type-order.csv", package = "ggmse"),
   ...
 )
 }
@@ -20,7 +20,7 @@ Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it
 
 \item{slot_type_order_file_name}{Filename of the .csv file containing the slot orders.}
 
-\item{...}{Arguments to be passed to \code{\link[gfdlm:create_default_rmd]{gfdlm::create_default_rmd()}}}
+\item{...}{Arguments to be passed to \code{\link[=create_default_rmd]{create_default_rmd()}}}
 }
 \value{
 Nothing

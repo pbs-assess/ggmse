@@ -220,7 +220,7 @@ plot_factory <- function(
   g$convergence <- scenarios %>%
     purrr::map(~ MSEtool::Sub(mse_list[[.x]], MPs = mp_sat_with_ref)) %>%
     set_names(scenarios_human) %>%
-    gfdlm::plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal, french = french)
+    plot_convergence(pm, ylim = c(0.3, 1), custom_pal = custom_pal, french = french)
 
   # Projections ---------------------------------------------------------------
 
@@ -366,16 +366,16 @@ plot_factory <- function(
   g$dot_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$dot_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_dots(type = "facet", custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$dot_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_dots(type = "single", custom_pal = custom_pal, dodge = dodge, french = french)
 
   # Parallel coordinate plots -------------------------------------------------
 
@@ -384,16 +384,16 @@ plot_factory <- function(
   g$parallel_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
+    plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
 
   g$parallel_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
+    plot_parallel_coords(type = "facet", custom_pal = custom_pal, french = french)
 
   g$parallel_refset_avg <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_parallel_coords(type = "single", custom_pal = custom_pal, french = french)
+    plot_parallel_coords(type = "single", custom_pal = custom_pal, french = french)
 
   # Lollipops -----------------------------------------------------------------
 
@@ -402,15 +402,15 @@ plot_factory <- function(
   g$lollipops_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% MPs) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$lollipops_refset_avg <- pm_avg %>%
     dplyr::filter(MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   g$lollipops_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% MPs) %>%
-    gfdlm::plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
+    plot_lollipop(custom_pal = custom_pal, dodge = dodge, french = french)
 
   # Bivariate trade-off plots -------------------------------------------------
 
@@ -419,22 +419,22 @@ plot_factory <- function(
   g$tradeoff_refset <- pm_df_list %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_ref_human) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
+    plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_avg <- list(pm_avg) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(en2fr("Average performance", french)) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
+    plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_min <- list(pm_min) %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(en2fr("Minimum performance", french)) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
+    plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french)
 
   g$tradeoff_robset <- pm_df_list_rob %>%
     map(dplyr::filter, MP %in% union(mp_sat, mp_ref[mp_ref != "NFref"])) %>%
     set_names(scenarios_rob_human) %>%
-    gfdlm::plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french) +
+    plot_tradeoff(tradeoff[1], tradeoff[2], custom_pal = custom_pal, french = french) +
     facet_wrap(~scenario, ncol = 2)
 
   # Psychedelic pyramid worms -------------------------------------------------

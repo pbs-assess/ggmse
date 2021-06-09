@@ -2,7 +2,7 @@
 ## Add new package objects here, and re-source this file to re-generate the RDA file.
 
 library(DLMtool)
-library(gfdlm)
+library(ggmse)
 om <- testOM
 om@nsim <- 10
 mse <- runMSE(OM = om, MPs = c("CC1.0", "Itarget1", "Iratio2", "FMSYref75"))

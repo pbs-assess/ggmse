@@ -114,10 +114,10 @@ scenario_df <- tibble::tribble(
   "sc3", "Scenario 3", "Robustness"
 )
 
-`LT LRP` <- gfdlm::pm_factory("SBMSY", 0.4, c(36, 50))
-`LT USR` <- gfdlm::pm_factory("SBMSY", 0.8, c(36, 50))
-STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
-LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
+`LT LRP` <- ggmse::pm_factory("SBMSY", 0.4, c(36, 50))
+`LT USR` <- ggmse::pm_factory("SBMSY", 0.8, c(36, 50))
+STC <- ggmse::pm_factory("LTY", 0.5, c(1, 10))
+LTC <- ggmse::pm_factory("LTY", 0.5, c(36, 50))
 pm <- c("LT LRP", "LT USR", "STC", "LTC")
 
 custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")

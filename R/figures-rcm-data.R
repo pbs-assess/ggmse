@@ -17,45 +17,55 @@ NULL
 #' @export
 plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE, i, index_names,
                            color, xlim) {
-
-  if(missing(i)) i <- 1:dim(rcm@Misc[[1]]$Ipred)[2]
-  if(missing(index_names)) index_names <- paste("Index", i)
-  if(missing(color)) color <- RColorBrewer::brewer.pal(length(i), "Set2") %>%
+  if (missing(i)) i <- 1:dim(rcm@Misc[[1]]$Ipred)[2]
+  if (missing(index_names)) index_names <- paste("Index", i)
+  if (missing(color)) {
+    color <- RColorBrewer::brewer.pal(length(i), "Set2") %>%
       structure(names = index_names)
+  }
   all_years <- seq(rcm[[1]]@OM@CurrentYr - rcm[[1]]@OM@nyears + 1, rcm[[1]]@OM@CurrentYr)
 
   .scenario <- scenario
   .index_names <- index_names
   Ipred <- purrr::map2_dfr(rcm, scenario, .rcm_index, .index_names = index_names, i = i) %>%
-    mutate(scenario = factor(scenario, levels = .scenario),
-           year = year + max(all_years) - rcm[[1]]@OM@nyears,
-           index_names = factor(index_names, levels = .index_names))
+    mutate(
+      scenario = factor(scenario, levels = .scenario),
+      year = year + max(all_years) - rcm[[1]]@OM@nyears,
+      index_names = factor(index_names, levels = .index_names)
+    )
 
-  I_sd <- rcm[[1]]@data@I_sd[, i, drop = FALSE] %>% structure(dimnames = list(all_years, index_names)) %>%
-    as.data.frame() %>% cbind(data.frame(year = all_years)) %>%
+  I_sd <- rcm[[1]]@data@I_sd[, i, drop = FALSE] %>%
+    structure(dimnames = list(all_years, index_names)) %>%
+    as.data.frame() %>%
+    cbind(data.frame(year = all_years)) %>%
     reshape2::melt(id.vars = "year", variable.name = "index_names", value.name = "SD")
 
-  Index <- rcm[[1]]@data@Index[, i, drop = FALSE] %>% structure(dimnames = list(all_years, index_names)) %>%
-    as.data.frame() %>% cbind(data.frame(year = all_years)) %>%
+  Index <- rcm[[1]]@data@Index[, i, drop = FALSE] %>%
+    structure(dimnames = list(all_years, index_names)) %>%
+    as.data.frame() %>%
+    cbind(data.frame(year = all_years)) %>%
     reshape2::melt(id.vars = "year", variable.name = "index_names") %>%
     left_join(I_sd, by = c("year", "index_names")) %>%
     mutate(lower = exp(log(value) - 2 * SD), upper = exp(log(value) + 2 * SD))
 
   g <- ggplot(Ipred, aes(year, value, group = paste(iter, index_names), colour = index_names)) +
     geom_line(alpha = 0.05) +
-    geom_pointrange(data = Index, aes(x = year, y = value, ymin = lower, ymax = upper, fill = index_names),
-                    inherit.aes = FALSE, pch = 21, colour = "grey40") +
+    geom_pointrange(
+      data = Index, aes(x = year, y = value, ymin = lower, ymax = upper, fill = index_names),
+      inherit.aes = FALSE, pch = 21, colour = "grey40"
+    ) +
     theme_pbs() +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color) +
-    ylab(en2fr("Index value", FRENCH)) + xlab(en2fr("Year", FRENCH)) +
+    ylab(en2fr("Index value", FRENCH)) +
+    xlab(en2fr("Year", FRENCH)) +
     labs(colour = en2fr("Index", FRENCH), fill = en2fr("Index", FRENCH))
-  if(length(i) > 1) {
+  if (length(i) > 1) {
     g <- g + facet_grid(index_names ~ scenario, scales = "free_y")
   } else {
     g <- g + facet_wrap(scenario ~ .)
   }
-  if(!missing(xlim)) g <- g + coord_cartesian(xlim = xlim)
+  if (!missing(xlim)) g <- g + coord_cartesian(xlim = xlim)
   g
 }
 
@@ -63,16 +73,15 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRE
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
 plot_rcm_age_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
-
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
-  if(type == "fleet") {
+  if (type == "fleet") {
     N <- RCModel@data@CAA_ESS[, i]
-    obs <- RCModel@data@CAA[, , i]/rowSums(RCModel@data@CAA[, , i])
+    obs <- RCModel@data@CAA[, , i] / rowSums(RCModel@data@CAA[, , i])
   } else {
     N <- RCModel@data@IAA_ESS[, i]
-    obs <- RCModel@data@IAA[, , i]/rowSums(RCModel@data@IAA[, , i])
+    obs <- RCModel@data@IAA[, , i] / rowSums(RCModel@data@IAA[, , i])
   }
   yr_ind <- N > 0
   yr_plot <- all_years[yr_ind]
@@ -82,21 +91,26 @@ plot_rcm_age_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("flee
     reshape2::melt(value.name = "Frequency")
 
   pred <- lapply(1:length(RCModel@Misc), function(x) {
-    if(type == "fleet") {
-      p <- RCModel@Misc[[x]]$CAApred[yr_ind, , i]/rowSums(RCModel@Misc[[x]]$CAApred[yr_ind, , i])
+    if (type == "fleet") {
+      p <- RCModel@Misc[[x]]$CAApred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$CAApred[yr_ind, , i])
     } else {
-      p <- RCModel@Misc[[x]]$IAApred[yr_ind, , i]/rowSums(RCModel@Misc[[x]]$IAApred[yr_ind, , i])
+      p <- RCModel@Misc[[x]]$IAApred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$IAApred[yr_ind, , i])
     }
-    p %>% structure(dimnames = list(Year = yr_plot, Age = 0:RCModel@OM@maxage)) %>%
-      reshape2::melt(value.name = "Frequency") %>% mutate(Iter = x)
+    p %>%
+      structure(dimnames = list(Year = yr_plot, Age = 0:RCModel@OM@maxage)) %>%
+      reshape2::melt(value.name = "Frequency") %>%
+      mutate(Iter = x)
   }) %>% bind_rows()
 
-  g <- ggplot(pred, aes(Age, Frequency, group = Iter)) + facet_wrap(~Year, scales = "free_y") +
+  g <- ggplot(pred, aes(Age, Frequency, group = Iter)) +
+    facet_wrap(~Year, scales = "free_y") +
     geom_col(data = obs, mapping = aes(x = Age, y = Frequency), fill = "grey40", inherit.aes = FALSE) +
     geom_line(alpha = 0.05, colour = color) +
-    #geom_point(data = obs, mapping = aes(x = Age, y = Frequency), inherit.aes = FALSE) +
-    geom_label(data = N_df, mapping = aes(label = N), x = Inf, y = Inf,
-               hjust = "right", vjust = "top", inherit.aes = FALSE) +
+    # geom_point(data = obs, mapping = aes(x = Age, y = Frequency), inherit.aes = FALSE) +
+    geom_label(
+      data = N_df, mapping = aes(label = N), x = Inf, y = Inf,
+      hjust = "right", vjust = "top", inherit.aes = FALSE
+    ) +
     theme_pbs() +
     ggtitle(scenario) +
     xlab(en2fr("Age", FRENCH)) +
@@ -113,7 +127,8 @@ plot_rcm_sel <- function(rcm, scenario, type = c("survey", "index"), i, name) {
 
   g <- ggplot(sel, aes(Age, value, group = paste(iter))) +
     geom_line(alpha = 0.15) +
-    theme_pbs() + facet_wrap(~scenario) +
+    theme_pbs() +
+    facet_wrap(~scenario) +
     ylab(paste(name, "selectivity")) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
   g
@@ -128,26 +143,30 @@ plot_rcm_sel <- function(rcm, scenario, type = c("survey", "index"), i, name) {
 plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fleet_i = 1, index_i = 1,
                                fleet_names = paste("Fleet", fleet_i), index_names = paste("Index", index_i),
                                color) {
-  if(all(is.na(fleet_i))) {
+  if (all(is.na(fleet_i))) {
     fsel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = fleet_i, i_names = fleet_names)
   } else {
     fsel <- data.frame()
   }
 
-  if(all(is.na(index_i))) {
+  if (all(is.na(index_i))) {
     isel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = index_i, i_names = index_names, type = "index")
   } else {
     isel <- data.frame()
   }
   out <- rbind(fsel, isel)
 
-  if(missing(color)) color <- RColorBrewer::brewer.pal(sum(!is.na(c(fleet_i, index_i))), "Set2") %>%
-    structure(names = c(fleet_names, index_names))
+  if (missing(color)) {
+    color <- RColorBrewer::brewer.pal(sum(!is.na(c(fleet_i, index_i))), "Set2") %>%
+      structure(names = c(fleet_names, index_names))
+  }
 
   ggplot(out, aes(Age, value, colour = Type)) +
     geom_line() +
-    theme_pbs() + facet_wrap(~scenario) +
-    ylab("Selectivity") + xlab("Age") +
+    theme_pbs() +
+    facet_wrap(~scenario) +
+    ylab("Selectivity") +
+    xlab("Age") +
     scale_color_manual(values = color) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
 }
@@ -159,9 +178,9 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 #' @export
 plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim) {
   type <- match.arg(type)
-  if(missing(i)) i <- 1
-  if(missing(name)) {
-    if(requireNamespace("stringi", quietly = TRUE)) {
+  if (missing(i)) i <- 1
+  if (missing(name)) {
+    if (requireNamespace("stringi", quietly = TRUE)) {
       name <- stringi::stri_trans_totitle(type) %>% paste(i, "mean age")
     } else {
       name <- "Mean age"
@@ -173,10 +192,12 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
 
   g <- ggplot(pred, aes(year, value)) +
     geom_line(alpha = 0.6, aes(group = paste(iter))) +
-    theme_pbs() + facet_wrap(~scenario, scales = scales) +
+    theme_pbs() +
+    facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
-    geom_point(data = obs) + geom_line(data = obs, linetype = 3)
-  if(!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
+    geom_point(data = obs) +
+    geom_line(data = obs, linetype = 3)
+  if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }
 
@@ -185,16 +206,15 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
 plot_rcm_length_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
-
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
-  if(type == "fleet") {
+  if (type == "fleet") {
     N <- RCModel@data@CAL_ESS[, i]
-    obs <- RCModel@data@CAL[, , i]/rowSums(RCModel@data@CAL[, , i])
+    obs <- RCModel@data@CAL[, , i] / rowSums(RCModel@data@CAL[, , i])
   } else {
     N <- RCModel@data@IAA_ESS[, i]
-    obs <- RCModel@data@IAL[, , i]/rowSums(RCModel@data@IAL[, , i])
+    obs <- RCModel@data@IAL[, , i] / rowSums(RCModel@data@IAL[, , i])
   }
   yr_ind <- N > 0
   yr_plot <- all_years[yr_ind]
@@ -204,20 +224,25 @@ plot_rcm_length_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("f
     reshape2::melt(value.name = "Frequency")
 
   pred <- lapply(1:length(RCModel@Misc), function(x) {
-    if(type == "fleet") {
-      p <- RCModel@Misc[[x]]$CALpred[yr_ind, , i]/rowSums(RCModel@Misc[[x]]$CALpred[yr_ind, , i])
+    if (type == "fleet") {
+      p <- RCModel@Misc[[x]]$CALpred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$CALpred[yr_ind, , i])
     } else {
-      p <- RCModel@Misc[[x]]$IALpred[yr_ind, , i]/rowSums(RCModel@Misc[[x]]$IALpred[yr_ind, , i])
+      p <- RCModel@Misc[[x]]$IALpred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$IALpred[yr_ind, , i])
     }
-    p %>% structure(dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
-      reshape2::melt(value.name = "Frequency") %>% mutate(Iter = x)
+    p %>%
+      structure(dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
+      reshape2::melt(value.name = "Frequency") %>%
+      mutate(Iter = x)
   }) %>% bind_rows()
 
-  g <- ggplot(pred, aes(Length, Frequency, group = Iter)) + facet_wrap(~Year, scales = "free_y") +
+  g <- ggplot(pred, aes(Length, Frequency, group = Iter)) +
+    facet_wrap(~Year, scales = "free_y") +
     geom_col(data = obs, mapping = aes(x = Length, y = Frequency), fill = "grey40", inherit.aes = FALSE) +
     geom_line(alpha = 0.05, colour = color) +
-    geom_label(data = N_df, mapping = aes(label = N), x = Inf, y = Inf,
-               hjust = "right", vjust = "top", inherit.aes = FALSE) +
+    geom_label(
+      data = N_df, mapping = aes(label = N), x = Inf, y = Inf,
+      hjust = "right", vjust = "top", inherit.aes = FALSE
+    ) +
     theme_pbs() +
     ggtitle(scenario) +
     xlab(en2fr("Length", FRENCH)) +
@@ -231,9 +256,9 @@ plot_rcm_length_comps <- function(RCModel, scenario, FRENCH = FALSE, type = c("f
 #' @export
 plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim) {
   type <- match.arg(type)
-  if(missing(i)) i <- 1
-  if(missing(name)) {
-    if(requireNamespace("stringi", quietly = TRUE)) {
+  if (missing(i)) i <- 1
+  if (missing(name)) {
+    if (requireNamespace("stringi", quietly = TRUE)) {
       name <- stringi::stri_trans_totitle(type) %>% paste(i, "mean length")
     } else {
       name <- "Mean length"
@@ -245,10 +270,12 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, n
 
   g <- ggplot(pred, aes(year, value)) +
     geom_line(alpha = 0.6, aes(group = paste(iter))) +
-    theme_pbs() + facet_wrap(~scenario, scales = scales) +
+    theme_pbs() +
+    facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
-    geom_point(data = obs) + geom_line(data = obs, linetype = 3)
-  if(!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
+    geom_point(data = obs) +
+    geom_line(data = obs, linetype = 3)
+  if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }
 
@@ -257,11 +284,10 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, n
 #' years for which there are observed age data.
 #' @export
 plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), i = 1, color = "black") {
-
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
-  if(type == "fleet") {
+  if (type == "fleet") {
     N <- RCModel@data@CAA_ESS[, i]
   } else {
     N <- RCModel@data@IAA_ESS[, i]
@@ -272,7 +298,7 @@ plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), 
   Wt_age <- RCModel@OM@cpars$Wt_age[, , 1:RCModel@OM@nyears]
 
   prop_bio <- lapply(1:length(RCModel@Misc), function(x) {
-    if(type == "fleet") {
+    if (type == "fleet") {
       age_comp <- RCModel@Misc[[x]]$CAApred[1:RCModel@OM@nyears, , i]
     } else {
       age_comp <- RCModel@Misc[[x]]$IAApred[1:RCModel@OM@nyears, , i]
@@ -280,13 +306,16 @@ plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), 
     reshape2::melt(age_comp * t(Wt_age[x, , ])) %>%
       rename(Year = Var1, Age = Var2) %>%
       mutate(Year = Year + RCModel@OM@CurrentYr - RCModel@OM@nyears, Age = Age - 1) %>%
-      group_by(Year) %>% mutate(prop = value/sum(value), Iter = x)
+      group_by(Year) %>%
+      mutate(prop = value / sum(value), Iter = x)
   }) %>%
     bind_rows() %>%
     dplyr::filter(Year %in% yr_plot)
 
-  g <- ggplot(prop_bio, aes(Age, prop, group = Iter)) + facet_wrap(~Year, scales = "free_y") +
-    geom_line(alpha = 0.05, colour = color) + geom_point() +
+  g <- ggplot(prop_bio, aes(Age, prop, group = Iter)) +
+    facet_wrap(~Year, scales = "free_y") +
+    geom_line(alpha = 0.05, colour = color) +
+    geom_point() +
     theme_pbs() +
     ggtitle(scenario) +
     xlab(en2fr("Age", FRENCH)) +

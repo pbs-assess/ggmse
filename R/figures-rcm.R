@@ -16,7 +16,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENC
                          scales = "fixed", ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "SSB")
 
-  if(is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
+  if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
   make_plot_wrap(dat, scenario, FRENCH, scales, ylim = ylim, ylab = "Spawning biomass")
 }
 
@@ -35,7 +35,7 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH 
                        ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_F)
 
-  if(is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
+  if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
   make_plot_wrap(dat, scenario, FRENCH, scales, ylim = ylim, ylab = "Apical fishing mortality")
 }
 
@@ -47,8 +47,10 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH 
 plot_rcm_recdev <- function(rcm, scenario, FRENCH = FALSE, proj = FALSE, logspace = FALSE,
                             scales = "fixed", ylim = NULL) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_recdev, proj = proj, logspace = logspace)
-  g <- make_plot_wrap(dat, scenario, FRENCH, scales = scales, ylim = ylim,
-                      ylab = paste0("Recruitment deviations", ifelse(logspace, " log space", ""))) +
+  g <- make_plot_wrap(dat, scenario, FRENCH,
+    scales = scales, ylim = ylim,
+    ylab = paste0("Recruitment deviations", ifelse(logspace, " log space", ""))
+  ) +
     geom_hline(yintercept = ifelse(logspace, 0, 1), lty = 2, alpha = 0.6)
   g
 }
@@ -62,23 +64,27 @@ plot_rcm_recdev <- function(rcm, scenario, FRENCH = FALSE, proj = FALSE, logspac
 plot_rcm_bio_sel <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), FRENCH = FALSE,
                              bio_type = c("LAA", "mat"), sel_type = c("fleet", "index"),
                              sel_i = 1, sel_name) {
-
   bio_type <- match.arg(bio_type, several.ok = TRUE)
   sel_type <- match.arg(sel_type)
 
-  if(missing(sel_name)) {
-    if(requireNamespace("stringi", quietly = TRUE)) {
+  if (missing(sel_name)) {
+    if (requireNamespace("stringi", quietly = TRUE)) {
       sel_name <- stringi::stri_trans_totitle(sel_type) %>% paste(sel_i, "selectivity")
     } else {
       sel_name <- "Selectivity"
     }
   }
 
-  dat <- purrr::map2_dfr(rcm, scenario, .rcm_bio_sel, bio_type = bio_type, sel_type = sel_type,
-                         sel_i = sel_i, sel_name = sel_name)
+  dat <- purrr::map2_dfr(rcm, scenario, .rcm_bio_sel,
+    bio_type = bio_type, sel_type = sel_type,
+    sel_i = sel_i, sel_name = sel_name
+  )
 
-  g <- ggplot(dat, aes(Age, Value, linetype = Type)) + geom_line() + geom_point(aes(shape = Type)) +
-    facet_wrap(~scenario) + theme_pbs() +
+  g <- ggplot(dat, aes(Age, Value, linetype = Type)) +
+    geom_line() +
+    geom_point(aes(shape = Type)) +
+    facet_wrap(~scenario) +
+    theme_pbs() +
     labs(x = en2fr("Age", FRENCH), y = en2fr("Value", FRENCH)) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.01))
   g
