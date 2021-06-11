@@ -80,13 +80,13 @@ data_file_exists <- function(species_name,
   file.exists(file)
 }
 
-#' Create a Stock object for DLMtool from data and values, to be used in an Operating Model (OM)
+#' Create a Stock object for MSEtool from data and values, to be used in an Operating Model (OM)
 #'
-#' @param d An S4 object of class DLMtool Data. If NULL, default values from the statring_stock
+#' @param d An S4 object of class MSEtool Data. If NULL, default values from the statring_stock
 #'   will be used in the returned object. If supplied, select values will be copied from the
 #'   Data object into the returned Stock object.
 #'
-#' @return An S4 object of class DLMtool Stock.
+#' @return An S4 object of class MSEtool Stock.
 #'
 #' @export
 #' @examples
@@ -182,13 +182,13 @@ create_dlm_stock <- function(dat = NULL,
   obj
 }
 
-#' Create a Fleet object for DLMtool from data and values, to be used in an Operating Model (OM)
+#' Create a Fleet object for MSEtool from data and values, to be used in an Operating Model (OM)
 #'
-#' @param d An S4 object of class DLMtool Data. If NULL, default values from the statring_fleet
+#' @param d An S4 object of class MSEtool Data. If NULL, default values from the statring_fleet
 #'   will be used in the returned object. If supplied, select values will be copied from the
 #'   Data object into the returned Fleet object.
 #'
-#' @return An S4 object of class DLMtool Fleet.
+#' @return An S4 object of class MSEtool Fleet.
 #'
 #' @export
 #' @examples
@@ -270,13 +270,13 @@ create_dlm_fleet <- function(dat = NULL,
   obj
 }
 
-#' Create an Obs object for DLMtool from data and values, to be used in an Operating Model (OM)
+#' Create an Obs object for MSEtool from data and values, to be used in an Operating Model (OM)
 #'
-#' @param d An S4 object of class DLMtool Data. If NULL, default values from the starting_obs
+#' @param d An S4 object of class MSEtool Data. If NULL, default values from the starting_obs
 #'   will be used in the returned object. If supplied, select values will be copied from the
 #'   Data object into the returned Obs object.
 #'
-#' @return An S4 object of class DLMtool Obs.
+#' @return An S4 object of class MSEtool Obs.
 #' @export
 #' @examples
 #' \dontrun{
@@ -362,13 +362,13 @@ create_dlm_obs <- function(dat = NULL,
   obj
 }
 
-#' Create an Imp object for DLMtool from data and values, to be used in an Operating Model (OM)
+#' Create an Imp object for MSEtool from data and values, to be used in an Operating Model (OM)
 #'
-#' @param d An S4 object of class DLMtool Data. If NULL, default values from the starting_imp
+#' @param d An S4 object of class MSEtool Data. If NULL, default values from the starting_imp
 #'   will be used in the returned object. If supplied, select values will be copied from the
 #'   Data object into the returned Imp object.
 #'
-#' @return An S4 object of class DLMtool Imp.
+#' @return An S4 object of class MSEtool Imp.
 #' @export
 #'
 #' @examples

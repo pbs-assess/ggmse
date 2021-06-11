@@ -28,12 +28,12 @@ plot_factory(
 )
 }
 \arguments{
-\item{mse_list}{A list of DLMtool MSE objects representing different
+\item{mse_list}{A list of MSEtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
 
 \item{pm}{A character vector of performance metrics. These performance
 metrics should exist in the current workspace or via an attached package
-such as DLMtool.}
+such as MSEtool.}
 
 \item{scenario_df}{A data frame with the columns \code{scenario},
 \code{scenario_human}, and \code{scenario_type}. \code{scenario_type} should contain
@@ -114,10 +114,10 @@ scenario_df <- tibble::tribble(
   "sc3", "Scenario 3", "Robustness"
 )
 
-`LT LRP` <- gfdlm::pm_factory("SBMSY", 0.4, c(36, 50))
-`LT USR` <- gfdlm::pm_factory("SBMSY", 0.8, c(36, 50))
-STC <- gfdlm::pm_factory("LTY", 0.5, c(1, 10))
-LTC <- gfdlm::pm_factory("LTY", 0.5, c(36, 50))
+`LT LRP` <- ggmse::pm_factory("SBMSY", 0.4, c(36, 50))
+`LT USR` <- ggmse::pm_factory("SBMSY", 0.8, c(36, 50))
+STC <- ggmse::pm_factory("LTY", 0.5, c(1, 10))
+LTC <- ggmse::pm_factory("LTY", 0.5, c(36, 50))
 pm <- c("LT LRP", "LT USR", "STC", "LTC")
 
 custom_pal <- c(RColorBrewer::brewer.pal(3, "Dark2"), "grey60")

@@ -6,8 +6,8 @@
 \usage{
 plot_historical_ts(
   object,
-  type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray",
-    "RecDev"),
+  type = c("Number", "Biomass", "VBiomass", "SBiomass", "Removals", "Landings",
+    "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
   n_samples = 50,
   this_year = 2018,
   observed_ts = NULL,
@@ -16,8 +16,8 @@ plot_historical_ts(
 )
 }
 \arguments{
-\item{object}{A DLMtool object of class \code{Hist} that was created by
-running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}} with \code{Hist = TRUE}.}
+\item{object}{A MSEtool object of class \code{Hist} that was created by
+running \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}} with \code{Hist = TRUE}.}
 
 \item{type}{A character object describing the element of \code{object@TSdata} to
 plot.}
@@ -39,10 +39,10 @@ ggplot object
 Plot historical time series
 }
 \examples{
-library(DLMtool)
+library(MSEtool)
 historical_mse <- runMSE(om, Hist = TRUE)
-plot_historical_ts(historical_mse, n_samples = 2)
-plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
+plot_historical_ts(historical_mse, type = "Removals", n_samples = 2)
+plot_historical_ts(historical_mse, type = "SBiomass", n_samples = 2)
 plot_historical_ts(historical_mse, type = "RecDev", n_samples = 2)
 plot_historical_ts(historical_mse,
   n_samples = 2,

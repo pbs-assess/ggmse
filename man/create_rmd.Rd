@@ -2,12 +2,12 @@
 % Please edit documentation in R/make-rmd.R
 \name{create_rmd}
 \alias{create_rmd}
-\title{Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it}
+\title{Create .Rmd file describing MSEtool Objects and Slots and inject custom descriptions into it}
 \usage{
 create_rmd(
   file_name,
-  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "gfdlm"),
-  slot_type_order_file_name = system.file("slot-type-order.csv", package = "gfdlm"),
+  cust_desc_file_name = system.file("alt-slot-descriptions.csv", package = "ggmse"),
+  slot_type_order_file_name = system.file("slot-type-order.csv", package = "ggmse"),
   ...
 )
 }
@@ -26,7 +26,7 @@ Use generate_default_custom_descriptions_file() in scratch.R to auto-generate it
 Nothing
 }
 \description{
-Create .Rmd file describing DLMtool Objects and Slots and inject custom descriptions into it
+Create .Rmd file describing MSEtool Objects and Slots and inject custom descriptions into it
 }
 \examples{
 create_rmd("test.Rmd")

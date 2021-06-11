@@ -17,7 +17,7 @@ plot_scenario_projections(
 )
 }
 \arguments{
-\item{object_list}{A named list of MSE objects from DLMtool. Names become
+\item{object_list}{A named list of MSE objects from MSEtool. Names become
 scenario names.}
 
 \item{probs}{The quantiles to plot as ribbons. This represents the tail

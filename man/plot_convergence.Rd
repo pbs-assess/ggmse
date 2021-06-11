@@ -15,7 +15,7 @@ plot_convergence(
 )
 }
 \arguments{
-\item{object_list}{A (named) list of DLMtool MSE objects.}
+\item{object_list}{A (named) list of MSEtool MSE objects.}
 
 \item{pm_list}{A list or vector of performance metrics as character.}
 

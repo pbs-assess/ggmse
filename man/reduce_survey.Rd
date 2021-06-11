@@ -12,7 +12,7 @@ reduce_survey(
 }
 \arguments{
 \item{mp}{An existing management procedure function of class \code{"MP"} that will
-work with \pkg{DLMtool}.}
+work with \pkg{MSEtool}.}
 
 \item{slots}{The slots for which you want to reduce observations.}
 
@@ -24,10 +24,10 @@ year, switch to \code{function(x) seq(2, x, by = 2)}.}
 }
 \value{
 A management procedure function of class \code{"MP"} for use with
-\pkg{DLMtool}.
+\pkg{MSEtool}.
 }
 \description{
-This function factory creates a \pkg{DLMtool} management procedure (MP)
+This function factory creates a \pkg{MSEtool} management procedure (MP)
 function that only sees survey data from selected years. For example, this
 could change the data that an MP sees from an annual survey into a biennial
 or triennial survey. It could also be used to eliminate commercial
@@ -35,7 +35,8 @@ observations from some years if the default slots affected were changed.
 }
 \examples{
 library(DLMtool)
-om <- DLMtool::testOM
+library(SAMtool)
+om <- MSEtool::testOM
 om@nsim <- 3
 temp_mp <- reduce_survey(Islope1)
 # mse <- runMSE(OM = om, MPs = "temp_mp")

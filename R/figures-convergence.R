@@ -3,7 +3,7 @@
 #' This function plots cumulative performance metric values across iterations to
 #' assess convergence.
 #'
-#' @param object_list A (named) list of DLMtool MSE objects.
+#' @param object_list A (named) list of MSEtool MSE objects.
 #' @param pm_list A list or vector of performance metrics as character.
 #' @param label_gap Controls the gap on the right of each panel to make space
 #'   for the MP labels. This value is multiplied by the maximum number of

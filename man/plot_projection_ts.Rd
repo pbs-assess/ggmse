@@ -6,7 +6,7 @@
 \usage{
 plot_projection_ts(
   object,
-  type = c("SSB", "FM"),
+  type = c("SSB", "FM", "Catch"),
   n_samples = 3,
   probs = c(0.1, 0.5),
   ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
@@ -18,8 +18,8 @@ plot_projection_ts(
 )
 }
 \arguments{
-\item{object}{A DLMtool object of class \code{mse} that was created by
-running \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
+\item{object}{A MSEtool object of class \code{mse} that was created by
+running \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}}.}
 
 \item{type}{A character vector describing the element of \verb{mse@} to
 plot. Each of these "types" will be included as a column in the
@@ -54,8 +54,8 @@ ggplot object
 Plot projection time series
 }
 \examples{
-plot_projection_ts(mse_example)
 plot_projection_ts(mse_example, type = "SSB")
+plot_projection_ts(mse_example, type = c("SSB", "FM"))
 }
 \seealso{
 \code{\link[=plot_main_projections]{plot_main_projections()}}

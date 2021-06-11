@@ -24,7 +24,7 @@ plot_kobe(
 plot_kobe_grid(object_list, french = isTRUE(getOption("french")), ...)
 }
 \arguments{
-\item{object}{An MSE object as returned by \code{\link[DLMtool:runMSE]{DLMtool::runMSE()}}.}
+\item{object}{An MSE object as returned by \code{\link[MSEtool:runMSE]{MSEtool::runMSE()}}.}
 
 \item{yend}{The end year}
 
@@ -50,7 +50,7 @@ plot_kobe_grid(object_list, french = isTRUE(getOption("french")), ...)
 
 \item{french}{French?}
 
-\item{object_list}{A list of DLMtool MSE objects representing different
+\item{object_list}{A list of MSEtool MSE objects representing different
 scenarios. The list should be named with the scenario names.}
 
 \item{...}{Other arguments to pass to \code{\link[=plot_kobe]{plot_kobe()}}.}

@@ -82,12 +82,12 @@ CC1.1(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = -0.1)
 CC1.2(x, Data, reps = 100, plot = FALSE, yrsmth = 5, xx = -0.1)
 }
 \arguments{
-\item{x}{A position in the data object. As per \pkg{DLMtool}.}
+\item{x}{A position in the data object. As per \pkg{MSEtool}.}
 
-\item{Data}{A data object. As per \pkg{DLMtool}.}
+\item{Data}{A data object. As per \pkg{MSEtool}.}
 
 \item{reps}{The number of stochastic samples of the MP recommendation(s). As
-per \pkg{DLMtool}.}
+per \pkg{MSEtool}.}
 
 \item{...}{Other arguments to pass to the MP function.}
 

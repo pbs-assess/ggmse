@@ -1,6 +1,6 @@
 #' Calculate a set of x-y coordinates for a contour line
 #' Density values are sorted and standardized, and the critical value is
-#' calculated from the alpha cutoff value and sent to [gfdlm::calc_contour_lines()]
+#' calculated from the alpha cutoff value and sent to [calc_contour_lines()]
 #' as an argument.
 #'
 #' @param x Output from the function [MASS::kde2d()]
@@ -59,7 +59,7 @@ calc_contour_lines <- function(d,
 
 #' Make Kobe contour plots by management procedure for B/BMSY by F/FMSY
 #'
-#' @param object An MSE object as returned by [DLMtool::runMSE()].
+#' @param object An MSE object as returned by [MSEtool::runMSE()].
 #' @param yend The end year
 #' @param dontshow_mp A vector of MPs to leave out of the plot.
 #' @param show_ref_pt_lines Show the reference point lines at the values in *_ref_lines arguments
@@ -102,7 +102,7 @@ plot_kobe <- function(object,
     ffmsy <- object@F_FMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(iter = Var1, mp = Var2, ffmsy = value)
-    bbmsy <- object@B_BMSY[, , yend] %>%
+    bbmsy <- object@SB_SBMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(iter = Var1, mp = Var2, bbmsy = value)
   } else {
@@ -110,7 +110,7 @@ plot_kobe <- function(object,
       reshape2::melt() %>%
       rename(ffmsy = value) %>%
       mutate(iter = seq_along(ffmsy), mp = 1L)
-    bbmsy <- object@B_BMSY[, , yend] %>%
+    bbmsy <- object@SB_SBMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(bbmsy = value) %>%
       mutate(iter = seq_along(bbmsy), mp = 1L)
@@ -182,7 +182,7 @@ plot_kobe <- function(object,
   }
 }
 
-#' @param object_list A list of DLMtool MSE objects representing different
+#' @param object_list A list of MSEtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param ... Other arguments to pass to [plot_kobe()].
 #' @rdname plot_kobe

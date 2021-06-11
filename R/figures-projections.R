@@ -1,7 +1,7 @@
 #' Plot projection time series
 #'
-#' @param object A DLMtool object of class `mse` that was created by
-#'  running [DLMtool::runMSE()].
+#' @param object A MSEtool object of class `mse` that was created by
+#'  running [MSEtool::runMSE()].
 #' @param type A character vector describing the element of `mse@` to
 #'   plot. Each of these "types" will be included as a column in the
 #'   final plot.
@@ -26,10 +26,10 @@
 #' @export
 #' @seealso [plot_main_projections()]
 #' @examples
-#' plot_projection_ts(mse_example)
 #' plot_projection_ts(mse_example, type = "SSB")
+#' plot_projection_ts(mse_example, type = c("SSB", "FM"))
 plot_projection_ts <- function(object,
-                               type = c("SSB", "FM"),
+                               type = c("SSB", "FM", "Catch"),
                                n_samples = 3,
                                probs = c(0.1, 0.5),
                                ribbon_colours = RColorBrewer::brewer.pal(8, "Blues")[c(2, 4, 8)],
@@ -37,11 +37,14 @@ plot_projection_ts <- function(object,
                                catch_reference = 1,
                                clip_ylim = NULL,
                                seed = 42, french = FALSE) {
+  type <- match.arg(type, several.ok = TRUE)
+  if (length(type) == 3L)
+    stop("type must not be all 3 (SSB, FM, Catch) at once. Either pick SSB and FM (or 1 of those) or Catch.", call. = FALSE)
 
   if (is.null(object@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
-      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
       "Setting CurrentYr = 0 for now.", call. = FALSE
     )
@@ -49,6 +52,8 @@ plot_projection_ts <- function(object,
   } else {
     this_year <- object@OM$CurrentYr[[1]]
   }
+  n_hist_years <- dim(object@SSB_hist)[2]
+  .hist_years <- seq(this_year - n_hist_years + 1, this_year)
   ts_data <- get_ts(object = object, type = type, this_year = this_year)
   quantiles <- get_ts_quantiles(ts_data, probs = probs)
 
@@ -109,6 +114,8 @@ plot_projection_ts <- function(object,
     quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
   }
 
+  lines <- dplyr::filter(lines, type_labels %in% unique(d$type_labels))
+
   g <- ggplot(d, aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(
     data = quantiles,
@@ -131,8 +138,8 @@ plot_projection_ts <- function(object,
   }
 
   if ("Catch" %in% type) {
-    average_catch <- filter(d, Type == "Catch", real_year %in%
-      .hist_years[(length(.hist_years) - (catch_reference - 1)):length(.hist_years)]) %>%
+    average_catch <- dplyr::filter(d, Type == "Catch", real_year %in%
+                                     .hist_years[(length(.hist_years) - (catch_reference - 1)):length(.hist_years)]) %>%
       summarize(average_catch = mean(value)) %>%
       pull(average_catch)
     g <- g + ggplot2::geom_hline(yintercept = average_catch, alpha = 0.2, lty = 2, lwd = 0.5)
@@ -154,12 +161,12 @@ plot_projection_ts <- function(object,
 
 
 get_ts <- function(object,
-                   type = c("SSB", "FM"),
+                   type = c("SSB", "FM", "Catch"),
                    this_year = 0) {
   if (!class(object) != "mse") {
     stop(
-      "`object` must be a DLMtool object of class `mse`",
-      "that was created by running `DLMtool::runMSE()`."
+      "`object` must be a MSEtool object of class `mse`",
+      "that was created by running `MSEtool::runMSE()`."
     )
   }
   .proj_years <- seq(this_year + 1, this_year + object@proyears)
@@ -175,6 +182,7 @@ get_ts <- function(object,
 
   ts_data <- list()
   for (i in seq_along(type)) {
+    if (type[i] == "C") type[i] <- "Catch" # changed in openMSE
     ts_data[[i]] <- slot(object, type[i]) %>%
       reshape2::melt() %>%
       dplyr::rename(
@@ -192,7 +200,7 @@ get_ts <- function(object,
   # --------------
   # historical
 
-  n_hist_years <- dim(object@SSB_hist)[3]
+  n_hist_years <- dim(object@SSB_hist)[2]
   .hist_years <- seq(this_year - n_hist_years + 1, this_year)
   years_df <- data.frame(
     year = seq_len(n_hist_years), real_year = .hist_years,
@@ -201,11 +209,8 @@ get_ts <- function(object,
   hist_data <- list()
 
   for (i in seq_along(type)) {
-    hist_data[[i]] <- slot(object, paste0(
-      type[i],
-      ifelse(type[i] == "C", "B_hist", "_hist")
-    )) %>%
-      apply(c(1, 3), if (type[i] == "FM") max else sum) %>%
+    hist_data[[i]] <- slot(object, ifelse(type[i] == "Catch", "CB_hist", paste0(type[i], "_hist"))) %>%
+      #apply(c(1, 3), if (type[i] == "FM") max else sum) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
@@ -231,19 +236,20 @@ get_ts <- function(object,
   all_mp_yrs <- expand.grid(mp = all_mps$mp, real_year = sort(unique(hist_data2$real_year)))
   # object@Misc$MSYRefs$Refs
   ref_ssb_hist <- data.frame(
-    ref = object@Misc$MSYRefs$Refs$SSBMSY, iter = seq_len(iters),
+    ref = object@RefPoint$SSBMSY[, 1, object@nyears], iter = seq_len(iters),
     Type = "SSB", stringsAsFactors = FALSE
   ) %>% left_join(bind_cols(all_mp_yrs, tibble(Type = rep("SSB", nrow(all_mp_yrs)))), by = "Type")
-  ref_f_hist <- data.frame(ref = object@Misc$MSYRefs$Refs$FMSY, iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE) %>%
+  ref_f_hist <- data.frame(
+    ref = object@RefPoint$FMSY[, 1, object@nyears], iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE) %>%
     left_join(bind_cols(all_mp_yrs, tibble(Type = rep("FM", nrow(all_mp_yrs)))), by = "Type")
 
   all_mp_yrs <- expand.grid(mp = seq_along(mps$mp), real_year = sort(unique(ts_data$real_year)))
-  ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "C", stringsAsFactors = FALSE) %>%
-    left_join(bind_cols(all_mp_yrs, tibble(Type = rep("C", nrow(all_mp_yrs)))), by = "Type")
+  ref_msy <- data.frame(ref = 1, iter = seq_len(iters), Type = "Catch", stringsAsFactors = FALSE) %>%
+    left_join(bind_cols(all_mp_yrs, tibble(Type = rep("Catch", nrow(all_mp_yrs)))), by = "Type")
 
   # dynamic ref pts for projections:
-  x1 <- object@Misc$MSYRefs$ByYear$SSBMSY
-  x2 <- object@Misc$MSYRefs$ByYear$FMSY
+  x1 <- object@RefPoint$SSBMSY
+  x2 <- object@RefPoint$FMSY
   if (length(dim(x1)) < 3) {
     .x1 <- array(NA, dim = c(dim(x1)[1], 1, dim(x1)[2]))
     .x1[,1,] <- x1
@@ -256,12 +262,12 @@ get_ts <- function(object,
   ref_ssb <- .x1 %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
-      real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2,
-      ref = .data$value, Type = "SSB")
+              real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2,
+              ref = .data$value, Type = "SSB")
   ref_f <- .x2 %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
-      real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2, ref = .data$value, Type = "FM")
+              real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2, ref = .data$value, Type = "FM")
 
   refs <- ref_ssb %>% bind_rows(ref_f) %>%
     bind_rows(ref_msy) %>%
@@ -273,10 +279,10 @@ get_ts <- function(object,
 
   type[type == "SSB"] <- "B_BMSY"
   type[type == "FM"] <- "F_FMSY"
-  type[type == "C"] <- "Catch"
+  type[type == "Catch"] <- "Catch"
   ts_data$Type[ts_data$Type == "FM"] <- "F_FMSY"
   ts_data$Type[ts_data$Type == "SSB"] <- "B_BMSY"
-  ts_data$Type[ts_data$Type == "C"] <- "Catch"
+  ts_data$Type[ts_data$Type == "Catch"] <- "Catch"
   ts_data
 }
 
@@ -299,7 +305,7 @@ get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
 #' This is a wrapper for [plot_projection_ts()] that includes columns for SSB,
 #' F, and catch.
 #'
-#' @param object An MSE object from DLMtool.
+#' @param object An MSE object from MSEtool.
 #' @param catch_breaks Optional y-axis tick locations for the catch column.
 #' @param catch_labels Optional y-axis tick labels for the catch column. Helpful
 #'   for dealing with large numbers.
@@ -329,7 +335,7 @@ plot_main_projections <- function(object,
                                   french = isTRUE(getOption("french"))) {
 
   suppressMessages({
-    g1 <- gfdlm::plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
+    g1 <- plot_projection_ts(object, type = c("SSB", "FM"), french = french) +
       ggplot2::coord_cartesian(expand = FALSE, ylim = msy_ylim) +
       ggplot2::theme(
         strip.text.y = ggplot2::element_blank()
@@ -338,7 +344,7 @@ plot_main_projections <- function(object,
   })
 
   g2 <- plot_projection_ts(object,
-    type = "C",
+    type = "Catch",
     catch_reference = 1, french = french
   ) #+ ggplot2::theme(axis.title.y = ggplot2::element_blank())
 

@@ -1,16 +1,16 @@
 #' Summary of probabilities of performance metrics from the MSE object
 #'
-#' @param object MSE object, output of the [DLMtool::runMSE()] function
+#' @param object MSE object, output of the [MSEtool::runMSE()] function
 #' @param ... List of performace metrics
 #' @param refs List containing the reference limits for each metric
 #'
 #' @return A tibble of the output
 #' @importFrom tibble as_tibble
-#' @importFrom DLMtool avail
+#' @importFrom MSEtool avail
 #' @export
 #'
 #' @examples
-#' library(DLMtool)
+#' library(MSEtool)
 #' probs <- get_probs(mse_example, "P40", "P100", "PNOF", "LTY", "AAVY")
 get_probs <- function(object,
                       ...,
@@ -61,7 +61,7 @@ get_probs <- function(object,
 #' Summary of performance metrics from MSE objects in a coloured tile table
 #' format
 #'
-#' @param probs_dat A data frame as returned from [gfdlm::get_probs()].
+#' @param probs_dat A data frame as returned from [get_probs()].
 #' @param relative_max Make the plot have each column use a reletive maximum. If
 #'   `scale_0_1` is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each

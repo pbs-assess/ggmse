@@ -1,5 +1,5 @@
 library(testthat)
 library(DLMtool)
-library(gfdlm)
+library(ggmse)
 
-test_check("gfdlm")
+test_check("ggmse")

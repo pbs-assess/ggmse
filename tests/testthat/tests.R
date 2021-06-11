@@ -12,8 +12,8 @@ if (file.exists("test-desc.rmd")) unlink("test-desc.rmd")
 context("Check that the package files are present")
 
 test_that("Custom .csvfiles are present in installed package", {
-  expect_true(file.exists(file.path(system.file(package = "gfdlm"), "alt-slot-descriptions.csv")))
-  expect_true(file.exists(file.path(system.file(package = "gfdlm"), "slot-type-order.csv")))
+  expect_true(file.exists(file.path(system.file(package = "ggmse"), "alt-slot-descriptions.csv")))
+  expect_true(file.exists(file.path(system.file(package = "ggmse"), "slot-type-order.csv")))
 })
 
 ## ------------------------------------------------------------------------------------------------

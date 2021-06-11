@@ -1,6 +1,6 @@
 #' Plot projections for various scenarios on the same panels
 #'
-#' @param object_list A named list of MSE objects from DLMtool. Names become
+#' @param object_list A named list of MSE objects from MSEtool. Names become
 #'   scenario names.
 #' @param probs The quantiles to plot as ribbons. This represents the tail
 #'   probability.
@@ -49,7 +49,7 @@ plot_scenario_projections <- function(
   if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
-      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
       "Setting CurrentYr = 0 for now.",
       call. = FALSE

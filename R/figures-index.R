@@ -1,6 +1,6 @@
 #' Plot sampled survey index projections
 #'
-#' @param object_list A list of DLMtool MSE objects representing different
+#' @param object_list A list of MSEtool MSE objects representing different
 #'   scenarios. The list should be named with the scenario names.
 #' @param n_samples The number of timeseries samples to illustrate.
 #' @param seed The seed to set before drawing samples.
@@ -37,7 +37,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
   if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
-      "Please run the MSE with a newer GitHub DLMtool version\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
       "or set `object@OM$CurrentYr` yourself.\n",
       "Setting CurrentYr = 0 for now.",
       call. = FALSE
@@ -85,7 +85,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
                          type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {
   type <- match.arg(type)
-  x <- purrr::map(object@Misc$Data, type)
+  x <- purrr::map(object@PPD, type)
   if (type == "AddInd") {
     x <- purrr::map(x, ~ .x[, 1L, , drop = TRUE])
   }

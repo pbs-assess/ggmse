@@ -1,7 +1,7 @@
 #' Plot historical time series
 #'
-#' @param object A DLMtool object of class `Hist` that was created by
-#'  running [DLMtool::runMSE()] with `Hist = TRUE`.
+#' @param object A MSEtool object of class `Hist` that was created by
+#'  running [MSEtool::runMSE()] with `Hist = TRUE`.
 #' @param type A character object describing the element of `object@TSdata` to
 #'   plot.
 #' @param n_samples The number of timeseries samples to illustrate.
@@ -21,17 +21,20 @@
 #' @return ggplot object
 #' @export
 #' @examples
-#' library(DLMtool)
+#' library(MSEtool)
 #' historical_mse <- runMSE(om, Hist = TRUE)
-#' plot_historical_ts(historical_mse, n_samples = 2)
-#' plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
+#' plot_historical_ts(historical_mse, type = "Removals", n_samples = 2)
+#' plot_historical_ts(historical_mse, type = "SBiomass", n_samples = 2)
 #' plot_historical_ts(historical_mse, type = "RecDev", n_samples = 2)
 #' plot_historical_ts(historical_mse,
 #'   n_samples = 2,
 #'   observed_ts = rlnorm(50, 1, 0.3)
 #' )
 plot_historical_ts <- function(object,
-                               type = c("Catch", "SSB", "B", "VB", "Removals", "Rec", "N", "Find", "Marray", "RecDev"),
+                               type = c("Number", "Biomass",
+                                 "VBiomass", "SBiomass",
+                                 "Removals", "Landings",
+                                 "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
                                n_samples = 50,
                                this_year = 2018,
                                observed_ts = NULL,
@@ -39,21 +42,26 @@ plot_historical_ts <- function(object,
                                legend_position = c(0.9, 0.85)) {
   if (!.hasSlot(object, "Data") || class(object) != "Hist") {
     stop(
-      "`object` must be a DLMtool object of class `Hist`",
-      "that was created by running `DLMtool::runMSE()` with",
+      "`object` must be a MSEtool object of class `Hist`",
+      "that was created by running `MSEtool::runMSE()` with",
       "`Hist = TRUE`."
     )
   }
   all_years <- seq(this_year - object@Data@LHYear + 1, this_year)
 
+  # used to be called Catch:
+  type <- gsub("Catch", "Removals", type)
+  # used to be called SSB:
+  type <- gsub("SSB", "SBiomass", type)
   x <- object@TSdata[[type[[1]]]] %>%
     reshape2::melt() %>%
     dplyr::transmute(
       sample_id = Var1, year = Var2 + min(all_years) - 1,
       value = value, type = "Simulated"
     )
-
   x <- x %>%
+    group_by(sample_id, year, type) %>%
+    summarize(value = sum(value)) %>% # over areas
     filter(!is.na(value))
 
   if (scale) x <- mutate(x, value = value / exp(mean(log(value))))
