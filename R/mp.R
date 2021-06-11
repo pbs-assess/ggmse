@@ -24,6 +24,7 @@
 #'
 #' @examples
 #' library(DLMtool)
+#' library(SAMtool)
 #' om <- MSEtool::testOM
 #' om@@nsim <- 3
 #' temp_mp <- reduce_survey(Islope1)
@@ -672,7 +673,7 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 #'
 #' @export
 #' @examples
-#' library(MSEtool)
+#' library(SAMtool)
 #' om <- MSEtool::testOM
 #' om@@nsim <- 10
 #' set.seed(1)

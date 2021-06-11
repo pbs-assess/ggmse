@@ -17,7 +17,7 @@ slots instead of \code{Ind} by generating a wrapper function that assigns AddInd
 calling the MP function.
 }
 \examples{
-library(MSEtool)
+library(SAMtool)
 om <- MSEtool::testOM
 om@nsim <- 10
 set.seed(1)

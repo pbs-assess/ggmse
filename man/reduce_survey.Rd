@@ -35,6 +35,7 @@ observations from some years if the default slots affected were changed.
 }
 \examples{
 library(DLMtool)
+library(SAMtool)
 om <- MSEtool::testOM
 om@nsim <- 3
 temp_mp <- reduce_survey(Islope1)

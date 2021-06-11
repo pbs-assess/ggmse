@@ -77,7 +77,8 @@ plot_rcm_biomass_age(
   scenario,
   type = c("fleet", "index"),
   i = 1,
-  color = "black"
+  color = "black",
+  french = FALSE
 )
 }
 \arguments{
