@@ -286,7 +286,7 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, n
 #' fleet or index. Used as a diagnostic of whether a high residual in the plusgroup is problematic. Only plots
 #' years for which there are observed age data.
 #' @export
-plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), i = 1, color = "black") {
+plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), i = 1, color = "black", french = FALSE) {
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 

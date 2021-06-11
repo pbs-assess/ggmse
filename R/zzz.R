@@ -50,5 +50,6 @@ globalVariables(c(
   "mp",
   "scenario_type",
   "Index", "geo_mean", "survey",
-  "Age", "iteration", "Value", "SD", "Iter"
+  "Age", "iteration", "Value", "SD", "Iter",
+  "type_labels", "Frequency", "Year", "lower", "upper", "Length", "prop"
 ))
