@@ -627,7 +627,7 @@ class(SP4010_gf) <- "MP"
 #' om <- MSEtool::testOM
 #' om@@nsim <- 5
 #' om@@proyears <- 10
-#' if (class(my_mp) != "MP") class(my_mp) <- "MP # only needed for R CMD check here
+#' if (class(my_mp) != "MP") class(my_mp) <- "MP" # only needed for R CMD check here
 #' mse <- runMSE(om, MPs = "my_mp")
 add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
                          other_start = NULL,
@@ -678,14 +678,16 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
 #' sra <- RCM(om,
 #'   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
 #' my_mp <- use_AddInd(Itarget_base)
+#' if (class(my_mp) != "MP") class(my_mp) <- "MP" # not normally needed
 #' mse <- runMSE(sra@@OM, MPs = "Itarget_base")
 use_AddInd <- function(mp, i) {
   force(mp)
-  force(i)
+  # force(i)
   f <- function(x, Data, reps = 1L) {
     Data@Ind <- Data@AddInd[, i, ]
     Data@CV_Ind <- Data@CV_AddInd[, i, ]
     mp(x = x, Data = Data, reps = reps)
   }
-  `class<-`(f, "MP")
+  class(f) <- "MP"
+  f
 }

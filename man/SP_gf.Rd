@@ -81,3 +81,12 @@ instead of using the last year's catch.}
 \description{
 PBS groundfish surplus production wrapper function
 }
+\examples{
+library(SAMtool)
+my_mp <- add_SP_prior(SP4010_gf, c(0.3, 0.05))
+om <- MSEtool::testOM
+om@nsim <- 5
+om@proyears <- 10
+if (class(my_mp) != "MP") class(my_mp) <- "MP" # only needed for R CMD check here
+mse <- runMSE(om, MPs = "my_mp")
+}

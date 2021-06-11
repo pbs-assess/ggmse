@@ -24,5 +24,6 @@ set.seed(1)
 sra <- RCM(om,
   data = list(Chist = runif(10), Index = runif(10), I_sd = rep(0.1, 10)))
 my_mp <- use_AddInd(Itarget_base)
+if (class(my_mp) != "MP") class(my_mp) <- "MP" # not normally needed
 mse <- runMSE(sra@OM, MPs = "Itarget_base")
 }
