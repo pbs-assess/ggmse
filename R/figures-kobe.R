@@ -102,7 +102,7 @@ plot_kobe <- function(object,
     ffmsy <- object@F_FMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(iter = Var1, mp = Var2, ffmsy = value)
-    bbmsy <- object@B_BMSY[, , yend] %>%
+    bbmsy <- object@SB_SBMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(iter = Var1, mp = Var2, bbmsy = value)
   } else {
@@ -110,7 +110,7 @@ plot_kobe <- function(object,
       reshape2::melt() %>%
       rename(ffmsy = value) %>%
       mutate(iter = seq_along(ffmsy), mp = 1L)
-    bbmsy <- object@B_BMSY[, , yend] %>%
+    bbmsy <- object@SB_SBMSY[, , yend] %>%
       reshape2::melt() %>%
       rename(bbmsy = value) %>%
       mutate(iter = seq_along(bbmsy), mp = 1L)

@@ -6,8 +6,8 @@
 \usage{
 plot_historical_ts(
   object,
-  type = c("Catch", "Number", "Biomass", "VBiomass", "SBiomass", "Removals",
-    "Landings", "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
+  type = c("Number", "Biomass", "VBiomass", "SBiomass", "Removals", "Landings",
+    "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
   n_samples = 50,
   this_year = 2018,
   observed_ts = NULL,
@@ -41,8 +41,8 @@ Plot historical time series
 \examples{
 library(MSEtool)
 historical_mse <- runMSE(om, Hist = TRUE)
-plot_historical_ts(historical_mse, n_samples = 2)
-plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
+plot_historical_ts(historical_mse, type = "Removals", n_samples = 2)
+plot_historical_ts(historical_mse, type = "SBiomass", n_samples = 2)
 plot_historical_ts(historical_mse, type = "RecDev", n_samples = 2)
 plot_historical_ts(historical_mse,
   n_samples = 2,

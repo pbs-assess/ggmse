@@ -51,7 +51,7 @@ plot_index_fits <- function(sra_list, survey_names,
   )
 
   extract_ts <- function(x, slot) {
-    out <- reshape2::melt(x@data[[slot]]) %>%
+    out <- reshape2::melt(slot(x@data, slot)) %>%
       dplyr::rename(year = Var1, survey_number = Var2, value = value) %>%
       tibble::as_tibble() %>%
       dplyr::left_join(yrs_df, by = "year")

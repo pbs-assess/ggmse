@@ -85,7 +85,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
                          type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {
   type <- match.arg(type)
-  x <- purrr::map(object@Misc$Data, type)
+  x <- purrr::map(object@PPD, type)
   if (type == "AddInd") {
     x <- purrr::map(x, ~ .x[, 1L, , drop = TRUE])
   }

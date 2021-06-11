@@ -627,6 +627,7 @@ class(SP4010_gf) <- "MP"
 #' om <- MSEtool::testOM
 #' om@@nsim <- 5
 #' om@@proyears <- 10
+#' if (class(my_mp) != "MP") class(my_mp) <- "MP # only needed for R CMD check here
 #' mse <- runMSE(om, MPs = "my_mp")
 add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
                          other_start = NULL,
@@ -655,7 +656,8 @@ add_SP_prior <- function(mp, r_prior, tac_max_increase = 1.2,
       initial_tac = initial_tac, ...
     )
   }
-  `class<-`(f, "MP")
+  class(f) <- "MP"
+  f
 }
 
 #' Use AddInd slot

@@ -35,6 +35,7 @@ get_obj_name <- function(rmd, obj_base_name) {
 #' unlink("test.Rmd")
 #' create_default_rmd("test.Rmd")
 #' change_chunk_suffix("test.Rmd", "test-suffix")
+#' unlink("test.Rmd")
 change_chunk_suffix <- function(file_name,
                                 chunk_suffix = "") {
   if (!file.exists(file_name)) {

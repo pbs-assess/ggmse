@@ -23,15 +23,15 @@
 #' @examples
 #' library(MSEtool)
 #' historical_mse <- runMSE(om, Hist = TRUE)
-#' plot_historical_ts(historical_mse, n_samples = 2)
-#' plot_historical_ts(historical_mse, type = "SSB", n_samples = 2)
+#' plot_historical_ts(historical_mse, type = "Removals", n_samples = 2)
+#' plot_historical_ts(historical_mse, type = "SBiomass", n_samples = 2)
 #' plot_historical_ts(historical_mse, type = "RecDev", n_samples = 2)
 #' plot_historical_ts(historical_mse,
 #'   n_samples = 2,
 #'   observed_ts = rlnorm(50, 1, 0.3)
 #' )
 plot_historical_ts <- function(object,
-                               type = c("Catch", "Number", "Biomass",
+                               type = c("Number", "Biomass",
                                  "VBiomass", "SBiomass",
                                  "Removals", "Landings",
                                  "Discards", "Find", "RecDev", "Unfished_Equilibrium"),
@@ -51,6 +51,8 @@ plot_historical_ts <- function(object,
 
   # used to be called Catch:
   type <- gsub("Catch", "Removals", type)
+  # used to be called SSB:
+  type <- gsub("SSB", "SBiomass", type)
   x <- object@TSdata[[type[[1]]]] %>%
     reshape2::melt() %>%
     dplyr::transmute(
