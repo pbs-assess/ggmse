@@ -3,5 +3,5 @@
 data-raw
 ^codecov\.yml$
 pop\.rds$
-test\.Rmd$
+test\.Rmd
 ^\.github$
