@@ -26,8 +26,8 @@
 #' @export
 #' @seealso [plot_main_projections()]
 #' @examples
-#' plot_projection_ts(mse_example)
 #' plot_projection_ts(mse_example, type = "SSB")
+#' plot_projection_ts(mse_example, type = c("SSB", "FM"))
 plot_projection_ts <- function(object,
                                type = c("SSB", "FM", "Catch"),
                                n_samples = 3,
@@ -38,6 +38,8 @@ plot_projection_ts <- function(object,
                                clip_ylim = NULL,
                                seed = 42, french = FALSE) {
   type <- match.arg(type, several.ok = TRUE)
+  if (length(type) == 3L)
+    stop("type must not be all 3 (SSB, FM, Catch) at once. Either pick SSB and FM (or 1 of those) or Catch.", call. = FALSE)
 
   if (is.null(object@OM$CurrentYr[[1]])) {
     warning(
@@ -111,6 +113,8 @@ plot_projection_ts <- function(object,
     quantiles$type_labels <- gsub("MSY", en2fr("MSY"), quantiles$type_labels)
     quantiles$type_labels <- factor(quantiles$type_labels, levels = c("B/B[RMD]", "F/F[RMD]"))
   }
+
+  lines <- dplyr::filter(lines, type_labels %in% unique(d$type_labels))
 
   g <- ggplot(d, aes_string("real_year", "value", group = "iter"))
   g <- g + ggplot2::geom_ribbon(

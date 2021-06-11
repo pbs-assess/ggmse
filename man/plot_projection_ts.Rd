@@ -54,8 +54,8 @@ ggplot object
 Plot projection time series
 }
 \examples{
-plot_projection_ts(mse_example)
 plot_projection_ts(mse_example, type = "SSB")
+plot_projection_ts(mse_example, type = c("SSB", "FM"))
 }
 \seealso{
 \code{\link[=plot_main_projections]{plot_main_projections()}}
