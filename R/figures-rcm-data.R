@@ -147,15 +147,15 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
                                fleet_names = paste("Fleet", fleet_i), index_names = paste("Index", index_i),
                                color) {
   if (all(is.na(fleet_i))) {
-    fsel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = fleet_i, i_names = fleet_names)
-  } else {
     fsel <- data.frame()
+  } else {
+    fsel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = fleet_i, i_names = fleet_names)
   }
 
   if (all(is.na(index_i))) {
-    isel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = index_i, i_names = index_names, type = "index")
-  } else {
     isel <- data.frame()
+  } else {
+    isel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = index_i, i_names = index_names, type = "index")
   }
   out <- rbind(fsel, isel)
 
