@@ -76,6 +76,14 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
     mutate(scenario = scenario)
 }
 
+.rcm_rec <- function(x, scenario) {
+  sapply(x@Misc, getElement, "R") %>%
+    structure(dimnames = list(year = seq(x@OM@CurrentYr - x@OM@nyears + 1, x@OM@CurrentYr + 1),
+                              iteration = 1:length(x@Misc))) %>%
+    reshape2::melt() %>%
+    mutate(scenario = scenario)
+}
+
 .rcm_bio_sel <- function(rcm, scenario, bio_type, sel_type, sel_i, sel_name) {
   if (!length(rcm@mean_fit)) stop("Re-run RCMs with argument mean_fit = TRUE")
   nyears <- rcm@OM@nyears

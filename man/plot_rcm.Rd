@@ -6,6 +6,7 @@
 \alias{plot_rcm_depletion}
 \alias{plot_rcm_F}
 \alias{plot_rcm_recdev}
+\alias{plot_rcm_rec}
 \alias{plot_rcm_bio_sel}
 \title{Plotting functions from OM conditioning}
 \usage{
@@ -41,6 +42,8 @@ plot_rcm_recdev(
   scales = "fixed",
   ylim = NULL
 )
+
+plot_rcm_rec(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL)
 
 plot_rcm_bio_sel(
   rcm,
@@ -88,6 +91,8 @@ of operating models.
 \item \code{plot_rcm_F}: Plot historical apical F
 
 \item \code{plot_rcm_recdev}: Plot recruitment deviates
+
+\item \code{plot_rcm_rec}: Plot recruitment
 
 \item \code{plot_rcm_bio_sel}: Compare maturity and length-at-age schedule vs. selectivity (of a single index or fleet)
 }}

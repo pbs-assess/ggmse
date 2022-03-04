@@ -55,6 +55,25 @@ plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspac
   g
 }
 
+#' @describeIn plot_rcm Plot recruitment
+#' @export
+plot_rcm_rec <- function(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_rec)
+  g <- make_plot_wrap(dat, scenario, french,
+                      scales = scales, ylim = ylim,
+                      ylab = "Recruitment") +
+    expand_limits(y = 0)
+  g
+}
+
+.rcm_rec <- function(x, scenario) {
+  sapply(x@Misc, getElement, "R") %>%
+    structure(dimnames = list(year = seq(x@OM@CurrentYr - x@OM@nyears + 1, x@OM@CurrentYr + 1),
+                              iteration = 1:length(x@Misc))) %>%
+    reshape2::melt() %>%
+    mutate(scenario = scenario)
+}
+
 #' @describeIn plot_rcm Compare maturity and length-at-age schedule vs. selectivity (of a single index or fleet)
 #' @param bio_type Character vector to plot either length-at-age (\code{"LAA"}) or maturity-at-age (\code{"mat"})
 #' @param sel_type Character to indicate whether to grab a fleet or index selectivity
