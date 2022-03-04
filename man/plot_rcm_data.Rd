@@ -50,7 +50,8 @@ plot_rcm_mean_age(
   i,
   name,
   scales = "fixed",
-  ylim
+  ylim,
+  color = "black"
 )
 
 plot_rcm_length_comps(
@@ -69,7 +70,8 @@ plot_rcm_mean_length(
   i,
   name,
   scales = "fixed",
-  ylim
+  ylim,
+  color = "black"
 )
 
 plot_rcm_biomass_age(

@@ -179,7 +179,7 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim) {
+plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim, color = "black") {
   type <- match.arg(type)
   if (missing(i)) i <- 1
   if (missing(name)) {
@@ -194,12 +194,15 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
   pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_age, type = type, i = i, type2 = "pred")
 
   g <- ggplot(pred, aes(year, value)) +
-    geom_line(alpha = 0.6, aes(group = paste(iter))) +
+    geom_line(alpha = 0.6, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
-    geom_point(data = obs) +
-    geom_line(data = obs, linetype = 3)
+    geom_point(data = obs, aes(year, value),
+             inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
+    geom_line(data = obs, linetype = 3) +
+    scale_color_manual(values = color) +
+    scale_fill_manual(values = color)
   if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }
@@ -257,7 +260,7 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim) {
+plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim, color = "black") {
   type <- match.arg(type)
   if (missing(i)) i <- 1
   if (missing(name)) {
@@ -272,12 +275,15 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, n
   pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_length, type = type, i = i, type2 = "pred")
 
   g <- ggplot(pred, aes(year, value)) +
-    geom_line(alpha = 0.6, aes(group = paste(iter))) +
+    geom_line(alpha = 0.6, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
-    geom_point(data = obs) +
-    geom_line(data = obs, linetype = 3)
+    geom_point(data = obs, aes(year, value),
+               inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
+    geom_line(data = obs, linetype = 3) +
+    scale_color_manual(values = color) +
+    scale_fill_manual(values = color)
   if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }
