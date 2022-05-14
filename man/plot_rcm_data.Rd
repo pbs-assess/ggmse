@@ -19,7 +19,8 @@ plot_rcm_index(
   i,
   index_names,
   color,
-  xlim
+  xlim,
+  MPD = FALSE
 )
 
 plot_rcm_age_comps(
@@ -28,10 +29,19 @@ plot_rcm_age_comps(
   french = FALSE,
   type = c("fleet", "index"),
   i = 1,
-  color = "black"
+  color = "black",
+  MPD = FALSE
 )
 
-plot_rcm_sel(rcm, scenario, type = c("survey", "index"), i, name)
+plot_rcm_sel(
+  rcm,
+  scenario,
+  type = c("fleet", "index"),
+  i,
+  name,
+  alpha = 0.15,
+  MPD = FALSE
+)
 
 plot_rcm_sel_multi(
   rcm,
@@ -51,7 +61,9 @@ plot_rcm_mean_age(
   name,
   scales = "fixed",
   ylim,
-  color = "black"
+  color = "black",
+  alpha = 0.6,
+  MPD = FALSE
 )
 
 plot_rcm_length_comps(
@@ -60,7 +72,8 @@ plot_rcm_length_comps(
   french = FALSE,
   type = c("fleet", "index"),
   i = 1,
-  color = "black"
+  color = "black",
+  MPD = FALSE
 )
 
 plot_rcm_mean_length(
@@ -71,7 +84,9 @@ plot_rcm_mean_length(
   name,
   scales = "fixed",
   ylim,
-  color = "black"
+  color = "black",
+  alpha = 0.6,
+  MPD = FALSE
 )
 
 plot_rcm_biomass_age(
@@ -97,6 +112,9 @@ plot_rcm_biomass_age(
 \item{color}{Character vector of colors used for plotting.}
 
 \item{xlim}{Optional, x-axis limits for the figure.}
+
+\item{MPD}{Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in
+\code{RCModel@mean_fit}.}
 
 \item{RCModel}{An object of class \linkS4class{RCModel}}
 

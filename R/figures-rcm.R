@@ -13,8 +13,8 @@ NULL
 #' @param ylim Optional y-axes limits to figures.
 #' @export
 plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
-                         scales = "fixed", ylim = NULL) {
-  dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "SSB")
+                         scales = "fixed", ylim = NULL, MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "SSB", MPD = MPD)
 
   if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
   make_plot_wrap(dat, scenario, french, scales, ylim = ylim, ylab = "Spawning biomass")
@@ -24,16 +24,16 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
 #' @describeIn plot_rcm Plot historical spawning depletion
 #' @export
 plot_rcm_depletion <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
-                               scales = "fixed") {
-  dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "depletion")
+                               scales = "fixed", MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "depletion", MPD = MPD)
   make_plot_wrap(dat, scenario, french, scales, ylab = "Spawning depletion", ylim = c(0, 1.1 * max(dat$value)))
 }
 
 #' @describeIn plot_rcm Plot historical apical F
 #' @export
 plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE, scales = "fixed",
-                       ylim = NULL) {
-  dat <- purrr::map2_df(rcm, scenario, .rcm_F)
+                       ylim = NULL, MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_F, MPD = MPD)
 
   if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
   make_plot_wrap(dat, scenario, french, scales, ylim = ylim, ylab = "Apical fishing mortality")
@@ -45,8 +45,8 @@ plot_rcm_F <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french 
 #' @param logspace Logical, whether to plot the recruitment deviates in logspace or normal space
 #' @export
 plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspace = FALSE,
-                            scales = "fixed", ylim = NULL) {
-  dat <- purrr::map2_df(rcm, scenario, .rcm_recdev, proj = proj, logspace = logspace)
+                            scales = "fixed", ylim = NULL, MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_recdev, proj = proj, logspace = logspace, MPD = MPD)
   g <- make_plot_wrap(dat, scenario, french,
     scales = scales, ylim = ylim,
     ylab = paste0("Recruitment deviations", ifelse(logspace, " log space", ""))
@@ -57,8 +57,8 @@ plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspac
 
 #' @describeIn plot_rcm Plot recruitment
 #' @export
-plot_rcm_rec <- function(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL) {
-  dat <- purrr::map2_df(rcm, scenario, .rcm_rec)
+plot_rcm_rec <- function(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL, MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_rec, MPD = MPD)
   g <- make_plot_wrap(dat, scenario, french,
                       scales = scales, ylim = ylim,
                       ylab = "Recruitment") +
@@ -66,13 +66,6 @@ plot_rcm_rec <- function(rcm, scenario, french = FALSE, scales = "fixed", ylim =
   g
 }
 
-.rcm_rec <- function(x, scenario) {
-  sapply(x@Misc, getElement, "R") %>%
-    structure(dimnames = list(year = seq(x@OM@CurrentYr - x@OM@nyears + 1, x@OM@CurrentYr + 1),
-                              iteration = 1:length(x@Misc))) %>%
-    reshape2::melt() %>%
-    mutate(scenario = scenario)
-}
 
 #' @describeIn plot_rcm Compare maturity and length-at-age schedule vs. selectivity (of a single index or fleet)
 #' @param bio_type Character vector to plot either length-at-age (\code{"LAA"}) or maturity-at-age (\code{"mat"})

@@ -15,14 +15,16 @@ plot_rcm_SSB(
   scenario = paste("Scenario", 1:length(rcm)),
   french = FALSE,
   scales = "fixed",
-  ylim = NULL
+  ylim = NULL,
+  MPD = FALSE
 )
 
 plot_rcm_depletion(
   rcm,
   scenario = paste("Scenario", 1:length(rcm)),
   french = FALSE,
-  scales = "fixed"
+  scales = "fixed",
+  MPD = FALSE
 )
 
 plot_rcm_F(
@@ -30,7 +32,8 @@ plot_rcm_F(
   scenario = paste("Scenario", 1:length(rcm)),
   french = FALSE,
   scales = "fixed",
-  ylim = NULL
+  ylim = NULL,
+  MPD = FALSE
 )
 
 plot_rcm_recdev(
@@ -40,10 +43,18 @@ plot_rcm_recdev(
   proj = FALSE,
   logspace = FALSE,
   scales = "fixed",
-  ylim = NULL
+  ylim = NULL,
+  MPD = FALSE
 )
 
-plot_rcm_rec(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL)
+plot_rcm_rec(
+  rcm,
+  scenario,
+  french = FALSE,
+  scales = "fixed",
+  ylim = NULL,
+  MPD = FALSE
+)
 
 plot_rcm_bio_sel(
   rcm,

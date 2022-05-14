@@ -14,12 +14,14 @@ NULL
 #' @param index_names Character vector of names for the indices of abundance.
 #' @param color Character vector of colors used for plotting.
 #' @param xlim Optional, x-axis limits for the figure.
+#' @param MPD Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in
+#' \code{RCModel@mean_fit}.
 #' @export
 #' @importFrom stats weighted.mean
 #' @importFrom ggplot2 ggtitle geom_label geom_col geom_pointrange
 #' @importFrom purrr map2_dfr map_dfc
 plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE, i, index_names,
-                           color, xlim) {
+                           color, xlim, MPD = FALSE) {
   if (missing(i)) i <- 1:dim(rcm@Misc[[1]]$Ipred)[2]
   if (missing(index_names)) index_names <- paste("Index", i)
   if (missing(color)) {
@@ -30,7 +32,7 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fre
 
   .scenario <- scenario
   .index_names <- index_names
-  Ipred <- purrr::map2_dfr(rcm, scenario, .rcm_index, .index_names = index_names, i = i) %>%
+  Ipred <- purrr::map2_dfr(rcm, scenario, .rcm_index, .index_names = index_names, i = i, MPD = MPD) %>%
     mutate(
       scenario = factor(scenario, levels = .scenario),
       year = year + max(all_years) - rcm[[1]]@OM@nyears,
@@ -75,7 +77,8 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fre
 #' @describeIn plot_rcm_data Plot age comps from a fleet or index (single RCM only)
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
-plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
+plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"), i = 1,
+                               color = "black", MPD = FALSE) {
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
@@ -93,11 +96,17 @@ plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("flee
   obs <- structure(obs[yr_ind, ], dimnames = list(Year = yr_plot, Age = 0:RCModel@OM@maxage)) %>%
     reshape2::melt(value.name = "Frequency")
 
-  pred <- lapply(1:length(RCModel@Misc), function(x) {
+  if (MPD) {
+    y <- list(RCModel@mean_fit$report)
+  } else {
+    y <- RCModel@Misc
+  }
+
+  pred <- lapply(1:length(y), function(x) {
     if (type == "fleet") {
-      p <- RCModel@Misc[[x]]$CAApred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$CAApred[yr_ind, , i])
+      p <- y[[x]]$CAApred[yr_ind, , i] / rowSums(y[[x]]$CAApred[yr_ind, , i])
     } else {
-      p <- RCModel@Misc[[x]]$IAApred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$IAApred[yr_ind, , i])
+      p <- y[[x]]$IAApred[yr_ind, , i] / rowSums(y[[x]]$IAApred[yr_ind, , i])
     }
     p %>%
       structure(dimnames = list(Year = yr_plot, Age = 0:RCModel@OM@maxage)) %>%
@@ -124,12 +133,12 @@ plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("flee
 #' @describeIn plot_rcm_data Plot selectivity of a single index or fleet (all simulations)
 #' @param name The name of the index or fleet
 #' @export
-plot_rcm_sel <- function(rcm, scenario, type = c("survey", "index"), i, name) {
+plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, name, alpha = 0.15, MPD = FALSE) {
   type <- match.arg(type)
-  sel <- purrr::map2_dfr(rcm, scenario, .rcm_sel, type = type, i = i)
+  sel <- purrr::map2_dfr(rcm, scenario, .rcm_sel, type = type, i = i, MPD = MPD)
 
   g <- ggplot(sel, aes(Age, value, group = paste(iter))) +
-    geom_line(alpha = 0.15) +
+    geom_line(alpha = alpha) +
     theme_pbs() +
     facet_wrap(~scenario) +
     ylab(paste(name, "selectivity")) +
@@ -179,7 +188,9 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim, color = "black") {
+plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name,
+                              scales = "fixed", ylim, color = "black", alpha = 0.6,
+                              MPD = FALSE) {
   type <- match.arg(type)
   if (missing(i)) i <- 1
   if (missing(name)) {
@@ -191,15 +202,15 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
   }
 
   obs <- .rcm_mean_age(rcm = rcm[[1]], type = type, i = i, type2 = "obs")
-  pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_age, type = type, i = i, type2 = "pred")
+  pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_age, type = type, i = i, type2 = "pred", MPD = MPD)
 
   g <- ggplot(pred, aes(year, value)) +
-    geom_line(alpha = 0.6, colour = color, aes(group = paste(iter))) +
+    geom_line(alpha = alpha, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
     geom_point(data = obs, aes(year, value),
-             inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
+               inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
     geom_line(data = obs, linetype = 3) +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color)
@@ -211,7 +222,8 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
 #' @describeIn plot_rcm_data Plot length comps from a fleet or index (single RCM only)
 #' @param RCModel An object of class \linkS4class{RCModel}
 #' @export
-plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"), i = 1, color = "black") {
+plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("fleet", "index"),
+                                  i = 1, color = "black", MPD = FALSE) {
   type <- match.arg(type)
   all_years <- seq(RCModel@OM@CurrentYr - RCModel@OM@nyears + 1, RCModel@OM@CurrentYr)
 
@@ -229,11 +241,17 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
   obs <- structure(obs[yr_ind, ], dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
     reshape2::melt(value.name = "Frequency")
 
-  pred <- lapply(1:length(RCModel@Misc), function(x) {
+  if (MPD) {
+    y <- list(RCModel@mean_fit$report)
+  } else {
+    y <- RCModel@Misc
+  }
+
+  pred <- lapply(1:length(y), function(x) {
     if (type == "fleet") {
-      p <- RCModel@Misc[[x]]$CALpred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$CALpred[yr_ind, , i])
+      p <- y[[x]]$CALpred[yr_ind, , i] / rowSums(y[[x]]$CALpred[yr_ind, , i])
     } else {
-      p <- RCModel@Misc[[x]]$IALpred[yr_ind, , i] / rowSums(RCModel@Misc[[x]]$IALpred[yr_ind, , i])
+      p <- y[[x]]$IALpred[yr_ind, , i] / rowSums(y[[x]]$IALpred[yr_ind, , i])
     }
     p %>%
       structure(dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
@@ -260,7 +278,9 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, name, scales = "fixed", ylim, color = "black") {
+plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i,
+                                 name, scales = "fixed", ylim, color = "black", alpha = 0.6,
+                                 MPD = FALSE) {
   type <- match.arg(type)
   if (missing(i)) i <- 1
   if (missing(name)) {
@@ -272,10 +292,10 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i, n
   }
 
   obs <- .rcm_mean_length(rcm = rcm[[1]], type = type, i = i, type2 = "obs")
-  pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_length, type = type, i = i, type2 = "pred")
+  pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_length, type = type, i = i, type2 = "pred", MPD = MPD)
 
   g <- ggplot(pred, aes(year, value)) +
-    geom_line(alpha = 0.6, colour = color, aes(group = paste(iter))) +
+    geom_line(alpha = alpha, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
     labs(x = "Year", y = name) +
