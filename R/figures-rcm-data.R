@@ -231,14 +231,14 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
     N <- RCModel@data@CAL_ESS[, i]
     obs <- RCModel@data@CAL[, , i] / rowSums(RCModel@data@CAL[, , i])
   } else {
-    N <- RCModel@data@IAA_ESS[, i]
+    N <- RCModel@data@IAL_ESS[, i]
     obs <- RCModel@data@IAL[, , i] / rowSums(RCModel@data@IAL[, , i])
   }
   yr_ind <- N > 0
   yr_plot <- all_years[yr_ind]
   N_df <- data.frame(Year = yr_plot, N = paste("N =", N[yr_ind] %>% round(1)))
 
-  obs <- structure(obs[yr_ind, ], dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
+  obs <- structure(obs[yr_ind, , drop = FALSE], dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
     reshape2::melt(value.name = "Frequency")
 
   if (MPD) {
@@ -249,9 +249,9 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
 
   pred <- lapply(1:length(y), function(x) {
     if (type == "fleet") {
-      p <- y[[x]]$CALpred[yr_ind, , i] / rowSums(y[[x]]$CALpred[yr_ind, , i])
+      p <- y[[x]]$CALpred[, , i][yr_ind, , drop = FALSE] / rowSums(y[[x]]$CALpred[, , i][yr_ind, , drop = FALSE])
     } else {
-      p <- y[[x]]$IALpred[yr_ind, , i] / rowSums(y[[x]]$IALpred[yr_ind, , i])
+      p <- y[[x]]$IALpred[, , i][yr_ind, , drop = FALSE] / rowSums(y[[x]]$IALpred[, , i][yr_ind, , drop = FALSE])
     }
     p %>%
       structure(dimnames = list(Year = yr_plot, Length = RCModel@data@length_bin)) %>%
