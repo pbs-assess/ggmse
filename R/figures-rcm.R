@@ -20,6 +20,14 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
   make_plot_wrap(dat, scenario, french, scales, ylim = ylim, ylab = "Spawning biomass")
 }
 
+#' @describeIn plot_rcm Plot SSB/SSBMSY
+#' @export
+plot_rcm_SSBMSY <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
+                               scales = "fixed", MPD = FALSE) {
+  dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "MSY", MPD = MPD)
+  make_plot_wrap(dat, scenario, french, scales, ylab = expression(SSB/SSB[MSY]), ylim = c(0, 1.1 * max(dat$value)))
+}
+
 
 #' @describeIn plot_rcm Plot historical spawning depletion
 #' @export

@@ -10,7 +10,7 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
   g
 }
 
-.rcm_SSB <- function(rcm, scenario, mse = NULL, type = c("SSB", "depletion", "MSY"), get_medians = FALSE,
+.rcm_SSB <- function(rcm, scenario, type = c("SSB", "depletion", "MSY"), get_medians = FALSE,
                      MPD = FALSE) {
   type <- match.arg(type)
   all_years <- seq(rcm@OM@CurrentYr - rcm@OM@nyears + 1, rcm@OM@CurrentYr)
@@ -20,13 +20,13 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
     if (type == "depletion") out <- array(rcm@mean_fit$report$E / rcm@mean_fit$report$E0_SR, c(1, rcm@OM@nyears + 1))
     if (type == "SSB") out <- array(rcm@mean_fit$report$E, c(1, rcm@OM@nyears + 1))
     if (type == "MSY") {
-      stop("Not supported with MPD = TRUE and type = \"MSY\"")
-      #out <- rcm@SSB / mse@RefPoint$SSBMSY[, 1, mse@nyears]
+      out <- array(rcm@mean_fit$report$E/.rcm_calc_MSY(rcm, MPD = MPD),
+                   c(1, rcm@OM@nyears + 1)) # Calculate MSY using last historical year parameters
     }
   } else {
     if (type == "depletion") out <- rcm@SSB / sapply(rcm@Misc, getElement, "E0_SR")
     if (type == "SSB") out <- rcm@SSB
-    if (type == "MSY") out <- rcm@SSB / mse@RefPoint$SSBMSY[, 1, mse@nyears]
+    if (type == "MSY") out <- rcm@SSB / .rcm_calc_MSY(rcm, MPD = MPD)
   }
 
   if (get_medians) {
@@ -49,6 +49,61 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
       mutate(year = rep(all_years, each = max(iteration))) %>%
       mutate(scenario = scenario)
   }
+}
+
+
+.rcm_calc_MSY <- function(rcm, MPD = FALSE, type = "SSBMSY", y = rcm@OM@nyears) {
+  type <- match.arg(type)
+  nsim <- rcm@OM@nsim
+
+  if (MPD) {
+    rcm_report <- rcm@mean_fit$report
+
+    MSYs <- sapply(1, MSEtool::optMSY_eq,
+                   M_ageArray = apply(rcm@OM@cpars$M_ageArray, 2:3, mean) %>%
+                     array(c(1, rcm@OM@maxage + 1, rcm@OM@nyears + rcm@OM@proyears)),
+                   Wt_age = apply(rcm@OM@cpars$Wt_age, 2:3, mean) %>%
+                     array(c(1, rcm@OM@maxage + 1, rcm@OM@nyears + rcm@OM@proyears)),
+                   Mat_age = apply(rcm@OM@cpars$Mat_age, 2:3, mean) %>%
+                     array(c(1, rcm@OM@maxage + 1, rcm@OM@nyears + rcm@OM@proyears)),
+                   Fec_age = apply(rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age, 2:3, mean) %>%
+                     array(c(1, rcm@OM@maxage + 1, rcm@OM@nyears + rcm@OM@proyears)),
+                   V = array(rcm_report$F_at_age/apply(rcm_report$F_at_age, 1, max),
+                             c(1, rcm@OM@nyears, rcm@OM@maxage + 1)) %>%
+                     aperm(c(1, 3, 2)),
+                   maxage = rcm@OM@maxage,
+                   R0 = rcm_report[["R0"]],
+                   SRrel = rcm@OM@SRrel,
+                   hs = rcm_report[["h"]],
+                   SSBpR = matrix(rcm_report[["EPR0_SR"]], 1, 1),
+                   yr.ind = y,
+                   plusgroup = 1)
+
+
+  } else {
+    phi0 <- sapply(rcm@Misc, getElement, "EPR0_SR")
+    if(length(phi0) == 1) phi0 <- rep(phi0, nsim)
+
+    MSYs <- sapply(1:nsim, MSEtool::optMSY_eq,
+                   M_ageArray = rcm@OM@cpars$M_ageArray,
+                   Wt_age = rcm@OM@cpars$Wt_age,
+                   Mat_age = rcm@OM@cpars$Mat_age,
+                   Fec_age = rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age,
+                   V = rcm@OM@cpars$V,
+                   maxage = rcm@OM@maxage,
+                   R0 = rcm@OM@cpars$R0,
+                   SRrel = rep(rcm@OM@SRrel, nsim),
+                   hs = rcm@OM@cpars$hs,
+                   SSBpR = matrix(phi0, nsim, 1),
+                   yr.ind = y,
+                   plusgroup = 1)
+  }
+
+
+  out <- switch(type,
+                "SSBMSY" = MSYs["SB", ])
+
+  return(out)
 }
 
 .rcm_F <- function(rcm, scenario, MPD) {

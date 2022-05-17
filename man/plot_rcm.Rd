@@ -3,6 +3,7 @@
 \name{plot_rcm}
 \alias{plot_rcm}
 \alias{plot_rcm_SSB}
+\alias{plot_rcm_SSBMSY}
 \alias{plot_rcm_depletion}
 \alias{plot_rcm_F}
 \alias{plot_rcm_recdev}
@@ -16,6 +17,14 @@ plot_rcm_SSB(
   french = FALSE,
   scales = "fixed",
   ylim = NULL,
+  MPD = FALSE
+)
+
+plot_rcm_SSBMSY(
+  rcm,
+  scenario = paste("Scenario", 1:length(rcm)),
+  french = FALSE,
+  scales = "fixed",
   MPD = FALSE
 )
 
@@ -96,6 +105,8 @@ of operating models.
 \section{Functions}{
 \itemize{
 \item \code{plot_rcm_SSB}: Plot historical SSB
+
+\item \code{plot_rcm_SSBMSY}: Plot SSB/SSBMSY
 
 \item \code{plot_rcm_depletion}: Plot historical spawning depletion
 
