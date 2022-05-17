@@ -33,15 +33,7 @@ plot_rcm_age_comps(
   MPD = FALSE
 )
 
-plot_rcm_sel(
-  rcm,
-  scenario,
-  type = c("fleet", "index"),
-  i,
-  name,
-  alpha = 0.15,
-  MPD = FALSE
-)
+plot_rcm_sel(rcm, scenario, type = c("fleet", "index"), i, name, MPD = FALSE)
 
 plot_rcm_sel_multi(
   rcm,
@@ -131,6 +123,8 @@ plot_rcm_biomass_age(
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
 
 \item{ylim}{Optional y-axes limits to figures.}
+
+\item{alpha}{The alpha parameter to control color transparency in the ggplots.}
 }
 \description{
 A set of functions that plots fits to data from a list of RCModel objects.

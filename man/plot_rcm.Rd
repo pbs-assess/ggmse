@@ -86,6 +86,8 @@ plot_rcm_bio_sel(
 
 \item{ylim}{Optional y-axes limits to figures.}
 
+\item{MPD}{Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in \code{RCModel@mean_fit}.}
+
 \item{proj}{Logical, whether to plot the recruitment deviates in the projection period}
 
 \item{logspace}{Logical, whether to plot the recruitment deviates in logspace or normal space}

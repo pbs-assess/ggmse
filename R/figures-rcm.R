@@ -11,6 +11,7 @@ NULL
 #' @param french Logical, whether the axes are in French or not.
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
 #' @param ylim Optional y-axes limits to figures.
+#' @param MPD Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in \code{RCModel@mean_fit}.
 #' @export
 plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                          scales = "fixed", ylim = NULL, MPD = FALSE) {
@@ -64,6 +65,7 @@ plot_rcm_recdev <- function(rcm, scenario, french = FALSE, proj = FALSE, logspac
 }
 
 #' @describeIn plot_rcm Plot recruitment
+#' @importFrom ggplot2 expand_limits
 #' @export
 plot_rcm_rec <- function(rcm, scenario, french = FALSE, scales = "fixed", ylim = NULL, MPD = FALSE) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_rec, MPD = MPD)

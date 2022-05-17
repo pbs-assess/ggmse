@@ -12,6 +12,7 @@ NULL
 #' @param type Whether the output is from a fishing fleet or index.
 #' @param i The corresponding index from the fleet or index of abundance.
 #' @param index_names Character vector of names for the indices of abundance.
+#' @param alpha The alpha parameter to control color transparency in the ggplots.
 #' @param color Character vector of colors used for plotting.
 #' @param xlim Optional, x-axis limits for the figure.
 #' @param MPD Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in
@@ -133,12 +134,12 @@ plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("flee
 #' @describeIn plot_rcm_data Plot selectivity of a single index or fleet (all simulations)
 #' @param name The name of the index or fleet
 #' @export
-plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, name, alpha = 0.15, MPD = FALSE) {
+plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, name, MPD = FALSE) {
   type <- match.arg(type)
   sel <- purrr::map2_dfr(rcm, scenario, .rcm_sel, type = type, i = i, MPD = MPD)
 
   g <- ggplot(sel, aes(Age, value, group = paste(iter))) +
-    geom_line(alpha = alpha) +
+    geom_line() +
     theme_pbs() +
     facet_wrap(~scenario) +
     ylab(paste(name, "selectivity")) +
