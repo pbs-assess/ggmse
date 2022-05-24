@@ -11,6 +11,7 @@
 #'   number of years.
 #' @param quantiles Probability quantiles to show.
 #' @param french French?
+#' @param MP A character vector to subset the management procedures in the MSE object.
 #'
 #' @export
 #' @importFrom ggplot2 facet_grid scale_colour_brewer
@@ -23,7 +24,7 @@
 #' names(mse_list) <- c("Sc 1", "Sc 2")
 #' plot_index(mse_list)
 plot_index <- function(object_list, n_samples = 4, seed = 42,
-                       type = c("Ind", "AddInd"),
+                       type = c("Ind", "AddInd"), MP = NULL,
                        omit_index_fn = function(x) NULL,
                        quantiles = c(0.025, 0.975),
                        french = isTRUE(getOption("french"))) {
@@ -61,6 +62,11 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
       upr = quantile(value, probs = quantiles[[2]], na.rm = TRUE)
     )
 
+  if(!is.null(MP)) {
+    d <- dplyr::filter(d, mp_name %in% MP)
+    d_all <- dplyr::filter(d_all, mp_name %in% MP)
+  }
+
   g <- ggplot(
     d[!is.na(d$value), , drop = FALSE],
     aes_string("real_year", "value", group = "as.factor(iter)")
@@ -77,7 +83,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
     theme_pbs() +
     ylab(en2fr("Index value", french, allow_missing = TRUE)) +
     xlab(en2fr("Year", french, allow_missing = TRUE)) +
-    guides(colour = FALSE)
+    guides(colour = "none")
 
   g
 }

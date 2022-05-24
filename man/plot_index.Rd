@@ -9,6 +9,7 @@ plot_index(
   n_samples = 4,
   seed = 42,
   type = c("Ind", "AddInd"),
+  MP = NULL,
   omit_index_fn = function(x) NULL,
   quantiles = c(0.025, 0.975),
   french = isTRUE(getOption("french"))
@@ -23,6 +24,8 @@ scenarios. The list should be named with the scenario names.}
 \item{seed}{The seed to set before drawing samples.}
 
 \item{type}{Which index to plot.}
+
+\item{MP}{A character vector to subset the management procedures in the MSE object.}
 
 \item{omit_index_fn}{A function that indexes years in the projection period
 to omit from the plot. E.g., for a biennial survey omitting even years
