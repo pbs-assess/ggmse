@@ -153,7 +153,7 @@ plot_tigure <- function(probs_dat,
       axis.ticks.y = ggplot2::element_blank()
     ) +
     ggplot2::scale_fill_viridis_c(limits = c(0, 1), begin = 0.15, end = 1, alpha = alpha, option = "D", direction = 1) +
-    ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
+    ggplot2::guides(fill = "none") + xlab("") + ylab("") +
     ggplot2::geom_text(aes(x = type, label = txt), size = ggplot2::rel(3), colour = txt_col) +
     ggplot2::scale_x_discrete(position = "top") +
     ggplot2::coord_cartesian(
@@ -221,7 +221,7 @@ plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
       limits = c(0, 1), begin = 0.15, end = 1, alpha = gdat[[1]]$alpha,
       option = "D", direction = 1
     ) +
-    ggplot2::guides(fill = FALSE) + xlab("") + ylab("") +
+    ggplot2::guides(fill = "none") + xlab("") + ylab("") +
     ggplot2::geom_text(aes_string(x = "type", label = "txt"),
       size = ggplot2::rel(3), colour = txt_col
     ) +
