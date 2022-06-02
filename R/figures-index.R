@@ -63,8 +63,8 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
     )
 
   if(!is.null(MP)) {
-    d <- dplyr::filter(d, mp_name %in% MP)
-    d_all <- dplyr::filter(d_all, mp_name %in% MP)
+    d <- dplyr::filter(d, mp_name %in% MP) %>% mutate(mp_name = factor(mp_name, levels = MP))
+    d_all <- dplyr::filter(d_all, mp_name %in% MP) %>% mutate(mp_name = factor(mp_name, levels = MP))
   }
 
   g <- ggplot(
