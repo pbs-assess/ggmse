@@ -16,6 +16,7 @@ plot_tigure(
   satisficed = NULL,
   return_data = FALSE,
   alpha = 0.6,
+  do_approx = TRUE,
   french = isTRUE(getOption("french"))
 )
 
@@ -26,7 +27,7 @@ plot_tigure_facet(pm_df_list, ncol = NULL, ...)
 
 \item{digits}{How many decimal places to show in the tiles for the values}
 
-\item{relative_max}{Make the plot have each column use a reletive maximum. If
+\item{relative_max}{Make the plot have each column use a relative maximum. If
 \code{scale_0_1} is used, this will be ignored}
 
 \item{scale_0_1}{Scale each column from 0 to 1, so that the colours in each
@@ -44,6 +45,9 @@ the performance metrics and the values correspond to the values above which
 returned instead of the plot.}
 
 \item{alpha}{Transparency of underlying colour.}
+
+\item{do_approx}{Logical. If \code{TRUE}, values greater than 0.99 are replaced with ">0.99" and less than 0.01 are replaced
+"<0.01".}
 
 \item{french}{French?}
 

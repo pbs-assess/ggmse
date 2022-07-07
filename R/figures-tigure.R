@@ -62,7 +62,7 @@ get_probs <- function(object,
 #' format
 #'
 #' @param probs_dat A data frame as returned from [get_probs()].
-#' @param relative_max Make the plot have each column use a reletive maximum. If
+#' @param relative_max Make the plot have each column use a relative maximum. If
 #'   `scale_0_1` is used, this will be ignored
 #' @param scale_0_1 Scale each column from 0 to 1, so that the colours in each
 #'   column are fully represented
@@ -75,6 +75,8 @@ get_probs <- function(object,
 #' @param return_data Logical. If `TRUE` then the underlying data frame is
 #'   returned instead of the plot.
 #' @param alpha Transparency of underlying colour.
+#' @param do_approx Logical. If `TRUE`, values greater than 0.99 are replaced with ">0.99" and less than 0.01 are replaced
+#' "<0.01".
 #' @param french French?
 #'
 #' @importFrom reshape2 melt
@@ -98,6 +100,7 @@ plot_tigure <- function(probs_dat,
                         satisficed = NULL,
                         return_data = FALSE,
                         alpha = 0.6,
+                        do_approx = TRUE,
                         french = isTRUE(getOption("french"))) {
 
   df <- probs_dat
@@ -126,8 +129,10 @@ plot_tigure <- function(probs_dat,
     gfutilities::f(x, digits)
   }, FUN.VALUE = character(1L))
 
-  df$txt <- gsub("1\\.00", ">0.99", df$txt)
-  df$txt <- gsub("0\\.00", "<0.01", df$txt)
+  if (do_approx) {
+    df$txt <- gsub("1\\.00", ">0.99", df$txt)
+    df$txt <- gsub("0\\.00", "<0.01", df$txt)
+  }
 
   if (relative_max) {
     df <- group_by(df, type) %>%
@@ -141,29 +146,34 @@ plot_tigure <- function(probs_dat,
   }
 
   df$MP <- as.factor(df$MP)
-  lab_cols <- ifelse(grepl("ref", levels(df$MP)), "grey65", "grey10")
-  txt_col <- ifelse(grepl("ref", df$MP), "grey45", "grey4")
+
+  # Reference MPs are italicized and followed with an asterisk
+  lab_text <- ifelse(grepl("ref", levels(df$MP)), parse(text = paste0("italic(", levels(df$MP), "~\"*\")")),
+                     levels(df$MP)) %>% structure(names = levels(df$MP))
+
   padding <- 0.52
+
   g <- ggplot(df, ggplot2::aes_string(x = "type", y = "MP")) +
     ggplot2::geom_tile(aes(fill = value), color = "white") +
-    theme_pbs() +
-    ggplot2::theme(
-      panel.border = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_blank(),
-      axis.ticks.y = ggplot2::element_blank()
-    ) +
     ggplot2::scale_fill_viridis_c(limits = c(0, 1), begin = 0.15, end = 1, alpha = alpha, option = "D", direction = 1) +
-    ggplot2::guides(fill = "none") + xlab("") + ylab("") +
-    ggplot2::geom_text(aes(x = type, label = txt), size = ggplot2::rel(3), colour = txt_col) +
-    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::guides(fill = "none") +
+    xlab("") +
+    ylab("") +
+    ggplot2::geom_text(aes(x = type, label = txt), size = ggplot2::rel(3)) +
     ggplot2::coord_cartesian(
       expand = FALSE,
       xlim = range(as.numeric(df$type)) + c(-padding, padding),
       ylim = range(as.numeric(df$MP)) + c(-padding - 0.01, padding + 0.01)
-    )
-
-  g <- g + ggplot2::theme(axis.text.y = element_text(color = lab_cols))
-  g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
+    ) +
+    theme_pbs() +
+    ggplot2::theme(
+      panel.border = ggplot2::element_blank(),
+      axis.ticks.x = ggplot2::element_blank(),
+      axis.ticks.y = ggplot2::element_blank(),
+      axis.text.x = element_text(color = "grey10")
+    ) +
+    ggplot2::scale_x_discrete(position = "top") +
+    ggplot2::scale_y_discrete(labels = lab_text)
 
   if (!is.null(satisficed)) {
     h <- purrr::map_df(
@@ -176,7 +186,7 @@ plot_tigure <- function(probs_dat,
   if (!return_data) {
     g
   } else {
-    list(df = df, lab_cols = lab_cols, txt_col = txt_col, alpha = alpha)
+    list(df = df, lab_text = lab_text, alpha = alpha)
   }
 }
 
@@ -204,32 +214,34 @@ plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
 
   gdat <- purrr::map(pm_df_list, plot_tigure, return_data = TRUE, ...)
   gdat2 <- purrr::map_dfr(gdat, "df", .id = "scenario")
-  txt_col <- ifelse(grepl("ref", gdat2$MP), "grey45", "grey4")
+
+  # Reference MPs are italicized and followed with an asterisk
+  lab_text <- ifelse(grepl("ref", levels(gdat2$MP)), parse(text = paste0("italic(", levels(gdat2$MP), "~\"*\")")),
+                     levels(gdat2$MP)) %>% structure(names = levels(gdat2$MP))
 
   g <- ggplot(gdat2, ggplot2::aes_string(x = "type", y = "MP")) +
-    ggplot2::geom_tile(aes_string(fill = "value"), color = "white") +
-    theme_pbs() +
-    ggplot2::facet_wrap(ggplot2::vars(scenario), scales = "free_x", ncol = ncol) +
-    ggplot2::theme(
-      # panel.border = ggplot2::element_blank(),
-      axis.ticks.x = ggplot2::element_blank(),
-      axis.ticks.y = ggplot2::element_blank(),
-      strip.text = element_text(face = "bold", size = 11)
-    ) +
-    ggplot2::theme(strip.placement = "outside") +
+    ggplot2::geom_tile(aes(fill = value), color = "white") +
     ggplot2::scale_fill_viridis_c(
       limits = c(0, 1), begin = 0.15, end = 1, alpha = gdat[[1]]$alpha,
       option = "D", direction = 1
     ) +
-    ggplot2::guides(fill = "none") + xlab("") + ylab("") +
-    ggplot2::geom_text(aes_string(x = "type", label = "txt"),
-      size = ggplot2::rel(3), colour = txt_col
+    ggplot2::guides(fill = "none") +
+    xlab("") +
+    ylab("") +
+    ggplot2::geom_text(aes_string(x = "type", label = "txt"), size = ggplot2::rel(3)) +
+    ggplot2::facet_wrap(ggplot2::vars(scenario), scales = "free_x", ncol = ncol) +
+    ggplot2::coord_cartesian(expand = FALSE) +
+    theme_pbs() +
+    ggplot2::theme(
+      # panel.border = ggplot2::element_blank(),
+      strip.placement = "outside",
+      strip.text = element_text(face = "bold", size = 11),
+      axis.ticks.x = ggplot2::element_blank(),
+      axis.ticks.y = ggplot2::element_blank(),
+      axis.text.x = element_text(color = "grey10")
     ) +
     ggplot2::scale_x_discrete(position = "top") +
-    ggplot2::coord_cartesian(expand = FALSE)
-
-  g <- g + ggplot2::theme(axis.text.y = element_text(color = gdat[[1]]$lab_cols))
-  g <- g + ggplot2::theme(axis.text.x = element_text(color = "grey10"))
+    ggplot2::scale_y_discrete(labels = lab_text)
 
   g
 }
