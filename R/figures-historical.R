@@ -40,7 +40,7 @@ plot_historical_ts <- function(object,
                                observed_ts = NULL,
                                scale = if (!is.null(observed_ts)) TRUE else FALSE,
                                legend_position = c(0.9, 0.85)) {
-  if (!.hasSlot(object, "Data") || class(object) != "Hist") {
+  if (!.hasSlot(object, "Data") || !is(object, "Hist")) {
     stop(
       "`object` must be a MSEtool object of class `Hist`",
       "that was created by running `MSEtool::runMSE()` with",

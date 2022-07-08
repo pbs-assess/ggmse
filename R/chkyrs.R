@@ -20,7 +20,7 @@
 #' @keywords internal
 #' @export
 chk_yrs <- function(Yrs, MSEobj) {
-  if (class(MSEobj) !='MSE') stop('Require object of class MSE', call.=FALSE)
+  if (!is(MSEobj, 'MSE')) stop('Require object of class MSE', call.=FALSE)
   if (is.null(Yrs)) {
     y.st <- 1
     y.end <- MSEobj@proyears

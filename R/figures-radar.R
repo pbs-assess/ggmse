@@ -32,7 +32,7 @@ plot_radar <- function(pm_df,
     palette = palette,
     ...
   )
-  if ("ggplot" %in% class(g)) {
+  if (inherits(g, "ggplot")) {
     g <- g + ggplot2::labs(color = en2fr("MP", french))
   }
   if (!is.null(custom_pal)) {

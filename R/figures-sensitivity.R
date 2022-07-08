@@ -21,10 +21,10 @@
 plot_sensitivity <- function(object, pm_function, mp = object@MPs,
                              slots = c("D", "hs", "M", "ageM", "L50", "Linf", "K", "Isd"),
                              ylab = "Performance metric value") {
-  if (class(object) != "MSE") {
+  if (!is(object, "MSE")) {
     stop("`object` must be class 'MSE'", call. = FALSE)
   }
-  if (class(pm_function) != "PM") {
+  if (!inherits(pm_function, "PM")) {
     stop("`pm_function` must be a function of class 'PM'", call. = FALSE)
   }
   if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs)))) {

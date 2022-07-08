@@ -92,7 +92,7 @@ plot_rcm_bio_sel(
 
 \item{histogram}{Logical, whether to show a histogram (TRUE) or otherwise a time series plot.}
 
-\item{bins}{The bins argument to \link{ggplot2}\link{geom_histogram}}
+\item{bins}{The \code{bins} argument to \link{ggplot2}\link{geom_histogram}}
 
 \item{proj}{Logical, whether to plot the recruitment deviates in the projection period}
 

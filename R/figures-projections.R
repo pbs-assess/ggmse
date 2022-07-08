@@ -163,7 +163,7 @@ plot_projection_ts <- function(object,
 get_ts <- function(object,
                    type = c("SSB", "FM", "Catch"),
                    this_year = 0) {
-  if (!class(object) != "mse") {
+  if (!is(object, "MSE")) {
     stop(
       "`object` must be a MSEtool object of class `mse`",
       "that was created by running `MSEtool::runMSE()`."

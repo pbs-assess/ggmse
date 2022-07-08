@@ -37,7 +37,7 @@ plot_sensitivity_trajectory <- function(object, type = c("B_BMSY", "F_FMSY"), mp
   }
 
   type <- match.arg(type)
-  if (class(object) != "MSE") {
+  if (!is(object, "MSE")) {
     stop("`object` must be class 'MSE'", call. = FALSE)
   }
   if (any(!slots %in% union(colnames(object@OM), colnames(object@Obs)))) {

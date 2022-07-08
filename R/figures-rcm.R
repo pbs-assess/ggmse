@@ -24,6 +24,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
 #' @describeIn plot_rcm Plot SSB/SSBMSY
 #' @param histogram Logical, whether to show a histogram (TRUE) or otherwise a time series plot.
 #' @param bins The `bins` argument to \link{ggplot2}[geom_histogram]
+#' @importFrom ggplot2 geom_histogram
 #' @export
 plot_rcm_SSBMSY <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
                             scales = "fixed", histogram = FALSE, bins = NULL, MPD = FALSE) {

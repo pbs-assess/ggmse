@@ -7,6 +7,7 @@
 #' @return A tibble of the output
 #' @importFrom tibble as_tibble
 #' @importFrom MSEtool avail
+#' @importFrom methods is
 #' @export
 #'
 #' @examples
@@ -15,7 +16,7 @@
 get_probs <- function(object,
                       ...,
                       refs = NULL) {
-  if (class(object) != "MSE") {
+  if (!is(object, "MSE")) {
     stop("object must be class `MSE`",
       call. = FALSE
     )
@@ -26,7 +27,7 @@ get_probs <- function(object,
     warning("No PM's included. Using defaults")
     pm_list <- c("PNOF", "P50", "AAVY", "LTY")
   }
-  if (class(pm_list) != "character") {
+  if (!inherits(pm_list, "character")) {
     stop("Must provide names of PM methods",
       call. = FALSE
     )

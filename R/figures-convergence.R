@@ -34,7 +34,7 @@ plot_convergence <- function(object_list, pm_list = c("LTY", "PNOF"),
     object_list <- list("Scenario 1" = object_list)
   }
 
-  if (class(object_list[[1]]) != "MSE") {
+  if (!is(object_list[[1]], "MSE")) {
     stop("`object` must be object of class 'MSE'", call. = FALSE)
   }
   if (object_list[[1]]@nMPs < 2) {
