@@ -25,6 +25,8 @@ plot_rcm_SSBMSY(
   scenario = paste("Scenario", 1:length(rcm)),
   french = FALSE,
   scales = "fixed",
+  histogram = FALSE,
+  bins = NULL,
   MPD = FALSE
 )
 
@@ -87,6 +89,10 @@ plot_rcm_bio_sel(
 \item{ylim}{Optional y-axes limits to figures.}
 
 \item{MPD}{Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in \code{RCModel@mean_fit}.}
+
+\item{histogram}{Logical, whether to show a histogram (TRUE) or otherwise a time series plot.}
+
+\item{bins}{The bins argument to \link{ggplot2}\link{geom_histogram}}
 
 \item{proj}{Logical, whether to plot the recruitment deviates in the projection period}
 

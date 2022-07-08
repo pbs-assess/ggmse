@@ -22,11 +22,30 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
 }
 
 #' @describeIn plot_rcm Plot SSB/SSBMSY
+#' @param histogram Logical, whether to show a histogram (TRUE) or otherwise a time series plot.
+#' @param bins The `bins` argument to \link{ggplot2}[geom_histogram]
 #' @export
 plot_rcm_SSBMSY <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE,
-                               scales = "fixed", MPD = FALSE) {
+                            scales = "fixed", histogram = FALSE, bins = NULL, MPD = FALSE) {
   dat <- purrr::map2_df(rcm, scenario, .rcm_SSB, type = "MSY", MPD = MPD)
-  make_plot_wrap(dat, scenario, french, scales, ylab = expression(SSB/SSB[MSY]), ylim = c(0, 1.1 * max(dat$value)))
+
+  if (histogram) {
+    .scenario <- scenario
+    dat_hist <- dat %>% dplyr::filter(year == max(year)) %>%
+      mutate(scenario = factor(scenario, levels = .scenario))
+
+    g <- ggplot(dat_hist, aes(value, y = ..density..)) +
+      geom_histogram(bins = bins, colour = "black", fill = "grey") +
+      facet_wrap(vars(scenario), scales = scales) +
+      theme_pbs() +
+      labs(x = en2fr(parse(text = "SSB/SSB[MSY]"), french),
+           y = en2fr("Relative frequency", french))
+
+  } else {
+    g <- make_plot_wrap(dat, scenario, french, scales, ylab = expression(SSB/SSB[MSY]),
+                        ylim = c(0, 1.1 * max(dat$value)))
+  }
+  g
 }
 
 
