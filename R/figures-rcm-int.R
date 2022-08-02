@@ -114,9 +114,7 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 
   } else {
     .F1 <- map(rcm@Misc, "F_at_age")
-    .F <- map_dfc(.F1, ~ tibble(.F = apply(.x, 1, max))) %>%
-      as.matrix() %>%
-      t()
+    .F <- sapply(.F1, apply, 1, max) %>% t()
   }
   row.names(.F) <- NULL
 
