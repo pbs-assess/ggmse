@@ -132,18 +132,20 @@ plot_rcm_age_comps <- function(RCModel, scenario, french = FALSE, type = c("flee
 }
 
 #' @describeIn plot_rcm_data Plot selectivity of a single index or fleet (all simulations)
-#' @param name The name of the index or fleet
 #' @export
-plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, name, MPD = FALSE) {
+plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, french = FALSE, MPD = FALSE) {
   type <- match.arg(type)
   sel <- purrr::map2_dfr(rcm, scenario, .rcm_sel, type = type, i = i, MPD = MPD)
 
   g <- ggplot(sel, aes(Age, value, group = paste(iter))) +
-    geom_line() +
+    geom_line(alpha = 0.05) +
     theme_pbs() +
     facet_wrap(~scenario) +
-    ylab(paste(name, "selectivity")) +
+    xlab(en2fr("Age", french)) +
+    ylab("Selectivity") +
+    #ylab(en2fr("Selectivity", french)) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
+
   g
 }
 

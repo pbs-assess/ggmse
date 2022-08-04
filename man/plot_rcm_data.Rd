@@ -33,7 +33,14 @@ plot_rcm_age_comps(
   MPD = FALSE
 )
 
-plot_rcm_sel(rcm, scenario, type = c("fleet", "index"), i, name, MPD = FALSE)
+plot_rcm_sel(
+  rcm,
+  scenario,
+  type = c("fleet", "index"),
+  i,
+  french = FALSE,
+  MPD = FALSE
+)
 
 plot_rcm_sel_multi(
   rcm,
@@ -111,8 +118,6 @@ plot_rcm_biomass_age(
 \item{RCModel}{An object of class \linkS4class{RCModel}}
 
 \item{type}{Whether the output is from a fishing fleet or index.}
-
-\item{name}{The name of the index or fleet}
 
 \item{fleet_i}{Vectors of indices for the fleets, i.e., 1 is the first fleet, etc. Use NA if no fleets will be plotted.}
 
