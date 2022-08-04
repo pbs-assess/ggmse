@@ -81,6 +81,7 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
     facet_grid(mp_name ~ scenario) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
     theme_pbs() +
+    theme(panel.spacing = unit(0, "in")) +
     ylab(en2fr("Index value", french, allow_missing = TRUE)) +
     xlab(en2fr("Year", french, allow_missing = TRUE)) +
     guides(colour = "none")
