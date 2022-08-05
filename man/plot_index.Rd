@@ -2,7 +2,8 @@
 % Please edit documentation in R/figures-index.R
 \name{plot_index}
 \alias{plot_index}
-\title{Plot sampled survey index projections}
+\alias{plot_catch}
+\title{Plot sampled survey index or catch projections}
 \usage{
 plot_index(
   object_list,
@@ -11,6 +12,15 @@ plot_index(
   type = c("Ind", "AddInd"),
   MP = NULL,
   omit_index_fn = function(x) NULL,
+  quantiles = c(0.025, 0.975),
+  french = isTRUE(getOption("french"))
+)
+
+plot_catch(
+  object_list,
+  n_samples = 4,
+  seed = 42,
+  MP = NULL,
   quantiles = c(0.025, 0.975),
   french = isTRUE(getOption("french"))
 )
@@ -40,8 +50,15 @@ number of years.}
 A ggplot object
 }
 \description{
-Plot sampled survey index projections
+Plot sampled survey index or catch projections
 }
+\section{Functions}{
+\itemize{
+\item \code{plot_index}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}
+
+\item \code{plot_catch}: Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}
+}}
+
 \examples{
 plot_index(mse_example)
 mse_list <- list()

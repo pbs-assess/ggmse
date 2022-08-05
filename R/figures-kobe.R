@@ -135,7 +135,7 @@ plot_kobe <- function(object,
 
   g <- ggplot(d, ggplot2::aes_string("x", "y")) +
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
-    ggplot2::guides(shape = FALSE)
+    ggplot2::guides(shape = "none")
 
   scale <- scale_color_viridis_c(
     end = 0.95, option = "D", direction = -1,
@@ -202,7 +202,7 @@ plot_kobe_grid <- function(object_list, french = isTRUE(getOption("french")), ..
 
   g <- ggplot(df, ggplot2::aes_string("x", "y")) +
     geom_point(alpha = 0.2, mapping = aes_string(shape = "outside")) +
-    ggplot2::guides(shape = FALSE)
+    ggplot2::guides(shape = "none")
 
   if (gdat[[1]]$show_contours) {
     g <- g + geom_path(
