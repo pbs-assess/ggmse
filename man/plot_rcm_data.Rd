@@ -19,7 +19,6 @@ plot_rcm_index(
   i,
   index_names,
   color,
-  xlim,
   MPD = FALSE
 )
 
@@ -49,6 +48,7 @@ plot_rcm_sel_multi(
   index_i = 1,
   fleet_names = paste("Fleet", fleet_i),
   index_names = paste("Index", index_i),
+  french = FALSE,
   color
 )
 
@@ -56,12 +56,11 @@ plot_rcm_mean_age(
   rcm,
   scenario,
   type = c("fleet", "index"),
-  i,
-  name,
+  i = 1,
   scales = "fixed",
-  ylim,
   color = "black",
   alpha = 0.6,
+  french = FALSE,
   MPD = FALSE
 )
 
@@ -79,12 +78,11 @@ plot_rcm_mean_length(
   rcm,
   scenario,
   type = c("fleet", "index"),
-  i,
-  name,
+  i = 1,
   scales = "fixed",
-  ylim,
   color = "black",
   alpha = 0.6,
+  french = FALSE,
   MPD = FALSE
 )
 
@@ -110,8 +108,6 @@ plot_rcm_biomass_age(
 
 \item{color}{Character vector of colors used for plotting.}
 
-\item{xlim}{Optional, x-axis limits for the figure.}
-
 \item{MPD}{Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in
 \code{RCModel@mean_fit}.}
 
@@ -126,8 +122,6 @@ plot_rcm_biomass_age(
 \item{fleet_names}{Character vector for the names of the fleets}
 
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
-
-\item{ylim}{Optional y-axes limits to figures.}
 
 \item{alpha}{The alpha parameter to control color transparency in the ggplots.}
 }

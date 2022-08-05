@@ -14,7 +14,6 @@ NULL
 #' @param index_names Character vector of names for the indices of abundance.
 #' @param alpha The alpha parameter to control color transparency in the ggplots.
 #' @param color Character vector of colors used for plotting.
-#' @param xlim Optional, x-axis limits for the figure.
 #' @param MPD Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in
 #' \code{RCModel@mean_fit}.
 #' @export
@@ -22,7 +21,7 @@ NULL
 #' @importFrom ggplot2 ggtitle geom_label geom_col geom_pointrange
 #' @importFrom purrr map2_dfr map_dfc
 plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), french = FALSE, i, index_names,
-                           color, xlim, MPD = FALSE) {
+                           color, MPD = FALSE) {
   if (missing(i)) i <- 1:dim(rcm@Misc[[1]]$Ipred)[2]
   if (missing(index_names)) index_names <- paste("Index", i)
   if (missing(color)) {
@@ -71,7 +70,7 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fre
   } else {
     g <- g + facet_wrap(scenario ~ .)
   }
-  if (!missing(xlim)) g <- g + coord_cartesian(xlim = xlim)
+
   g
 }
 
@@ -142,8 +141,7 @@ plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, french = 
     theme_pbs() +
     facet_wrap(~scenario) +
     xlab(en2fr("Age", french)) +
-    ylab("Selectivity") +
-    #ylab(en2fr("Selectivity", french)) +
+    ylab(en2fr("Selectivity", french, allow_missing = TRUE)) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
 
   g
@@ -157,7 +155,7 @@ plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i, french = 
 #' @export
 plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fleet_i = 1, index_i = 1,
                                fleet_names = paste("Fleet", fleet_i), index_names = paste("Index", index_i),
-                               color) {
+                               french = FALSE, color) {
   if (all(is.na(fleet_i))) {
     fsel <- data.frame()
   } else {
@@ -180,8 +178,8 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
     geom_line() +
     theme_pbs() +
     facet_wrap(~scenario) +
-    ylab("Selectivity") +
-    xlab("Age") +
+    ylab(en2fr("Selectivity", french, allow_missing = TRUE)) +
+    xlab(en2fr("Age", french)) +
     scale_color_manual(values = color) +
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
 }
@@ -189,20 +187,11 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 
 #' @describeIn plot_rcm_data Plot mean age for a fleet or index of abundance
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
-#' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name,
-                              scales = "fixed", ylim, color = "black", alpha = 0.6,
+plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i = 1,
+                              scales = "fixed", color = "black", alpha = 0.6, french = FALSE,
                               MPD = FALSE) {
   type <- match.arg(type)
-  if (missing(i)) i <- 1
-  if (missing(name)) {
-    if (requireNamespace("stringi", quietly = TRUE)) {
-      name <- stringi::stri_trans_totitle(type) %>% paste(i, "mean age")
-    } else {
-      name <- "Mean age"
-    }
-  }
 
   obs <- .rcm_mean_age(rcm = rcm[[1]], type = type, i = i, type2 = "obs")
   pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_age, type = type, i = i, type2 = "pred", MPD = MPD)
@@ -211,13 +200,14 @@ plot_rcm_mean_age <- function(rcm, scenario, type = c("fleet", "index"), i, name
     geom_line(alpha = alpha, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
-    labs(x = "Year", y = name) +
+    labs(x = en2fr("Year", french),
+         y = en2fr("Mean age", french, allow_missing = TRUE)) +
     geom_point(data = obs, aes(year, value),
                inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
     geom_line(data = obs, linetype = 3) +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color)
-  if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
+
   g
 }
 
@@ -279,20 +269,11 @@ plot_rcm_length_comps <- function(RCModel, scenario, french = FALSE, type = c("f
 
 #' @describeIn plot_rcm_data Plot mean length for a fleet or index of abundance using the length compositions
 #' @param scales The scales argument to \link[ggplot2]{facet_wrap}.
-#' @param ylim Optional y-axes limits to figures.
 #' @export
-plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i,
-                                 name, scales = "fixed", ylim, color = "black", alpha = 0.6,
-                                 MPD = FALSE) {
+plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i = 1,
+                                 scales = "fixed", color = "black", alpha = 0.6,
+                                 french = FALSE, MPD = FALSE) {
   type <- match.arg(type)
-  if (missing(i)) i <- 1
-  if (missing(name)) {
-    if (requireNamespace("stringi", quietly = TRUE)) {
-      name <- stringi::stri_trans_totitle(type) %>% paste(i, "mean length")
-    } else {
-      name <- "Mean length"
-    }
-  }
 
   obs <- .rcm_mean_length(rcm = rcm[[1]], type = type, i = i, type2 = "obs")
   pred <- purrr::map2_dfr(rcm, scenario, .rcm_mean_length, type = type, i = i, type2 = "pred", MPD = MPD)
@@ -301,13 +282,14 @@ plot_rcm_mean_length <- function(rcm, scenario, type = c("fleet", "index"), i,
     geom_line(alpha = alpha, colour = color, aes(group = paste(iter))) +
     theme_pbs() +
     facet_wrap(~scenario, scales = scales) +
-    labs(x = "Year", y = name) +
+    labs(x = en2fr("Year", french),
+         y = en2fr("Mean length", french)) +
     geom_point(data = obs, aes(year, value),
                inherit.aes = FALSE, fill = color, pch = 21, colour = "grey40") +
     geom_line(data = obs, linetype = 3) +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color)
-  if (!missing(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
+
   g
 }
 
