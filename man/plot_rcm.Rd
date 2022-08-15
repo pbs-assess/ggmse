@@ -9,6 +9,8 @@
 \alias{plot_rcm_recdev}
 \alias{plot_rcm_rec}
 \alias{plot_rcm_bio_sel}
+\alias{plot_rcm_sel}
+\alias{plot_rcm_sel_multi}
 \title{Plotting functions from OM conditioning}
 \usage{
 plot_rcm_SSB(
@@ -76,6 +78,27 @@ plot_rcm_bio_sel(
   sel_i = 1,
   sel_name
 )
+
+plot_rcm_sel(
+  rcm,
+  scenario,
+  type = c("fleet", "index"),
+  i = "all",
+  color = "black",
+  french = FALSE,
+  MPD = FALSE
+)
+
+plot_rcm_sel_multi(
+  rcm,
+  scenario = paste("Scenario", 1:length(rcm)),
+  fleet_i = 1,
+  index_i = 1,
+  fleet_names = paste("Fleet", fleet_i),
+  index_names = paste("Index", index_i),
+  french = FALSE,
+  color
+)
 }
 \arguments{
 \item{rcm}{A list containing \linkS4class{RCModel} objects.}
@@ -105,6 +128,20 @@ plot_rcm_bio_sel(
 \item{sel_i}{The index of the fleet or index for the selectivity}
 
 \item{sel_name}{The name for the selectivity}
+
+\item{type}{Whether the output is from a fishing fleet or index.}
+
+\item{i}{The corresponding index from the fleet or index of abundance.}
+
+\item{color}{Character vector of colors used for plotting.}
+
+\item{fleet_i}{Vectors of indices for the fleets, i.e., 1 is the first fleet, etc. Use NA if no fleets will be plotted.}
+
+\item{index_i}{Vectors of indices for the indices of abundance. Use NA if no indices will be plotted.}
+
+\item{fleet_names}{Character vector for the names of the fleets}
+
+\item{index_names}{Character vector for the names of the indices}
 }
 \description{
 A set of functions that plots output from a list of RCModel objects used to condition a set
@@ -112,18 +149,22 @@ of operating models.
 }
 \section{Functions}{
 \itemize{
-\item \code{plot_rcm_SSB}: Plot historical SSB
+\item \code{plot_rcm_SSB()}: Plot historical SSB
 
-\item \code{plot_rcm_SSBMSY}: Plot SSB/SSBMSY
+\item \code{plot_rcm_SSBMSY()}: Plot SSB/SSBMSY
 
-\item \code{plot_rcm_depletion}: Plot historical spawning depletion
+\item \code{plot_rcm_depletion()}: Plot historical spawning depletion
 
-\item \code{plot_rcm_F}: Plot historical apical F
+\item \code{plot_rcm_F()}: Plot historical apical F
 
-\item \code{plot_rcm_recdev}: Plot recruitment deviates
+\item \code{plot_rcm_recdev()}: Plot recruitment deviates
 
-\item \code{plot_rcm_rec}: Plot recruitment
+\item \code{plot_rcm_rec()}: Plot recruitment
 
-\item \code{plot_rcm_bio_sel}: Compare maturity and length-at-age schedule vs. selectivity (of a single index or fleet)
+\item \code{plot_rcm_bio_sel()}: Compare maturity and length-at-age schedule vs. selectivity (of a single index or fleet)
+
+\item \code{plot_rcm_sel()}: Plot selectivity of a single index or fleet (all simulations)
+
+\item \code{plot_rcm_sel_multi()}: Plot selectivity of a multiple indices or fleets overlayed on top of each other
+
 }}
-

@@ -54,11 +54,11 @@ Plot sampled survey index or catch projections
 }
 \section{Functions}{
 \itemize{
-\item \code{plot_index}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}
+\item \code{plot_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}
 
-\item \code{plot_catch}: Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}
+\item \code{plot_catch()}: Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}
+
 }}
-
 \examples{
 plot_index(mse_example)
 mse_list <- list()

@@ -4,8 +4,6 @@
 \alias{plot_rcm_data}
 \alias{plot_rcm_index}
 \alias{plot_rcm_age_comps}
-\alias{plot_rcm_sel}
-\alias{plot_rcm_sel_multi}
 \alias{plot_rcm_mean_age}
 \alias{plot_rcm_length_comps}
 \alias{plot_rcm_mean_length}
@@ -30,26 +28,6 @@ plot_rcm_age_comps(
   i = 1,
   color = "black",
   MPD = FALSE
-)
-
-plot_rcm_sel(
-  rcm,
-  scenario,
-  type = c("fleet", "index"),
-  i,
-  french = FALSE,
-  MPD = FALSE
-)
-
-plot_rcm_sel_multi(
-  rcm,
-  scenario = paste("Scenario", 1:length(rcm)),
-  fleet_i = 1,
-  index_i = 1,
-  fleet_names = paste("Fleet", fleet_i),
-  index_names = paste("Index", index_i),
-  french = FALSE,
-  color
 )
 
 plot_rcm_mean_age(
@@ -104,7 +82,7 @@ plot_rcm_biomass_age(
 
 \item{i}{The corresponding index from the fleet or index of abundance.}
 
-\item{index_names}{Character vector for the names of the indices}
+\item{index_names}{Character vector of names for the indices of abundance.}
 
 \item{color}{Character vector of colors used for plotting.}
 
@@ -115,12 +93,6 @@ plot_rcm_biomass_age(
 
 \item{type}{Whether the output is from a fishing fleet or index.}
 
-\item{fleet_i}{Vectors of indices for the fleets, i.e., 1 is the first fleet, etc. Use NA if no fleets will be plotted.}
-
-\item{index_i}{Vectors of indices for the indices of abundance. Use NA if no indices will be plotted.}
-
-\item{fleet_names}{Character vector for the names of the fleets}
-
 \item{scales}{The scales argument to \link[ggplot2]{facet_wrap}.}
 
 \item{alpha}{The alpha parameter to control color transparency in the ggplots.}
@@ -130,22 +102,18 @@ A set of functions that plots fits to data from a list of RCModel objects.
 }
 \section{Functions}{
 \itemize{
-\item \code{plot_rcm_index}: Plot fits to index
+\item \code{plot_rcm_index()}: Plot fits to index
 
-\item \code{plot_rcm_age_comps}: Plot age comps from a fleet or index (single RCM only)
+\item \code{plot_rcm_age_comps()}: Plot age comps from a fleet or index (single RCM only)
 
-\item \code{plot_rcm_sel}: Plot selectivity of a single index or fleet (all simulations)
+\item \code{plot_rcm_mean_age()}: Plot mean age for a fleet or index of abundance
 
-\item \code{plot_rcm_sel_multi}: Plot selectivity of a multiple indices or fleets overlayed on top of each other
+\item \code{plot_rcm_length_comps()}: Plot length comps from a fleet or index (single RCM only)
 
-\item \code{plot_rcm_mean_age}: Plot mean age for a fleet or index of abundance
+\item \code{plot_rcm_mean_length()}: Plot mean length for a fleet or index of abundance using the length compositions
 
-\item \code{plot_rcm_length_comps}: Plot length comps from a fleet or index (single RCM only)
-
-\item \code{plot_rcm_mean_length}: Plot mean length for a fleet or index of abundance using the length compositions
-
-\item \code{plot_rcm_biomass_age}: Plots the proportion of biomass vs. age from the predicted age composition of a
+\item \code{plot_rcm_biomass_age()}: Plots the proportion of biomass vs. age from the predicted age composition of a
 fleet or index. Used as a diagnostic of whether a high residual in the plusgroup is problematic. Only plots
 years for which there are observed age data.
-}}
 
+}}

@@ -131,3 +131,62 @@ plot_rcm_bio_sel <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), f
     coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.01))
   g
 }
+
+
+#' @describeIn plot_rcm Plot selectivity of a single index or fleet (all simulations)
+#' @param color Character vector of colors used for plotting.
+#' @param type Whether the output is from a fishing fleet or index.
+#' @param i The corresponding index from the fleet or index of abundance.
+#' @export
+plot_rcm_sel <- function(rcm, scenario, type = c("fleet", "index"), i = "all", color = "black", french = FALSE, MPD = FALSE) {
+  type <- match.arg(type)
+  sel <- purrr::map2_dfr(rcm, scenario, .rcm_sel, type = type, i = i, MPD = MPD)
+
+  g <- ggplot(sel, aes(Age, value, group = paste(iter))) +
+    geom_line(alpha = 0.05, color = color) +
+    theme_pbs() +
+    facet_wrap(~scenario) +
+    xlab(en2fr("Age", french)) +
+    ylab(en2fr("Selectivity", french, allow_missing = TRUE)) +
+    coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
+
+  g
+}
+
+#' @describeIn plot_rcm Plot selectivity of a multiple indices or fleets overlayed on top of each other
+#' @param fleet_i Vectors of indices for the fleets, i.e., 1 is the first fleet, etc. Use NA if no fleets will be plotted.
+#' @param index_i Vectors of indices for the indices of abundance. Use NA if no indices will be plotted.
+#' @param fleet_names Character vector for the names of the fleets
+#' @param index_names Character vector for the names of the indices
+#' @export
+plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fleet_i = 1, index_i = 1,
+                               fleet_names = paste("Fleet", fleet_i), index_names = paste("Index", index_i),
+                               french = FALSE, color) {
+  if (all(is.na(fleet_i))) {
+    fsel <- data.frame()
+  } else {
+    fsel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = fleet_i, i_names = fleet_names)
+  }
+
+  if (all(is.na(index_i))) {
+    isel <- data.frame()
+  } else {
+    isel <- map2_dfr(rcm, scenario, .rcm_sel_multi, i = index_i, i_names = index_names, type = "index")
+  }
+  out <- rbind(fsel, isel)
+
+  if (missing(color)) {
+    color <- RColorBrewer::brewer.pal(sum(!is.na(c(fleet_i, index_i))), "Set2") %>%
+      structure(names = c(fleet_names, index_names))
+  }
+
+  ggplot(out, aes(Age, value, colour = Type)) +
+    geom_line() +
+    theme_pbs() +
+    facet_wrap(~scenario) +
+    ylab(en2fr("Selectivity", french, allow_missing = TRUE)) +
+    xlab(en2fr("Age", french)) +
+    scale_color_manual(values = color) +
+    coord_cartesian(expand = FALSE, ylim = c(-0.01, 1.1))
+}
+
