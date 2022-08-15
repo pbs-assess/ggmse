@@ -257,8 +257,15 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
     y <- rcm@Misc
   }
   if (type == "fleet") {
-    sel <- sapply(1:length(y), function(x) y[[x]]$vul[nyears, , i])
+
+    if (is.character(i) && i == "all") {
+      sel <- sapply(1:length(y), function(x) y[[x]]$F_at_age[nyears, ]/max(y[[x]]$F_at_age[nyears, ]))
+    } else {
+      sel <- sapply(1:length(y), function(x) y[[x]]$vul[nyears, , i])
+    }
+
   } else {
+    if (is.character(i)) stop("i needs to be an integer for type = \"index\".")
     sel <- sapply(1:length(y), function(x) y[[x]]$ivul[nyears, , i])
   }
 
