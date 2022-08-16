@@ -30,7 +30,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
   )
 
   if (!is.null(mp)) {
-    df <- dplyr::filter(df, MP %in% mp)
+    df <- dplyr::filter(df, MP %in% mp) %>% mutate(MP = factor(MP, levels = mp))
   }
   df_long <- reshape2::melt(df,
     id.vars = c("MP", "scenario"),
