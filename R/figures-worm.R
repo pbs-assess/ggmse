@@ -81,7 +81,9 @@ plot_worms_grid <- function(object_list, prob = 0.5,
       rename(b_m = B_BMSY, f_m = F_FMSY)
     other <- bind_rows(now_m, end_m) %>%
       bind_rows(start_m)
-    list(dd = dd, other = other, poly_df = poly_df)
+    list(dd = dd %>% mutate(mp_name = factor(mp_name, levels = .x@MPs)),
+         other = other %>% mutate(mp_name = factor(mp_name, levels = .x@MPs)),
+         poly_df = poly_df %>% mutate(mp_name = factor(mp_name, levels = .x@MPs)))
   })
 
   dd <- purrr::map_dfr(out, "dd", .id = "scenario")
