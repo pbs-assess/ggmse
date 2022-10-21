@@ -1,11 +1,33 @@
 
-make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL, ylab) {
-  g <- mutate(dat, scenario = factor(scenario, levels = .scenario)) %>%
-    ggplot(aes(year, value, group = iteration)) +
-    geom_line(alpha = 0.05) +
-    facet_wrap(vars(scenario), scales = scales) +
-    theme_pbs() +
-    labs(x = en2fr("Year", french), y = en2fr(ylab, french))
+make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL, ylab,
+                           conf_int = c(0.025, 0.25, 0.5, 0.75, 0.975)) {
+  if (is.null(conf_int)) {
+    g <- mutate(dat, scenario = factor(scenario, levels = .scenario)) %>%
+      ggplot(aes(year, value, group = iteration)) +
+      geom_line(alpha = 0.05) +
+      facet_wrap(vars(scenario), scales = scales) +
+      theme_pbs() +
+      labs(x = en2fr("Year", french), y = en2fr(ylab, french))
+  } else {
+
+    panel <- mutate(dat, scenario = factor(scenario, levels = .scenario)) %>%
+      group_by(year, scenario) %>%
+      summarise(lwr = quantile(value, probs = conf_int[1]),
+                lwr2 = quantile(value, probs = conf_int[2]),
+                mid = quantile(value, probs = conf_int[3]),
+                upr2 = quantile(value, probs = conf_int[4]),
+                upr = quantile(value, probs = conf_int[5]),)
+
+    g <- panel %>%
+      ggplot(aes(year, mid)) +
+      geom_ribbon(fill = "grey90", colour = NA, inherit.aes = FALSE, aes(x = year, ymin = lwr, max = upr)) +
+      geom_ribbon(fill = "grey70", colour = NA, inherit.aes = FALSE, aes(x = year, ymin = lwr2, max = upr2)) +
+      geom_line() +
+      facet_wrap(vars(scenario), scales = scales) +
+      theme_pbs() +
+      labs(x = en2fr("Year", french), y = en2fr(ylab, french))
+  }
+
   if (!is.null(ylim)) g <- g + coord_cartesian(expand = FALSE, ylim = ylim)
   g
 }

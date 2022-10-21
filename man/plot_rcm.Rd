@@ -37,6 +37,8 @@ plot_rcm_depletion(
   scenario = paste("Scenario", 1:length(rcm)),
   french = FALSE,
   scales = "fixed",
+  histogram = FALSE,
+  bins = NULL,
   MPD = FALSE
 )
 
@@ -113,7 +115,7 @@ plot_rcm_sel_multi(
 
 \item{MPD}{Logical, whether to plot individual simulations (\code{FALSE}) or from the single fit (\code{TRUE}) in \code{RCModel@mean_fit}.}
 
-\item{histogram}{Logical, whether to show a histogram (TRUE) or otherwise a time series plot.}
+\item{histogram}{Logical, whether to show a histogram (TRUE) for the terminal year only. Otherwise, a time series plot.}
 
 \item{bins}{The \code{bins} argument to \link{ggplot2}\link{geom_histogram}}
 
