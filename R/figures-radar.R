@@ -28,7 +28,7 @@ plot_radar <- function(pm_df,
     "pm",
     "prob",
     leg_main_title = en2fr("MP", french),
-    leg_lty_title = if (french) "Type de PG" else "MP type",
+    leg_lty_title = en2fr("Reference", french),
     palette = palette,
     ...
   )

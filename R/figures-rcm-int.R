@@ -74,7 +74,9 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 }
 
 
-.rcm_calc_MSY <- function(rcm, MPD = FALSE, type = "SSBMSY", y = rcm@OM@nyears) {
+.rcm_calc_MSY <- function(rcm, MPD = FALSE,
+                          type = c("SSBMSY", "FMSY", "MSY"),
+                          y = rcm@OM@nyears) {
   type <- match.arg(type)
   nsim <- rcm@OM@nsim
 
@@ -123,7 +125,9 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 
 
   out <- switch(type,
-                "SSBMSY" = MSYs["SB", ])
+                "SSBMSY" = MSYs["SB", ],
+                "FMSY" = MSYs["F", ],
+                "MSY" = MSYs["Yield", ])
 
   return(out)
 }
