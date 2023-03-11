@@ -149,8 +149,14 @@ plot_tigure <- function(probs_dat,
   df$MP <- as.factor(df$MP)
 
   # Reference MPs are italicized and followed with an asterisk
-  lab_text <- ifelse(grepl("ref", levels(df$MP)), parse(text = paste0("italic(", levels(df$MP), "~\"*\")")),
-                     levels(df$MP)) %>% structure(names = levels(df$MP))
+  lab_text <- sapply(levels(df$MP), function(x) {
+    if(grepl("ref", x)) { #ifelse causes errors because it parses all MP names
+      parse(text = paste0("italic(", x, "~\"*\")"))
+    } else {
+      x
+    }
+  }) %>%
+    structure(names = levels(df$MP))
 
   padding <- 0.52
 
@@ -217,8 +223,14 @@ plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
   gdat2 <- purrr::map_dfr(gdat, "df", .id = "scenario")
 
   # Reference MPs are italicized and followed with an asterisk
-  lab_text <- ifelse(grepl("ref", levels(gdat2$MP)), parse(text = paste0("italic(", levels(gdat2$MP), "~\"*\")")),
-                     levels(gdat2$MP)) %>% structure(names = levels(gdat2$MP))
+  lab_text <- sapply(levels(df$MP), function(x) {
+    if(grepl("ref", x)) { #ifelse causes errors because it parses all MP names
+      parse(text = paste0("italic(", x, "~\"*\")"))
+    } else {
+      x
+    }
+  }) %>%
+    structure(names = levels(df$MP))
 
   g <- ggplot(gdat2, ggplot2::aes_string(x = "type", y = "MP")) +
     ggplot2::geom_tile(aes(fill = value), color = "white") +
