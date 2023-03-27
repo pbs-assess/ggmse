@@ -10,6 +10,7 @@ plot_tradeoff(
   yvar,
   custom_pal = NULL,
   mp = NULL,
+  nudge_y = 0.05,
   french = FALSE
 )
 }
@@ -26,6 +27,8 @@ character vector.}
 
 \item{mp}{An optional character vector of MPs to include. By default includes
 all.}
+
+\item{nudge_y}{How far to nudge the labels up away from the y-value}
 
 \item{french}{French}
 }
