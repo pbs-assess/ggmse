@@ -11,7 +11,9 @@
 #'   character vector.
 #' @param mp An optional character vector of MPs to include. By default includes
 #'   all.
+#' @param nudge_y How far to nudge the labels up away from the y-value
 #' @param french French
+#'
 #'
 #' @return A ggplot2 object
 #' @export
@@ -21,24 +23,31 @@
 #' names(probs) <- "Scenario 1"
 #' plot_tradeoff(probs, "P40", "LTY")
 plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
+                          nudge_y = 0.05,
                           french = FALSE) {
-  df <- purrr::map_df(
-    names(pm_df_list),
-    ~ dplyr::bind_cols(pm_df_list[[.x]],
-      scenario = rep(.x, nrow(pm_df_list[[.x]]))
-    )
-  )
+  #df <- purrr::map_df(
+  #  names(pm_df_list),
+  #  ~ dplyr::bind_cols(pm_df_list[[.x]],
+  #    scenario = rep(.x, nrow(pm_df_list[[.x]]))
+  #  )
+  #)
+
+  df <- lapply(names(pm_df_list), function(x) {
+    pm_df_list[[x]] %>%
+      mutate(scenario = x, MP_label = 1:nrow(.))
+  }) %>%
+    bind_rows()
 
   if (!is.null(mp)) {
     df <- dplyr::filter(df, MP %in% mp) %>% mutate(MP = factor(MP, levels = mp))
   }
   df_long <- reshape2::melt(df,
-    id.vars = c("MP", "scenario"),
+    id.vars = c("MP", "scenario", "MP_label"),
     value.name = "prob",
     variable.name = "pm"
   )
   df_wide <- df_long %>%
-    reshape2::dcast(MP + scenario ~ pm, value.var = "prob") %>%
+    reshape2::dcast(MP + MP_label + scenario ~ pm, value.var = "prob") %>%
     dplyr::mutate(`Reference` = ifelse(grepl("ref", MP), "True", "False"))
 
   xmin <- pull(df_wide, !!xvar) %>% min()
@@ -51,14 +60,18 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
   mp_shapes <- vector(mode = "numeric", length = n_mp)
   mp_shapes <- ifelse(ref_or_not$Reference == "True", 21, 19)
   names(mp_shapes) <- ref_or_not$MP
+  mp_label <- filter(df_wide, scenario == names(pm_df_list)[[1]]) %>% pull("MP_label")
 
   g <- ggplot2::ggplot(
     df_wide,
     ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "MP")
   ) +
+    ggplot2::geom_text(aes_string(label = "MP_label"), vjust = 0, nudge_y = nudge_y) +
     ggplot2::geom_point() +
     ggplot2::scale_shape_manual(values = mp_shapes) +
-    ggplot2::facet_wrap(~scenario, nrow = 2) +
+    guides(shape = "none",
+           colour = guide_legend(override.aes = list(label = mp_label))) +
+    ggplot2::facet_wrap(vars(scenario), nrow = 2) +
     theme_pbs() +
     ggplot2::coord_equal(
       xlim = c(xmin * 0.99, 1.005),
