@@ -11,7 +11,8 @@
 #'   character vector.
 #' @param mp An optional character vector of MPs to include. By default includes
 #'   all.
-#' @param nudge_y How far to nudge the labels up away from the y-value
+#' @param nudge_x How far to nudge the labels left/right from the x-value for \link[ggplot2]{geom_text}
+#' @param nudge_y How far to nudge the labels up/down from the y-value for \link[ggplot2]{geom_text}
 #' @param french French
 #'
 #'
@@ -23,7 +24,7 @@
 #' names(probs) <- "Scenario 1"
 #' plot_tradeoff(probs, "P40", "LTY")
 plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
-                          nudge_y = 0.05,
+                          nudge_x = 0, nudge_y = 0.05,
                           french = FALSE) {
   #df <- purrr::map_df(
   #  names(pm_df_list),
@@ -66,7 +67,7 @@ plot_tradeoff <- function(pm_df_list, xvar, yvar, custom_pal = NULL, mp = NULL,
     df_wide,
     ggplot2::aes_string(xvar, yvar, colour = "MP", pch = "MP")
   ) +
-    ggplot2::geom_text(aes_string(label = "MP_label"), vjust = 0, nudge_y = nudge_y) +
+    ggplot2::geom_text(aes_string(label = "MP_label"), nudge_x = nudge_x, nudge_y = nudge_y) +
     ggplot2::geom_point(show.legend = FALSE) +
     ggplot2::scale_shape_manual(values = mp_shapes) +
     guides(colour = guide_legend(override.aes = list(label = mp_label))) +

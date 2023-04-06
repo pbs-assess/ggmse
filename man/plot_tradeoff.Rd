@@ -10,6 +10,7 @@ plot_tradeoff(
   yvar,
   custom_pal = NULL,
   mp = NULL,
+  nudge_x = 0,
   nudge_y = 0.05,
   french = FALSE
 )
@@ -28,7 +29,9 @@ character vector.}
 \item{mp}{An optional character vector of MPs to include. By default includes
 all.}
 
-\item{nudge_y}{How far to nudge the labels up away from the y-value}
+\item{nudge_x}{How far to nudge the labels left/right from the x-value for \link[ggplot2]{geom_text}}
+
+\item{nudge_y}{How far to nudge the labels up/down from the y-value for \link[ggplot2]{geom_text}}
 
 \item{french}{French}
 }
