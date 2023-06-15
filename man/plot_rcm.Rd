@@ -6,11 +6,13 @@
 \alias{plot_rcm_SSBMSY}
 \alias{plot_rcm_depletion}
 \alias{plot_rcm_F}
+\alias{plot_rcm_FMSY}
 \alias{plot_rcm_recdev}
 \alias{plot_rcm_rec}
 \alias{plot_rcm_bio_sel}
 \alias{plot_rcm_sel}
 \alias{plot_rcm_sel_multi}
+\alias{plot_rcm_corr}
 \title{Plotting functions from OM conditioning}
 \usage{
 plot_rcm_SSB(
@@ -51,6 +53,15 @@ plot_rcm_F(
   MPD = FALSE
 )
 
+plot_rcm_FMSY(
+  rcm,
+  scenario = paste("Scenario", 1:length(rcm)),
+  french = FALSE,
+  scales = "fixed",
+  ylim = NULL,
+  MPD = FALSE
+)
+
 plot_rcm_recdev(
   rcm,
   scenario,
@@ -78,7 +89,7 @@ plot_rcm_bio_sel(
   bio_type = c("LAA", "mat"),
   sel_type = c("fleet", "index"),
   sel_i = 1,
-  sel_name
+  sel_name = "Selectivity"
 )
 
 plot_rcm_sel(
@@ -101,6 +112,16 @@ plot_rcm_sel_multi(
   french = FALSE,
   color
 )
+
+plot_rcm_corr(
+  rcm,
+  scenario,
+  var = c("D", "M", "h", "R0"),
+  status = TRUE,
+  bins = NULL,
+  do_corr = FALSE,
+  french = FALSE
+)
 }
 \arguments{
 \item{rcm}{A list containing \linkS4class{RCModel} objects.}
@@ -117,7 +138,7 @@ plot_rcm_sel_multi(
 
 \item{histogram}{Logical, whether to show a histogram (TRUE) for the terminal year only. Otherwise, a time series plot.}
 
-\item{bins}{The \code{bins} argument to \link{ggplot2}\link{geom_histogram}}
+\item{bins}{The number of bins for \link[ggplot]{geom_histogram}.}
 
 \item{proj}{Logical, whether to plot the recruitment deviates in the projection period}
 
@@ -144,6 +165,14 @@ plot_rcm_sel_multi(
 \item{fleet_names}{Character vector for the names of the fleets}
 
 \item{index_names}{Character vector for the names of the indices}
+
+\item{var}{Parameters to plot. Select up to two.}
+
+\item{status}{Logical, whether to identify estimated status with each point in scatter plot.
+Only used if two parameters are selected in \code{var}.}
+
+\item{do_corr}{Whether to report the correlation between parameters.
+Only used if two parameters are selected in \code{var}.}
 }
 \description{
 A set of functions that plots output from a list of RCModel objects used to condition a set
@@ -159,6 +188,8 @@ of operating models.
 
 \item \code{plot_rcm_F()}: Plot historical apical F
 
+\item \code{plot_rcm_FMSY()}: Plot historical F/FMSY
+
 \item \code{plot_rcm_recdev()}: Plot recruitment deviates
 
 \item \code{plot_rcm_rec()}: Plot recruitment
@@ -168,5 +199,7 @@ of operating models.
 \item \code{plot_rcm_sel()}: Plot selectivity of a single index or fleet (all simulations)
 
 \item \code{plot_rcm_sel_multi()}: Plot selectivity of a multiple indices or fleets overlayed on top of each other
+
+\item \code{plot_rcm_corr()}: Plot histogram or scatter plot of operating model parameters
 
 }}

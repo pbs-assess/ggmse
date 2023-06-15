@@ -31,7 +31,7 @@ plot_worms_grid <- function(object_list, prob = 0.5,
                             include_historical = TRUE,
                             french = isTRUE(getOption("french"))) {
 
-    if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
+  if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
     warning(
       "Missing `object@OM$CurrentYr`.\n",
       "Please run the MSE with a newer GitHub DLMtool version\n",

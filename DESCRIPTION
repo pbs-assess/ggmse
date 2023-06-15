@@ -57,8 +57,7 @@ Remotes:
     github::pbs-assess/gfdata,
     github::pbs-assess/gfutilities,
     github::pbs-assess/ggspider,
-    github::pbs-assess/rosettafish,
-    github::Blue-Matter/SAMtool
+    github::pbs-assess/rosettafish
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)

@@ -62,7 +62,7 @@ plot_rcm_index <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), fre
     theme_pbs() +
     scale_color_manual(values = color) +
     scale_fill_manual(values = color) +
-    ylab(en2fr("Index value", french)) +
+    ylab(en2fr("Index", french)) +
     xlab(en2fr("Year", french)) +
     labs(colour = en2fr("Index", french), fill = en2fr("Index", french))
   if (length(i) > 1) {
@@ -278,6 +278,6 @@ plot_rcm_biomass_age <- function(RCModel, scenario, type = c("fleet", "index"), 
     theme_pbs() +
     ggtitle(scenario) +
     xlab(en2fr("Age", french)) +
-    ylab(en2fr("Proportion biomass", french))
+    ylab(en2fr("Proportion biomass", french, allow_missing = TRUE))
   g
 }
