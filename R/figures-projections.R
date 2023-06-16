@@ -169,21 +169,15 @@ get_ts <- function(object,
       "that was created by running `MSEtool::runMSE()`."
     )
   }
-  .proj_years <- seq(this_year + 1, this_year + object@proyears)
-  years_df <- data.frame(
-    year = seq_len(object@proyears), real_year = .proj_years,
-    stringsAsFactors = FALSE
-  )
 
   mps <- data.frame(
     mp = seq_along(object@MPs),
     mp_name = object@MPs, stringsAsFactors = FALSE
   )
+  iters <- object@nsim
 
-  ts_data <- list()
-  for (i in seq_along(type)) {
-    if (type[i] == "C") type[i] <- "Catch" # changed in openMSE
-    ts_data[[i]] <- slot(object, type[i]) %>%
+  ts_data <- lapply(seq_along(type), function(i) {
+    slot(object, type[i]) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1, mp = .data$Var2,
@@ -191,36 +185,33 @@ get_ts <- function(object,
       ) %>%
       dplyr::left_join(mps, by = "mp") %>%
       dplyr::mutate(Type = type[i])
-  }
-  ts_data <- dplyr::bind_rows(ts_data)
-  ts_data <- dplyr::left_join(ts_data, years_df, by = "year")
-  iters <- dim(object@SSB)[1]
-  ts_data$iter <- rep(seq_len(iters), length(unique(ts_data$Type))) # parallel messed this up
+  }) %>%
+    dplyr::bind_rows() %>%
+    dplyr::mutate(real_year = year + this_year)
+
+  ts_data$iter <- rep(seq_len(object@nsim), length(unique(ts_data$Type))) # parallel messed this up
 
   # --------------
   # historical
-
-  n_hist_years <- dim(object@SSB_hist)[2]
-  .hist_years <- seq(this_year - n_hist_years + 1, this_year)
-  years_df <- data.frame(
-    year = seq_len(n_hist_years), real_year = .hist_years,
-    stringsAsFactors = FALSE
-  )
-  hist_data <- list()
-
-  for (i in seq_along(type)) {
-    hist_data[[i]] <- slot(object, ifelse(type[i] == "Catch", "CB_hist", paste0(type[i], "_hist"))) %>%
+  n_hist_years <- object@nyears
+  .hist_years <- this_year - n_hist_years + 1
+  hist_data <- lapply(seq_along(type), function(i) {
+    slot(object, ifelse(type[i] == "Catch", "CB_hist", paste0(type[i], "_hist"))) %>%
       #apply(c(1, 3), if (type[i] == "FM") max else sum) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
-        value = .data$value, year = .data$Var2
+        value = .data$value,
+        year = .data$Var2
       ) %>%
       dplyr::mutate(Type = type[i])
-  }
-  hist_data <- dplyr::bind_rows(hist_data)
-  hist_data$iter <- rep(seq_len(iters), length(unique(hist_data$Type))) # parallel messed this up
-  hist_data <- dplyr::left_join(hist_data, years_df, by = "year")
+
+  }) %>%
+    dplyr::bind_rows() %>%
+    dplyr::mutate(
+      real_year = year + .hist_years - 1,
+      iter = rep(seq_len(iters), n_hist_years * length(type)) # parallel messed this up
+    )
   hist_data2 <- do.call(
     "rbind",
     replicate(length(mps$mp), hist_data, simplify = FALSE)
@@ -228,6 +219,7 @@ get_ts <- function(object,
   hist_data2[["mp_name"]] <- rep(mps$mp_name, each = nrow(hist_data))
   hist_data2[["mp"]] <- rep(mps$mp, each = nrow(hist_data))
 
+  # projected and historic time series
   ts_data <- bind_rows(ts_data, hist_data2)
 
   # static ref pts:
@@ -238,9 +230,12 @@ get_ts <- function(object,
   ref_ssb_hist <- data.frame(
     ref = object@RefPoint$SSBMSY[, 1, object@nyears], iter = seq_len(iters),
     Type = "SSB", stringsAsFactors = FALSE
-  ) %>% left_join(bind_cols(all_mp_yrs, tibble(Type = rep("SSB", nrow(all_mp_yrs)))), by = "Type")
+  ) %>%
+    left_join(bind_cols(all_mp_yrs, tibble(Type = rep("SSB", nrow(all_mp_yrs)))), by = "Type")
   ref_f_hist <- data.frame(
-    ref = object@RefPoint$FMSY[, 1, object@nyears], iter = seq_len(iters), Type = "FM", stringsAsFactors = FALSE) %>%
+    ref = object@RefPoint$FMSY[, 1, object@nyears], iter = seq_len(iters),
+    Type = "FM", stringsAsFactors = FALSE
+  ) %>%
     left_join(bind_cols(all_mp_yrs, tibble(Type = rep("FM", nrow(all_mp_yrs)))), by = "Type")
 
   all_mp_yrs <- expand.grid(mp = seq_along(mps$mp), real_year = sort(unique(ts_data$real_year)))
@@ -248,28 +243,24 @@ get_ts <- function(object,
     left_join(bind_cols(all_mp_yrs, tibble(Type = rep("Catch", nrow(all_mp_yrs)))), by = "Type")
 
   # dynamic ref pts for projections:
-  x1 <- object@RefPoint$SSBMSY
-  x2 <- object@RefPoint$FMSY
-  if (length(dim(x1)) < 3) {
-    .x1 <- array(NA, dim = c(dim(x1)[1], 1, dim(x1)[2]))
-    .x1[,1,] <- x1
-    .x2 <- array(NA, dim = c(dim(x2)[1], 1, dim(x2)[2]))
-    .x2[,1,] <- x2
-  } else {
-    .x1 <- x1
-    .x2 <- x2
-  }
-  ref_ssb <- .x1 %>%
+  ref_ssb <- object@RefPoint$SSBMSY %>%
+    array(c(object@nsim, object@nMPs, object@nyears + object@proyears)) %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
-              real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2,
+              real_year = .data$Var3 + object@OM$CurrentYr[1],
+              mp = .data$Var2,
               ref = .data$value, Type = "SSB")
-  ref_f <- .x2 %>%
+  ref_f <- object@RefPoint$FMSY %>%
+    array(c(object@nsim, object@nMPs, object@nyears + object@proyears)) %>%
     reshape2::melt() %>%
     transmute(iter = .data$Var1,
-              real_year = .data$Var3 + object@OM$CurrentYr[1], mp = .data$Var2, ref = .data$value, Type = "FM")
+              real_year = .data$Var3 + object@OM$CurrentYr[1],
+              mp = .data$Var2,
+              ref = .data$value,
+              Type = "FM")
 
-  refs <- ref_ssb %>% bind_rows(ref_f) %>%
+  refs <- ref_ssb %>%
+    bind_rows(ref_f) %>%
     bind_rows(ref_msy) %>%
     bind_rows(ref_ssb_hist) %>%
     bind_rows(ref_f_hist)
@@ -280,9 +271,11 @@ get_ts <- function(object,
   type[type == "SSB"] <- "B_BMSY"
   type[type == "FM"] <- "F_FMSY"
   type[type == "Catch"] <- "Catch"
+
   ts_data$Type[ts_data$Type == "FM"] <- "F_FMSY"
   ts_data$Type[ts_data$Type == "SSB"] <- "B_BMSY"
   ts_data$Type[ts_data$Type == "Catch"] <- "Catch"
+
   ts_data
 }
 
