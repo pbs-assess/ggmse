@@ -131,8 +131,9 @@ plot_tigure <- function(probs_dat,
   }, FUN.VALUE = character(1L))
 
   if (do_approx) {
-    df$txt <- gsub("1\\.00", ">0.99", df$txt)
-    df$txt <- gsub("0\\.00", "<0.01", df$txt)
+    OutDec <- options()$OutDec
+    df$txt <- gsub(paste0("1\\", OutDec, "00"), paste0(">0", OutDec , "99"), df$txt)
+    df$txt <- gsub(paste0("0\\", OutDec, "00"), paste0("<0", OutDec , "01"), df$txt)
   }
 
   if (relative_max) {
