@@ -30,8 +30,7 @@
 #' names(x) <- c("Scenario 1", "Scenario 2")
 #' plot_scenario_projections(x)
 #' plot_scenario_projections(mse_example)
-plot_scenario_projections <- function(
-                                      object_list,
+plot_scenario_projections <- function(object_list,
                                       probs = 0.5,
                                       rel_widths = c(2, 1.2),
                                       palette = "Dark2",
@@ -64,14 +63,13 @@ plot_scenario_projections <- function(
     ts_data <- get_ts(object = .x, type = c("SSB", "FM"), this_year = this_year)
     get_ts_quantiles(ts_data, probs = probs)
   }, .id = "scenario")
-
-  catch <- purrr::map_dfr(object_list, ~ {
-    ts_data <- get_ts(object = .x, type = "C", this_year = this_year)
-    get_ts_quantiles(ts_data, probs = probs)
-  }, .id = "scenario")
-
   bbmsy_ffmsy$Type <- gsub("_", "/", bbmsy_ffmsy$Type)
   bbmsy_ffmsy$Type <- gsub("MSY", "[MSY]", bbmsy_ffmsy$Type)
+
+  catch <- purrr::map_dfr(object_list, ~ {
+    ts_data <- get_ts(object = .x, type = "Catch", this_year = this_year)
+    get_ts_quantiles(ts_data, probs = probs)
+  }, .id = "scenario")
 
   mp_names <- sort(unique(bbmsy_ffmsy$mp_name))
   ref_grep <- grepl("ref", mp_names)
@@ -93,41 +91,37 @@ plot_scenario_projections <- function(
     catch$Type <- gsub("Catch", en2fr("Catch"), catch$Type)
   }
   g1 <- bbmsy_ffmsy %>%
-    ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
+    filter(grepl(en2fr("MSY", french), Type)) %>%
+    ggplot(aes(real_year, m, colour = scenario, fill = scenario)) +
     geom_line(na.rm = TRUE) +
-    facet_grid(mp_name ~ Type, labeller = ggplot2::label_parsed) +
-    geom_ribbon(aes_string(x = "real_year", ymin = "l", ymax = "u"),
-      colour = NA, alpha = 0.07, na.rm = TRUE
+    facet_grid(vars(mp_name), vars(Type), labeller = ggplot2::label_parsed) +
+    geom_ribbon(aes(x = real_year, ymin = l, ymax = u),
+      colour = NA, alpha = 0.07
     ) +
     theme_pbs() +
     coord_cartesian(expand = FALSE, ylim = msy_ylim) +
     scale_colour_brewer(palette = palette) +
-    scale_fill_brewer(palette = palette) + ylab("Value") + xlab("Year") +
+    scale_fill_brewer(palette = palette) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
-    ggplot2::geom_hline(data = lines, mapping = aes_string(yintercept = "value"),
+    ggplot2::geom_hline(data = lines, mapping = aes(yintercept = value),
       alpha = 0.2, lty = 2, lwd = 0.5) +
-    ylab(en2fr("Value", french)) + xlab(en2fr("Year", french))
+    labs(x = en2fr("Year", french), y = en2fr("Value", french))
 
   g2 <- catch %>%
-    ggplot(aes_string("real_year", "m", colour = "scenario", fill = "scenario")) +
-    geom_line(na.rm = TRUE) +
-    facet_grid(mp_name ~ Type) +
-    geom_ribbon(aes_string(x = "real_year", ymin = "l", ymax = "u"),
-      colour = NA, alpha = 0.07, na.rm = TRUE
+    ggplot(aes(real_year, m, colour = scenario, fill = scenario)) +
+    geom_line() +
+    facet_grid(vars(mp_name), vars(Type)) +
+    geom_ribbon(aes(x = real_year, ymin = l, ymax = u),
+      colour = NA, alpha = 0.07
     ) +
     theme_pbs() +
     scale_colour_brewer(palette = palette) +
-    scale_fill_brewer(palette = palette) + ylab(en2fr("Value", french)) + xlab(en2fr("Year", french)) +
+    scale_fill_brewer(palette = palette) +
     geom_vline(xintercept = this_year, lty = 2, alpha = 0.3) +
     ggplot2::theme(panel.spacing = grid::unit(-0.1, "lines")) +
-    coord_cartesian(expand = FALSE)
-
-  if (!is.null(catch_ylim)) {
-    suppressMessages({
-      g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
-    })
-  }
+    coord_cartesian(expand = FALSE, ylim = catch_ylim) +
+    labs(x = en2fr("Year", french), y = en2fr("Value", french))
 
   if (!is.null(catch_breaks) && is.null(catch_labels)) {
     catch_labels <- catch_breaks
@@ -136,7 +130,6 @@ plot_scenario_projections <- function(
     suppressMessages({
       g2 <- g2 +
         ggplot2::scale_y_continuous(breaks = catch_breaks, labels = catch_labels)
-      g2 <- g2 + ggplot2::coord_cartesian(expand = FALSE, ylim = catch_ylim)
     })
   }
 
@@ -152,7 +145,7 @@ plot_scenario_projections <- function(
       legend.box.margin = ggplot2::margin(0.2, 0.2, 12, .2),
       legend.position = "bottom"
     ) +
-      labs(colour = en2fr("Scenario", french), fill = en2fr("Scenario", french))
+      labs(colour = en2fr("OM", french), fill = en2fr("OM", french))
   )
 
   cowplot::plot_grid(g3, legend, rel_heights = c(4, .2), nrow = 2)

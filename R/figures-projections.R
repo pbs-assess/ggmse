@@ -163,6 +163,7 @@ plot_projection_ts <- function(object,
 get_ts <- function(object,
                    type = c("SSB", "FM", "Catch"),
                    this_year = 0) {
+  type <- match.arg(type, several.ok = TRUE)
   if (!is(object, "MSE")) {
     stop(
       "`object` must be a MSEtool object of class `mse`",
@@ -176,36 +177,35 @@ get_ts <- function(object,
   )
   iters <- object@nsim
 
-  ts_data <- lapply(seq_along(type), function(i) {
-    type_i <- ifelse(type[i] == "C", "Catch", type[i])
-    slot(object, type_i) %>%
+  proj_data <- lapply(seq_along(type), function(i) {
+    slot(object, type[i]) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1, mp = .data$Var2,
         value = .data$value, year = .data$Var3
       ) %>%
       dplyr::left_join(mps, by = "mp") %>%
-      dplyr::mutate(Type = type_i)
+      dplyr::mutate(Type = type[i])
   }) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(real_year = year + this_year)
 
-  ts_data$iter <- rep(seq_len(object@nsim), length(unique(ts_data$Type))) # parallel messed this up
+  proj_data$iter <- rep(seq_len(object@nsim), length(unique(proj_data$Type))) # parallel messed this up
 
   # --------------
   # historical
   n_hist_years <- object@nyears
   .hist_years <- this_year - n_hist_years + 1
   hist_data <- lapply(seq_along(type), function(i) {
-    type_i <- ifelse(type[i] %in% c("Catch", "C"), "CB_hist", paste0(type[i], "_hist"))
-    slot(object, type_i) %>%
+    slot_i <- ifelse(type[i] == "Catch", "CB_hist", paste0(type[i], "_hist"))
+    slot(object, slot_i) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
         value = .data$value,
         year = .data$Var2
       ) %>%
-      dplyr::mutate(Type = type_i)
+      dplyr::mutate(Type = type[i])
 
   }) %>%
     dplyr::bind_rows() %>%
@@ -221,7 +221,7 @@ get_ts <- function(object,
   hist_data2[["mp"]] <- rep(mps$mp, each = nrow(hist_data))
 
   # projected and historic time series
-  ts_data <- bind_rows(ts_data, hist_data2)
+  ts_data <- bind_rows(proj_data, hist_data2)
 
   # static ref pts:
   # dim(object@Misc$MSYRefs$ByYear$SSBMSY)
@@ -251,7 +251,8 @@ get_ts <- function(object,
     transmute(iter = .data$Var1,
               real_year = .data$Var3 + .hist_years - 1,
               mp = .data$Var2,
-              ref = .data$value, Type = "SSB")
+              ref = .data$value,
+              Type = "SSB")
   ref_f <- object@RefPoint$FMSY %>%
     array(c(object@nsim, object@nMPs, object@nyears + object@proyears)) %>%
     reshape2::melt() %>%
@@ -268,18 +269,13 @@ get_ts <- function(object,
     bind_rows(ref_ssb_hist) %>%
     bind_rows(ref_f_hist)
 
-  ts_data <- left_join(ts_data, refs, by = c("iter", "mp", "Type", "real_year")) %>%
+  ts <- left_join(ts_data, refs, by = c("iter", "mp", "Type", "real_year")) %>%
     mutate(value = value / ref)
 
-  type[type == "SSB"] <- "B_BMSY"
-  type[type == "FM"] <- "F_FMSY"
-  type[type == "Catch"] <- "Catch"
+  ts$Type[ts$Type == "FM"] <- "F_FMSY"
+  ts$Type[ts$Type == "SSB"] <- "B_BMSY"
 
-  ts_data$Type[ts_data$Type == "FM"] <- "F_FMSY"
-  ts_data$Type[ts_data$Type == "SSB"] <- "B_BMSY"
-  ts_data$Type[ts_data$Type == "Catch"] <- "Catch"
-
-  ts_data
+  ts
 }
 
 get_ts_quantiles <- function(x, probs = c(0.1, 0.5)) {
