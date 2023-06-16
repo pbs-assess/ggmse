@@ -177,14 +177,15 @@ get_ts <- function(object,
   iters <- object@nsim
 
   ts_data <- lapply(seq_along(type), function(i) {
-    slot(object, type[i]) %>%
+    type_i <- ifelse(type[i] == "C", "Catch", type[i])
+    slot(object, type_i) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1, mp = .data$Var2,
         value = .data$value, year = .data$Var3
       ) %>%
       dplyr::left_join(mps, by = "mp") %>%
-      dplyr::mutate(Type = type[i])
+      dplyr::mutate(Type = type_i)
   }) %>%
     dplyr::bind_rows() %>%
     dplyr::mutate(real_year = year + this_year)
@@ -196,15 +197,15 @@ get_ts <- function(object,
   n_hist_years <- object@nyears
   .hist_years <- this_year - n_hist_years + 1
   hist_data <- lapply(seq_along(type), function(i) {
-    slot(object, ifelse(type[i] == "Catch", "CB_hist", paste0(type[i], "_hist"))) %>%
-      #apply(c(1, 3), if (type[i] == "FM") max else sum) %>%
+    type_i <- ifelse(type[i] %in% c("Catch", "C"), "CB_hist", paste0(type[i], "_hist"))
+    slot(object, type_i) %>%
       reshape2::melt() %>%
       dplyr::rename(
         iter = .data$Var1,
         value = .data$value,
         year = .data$Var2
       ) %>%
-      dplyr::mutate(Type = type[i])
+      dplyr::mutate(Type = type_i)
 
   }) %>%
     dplyr::bind_rows() %>%
