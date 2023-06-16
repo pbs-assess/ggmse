@@ -2,6 +2,7 @@
 % Please edit documentation in R/figures-index.R
 \name{plot_index}
 \alias{plot_index}
+\alias{plot_scenario_index}
 \alias{plot_catch}
 \title{Plot sampled survey index or catch projections}
 \usage{
@@ -13,6 +14,17 @@ plot_index(
   MP = NULL,
   omit_index_fn = function(x) NULL,
   quantiles = c(0.025, 0.975),
+  french = isTRUE(getOption("french"))
+)
+
+plot_scenario_index(
+  object_list,
+  seed = 42,
+  type = c("Ind", "AddInd"),
+  MP = NULL,
+  omit_index_fn = function(x) NULL,
+  quantiles = c(0.025, 0.975),
+  palette = "Dark2",
   french = isTRUE(getOption("french"))
 )
 
@@ -45,6 +57,8 @@ number of years.}
 \item{quantiles}{Probability quantiles to show.}
 
 \item{french}{French?}
+
+\item{palette}{A palette color as recognized by \code{\link[ggplot2:scale_brewer]{ggplot2::scale_color_brewer()}}}
 }
 \value{
 A ggplot object
@@ -54,7 +68,11 @@ Plot sampled survey index or catch projections
 }
 \section{Functions}{
 \itemize{
-\item \code{plot_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}
+\item \code{plot_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}, gridded by
+OM and MP
+
+\item \code{plot_scenario_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd} by
+MP (multiple OMs per panel)
 
 \item \code{plot_catch()}: Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}
 

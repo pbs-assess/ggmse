@@ -111,7 +111,7 @@ plot_scenario_projections <- function(object_list,
   g2 <- catch %>%
     ggplot(aes(real_year, m, colour = scenario, fill = scenario)) +
     geom_line() +
-    facet_grid(vars(mp_name), vars(Type)) +
+    facet_grid(vars(mp_name), vars(Type), labeller = ggplot2::label_parsed) +
     geom_ribbon(aes(x = real_year, ymin = l, ymax = u),
       colour = NA, alpha = 0.07
     ) +

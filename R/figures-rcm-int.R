@@ -473,9 +473,9 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 
     dat <- mutate(dat,
                   SSB_SSBMSY = SSB/SSBMSY,
-                  status = ifelse(SSB_SSBMSY < 0.4,
+                  status = ifelse(.data$SSB_SSBMSY < 0.4,
                                   ifelse(french, "Critique", "Critical"),
-                                  ifelse(SSB_SSBMSY < 0.8,
+                                  ifelse(.data$SSB_SSBMSY < 0.8,
                                          ifelse(french, "Prudence", "Cautious"),
                                          ifelse(french, "Saine", "Healthy"))))
   }

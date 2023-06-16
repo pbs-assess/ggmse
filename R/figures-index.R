@@ -16,7 +16,8 @@
 #' @export
 #' @importFrom ggplot2 facet_grid scale_colour_brewer
 #' @return A ggplot object
-#' @describeIn plot_index Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd`
+#' @describeIn plot_index Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd`, gridded by
+#' OM and MP
 #' @examples
 #' plot_index(mse_example)
 #' mse_list <- list()
@@ -89,6 +90,80 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
 
   g
 }
+
+#' @describeIn plot_index Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd` by
+#' MP (multiple OMs per panel)
+#' @param palette A palette color as recognized by [ggplot2::scale_color_brewer()]
+#' @export
+plot_scenario_index <- function(object_list,
+                                seed = 42,
+                                type = c("Ind", "AddInd"),
+                                MP = NULL,
+                                omit_index_fn = function(x) NULL,
+                                quantiles = c(0.025, 0.975),
+                                palette = "Dark2",
+                                french = isTRUE(getOption("french"))) {
+
+  if (!is.list(object_list)) {
+    object_list <- list(object_list)
+    names(object_list) <- "Scenario"
+  }
+
+  type <- match.arg(type)
+  if (is.null(object_list[[1]]@OM$CurrentYr[[1]])) {
+    warning(
+      "Missing `object@OM$CurrentYr`.\n",
+      "Please run the MSE with a newer GitHub MSEtool version\n",
+      "or set `object@OM$CurrentYr` yourself.\n",
+      "Setting CurrentYr = 0 for now.",
+      call. = FALSE
+    )
+    this_year <- 0
+  } else {
+    this_year <- object_list[[1]]@OM$CurrentYr[[1]]
+  }
+
+  d_all <- purrr::map_dfr(object_list, get_index_ts,
+                          this_year = this_year, type = type, omit_index_fn = omit_index_fn,
+                          seed = seed, n_samples = object_list[[1]]@nsim, .id = "scenario"
+  )
+  d_all <- group_by(d_all, scenario, real_year, mp_name) %>%
+    summarise(
+      lwr = quantile(value, probs = quantiles[[1]], na.rm = TRUE),
+      med = quantile(value, probs = 0.5, na.rm = TRUE),
+      upr = quantile(value, probs = quantiles[[2]], na.rm = TRUE)
+    )
+
+  if(!is.null(MP)) {
+    d_all <- dplyr::filter(d_all, mp_name %in% MP) %>% mutate(mp_name = factor(mp_name, levels = MP))
+  }
+
+  d_hist <- dplyr::filter(d_all, .data$real_year <= this_year)
+
+  g <- d_all %>%
+    filter(!is.na(.data$med)) %>%
+    ggplot(aes(.data$real_year)) +
+    geom_ribbon(
+      aes(ymin = .data$lwr, ymax = .data$upr, fill = .data$scenario),
+      alpha = 0.2,
+      colour = NA
+    ) +
+    geom_line(aes(y = .data$med, colour = .data$scenario)) +
+    geom_point(data = d_hist, aes(y = .data$med)) +
+    geom_line(data = d_hist, aes(y = .data$med)) +
+    facet_wrap(vars(mp_name)) +
+    geom_vline(xintercept = this_year, lty = 2, alpha = 0.5) +
+    theme_pbs() +
+    theme(panel.spacing = unit(0, "in")) +
+    ylab(en2fr("Index", french, allow_missing = TRUE)) +
+    xlab(en2fr("Year", french, allow_missing = TRUE)) +
+    labs(colour = en2fr("OM", french), fill = en2fr("OM", french)) +
+    scale_colour_brewer(palette = palette) +
+    scale_fill_brewer(palette = palette)
+
+  g
+}
+
 
 get_index_ts <- function(object, this_year, seed = 42, n_samples = 5,
                          type = c("Ind", "AddInd"), omit_index_fn = function(x) NULL) {

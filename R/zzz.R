@@ -53,7 +53,6 @@ globalVariables(c(
   "Age", "iteration", "Value", "SD", "Iter",
   "type_labels", "Frequency", "Year", "lower", "upper", "Length", "prop",
   "..density..",
-  "SSB_SSBMSY",
   "correlation",
   "lwr",
   "lwr2",

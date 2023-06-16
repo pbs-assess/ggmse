@@ -247,7 +247,7 @@ get_ts <- function(object,
   ref_ssb <- object@RefPoint$SSBMSY %>%
     array(c(object@nsim, object@nMPs, object@nyears + object@proyears)) %>%
     reshape2::melt() %>%
-    dplyr::filter(Var3 > object@nyears) %>%
+    dplyr::filter(.data$Var3 > object@nyears) %>%
     transmute(iter = .data$Var1,
               real_year = .data$Var3 + .hist_years - 1,
               mp = .data$Var2,
@@ -256,7 +256,7 @@ get_ts <- function(object,
   ref_f <- object@RefPoint$FMSY %>%
     array(c(object@nsim, object@nMPs, object@nyears + object@proyears)) %>%
     reshape2::melt() %>%
-    dplyr::filter(Var3 > object@nyears) %>%
+    dplyr::filter(.data$Var3 > object@nyears) %>%
     transmute(iter = .data$Var1,
               real_year = .data$Var3 + .hist_years - 1,
               mp = .data$Var2,
