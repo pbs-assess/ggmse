@@ -52,5 +52,14 @@ globalVariables(c(
   "Index", "geo_mean", "survey",
   "Age", "iteration", "Value", "SD", "Iter",
   "type_labels", "Frequency", "Year", "lower", "upper", "Length", "prop",
-  "..density.."
+  "..density..",
+  "SSB_SSBMSY",
+  "correlation",
+  "lwr",
+  "lwr2",
+  "mid",
+  "reference",
+  "upr",
+  "upr2",
+  "variable"
 ))

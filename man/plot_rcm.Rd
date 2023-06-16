@@ -138,7 +138,7 @@ plot_rcm_corr(
 
 \item{histogram}{Logical, whether to show a histogram (TRUE) for the terminal year only. Otherwise, a time series plot.}
 
-\item{bins}{The number of bins for \link[ggplot]{geom_histogram}.}
+\item{bins}{The number of bins for \link[ggplot2]{geom_histogram}.}
 
 \item{proj}{Logical, whether to plot the recruitment deviates in the projection period}
 

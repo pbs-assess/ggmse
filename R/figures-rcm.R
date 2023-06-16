@@ -226,9 +226,10 @@ plot_rcm_sel_multi <- function(rcm, scenario = paste("Scenario", 1:length(rcm)),
 #' @param var Parameters to plot. Select up to two.
 #' @param status Logical, whether to identify estimated status with each point in scatter plot.
 #' Only used if two parameters are selected in \code{var}.
-#' @param bins The number of bins for \link[ggplot]{geom_histogram}.
+#' @param bins The number of bins for \link[ggplot2]{geom_histogram}.
 #' @param do_corr Whether to report the correlation between parameters.
 #' Only used if two parameters are selected in \code{var}.
+#' @importFrom stats cor
 #' @export
 plot_rcm_corr <- function(rcm, scenario, var = c("D", "M", "h", "R0"),
                           status = TRUE, bins = NULL, do_corr = FALSE,
@@ -245,7 +246,7 @@ plot_rcm_corr <- function(rcm, scenario, var = c("D", "M", "h", "R0"),
 
   var2[var == "M"] <- "M_ageArray[,1,1]"
 
-  vars <- purrr::map2_dfr(rcm, scenario, .rcm_par_status, var2, status = status)
+  vars <- purrr::map2_dfr(rcm, scenario, .rcm_par_status, var2, status = status, french = french)
 
   if(length(var) == 1) {
 
@@ -271,7 +272,8 @@ plot_rcm_corr <- function(rcm, scenario, var = c("D", "M", "h", "R0"),
       }
       g <- g +
         geom_point(shape = 21, aes(fill = status)) +
-        scale_fill_manual(ifelse(french, "Statut\nestimé", "Estimated\nstatus"), values = values)
+        scale_fill_manual(ifelse(french, "Statut\nestim\u00e9", "Estimated\nstatus"),  # \u00e9 = e accent aigu from stringi::stri_escape_unicode
+                          values = values)
     } else {
       g <- g + geom_point(shape = 21, bg = "grey")
     }

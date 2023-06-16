@@ -73,7 +73,7 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
   }
 }
 
-
+#' @importFrom utils packageVersion
 .rcm_calc_MSY <- function(rcm, MPD = FALSE,
                           type = c("SSBMSY", "FMSY", "MSY"),
                           y = rcm@OM@nyears) {
@@ -274,7 +274,7 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
   if ("LAA" %in% bio_type) {
     LAA <- data.frame(
       Age = 0:maxage, Value = rcm@OM@cpars$Len_age[1, , nyears],
-      Type = ifelse(FRENCH, "Longueur relatif", "Relative length")
+      Type = ifelse(french, "Longueur relatif", "Relative length")
     ) %>% mutate(Value = Value / max(Value))
   } else {
     LAA <- data.frame()
@@ -461,10 +461,12 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 }
 
 
-.rcm_par_status <- function(rcm, scenario, var, status = FALSE) {
+.rcm_par_status <- function(rcm, scenario, var, status = FALSE, french = FALSE) {
+
   dat <- data.frame(Var1 = rcm@OM@cpars[[var[1]]],
                     Var2 = rcm@OM@cpars[[var[2]]]) %>%
     mutate(scenario = scenario)
+
   if (length(var) > 1 && status) {
     SSB <- rcm@SSB[, rcm@OM@nyears]
     SSBMSY <- .rcm_calc_MSY(rcm)
@@ -477,5 +479,6 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
                                          ifelse(french, "Prudence", "Cautious"),
                                          ifelse(french, "Saine", "Healthy"))))
   }
+
   return(dat)
 }
