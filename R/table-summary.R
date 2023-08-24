@@ -24,6 +24,10 @@
 #' \item BMSY
 #' \item FMSY
 #' \item MSY
+#' \item LRP (absolute magnitude)
+#' \item USR (absolute magnitude)
+#' \item LRP_B0 (ratio of LRP to B0)
+#' \item USR_B0 (ratio of USR to B0)
 #' \item B_BMSY
 #' \item p_LRP (probability above the LRP)
 #' \item p_USR (probability above USR)
@@ -91,6 +95,8 @@ FSP_summary <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), MPD = 
   MSY <- .rcm_calc_MSY(rcm, MPD = MPD, type = "MSY")
 
   B_BMSY <- Bterminal/BMSY
+  LRP_val <- LRP * BMSY
+  USR_val <- USR * BMSY
   p_LRP <- mean(B_BMSY >= LRP)
   p_USR <- mean(B_BMSY >= USR)
   p_BMSY <- mean(B_BMSY >= 1)
@@ -98,23 +104,29 @@ FSP_summary <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), MPD = 
   F_FMSY <- Fterminal/FMSY
   p_FMSY <- mean(F_FMSY <= 1)
 
-  data.frame(B0 = B0,
-             R0 = R0,
-             h = h,
-             M = M,
-             Bt = Bterminal,
-             Ft = Fterminal,
-             BMSY = BMSY,
-             FMSY = FMSY,
-             MSY = MSY,
-             B_BMSY = B_BMSY,
-             p_LRP = p_LRP,
-             p_USR = p_USR,
-             p_BMSY = p_BMSY,
-             F_FMSY = F_FMSY,
-             p_FMSY = p_FMSY,
-             simulation = 1:length(MSY),
-             scenario = .scenario,
-             reference = ref)
+  data.frame(
+    B0 = B0,
+    R0 = R0,
+    h = h,
+    M = M,
+    Bt = Bterminal,
+    Ft = Fterminal,
+    BMSY = BMSY,
+    FMSY = FMSY,
+    MSY = MSY,
+    LRP = LRP_val,
+    USR = USR_val,
+    LRP_B0 = LRP_val/B0,
+    USR_B0 = USR_val/B0,
+    B_BMSY = B_BMSY,
+    p_LRP = p_LRP,
+    p_USR = p_USR,
+    p_BMSY = p_BMSY,
+    F_FMSY = F_FMSY,
+    p_FMSY = p_FMSY,
+    simulation = 1:length(MSY),
+    scenario = .scenario,
+    reference = ref
+  )
 }
 
