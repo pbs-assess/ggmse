@@ -463,8 +463,8 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
 
 .rcm_par_status <- function(rcm, scenario, var, status = FALSE, french = FALSE) {
 
-  dat <- data.frame(Var1 = rcm@OM@cpars[[var[1]]],
-                    Var2 = rcm@OM@cpars[[var[2]]]) %>%
+  dat <- data.frame(Var1 = parse(text = paste0("rcm@OM@cpars$", var[1])) %>% eval(),
+                    Var2 = parse(text = paste0("rcm@OM@cpars$", var[2])) %>% eval()) %>%
     mutate(scenario = scenario)
 
   if (length(var) > 1 && status) {
