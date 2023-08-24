@@ -19,7 +19,7 @@ plot_rcm_SSB <- function(rcm, scenario = paste("Scenario", 1:length(rcm)), frenc
 
   if (is.null(ylim)) ylim <- c(0, 1.1 * max(dat$value))
   make_plot_wrap(dat, scenario, french, scales, ylim = ylim) +
-    labs(y = en2fr("Spawning biomass"))
+    labs(y = en2fr("Spawning biomass", french))
 }
 
 #' @describeIn plot_rcm Plot SSB/SSBMSY
