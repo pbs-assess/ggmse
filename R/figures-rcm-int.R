@@ -88,8 +88,37 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
   if (MPD) {
     rcm_report <- rcm@mean_fit$report
 
-    if (packageVersion("MSEtool") < 3.7) {
+    if ("StockPars" %in% names(formals(MSEtool::optMSY_eq))) { # MSEtool v 3.7
+      allyears <- rcm@OM@nyears + rcm@OM@proyears
+      n_age <- rcm@OM@maxage + 1
 
+      spawn_time_frac <- rcm@OM@cpars$spawn_time_frac[1]
+      if (is.null(spawn_time_frac)) spawn_time_frac <- 0
+
+      StockPars <- list(
+        maxage = rcm@OM@maxage,
+        plusgroup = 1,
+        hs = rcm_report[["h"]],
+        SSBpR = matrix(rcm_report[["EPR0_SR"]], 1, 1),
+        spawn_time_frac = spawn_time_frac,
+        SRrel = rcm@OM@SRrel,
+        R0 = rcm_report[["R0"]],
+        M_ageArray = apply(rcm@OM@cpars$M_ageArray, 2:3, mean) %>%
+          array(c(1, n_age, allyears)),
+        Wt_age = apply(rcm@OM@cpars$Wt_age, 2:3, mean) %>%
+          array(c(1, n_age, allyears)),
+        Fec_Age = apply(rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age, 2:3, mean) %>%
+          array(c(1, n_age, allyears)),
+        Mat_age = apply(rcm@OM@cpars$Mat_age, 2:3, mean) %>%
+          array(c(1, n_age, allyears))
+      )
+
+      V <- array(rcm_report$F_at_age/apply(rcm_report$F_at_age, 1, max),
+                 c(1, rcm@OM@nyears, n_age)) %>%
+        aperm(c(1, 3, 2))
+
+      MSYs <- sapply(1, MSEtool::optMSY_eq, yr.ind = y, StockPars = StockPars, V = V)
+    } else {
       MSYs <- sapply(1, MSEtool::optMSY_eq,
                      M_ageArray = apply(rcm@OM@cpars$M_ageArray, 2:3, mean) %>%
                        array(c(1, rcm@OM@maxage + 1, rcm@OM@nyears + rcm@OM@proyears)),
@@ -109,40 +138,33 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
                      SSBpR = matrix(rcm_report[["EPR0_SR"]], 1, 1),
                      yr.ind = y,
                      plusgroup = 1)
-    } else {
-      allyears <- rcm@OM@nyears + rcm@OM@proyears
-      n_age <- rcm@OM@maxage + 1
-
-      StockPars <- list(
-        maxage = rcm@OM@maxage,
-        plusgroup = 1,
-        hs = rcm_report[["h"]],
-        SSBpR = matrix(rcm_report[["EPR0_SR"]], 1, 1),
-        spawn_time_frac = 0,
-        SRrel = rcm@OM@SRrel,
-        R0 = rcm_report[["R0"]],
-        M_ageArray = apply(rcm@OM@cpars$M_ageArray, 2:3, mean) %>%
-          array(c(1, n_age, allyears)),
-        Wt_age = apply(rcm@OM@cpars$Wt_age, 2:3, mean) %>%
-          array(c(1, n_age, allyears)),
-        Fec_Age = apply(rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age, 2:3, mean) %>%
-          array(c(1, n_age, allyears)),
-        Mat_age = apply(rcm@OM@cpars$Mat_age, 2:3, mean) %>%
-          array(c(1, n_age, allyears))
-      )
-
-      V <- array(rcm_report$F_at_age/apply(rcm_report$F_at_age, 1, max),
-                 c(1, rcm@OM@nyears, n_age)) %>%
-        aperm(c(1, 3, 2))
-
-      MSYs <- sapply(1, MSEtool::optMSY_eq, yr.ind = y, StockPars = StockPars, V = V)
     }
 
   } else {
     phi0 <- sapply(rcm@Misc, getElement, "EPR0_SR")
     if(length(phi0) == 1) phi0 <- rep(phi0, nsim)
+    spawn_time_frac <- rcm@OM@cpars$spawn_time_frac
+    if (is.null(spawn_time_frac)) spawn_time_frac <- rep(0, nsim)
 
-    if (packageVersion("MSEtool") < 3.7) {
+    if ("StockPars" %in% names(formals(MSEtool::optMSY_eq))) {  # MSEtool v 3.7
+      StockPars <- list(
+        maxage = rcm@OM@maxage,
+        plusgroup = 1,
+        hs = rcm@OM@cpars$hs,
+        SSBpR = matrix(phi0, nsim, 1),
+        spawn_time_frac = spawn_time_frac,
+        SRrel = rep(rcm@OM@SRrel, nsim),
+        R0 = rcm@OM@cpars$R0,
+        M_ageArray = rcm@OM@cpars$M_ageArray,
+        Wt_age = rcm@OM@cpars$Wt_age,
+        Fec_Age = rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age,
+        Mat_age = rcm@OM@cpars$Mat_age
+      )
+
+      V <- rcm@OM@cpars$V
+
+      MSYs <- sapply(1:nsim, MSEtool::optMSY_eq, yr.ind = y, StockPars = StockPars, V = V)
+    } else {
       MSYs <- sapply(1:nsim, MSEtool::optMSY_eq,
                      M_ageArray = rcm@OM@cpars$M_ageArray,
                      Wt_age = rcm@OM@cpars$Wt_age,
@@ -156,24 +178,6 @@ make_plot_wrap <- function(dat, .scenario, french, scales = "fixed", ylim = NULL
                      SSBpR = matrix(phi0, nsim, 1),
                      yr.ind = y,
                      plusgroup = 1)
-    } else {
-      StockPars <- list(
-        maxage = rcm@OM@maxage,
-        plusgroup = 1,
-        hs = rcm@OM@cpars$hs,
-        SSBpR = matrix(phi0, nsim, 1),
-        spawn_time_frac = 0,
-        SRrel = rep(rcm@OM@SRrel, nsim),
-        R0 = rcm@OM@cpars$R0,
-        M_ageArray = rcm@OM@cpars$M_ageArray,
-        Wt_age = rcm@OM@cpars$Wt_age,
-        Fec_Age = rcm@OM@cpars$Wt_age * rcm@OM@cpars$Mat_age,
-        Mat_age = rcm@OM@cpars$Mat_age
-      )
-
-      V <- rcm@OM@cpars$V
-
-      MSYs <- sapply(1:nsim, MSEtool::optMSY_eq, yr.ind = y, StockPars = StockPars, V = V)
     }
   }
 
