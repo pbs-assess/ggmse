@@ -255,7 +255,7 @@ plot_tigure_facet <- function(pm_df_list, ncol = NULL, ...) {
       axis.text.x = element_text(color = "grey10")
     ) +
     ggplot2::scale_x_discrete(position = "top") +
-    ggplot2::scale_y_discrete(labels = levels(df$MP))
+    ggplot2::scale_y_discrete(labels = levels(gdat2$MP))
 
   g
 }

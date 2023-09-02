@@ -42,6 +42,10 @@ A data frame with:
 \item BMSY
 \item FMSY
 \item MSY
+\item LRP (absolute magnitude)
+\item USR (absolute magnitude)
+\item LRP_B0 (ratio of LRP to B0)
+\item USR_B0 (ratio of USR to B0)
 \item B_BMSY
 \item p_LRP (probability above the LRP)
 \item p_USR (probability above USR)
