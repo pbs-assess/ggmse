@@ -228,7 +228,7 @@ get_catch_ts <- function(object, this_year, seed = 42, n_samples = 5) {
 
 #' @rdname plot_index
 #' @description
-#' - `plot_catch()`:  Plots observed catches, i.e., `MSE@PPD[[i]]@Cat`. **To plot OM catches, use [plot_projection_catch()]**.
+#' - `plot_catch()`:  Plots observed catches, i.e., `MSE@PPD[[i]]@Cat`. **To plot OM catches, use [plot_scenario_catch()]**.
 #' @aliases plot_catch
 #' @export
 plot_catch <- function(object_list, n_samples = 4, seed = 42, MP = NULL,

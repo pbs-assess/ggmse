@@ -75,7 +75,7 @@ MP (multiple OMs per panel)
 }
 
 \itemize{
-\item \code{plot_catch()}:  Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}. \strong{To plot OM catches, use \code{\link[=plot_projection_catch]{plot_projection_catch()}}}.
+\item \code{plot_catch()}:  Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}. \strong{To plot OM catches, use \code{\link[=plot_scenario_catch]{plot_scenario_catch()}}}.
 }
 }
 \examples{
