@@ -64,19 +64,20 @@ number of years.}
 A ggplot object
 }
 \description{
-Plot sampled survey index or catch projections
-}
-\section{Functions}{
 \itemize{
 \item \code{plot_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd}, gridded by
 OM and MP
+}
 
+\itemize{
 \item \code{plot_scenario_index()}: Plots observed and simulated indices, i.e., \code{MSE@PPD[[i]]@Ind} or \code{MSE@PPD[[i]]@AddInd} by
 MP (multiple OMs per panel)
+}
 
-\item \code{plot_catch()}: Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}
-
-}}
+\itemize{
+\item \code{plot_catch()}:  Plots observed catches, i.e., \code{MSE@PPD[[i]]@Cat}. \strong{To plot OM catches, use \code{\link[=plot_projection_catch]{plot_projection_catch()}}}.
+}
+}
 \examples{
 plot_index(mse_example)
 mse_list <- list()

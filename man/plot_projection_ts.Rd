@@ -58,5 +58,5 @@ plot_projection_ts(mse_example, type = "SSB")
 plot_projection_ts(mse_example, type = c("SSB", "FM"))
 }
 \seealso{
-\code{\link[=plot_main_projections]{plot_main_projections()}}
+\code{\link[=plot_main_projections]{plot_main_projections()}} \code{\link[=plot_scenario_BMSY]{plot_scenario_BMSY()}}
 }

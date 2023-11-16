@@ -16,7 +16,8 @@
 #' @export
 #' @importFrom ggplot2 facet_grid scale_colour_brewer
 #' @return A ggplot object
-#' @describeIn plot_index Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd`, gridded by
+#' @description
+#' - `plot_index()`: Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd`, gridded by
 #' OM and MP
 #' @examples
 #' plot_index(mse_example)
@@ -91,7 +92,9 @@ plot_index <- function(object_list, n_samples = 4, seed = 42,
   g
 }
 
-#' @describeIn plot_index Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd` by
+#' @rdname plot_index
+#' @description
+#' - `plot_scenario_index()`: Plots observed and simulated indices, i.e., `MSE@PPD[[i]]@Ind` or `MSE@PPD[[i]]@AddInd` by
 #' MP (multiple OMs per panel)
 #' @param palette A palette color as recognized by [ggplot2::scale_color_brewer()]
 #' @export
@@ -223,12 +226,15 @@ get_catch_ts <- function(object, this_year, seed = 42, n_samples = 5) {
     tibble::as_tibble()
 }
 
-#' @describeIn plot_index Plots observed catches, i.e., `MSE@PPD[[i]]@Cat`
+#' @rdname plot_index
+#' @description
+#' - `plot_catch()`:  Plots observed catches, i.e., `MSE@PPD[[i]]@Cat`. **To plot OM catches, use [plot_projection_catch()]**.
 #' @aliases plot_catch
 #' @export
 plot_catch <- function(object_list, n_samples = 4, seed = 42, MP = NULL,
                        quantiles = c(0.025, 0.975),
                        french = isTRUE(getOption("french"))) {
+
   if (!is.list(object_list)) {
     object_list <- list(object_list)
     names(object_list) <- "Scenario"

@@ -24,7 +24,7 @@
 #' @importFrom rlang .data
 #' @importFrom dplyr bind_cols summarise
 #' @export
-#' @seealso [plot_main_projections()]
+#' @seealso [plot_main_projections()] [plot_scenario_BMSY()]
 #' @examples
 #' plot_projection_ts(mse_example, type = "SSB")
 #' plot_projection_ts(mse_example, type = c("SSB", "FM"))
